@@ -1,0 +1,130 @@
+{
+  "dataset": "rbns",
+  "model": "logistic_regression",
+  "overall": {
+    "auroc": 0.6316234391696607,
+    "auprc": 0.5069079228808873,
+    "accuracy": 0.6908580696650619,
+    "f1": 0.3657969789796134,
+    "brier": 0.21835869611242387
+  },
+  "per_protein_summary": {
+    "median": 0.5478945,
+    "mean": 0.6298931009224091,
+    "min": 0.322659,
+    "max": 0.99385,
+    "n_flagged": 3
+  },
+  "per_protein": [
+    {
+      "protein": "HNRNPH2",
+      "auroc": 0.99385,
+      "auprc": 0.9855526399978832,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "THUMPD1",
+      "auroc": 0.8729270000000001,
+      "auprc": 0.6934878978104199,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "A1CF",
+      "auroc": 0.8184345,
+      "auprc": 0.6463531876797666,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "UNK",
+      "auroc": 0.776723,
+      "auprc": 0.6066447834278376,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "CSDE1",
+      "auroc": 0.727562,
+      "auprc": 0.5007577456894312,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "NUPL2",
+      "auroc": 0.6884753119913185,
+      "auprc": 0.47667954452988026,
+      "n": 2843,
+      "note": "ok"
+    },
+    {
+      "protein": "RBM47",
+      "auroc": 0.5478945,
+      "auprc": 0.3533245057100217,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "EIF4G2",
+      "auroc": 0.5450565,
+      "auprc": 0.38789321696667567,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "SAFB2",
+      "auroc": 0.5275075,
+      "auprc": 0.3556550853718756,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "TRA2A",
+      "auroc": 0.526355,
+      "auprc": 0.33051614768169796,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "XRCC6",
+      "auroc": 0.4963805,
+      "auprc": 0.31978449509824747,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "RBM4",
+      "auroc": 0.3447855,
+      "auprc": 0.254090357403939,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "RBM4B",
+      "auroc": 0.322659,
+      "auprc": 0.2445501743997622,
+      "n": 3000,
+      "note": "ok"
+    }
+  ],
+  "flagged": [
+    {
+      "protein": "XRCC6",
+      "auroc": 0.4963805,
+      "n": 3000
+    },
+    {
+      "protein": "RBM4",
+      "auroc": 0.3447855,
+      "n": 3000
+    },
+    {
+      "protein": "RBM4B",
+      "auroc": 0.322659,
+      "n": 3000
+    }
+  ],
+  "status": "WARN",
+  "message": "\u26a0\ufe0f  Marginal \u2014 investigate before Phase 2"
+}

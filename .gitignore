@@ -1,0 +1,26 @@
+# Large data files — not tracked (reproduce via scripts)
+data/processed/
+data/generalized/
+data/splits/*/train.tsv
+data/splits/*/val.tsv
+data/splits/*/test.tsv
+
+# Trained model weights
+models/saved/
+models/checkpoints/
+
+# Results plots (regenerate via script 03)
+results/*/plots/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+*.egg-info/
+
+# OS
+.DS_Store
+
+# Jupyter
+.jupyter/

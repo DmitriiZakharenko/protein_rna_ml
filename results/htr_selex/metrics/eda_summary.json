@@ -1,0 +1,30 @@
+{
+  "total_examples": 279000,
+  "positive_examples": 93000,
+  "negative_examples": 186000,
+  "n_unique_proteins": 93,
+  "rna_length": {
+    "min": 26,
+    "max": 40,
+    "mean": 39.57779211469534,
+    "median": 40.0
+  },
+  "protein_length": {
+    "min": 47,
+    "max": 1186,
+    "mean": 320.13978494623655,
+    "median": 326.0
+  },
+  "examples_per_protein": {
+    "mean": 3000.0,
+    "min": 3000,
+    "max": 3000
+  },
+  "sequence_issues": {
+    "null_rna": 0,
+    "null_protein": 0,
+    "invalid_rna": 506,
+    "invalid_prot": 6000,
+    "has_T_in_rna": 0
+  }
+}

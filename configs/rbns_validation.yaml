@@ -1,0 +1,52 @@
+dataset:
+  name: rbns
+  raw_path: "../rbns_analysis/results/ml_dataset_rbns_clean.tsv"
+  splits_dir: "data/splits/rbns"
+  processed_dir: "data/processed/rbns"
+  column_map:
+    protein_col: target_name
+    protein_seq: protein_sequence
+    rna_seq: rna_sequence
+    label: binding_label
+    source: source
+
+splitting:
+  strategy: protein_aware
+  train_frac: 0.75
+  val_frac: 0.11
+  seed: 42
+
+encoding:
+  rna_kmer_k: 4
+  protein_kmer_k: 3
+  normalize: true
+
+baseline_models:
+  logistic_regression:
+    enabled: true
+    max_iter: 1000
+    C: 1.0
+  random_forest:
+    enabled: true
+    n_estimators: 200
+    max_depth: 15
+    n_jobs: -1
+  xgboost:
+    enabled: true
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    eval_metric: logloss
+    n_jobs: -1
+
+thresholds:
+  auroc_pass: 0.70
+  auroc_warn: 0.60
+  per_protein_auroc_min: 0.50
+
+output:
+  metrics_path: "results/rbns/metrics/validation_results.json"
+  plots_dir: "results/rbns/plots"
+  model_save_dir: "models/saved/rbns_validation"

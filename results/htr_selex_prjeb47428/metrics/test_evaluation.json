@@ -1,0 +1,51 @@
+{
+  "dataset": "htr_selex_prjeb47428",
+  "model": "xgboost",
+  "overall": {
+    "auroc": 0.628120953125,
+    "auprc": 0.4364287877735734,
+    "accuracy": 0.667,
+    "f1": 0.02106810387065164,
+    "brier": 0.24305570852252578
+  },
+  "per_protein_summary": {
+    "median": 0.6718215,
+    "mean": 0.6468698749999999,
+    "min": 0.5036205,
+    "max": 0.740216,
+    "n_flagged": 0
+  },
+  "per_protein": [
+    {
+      "protein": "MBNL1",
+      "auroc": 0.740216,
+      "auprc": 0.5104150914548016,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "SNRPA",
+      "auroc": 0.738321,
+      "auprc": 0.5425798484999491,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "slbp",
+      "auroc": 0.6053219999999999,
+      "auprc": 0.43854805380310125,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "PUM2",
+      "auroc": 0.5036205,
+      "auprc": 0.3219873745542986,
+      "n": 3000,
+      "note": "ok"
+    }
+  ],
+  "flagged": [],
+  "status": "WARN",
+  "message": "\u26a0\ufe0f  Marginal \u2014 investigate before Phase 2"
+}

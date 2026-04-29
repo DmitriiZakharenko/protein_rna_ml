@@ -1,0 +1,69 @@
+# Generalized Protein-RNA Binding Model — Phase 2
+
+datasets:
+  - name: htr_selex_25907
+    path: "../htr_selex_analysis/results/ml_dataset_simple_clean.tsv"
+    protein_col: protein_name
+    experiment_type: in_vitro
+    validated: true
+    phase1_auroc: 0.844
+
+  - name: rbns
+    path: "../rbns_analysis/results/ml_dataset_rbns_clean.tsv"
+    protein_col: target_name
+    experiment_type: in_vitro
+    validated: true   # WARN but signal confirmed; flagged proteins tracked
+    phase1_auroc: 0.758
+    flagged_proteins: [RBM4, RBM4B, XRCC6]
+
+  - name: htr_selex_47428
+    path: "../htr_selex_prjeb47428/results/final/ml_dataset_top1000_lastcycle_clean.tsv"
+    protein_col: protein_name
+    experiment_type: in_vitro
+    validated: true   # WARN due to small size (23 proteins); no proteins below 0.50
+    phase1_auroc: 0.817
+
+splitting:
+  strategy: global_protein_aware   # no protein shared across splits globally
+  train_frac: 0.75
+  val_frac: 0.11
+  seed: 42
+
+encoding:
+  v1_kmer:
+    rna_k: 4
+    protein_k: 3
+    normalize: true
+    include_metadata: true   # experiment_type + is_flagged as extra features
+  v2_cnn:
+    rna_max_len: 60
+    prot_max_len: 800
+
+v1_mlp:
+  hidden_dims: [512, 256, 128]
+  dropout: 0.3
+  lr: 1.0e-3
+  batch_size: 1024
+  epochs: 60
+  patience: 8
+  pos_weight: auto   # n_neg / n_pos computed from training set
+
+v2_cnn:
+  rna_filters:  [128, 256, 256]
+  rna_kernels:  [7, 5, 3]
+  prot_filters: [128, 256, 256]
+  prot_kernels: [11, 7, 5]
+  head_dims: [256, 64]
+  dropout: 0.3
+  lr: 5.0e-4
+  batch_size: 256
+  epochs: 60
+  patience: 8
+
+# Phase 2 V3 — planned (requires GPU with ≥16GB VRAM)
+v3_pretrained:
+  protein_encoder: esm2_t33_650M_UR50D   # Meta ESM-2, 650M params
+  rna_encoder: RNA-FM                     # 100M params
+  fine_tune: true
+  interaction: cross_attention
+  status: planned

@@ -1,0 +1,21 @@
+{
+  "total": 284642,
+  "positive": 96000,
+  "negative": 188642,
+  "pos_frac": 0.3373,
+  "n_proteins": 96,
+  "rna_length": {
+    "min": 20,
+    "max": 20,
+    "median": 20.0
+  },
+  "prot_length": {
+    "min": 95,
+    "max": 953,
+    "median": 282.0
+  },
+  "issues": {
+    "invalid_rna": 0,
+    "has_T_in_rna": 0
+  }
+}

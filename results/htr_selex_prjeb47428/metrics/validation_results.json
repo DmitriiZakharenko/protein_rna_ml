@@ -1,0 +1,32 @@
+{
+  "dataset": "htr_selex_prjeb47428",
+  "best_model": "logistic_regression",
+  "best_val_auroc": 0.8167222222222221,
+  "status": "PASS",
+  "models": {
+    "logistic_regression": {
+      "auroc": 0.8167222222222221,
+      "auprc": 0.7362397171429267,
+      "accuracy": 0.776,
+      "f1": 0.5569230769230769,
+      "brier_score": 0.16087582301616543,
+      "t": 14.6
+    },
+    "random_forest": {
+      "auroc": 0.7805728333333334,
+      "auprc": 0.6284296885848868,
+      "accuracy": 0.6666666666666666,
+      "f1": 0.0,
+      "brier_score": 0.21293690677365548,
+      "t": 8.1
+    },
+    "xgboost": {
+      "auroc": 0.6294406111111112,
+      "auprc": 0.454404983659262,
+      "accuracy": 0.6696666666666666,
+      "f1": 0.03817534778388871,
+      "brier_score": 0.25326247085812725,
+      "t": 18.5
+    }
+  }
+}
