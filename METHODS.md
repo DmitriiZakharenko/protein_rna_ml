@@ -1,7 +1,7 @@
 # Methods & Model Tracking
 
 **Project**: Protein–RNA Binding Prediction  
-**Last updated**: 2026-04-23  
+**Last updated**: 2026-05-01  
 **Language**: English  
 
 This document records every methodological choice made in the project — encoding strategies, splitting decisions, model architectures, and training configurations — together with the rationale for each choice and literature references. It is updated each time a new method is introduced or an existing one is modified.
@@ -101,13 +101,12 @@ This document records every methodological choice made in the project — encodi
 **Rationale**:  
 A random split at the example level would mix the same protein across train and test. In that case, a model could achieve high test AUROC simply by memorising which RNA sequences co-occur with which protein — without learning any transferable binding principle. Protein-aware splitting enforces that test-set proteins are genuinely unseen during training, providing an honest estimate of generalisation to new RBPs. This is the biologically meaningful evaluation setting and mirrors the real deployment scenario (predicting binding for a protein with no prior SELEX/RBNS data).
 
-This design is analogous to the "unknown protein" or "hard split" setting used in the ZHMolGraph benchmark (Liu et al., 2025) and is stricter than the standard random split used in older RBP prediction papers.
+This design is stricter than the standard random split used in older RBP prediction papers, and directly mirrors the real deployment scenario of predicting binding for a novel protein with no prior experimental data.
 
 **Random seed**: 42 (fixed throughout; all splits reproducible).
 
 **Reference**:
-- [Ghanbari & Ohler (2020), Briefings in Bioinformatics](https://doi.org/10.1093/bib/bbz103) — discusses protein-aware vs random splits for RBP prediction; demonstrates that random splits systematically overestimate performance
-- [Liu et al. (2025), Communications Biology](https://doi.org/10.1038/s42003-025-07657-4) (ZHMolGraph) — uses "unknown RNA + unknown protein" as the primary hard-split benchmark
+- [Ghanbari & Ohler (2020), Briefings in Bioinformatics](https://doi.org/10.1093/bib/bbz103) — discusses protein-aware vs random splits for RBP prediction; demonstrates that random splits systematically overestimate performance by 0.05–0.15 AUROC
 
 ---
 
@@ -239,8 +238,8 @@ The following methods will be implemented after all datasets pass Phase 1 valida
 **Why this matters**: ESM-2 was trained on 250 million protein sequences and encodes evolutionary, structural, and functional information that k-mers cannot capture. Proteins with similar binding domains (e.g., all RRM-domain proteins) will have similar embeddings even if their primary sequences diverge.
 
 **Modes**:
-- **Frozen** (zero-shot): extract embeddings without fine-tuning; fast; similar to ZHMolGraph approach
-- **Fine-tuned**: continue training ESM-2 on our RBP dataset; expected to substantially outperform frozen
+- **Frozen** (zero-shot): extract embeddings without fine-tuning; fast; implemented in V3
+- **Fine-tuned**: continue training ESM-2 on our RBP dataset; expected to substantially outperform frozen; planned for V3b
 
 **Expected AUROC (frozen)**: 0.85–0.90  
 **Expected AUROC (fine-tuned)**: 0.90–0.95  
@@ -252,9 +251,9 @@ The following methods will be implemented after all datasets pass Phase 1 valida
 
 **Description**: Extract per-nucleotide embeddings from RNA-FM (100M parameter model) for each RNA sequence. Average-pool to obtain a 640-dimensional RNA embedding.
 
-**Why this matters**: RNA-FM was trained on 23 million non-coding RNA sequences and captures secondary structure information implicitly (sequences that fold into similar structures get similar embeddings). ZHMolGraph also uses RNA-FM but with frozen weights.
+**Why this matters**: RNA-FM was trained on 23 million non-coding RNA sequences and captures secondary structure information implicitly — sequences that fold into similar structures get similar embeddings, even with different primary sequences. This is the key limitation of one-hot and k-mer RNA encoding that RNA-FM resolves.
 
-**Modes**: Frozen (baseline) → fine-tuned (target)  
+**Modes**: Frozen (planned V3b) → fine-tuned (planned V3c)  
 **Reference**: [Chen et al. (2022), arXiv](https://arxiv.org/abs/2204.00300) — RNA-FM
 
 ---
@@ -308,19 +307,71 @@ L_total = L_classification + λ · L_regression (only where affinity label is av
 
 ## 7. Results Summary Table
 
-Updated after each experiment. All numbers are on the **test set** (unseen proteins).
+Updated after each experiment. Phase 1 numbers are on the **test set** (unseen proteins within each dataset). Phase 2 numbers are on the generalized test set (unseen proteins across all 3 datasets, 24 proteins total).
 
-| Dataset | Model | Encoding | AUROC | AUPRC | Status | Date |
-|---|---|---|---|---|---|---|
-| HTR-SELEX PRJEB25907 | XGBoost | k-mer (4+3) | **0.844** | **0.765** | ✅ PASS | 2025-04 |
-| HTR-SELEX PRJEB25907 | Logistic Regression | k-mer (4+3) | 0.771 | 0.640 | ✅ PASS | 2025-04 |
-| HTR-SELEX PRJEB25907 | Random Forest | k-mer (4+3) | 0.766 | 0.659 | ✅ PASS | 2025-04 |
-| RBNS | XGBoost (no early stop) | k-mer (4+3) | 0.608 | 0.473 | ⚠️ WARN* | 2025-04 |
-| RBNS | Logistic Regression | k-mer (4+3) | — | — | pending eval on test | — |
-| RBNS | Random Forest | k-mer (4+3) | — | — | pending eval on test | — |
-| HTR-SELEX PRJEB47428 | Logistic Regression | k-mer (4+3) | — | — | pending | — |
-| HTR-SELEX PRJEB47428 | XGBoost (with early stop) | k-mer (4+3) | — | — | pending | — |
+### Phase 1 — Per-dataset validation (protein-aware split)
 
-*RBNS XGBoost failed due to missing early stopping — overfitting confirmed. To be rerun.  
-**RBNS flagged proteins**: EIF4G2 (0.49), RBM4 (0.45), NUPL2 (0.43), RBM4B (0.40), SAFB2 (0.37). Likely biological/domain novelty rather than data quality issue. RBNS dataset considered valid for Phase 2 with these proteins flagged as hard cases.
+| Dataset | Model | Val AUROC | Val AUPRC | Test AUROC | Test AUPRC | Status | Date |
+|---|---|---|---|---|---|---|---|
+| HTR-SELEX PRJEB25907 | XGBoost | **0.825** | **0.742** | 0.796 | 0.693 | ✅ PASS | 2026-05 |
+| HTR-SELEX PRJEB25907 | Logistic Regression | 0.771 | 0.639 | — | — | ✅ PASS | 2026-05 |
+| HTR-SELEX PRJEB25907 | Random Forest | 0.759 | 0.644 | — | — | ✅ PASS | 2026-05 |
+| RBNS | Random Forest | **0.758** | **0.684** | 0.632 | 0.507 | ✅ PASS | 2026-04 |
+| RBNS | Logistic Regression | 0.746 | 0.636 | — | — | ✅ PASS | 2026-04 |
+| RBNS | XGBoost | 0.661 | 0.522 | — | — | ✅ PASS | 2026-04 |
+| HTR-SELEX PRJEB47428 | Logistic Regression | **0.817** | **0.736** | 0.590 | — | ✅ PASS | 2026-04 |
+| HTR-SELEX PRJEB47428 | XGBoost | 0.629 | 0.454 | 0.628 | 0.436 | ✅ PASS | 2026-04 |
+
+**Flagged proteins** (test AUROC < 0.70, hard biological cases, not data quality issues):
+- RBNS: RBM4 (0.345), RBM4B (0.323) — closely related paralogs with near-identical binding profiles; XRCC6 (0.496) — atypical non-canonical RBP
+- HTR-SELEX PRJEB25907: PCBP1 (0.436) — poly-C binding with structured recognition mode; LARP6 (0.693), RBM6 (0.683), RBMS2 (0.656) — marginal
+- HTR-SELEX PRJEB47428: PUM2 (0.504), slbp (0.605) — only 4 test proteins, high variance
+
+### Phase 2 — Generalized model (cross-dataset, 168 proteins, 632k examples)
+
+| Model | Architecture | Val AUROC | Val AUPRC | Test AUROC | Test AUPRC | Best epoch | Date |
+|---|---|---|---|---|---|---|---|
+| V1 MLP | k-mer 8262-d → MLP [512,256,128] | 0.716 | 0.636 | 0.674 | 0.544 | 1 (then degraded) | 2026-04 |
+| V2 CNN | One-hot → dual CNN → MLP | **0.811** | **0.734** | **0.703** | **0.599** | 20 / 28 | 2026-05 |
+| V3 ESM-2 | ESM-2(1280) + RNA CNN → MLP | in progress | in progress | — | — | — | 2026-05 |
+
+**V2 CNN per-protein test results** (24 proteins, median AUROC=0.718):
+
+| Protein | Dataset | AUROC | AUPRC |
+|---|---|---|---|
+| ESRP1-construct3 | HTR-SELEX 25907 | 0.981 | — |
+| PUF60 | RBNS | 0.924 | — |
+| KHDRBS3 | HTR-SELEX 25907 | 0.901 | — |
+| RBM28 | HTR-SELEX 25907 | 0.842 | — |
+| PUM2 | HTR-SELEX 25907 | 0.835 | — |
+| TRA2A | RBNS | 0.800 | — |
+| HNRNPA0 | HTR-SELEX 25907 | 0.851 | — |
+| CSDA | HTR-SELEX 25907 | 0.819 | — |
+| LARP7-construct4 | HTR-SELEX 25907 | 0.774 | — |
+| MEX3D-construct3 | HTR-SELEX 25907 | 0.735 | — |
+| DAZAP1 | HTR-SELEX 25907 | 0.783 | — |
+| PRR3 | RBNS | 0.759 | — |
+| IGF2BP2 | RBNS | 0.701 | — |
+| PCBP1 | HTR-SELEX 25907 | 0.675 | — |
+| ZC3H18 | RBNS | 0.612 | — |
+| NUPL2 | RBNS | 0.610 | — |
+| RBM6 | HTR-SELEX 25907 | 0.610 | — |
+| LARP6 | HTR-SELEX 25907 | 0.585 | — |
+| IGF2BP1 | HTR-SELEX 25907 | 0.632 | — |
+| SNRNP70 | HTR-SELEX 25907 | 0.574 | — |
+| SRSF8 | RBNS | 0.577 | — |
+| TAF15 | RBNS | 0.468 | — |
+| IGF2BP3 | RBNS | 0.459 | — |
+| UNK | RBNS | 0.429 | — |
+
+**V1 MLP failure analysis**: k-mer features are length-dependent — RBNS (20 nt RNA) and HTR-SELEX (40 nt RNA) produce incompatible frequency distributions. Val AUROC peaked at epoch 1 (0.716) then monotonically degraded as the model overfit to dataset-specific frequency scales. StandardScaler normalization does not resolve a structural feature mismatch. V2 CNN resolves this by using raw sequences with global max pooling (length-agnostic).
+
+### External benchmarks (reference only)
+
+| Model | Method | AUROC | AUPRC | Split | Reference |
+|---|---|---|---|---|---|
+| ZHMolGraph | RNA-FM + ProtTrans (frozen) + GNN | 0.798 | 0.820 | Hard (unseen prot+RNA) | Liu et al. 2025 |
+| RPITER | Iterative feature refinement + RF | 0.727 | 0.774 | Random | Peng et al. 2019 |
+| IPMiner | Deep autoencoder + DBN | 0.664 | 0.742 | Random | Pan et al. 2016 |
+| NPI-GNN | Graph neural network | 0.511 | 0.520 | Random | Yu et al. 2021 |
 
