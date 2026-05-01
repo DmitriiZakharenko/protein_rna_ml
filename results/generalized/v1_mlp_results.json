@@ -1,0 +1,274 @@
+{
+  "model": "generalized_v1_mlp",
+  "best_val_auroc": 0.7156714976752503,
+  "best_epoch": 1,
+  "test_metrics": {
+    "auroc": 0.6735628934866622,
+    "auprc": 0.5444432027345535
+  },
+  "per_protein_summary": {
+    "median": 0.68933675,
+    "mean": 0.6886763305582534,
+    "min": 0.4050931174089069,
+    "max": 0.94481975
+  },
+  "per_protein": [
+    {
+      "protein": "CSDA",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.665863,
+      "auprc": 0.4380540227335577,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "DAZAP1",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.7578271875,
+      "auprc": 0.6382998282070251,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "ESRP1-construct3",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.94481975,
+      "auprc": 0.8159419228982332,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "HNRNPA0",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.7846636250000001,
+      "auprc": 0.7096314656148613,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "IGF2BP1",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.5480630624999999,
+      "auprc": 0.4376424242988634,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "IGF2BP2",
+      "dataset": "rbns",
+      "auroc": 0.6409570000000001,
+      "auprc": 0.4361821659563071,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "IGF2BP3",
+      "dataset": "rbns",
+      "auroc": 0.4050931174089069,
+      "auprc": 0.27436772039244944,
+      "n": 2976,
+      "is_flagged": 0
+    },
+    {
+      "protein": "KHDRBS3",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.9169186250000001,
+      "auprc": 0.8543818746400066,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "LARP6",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.6100823125,
+      "auprc": 0.40587551949498685,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "LARP7-construct4",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.801649,
+      "auprc": 0.5901835190557897,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "MEX3D-construct3",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.7128105,
+      "auprc": 0.6859663633889421,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "NUPL2",
+      "dataset": "rbns",
+      "auroc": 0.6574725990233314,
+      "auprc": 0.4644280975660389,
+      "n": 2843,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PCBP1",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.7762969722222222,
+      "auprc": 0.6306487645549651,
+      "n": 9000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PRR3",
+      "dataset": "rbns",
+      "auroc": 0.45241155724362453,
+      "auprc": 0.3048324241582274,
+      "n": 2843,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PUF60",
+      "dataset": "rbns",
+      "auroc": 0.8518150000000001,
+      "auprc": 0.7432656802262854,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PUM2",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.8179952500000002,
+      "auprc": 0.6918568393374913,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "RBM28",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.8359865,
+      "auprc": 0.7311297767319797,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "RBM6",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.517929625,
+      "auprc": 0.38084147645797595,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "SNRNP70",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.502367,
+      "auprc": 0.3591527406087838,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "SRSF8",
+      "dataset": "rbns",
+      "auroc": 0.65210925,
+      "auprc": 0.44425828016407265,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "TAF15",
+      "dataset": "rbns",
+      "auroc": 0.7431690000000001,
+      "auprc": 0.4877032891866179,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "TRA2A",
+      "dataset": "rbns",
+      "auroc": 0.825839,
+      "auprc": 0.692637665067821,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "UNK",
+      "dataset": "rbns",
+      "auroc": 0.5525105,
+      "auprc": 0.3481733766783786,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "ZC3H18",
+      "dataset": "rbns",
+      "auroc": 0.5535825,
+      "auprc": 0.3502031135890884,
+      "n": 3000,
+      "is_flagged": 0
+    }
+  ],
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6837,
+      "val_auroc": 0.7157,
+      "val_auprc": 0.6361,
+      "lr": 0.000999
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4421,
+      "val_auroc": 0.7089,
+      "val_auprc": 0.6542,
+      "lr": 0.000997
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.3805,
+      "val_auroc": 0.7054,
+      "val_auprc": 0.6409,
+      "lr": 0.000994
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.3514,
+      "val_auroc": 0.6824,
+      "val_auprc": 0.6355,
+      "lr": 0.000989
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.3341,
+      "val_auroc": 0.6934,
+      "val_auprc": 0.6449,
+      "lr": 0.000983
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.3203,
+      "val_auroc": 0.6979,
+      "val_auprc": 0.6477,
+      "lr": 0.000976
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.3083,
+      "val_auroc": 0.6888,
+      "val_auprc": 0.6465,
+      "lr": 0.000967
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.2995,
+      "val_auroc": 0.6931,
+      "val_auprc": 0.6434,
+      "lr": 0.000957
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.293,
+      "val_auroc": 0.6837,
+      "val_auprc": 0.6311,
+      "lr": 0.000946
+    }
+  ]
+}

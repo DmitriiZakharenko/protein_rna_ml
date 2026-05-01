@@ -61,7 +61,7 @@ def main():
     parser.add_argument("--out_dir",    default="results/generalized")
     parser.add_argument("--model_dir",  default="models/saved/generalized_v2")
     parser.add_argument("--rna_max",    type=int,   default=60)
-    parser.add_argument("--prot_max",   type=int,   default=800)
+    parser.add_argument("--prot_max",   type=int,   default=300)  # max observed prot len=283
     parser.add_argument("--epochs",     type=int,   default=60)
     parser.add_argument("--batch_size", type=int,   default=256)
     parser.add_argument("--lr",         type=float, default=5e-4)
@@ -73,12 +73,19 @@ def main():
     os.makedirs(args.out_dir,   exist_ok=True)
     os.makedirs(args.model_dir, exist_ok=True)
 
-    device = torch.device(
-        "cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
+    if not args.no_cuda:
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            device = torch.device("mps")   # Apple Silicon
+        else:
+            device = torch.device("cpu")
+    else:
+        device = torch.device("cpu")
     print(f"\n  Device: {device}")
     if device.type == "cpu":
-        print("  ⚠️  No GPU detected. CNN training will be slow (~2–4h).")
-        print("  Consider running on a machine with CUDA or reducing batch size.")
+        print("  ⚠️  No GPU/MPS detected. CNN training on CPU (~90 min on fast machine).")
+        print("  Tip: on Apple Silicon, MPS is auto-detected (no flag needed).")
 
     # ── Data ──────────────────────────────────────────────────────────────────
     print(f"\n=== Loading sequence data from {args.data_dir}/ ===")
