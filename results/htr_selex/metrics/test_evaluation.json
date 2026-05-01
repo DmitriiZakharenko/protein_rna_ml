@@ -1,0 +1,135 @@
+{
+  "dataset": "htr_selex_prjeb25907",
+  "model": "xgboost",
+  "overall": {
+    "auroc": 0.7959034585798817,
+    "auprc": 0.6926795756320836,
+    "accuracy": 0.7322820512820513,
+    "f1": 0.3699233600868988,
+    "brier": 0.17854890595163342
+  },
+  "per_protein_summary": {
+    "median": 0.8158885,
+    "mean": 0.7859727500000001,
+    "min": 0.435834,
+    "max": 0.9860745000000001,
+    "n_flagged": 4
+  },
+  "per_protein": [
+    {
+      "protein": "ESRP1-construct3",
+      "auroc": 0.9860745000000001,
+      "auprc": 0.9679096598597096,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "CSTF2T",
+      "auroc": 0.9386565,
+      "auprc": 0.894217237479997,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "DAZ3",
+      "auroc": 0.9013210000000001,
+      "auprc": 0.8024506325623791,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "RBFOX1-construct2",
+      "auroc": 0.8615029999999999,
+      "auprc": 0.795790977941742,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "LARP7-construct4",
+      "auroc": 0.831576,
+      "auprc": 0.6669405879268238,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "RBMS1",
+      "auroc": 0.823831,
+      "auprc": 0.7304908667913672,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "SNRNP70",
+      "auroc": 0.8158885,
+      "auprc": 0.6481079226667873,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "DAZAP1",
+      "auroc": 0.8014915,
+      "auprc": 0.76339298264401,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "DAZ4",
+      "auroc": 0.7896045,
+      "auprc": 0.6657762015295998,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "LARP6",
+      "auroc": 0.6928555000000002,
+      "auprc": 0.48326901790629784,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "RBM6",
+      "auroc": 0.683153,
+      "auprc": 0.5216069908589329,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "RBMS2",
+      "auroc": 0.65585675,
+      "auprc": 0.42572667106998113,
+      "n": 3000,
+      "note": "ok"
+    },
+    {
+      "protein": "PCBP1",
+      "auroc": 0.435834,
+      "auprc": 0.2827680835358043,
+      "n": 3000,
+      "note": "ok"
+    }
+  ],
+  "flagged": [
+    {
+      "protein": "LARP6",
+      "auroc": 0.6928555000000002,
+      "n": 3000
+    },
+    {
+      "protein": "PCBP1",
+      "auroc": 0.435834,
+      "n": 3000
+    },
+    {
+      "protein": "RBM6",
+      "auroc": 0.683153,
+      "n": 3000
+    },
+    {
+      "protein": "RBMS2",
+      "auroc": 0.65585675,
+      "n": 3000
+    }
+  ],
+  "status": "PASS",
+  "message": "\u2705 Ready for Phase 2"
+}

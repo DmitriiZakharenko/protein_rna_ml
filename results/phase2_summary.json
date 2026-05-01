@@ -1,0 +1,81 @@
+{
+  "phase": 2,
+  "description": "Generalized model trained across all 3 datasets on 168 proteins, 632k samples",
+  "split_strategy": "Global protein-aware split — same protein always in same split across datasets",
+  "primary_metric": "AUPRC",
+  "benchmark_target": {"model": "ZHMolGraph", "auroc": 0.798, "auprc": 0.820, "split": "hard (unseen proteins+RNAs)"},
+  "generated": "2026-05-01",
+
+  "v1_mlp_kmer": {
+    "status": "DONE",
+    "architecture": "MLP [512,256,128], input=8262 k-mer features (RNA 4-mer + Prot 3-mer + dataset_onehot + extras)",
+    "best_epoch": 1,
+    "val_auroc": 0.7157,
+    "val_auprc": 0.6361,
+    "test_auroc": 0.6736,
+    "test_auprc": 0.5444,
+    "failure_mode": "Val AUROC peaked at epoch 1 then monotonically degraded. Root cause: RNA length mismatch (RBNS 20nt vs HTR-SELEX 40nt) → k-mer frequency distributions incompatible across datasets. StandardScaler cannot fix a structural feature mismatch.",
+    "conclusion": "k-mer MLP not viable for cross-dataset training."
+  },
+
+  "v2_cnn_raw_seq": {
+    "status": "DONE",
+    "architecture": "Dual-branch CNN: RNA branch (4-ch in, filters [128,256,256], kernels [7,5,3]) + Protein branch (20-ch in, filters [128,256,256], kernels [11,7,5]) → global max pool → concat 512-d → MLP [256,64] → logit",
+    "input": "Raw one-hot sequences. RNA padded to 60nt, Protein to 300aa.",
+    "training": {
+      "epochs_trained": 28,
+      "best_epoch": 20,
+      "early_stopping_metric": "val_auroc",
+      "optimizer": "AdamW lr=5e-4 weight_decay=1e-4",
+      "scheduler": "CosineAnnealingLR",
+      "pos_weight": "~2.0 (1:2 class imbalance)",
+      "device": "CPU (~210s/epoch)"
+    },
+    "val_auroc": 0.8107,
+    "val_auprc": 0.7342,
+    "test_auroc": 0.7028,
+    "test_auprc": 0.5987,
+    "vs_v1_mlp": {
+      "val_auroc_delta": "+0.095",
+      "val_auprc_delta": "+0.098",
+      "test_auroc_delta": "+0.029",
+      "test_auprc_delta": "+0.054"
+    },
+    "vs_zhmolgraph": {
+      "auroc_gap": "-0.095",
+      "auprc_gap": "-0.221"
+    },
+    "per_protein_test": {
+      "n_proteins": 24,
+      "median_auroc": 0.7176,
+      "min_auroc": 0.429,
+      "by_dataset": {
+        "htr_selex_25907": {"n": 14, "median_auroc": 0.779},
+        "rbns": {"n": 10, "median_auroc": 0.611}
+      }
+    },
+    "per_protein_best": [
+      {"protein": "ESRP1-construct3", "auroc": 0.981, "dataset": "htr_selex_25907"},
+      {"protein": "PUF60",            "auroc": 0.924, "dataset": "rbns"},
+      {"protein": "KHDRBS3",          "auroc": 0.901, "dataset": "htr_selex_25907"}
+    ],
+    "per_protein_worst": [
+      {"protein": "UNK",    "auroc": 0.429, "dataset": "rbns",           "note": "Poorly characterized RBP"},
+      {"protein": "IGF2BP3","auroc": 0.459, "dataset": "rbns",           "note": "Complex multi-domain binding"},
+      {"protein": "TAF15",  "auroc": 0.468, "dataset": "rbns",           "note": "Phase-separation RBP, atypical"}
+    ],
+    "interpretation": "CNN V2 successfully resolves the RNA length mismatch — val AUPRC improves steadily across all 28 epochs (no degradation as with MLP). RBNS proteins remain harder: shorter RNA (20nt) provides fewer convolutional filter activations. Gap vs ZHMolGraph remains large — one-hot CNN lacks semantic protein representation. ESM-2 embeddings needed.",
+    "action": "Proceed to V3: ESM-2 protein embeddings + RNA CNN branch"
+  },
+
+  "v3_esm2_rna_cnn": {
+    "status": "PLANNED",
+    "architecture": "ESM-2 (650M, frozen, mean-pool) → 1280-d → Linear(256) + RNA CNN branch (256-d) → concat 512-d → MLP [256,64] → logit",
+    "key_advantage": "ESM-2 captures evolutionary protein language; per-residue embeddings encode structural + functional context k-mer and one-hot miss entirely",
+    "expected_auroc": "0.78-0.82",
+    "expected_auprc": "0.72-0.78",
+    "target": "Beat ZHMolGraph: AUROC > 0.798, AUPRC > 0.820",
+    "scripts": ["scripts/07_extract_esm2_embeddings.py", "scripts/08_train_generalized_v3.py"],
+    "requirements": "transformers>=4.35, esm, torch (GPU recommended for ESM-2 inference but not required)"
+  }
+}

@@ -125,11 +125,11 @@ def main():
         optimizer, T_max=args.epochs, eta_min=args.lr * 0.01)
 
     # ── Training loop ─────────────────────────────────────────────────────────
-    print(f"\n=== Training CNN (max {args.epochs} epochs, patience={args.patience}) ===")
-    print(f"  {'Epoch':>5}  {'Loss':>8}  {'Val AUROC':>10}  {'Val AUPRC':>10}  {'Time':>6}")
-    print(f"  {'─'*50}")
+    print(f"\n=== Training CNN (max {args.epochs} epochs, early stop on val AUPRC, patience={args.patience}) ===")
+    print(f"  {'Epoch':>5}  {'Loss':>8}  {'ValAUROC':>9}  {'ValAUPRC':>9}  {'Time':>6}  {'*':>3}")
+    print(f"  {'─'*55}")
 
-    best_auroc, best_epoch, no_improve = 0.0, 0, 0
+    best_auprc, best_auroc, best_epoch, no_improve = 0.0, 0.0, 0, 0
     history = []
 
     for epoch in range(1, args.epochs + 1):
@@ -149,24 +149,26 @@ def main():
         val_m = evaluate(model, val_loader, device)
         scheduler.step()
         elapsed = time.time() - t0
+        is_best = val_m["auprc"] > best_auprc
+        marker = "★" if is_best else ""
         history.append({"epoch": epoch, "train_loss": round(train_loss,4),
                          "val_auroc": round(val_m["auroc"],4),
                          "val_auprc": round(val_m["auprc"],4)})
-        print(f"  {epoch:>5}  {train_loss:>8.4f}  {val_m['auroc']:>10.4f}  "
-              f"{val_m['auprc']:>10.4f}  {elapsed:>5.1f}s")
+        print(f"  {epoch:>5}  {train_loss:>8.4f}  {val_m['auroc']:>9.4f}  "
+              f"{val_m['auprc']:>9.4f}  {elapsed:>5.1f}s  {marker}")
 
-        if val_m["auroc"] > best_auroc:
-            best_auroc, best_epoch, no_improve = val_m["auroc"], epoch, 0
+        if is_best:
+            best_auprc, best_auroc, best_epoch, no_improve = val_m["auprc"], val_m["auroc"], epoch, 0
             torch.save({"epoch": epoch, "model_state": model.state_dict(),
                         "val_metrics": val_m, "args": vars(args)},
                        os.path.join(args.model_dir, "best_model.pt"))
         else:
             no_improve += 1
             if no_improve >= args.patience:
-                print(f"\n  Early stopping at epoch {epoch}")
+                print(f"\n  Early stopping at epoch {epoch} (patience={args.patience})")
                 break
 
-    print(f"\n  Best val AUROC: {best_auroc:.4f} at epoch {best_epoch}")
+    print(f"\n  Best val AUPRC: {best_auprc:.4f}  AUROC: {best_auroc:.4f}  at epoch {best_epoch}")
 
     # ── Test evaluation ───────────────────────────────────────────────────────
     ckpt = torch.load(os.path.join(args.model_dir, "best_model.pt"), map_location=device)
