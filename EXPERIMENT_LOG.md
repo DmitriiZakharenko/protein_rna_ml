@@ -245,3 +245,71 @@ a fundamentally different design (fine-tuning, cross-attention, binding-domain s
 | EXP-HOMOLOGY | Homology audit | Quantify paralog leakage | MMseqs2 install | Leakage fraction |
 | EXP-HARDNEG | V2 with hard negatives | Better negatives | scripts/15 (todo) | AUROC on new test |
 | EXP-INTERACTION | Bilinear V2 | Pairwise interaction | V2-CLEAN | AUROC vs V2 |
+
+---
+
+## RNAcompete Zero-Shot Benchmark — V2 CNN (Bug-Affected)
+
+**Date**: 2026-05-13  
+**Script**: `scripts/20_evaluate_benchmark.py`  
+**Checkpoint**: `models/saved/generalized_v2/best_model.pt` (bug-affected)  
+**Benchmark**: `data/benchmarks/rnacompete/rnacompete_all.tsv` (2M rows subsampled from 13.9M)
+
+### Results
+
+| Metric | Value | Interpretation |
+|---|---|---|
+| Overall AUROC | **0.571** | Marginally above random (0.5) |
+| Overall AUPRC | **0.391** | vs random baseline 0.316 |
+| Per-protein median AUROC (all 742) | **0.551** | Near-random |
+| Per-protein median — seen in training (27) | **0.629** | Slight memorization benefit |
+| Per-protein median — truly unseen (715) | **0.549** | Near-random zero-shot |
+| % proteins with AUROC > 0.7 | 17.3% | |
+| % proteins with AUROC > 0.5 | 61.9% | |
+
+### Top / Bottom Proteins
+
+**Best** (AUROC > 0.90): TAF15 (0.982), EWSR1 (0.961), RBFOX2 (0.949), ZRANB2 (0.934), ESRP1 (0.916)  
+Of these, EWSR1, RBFOX2, ZRANB2, ESRP1 are in the training set — partial memorization.
+
+**Worst** (AUROC < 0.26): ETF1 (0.215), RNF31 (0.215), NUDT6 (0.228), DCN (0.241)  
+These are likely non-canonical RBPs (many from ucRBP) with binding specificity
+the model has never seen evidence of.
+
+### Per-Organism (selected, after name normalization fix)
+
+| Organism | AUROC | n |
+|---|---|---|
+| Saccharomyces cerevisiae | 0.830 | 2,277 |
+| Puccinia graminis | 0.811 | 5,995 |
+| Monodelphis domestica | 0.807 | 10,295 |
+| Arabidopsis thaliana | 0.674 | 13,283 |
+| Homo sapiens (RBPZoo/Eukarya) | 0.671 | 42,055 |
+| Homo sapiens (ucRBP, 613 RBPs) | 0.554 | 1,452,731 |
+| Leishmania major | 0.534 | 54,639 |
+
+Human ucRBP (0.554 on 1.45M pairs, 613 proteins) is the most important number:
+the model barely generalizes to unseen human RBPs from the same in vitro assay.
+
+### Data Quality Issues Found
+
+- Organism name normalization bug: ucRBP uses underscores (`Homo_sapiens`),
+  other sub-datasets use spaces. Fixed in `17_prepare_rnacompete_benchmark.py`.
+  Benchmark must be re-generated to get clean per-organism numbers.
+
+### Interpretation
+
+This is a **true zero-shot generalization failure**. The model trained on 169 proteins
+from HTR-SELEX + RBNS cannot generalize to 715 unseen proteins across 26 organisms.
+The 0.08 gap between seen (0.629) and unseen (0.549) median AUROC shows limited
+memorization and limited generalization — the worst possible combination.
+
+This result is expected for a bug-affected model with ~170 training proteins.
+It establishes the **lower bound** for this architecture. The clean retrain
+(V2-CLEAN) will not fundamentally change this — the bottleneck is not the bug,
+it is the number and diversity of training proteins.
+
+### Action Items
+
+See STRATEGY.md §Next Steps for the full prioritized plan.
+

@@ -173,3 +173,106 @@ Potential path to a short paper (workshop / methods letter):
 - Run homology audit; report results honestly.
 - Improve negatives; retrain; show AUROC changes.
 - This becomes a benchmark/dataset contribution, not a methods paper.
+
+---
+
+## 7. RNAcompete Zero-Shot Results — Diagnosis (2026-05-13)
+
+### 7.1 Results
+
+| Metric | Value |
+|---|---|
+| Overall AUROC | 0.571 |
+| Per-protein median, all (742) | 0.551 |
+| Per-protein median, truly unseen (715) | **0.549** |
+| Per-protein median, seen in training (27) | 0.629 |
+| Homo sapiens ucRBP (613 proteins, 1.45M pairs) | 0.554 |
+
+**Verdict**: zero-shot generalization has essentially failed. The model performs at near-random
+on unseen proteins across assay and organism boundaries.
+
+### 7.2 Root Cause Analysis
+
+This is **not primarily a bug problem**. The double class-weighting bug affects calibration
+and absolute AUROC, but not the fundamental capacity to generalize. The root causes are:
+
+1. **Training set too small**: 169 unique proteins cannot cover the motif space of all RBPs.
+   The 0.08 gap between seen/unseen proteins shows minimal memorization — the model is not
+   overfitting to protein identity, it just lacks generalizable signal.
+
+2. **Assay and RNA length distribution mismatch**: V2 was trained on HTR-SELEX sequences
+   (30–60 nt enriched) and evaluated on RNAcompete probes (35–41 nt synthetic covering all
+   7-mers). These are different distributions; the CNN's learned motif filters may be tuned
+   to the specific frequency spectrum of SELEX-enriched sequences.
+
+3. **No organism-invariant features**: organisms like Leishmania (0.534) and C. elegans (0.597)
+   have distinct codon usage and RNA composition. One-hot CNN has no mechanism to abstract
+   over these differences.
+
+4. **Architecture ceiling**: one-hot CNN with global max pooling is the right inductive bias
+   for motif detection but has no interaction layer — it scores protein and RNA independently
+   and combines them only in the MLP head. This limits the model to protein-specific and
+   RNA-specific features rather than joint interaction features.
+
+### 7.3 What Would Improve Zero-Shot Performance
+
+In order of expected impact:
+
+1. **More diverse training proteins** — adding RNAcompete to training (with homology-aware
+   split to exclude proteins appearing in the test set) would provide 1,087 proteins spanning
+   26 organisms. This is the highest-leverage intervention.
+
+2. **Interaction layer** — bilinear product or cross-attention between RNA and protein
+   representations forces the model to learn joint features that may generalize better
+   than independent branch representations combined only at the head.
+
+3. **Fine-tuned protein encoder** — LoRA fine-tuned ESM-2 on the training proteins may
+   learn binding-domain-specific representations that transfer to unseen proteins in the
+   same family. Frozen ESM-2 failed; fine-tuned may not.
+
+4. **RNA structural features** — RNAcompete probes are short enough for RNAfold;
+   adding MFE/accessibility features may help the model generalize beyond
+   sequence-level motifs.
+
+---
+
+## 8. Prioritized Next Steps (Post-Benchmark)
+
+### Immediate (this week — no new training required)
+
+| Task | Action | Output |
+|---|---|---|
+| Fix benchmark organism names | Re-run `17_prepare_rnacompete_benchmark.py` with fix | Clean per-organism AUROC table |
+| Retrain V2-CLEAN (1 run) | `python scripts/06_train_generalized_v2.py` | Bug-free anchor baseline |
+| Re-run RNAcompete on V2-CLEAN | `scripts/20_evaluate_benchmark.py` | Corrected zero-shot score |
+| Multi-seed V2 (5 seeds) | `scripts/18_run_multiseed.py` | AUROC mean ± std |
+
+### Short-term (after clean baseline confirmed)
+
+1. **Homology audit** — run MMseqs2 between training proteins and RNAcompete proteins at 30%
+   identity. Identify how many of the 27 overlaps are true sequence matches vs name matches.
+   Determines whether RNAcompete can be used as a training source without leakage.
+
+2. **Interaction layer V4** — add a bilinear interaction layer between V2's 256-d RNA and
+   protein branch outputs. No new encoders. Expected to improve both in-distribution test
+   AUROC and zero-shot generalization. This is the highest-priority architecture change.
+
+3. **iCLIP data acquisition** — prepare TDP-43 and FUS iCLIP datasets. These two proteins
+   appear in RNAcompete training overlap (TARDBP = TDP-43, FUS = EWSR1 family) and provide
+   in vivo context for the proteins the model already partially handles.
+
+### Medium-term
+
+4. **RNAcompete → Training (Phase 3)** — after homology audit and interaction layer V4:
+   merge RNAcompete sub-datasets into training with homology-aware split. Re-run zero-shot
+   benchmark on held-out organisms (non-human organisms absent from any training set).
+
+5. **Affinity regression head** — add a parallel regression output trained on
+   `probe_intensity` from RNAcompete and `R_max` from RBNS. Multi-task training on
+   both classification and affinity may learn better-calibrated motif representations.
+
+### Do Not Do
+
+- Do not try more frozen ESM-2 variants (three experiments, conclusively worse).
+- Do not report RNAcompete median AUROC 0.551 as a success metric; it is a baseline.
+- Do not compare to ZHMolGraph AUROC 0.798 — different dataset, different task.

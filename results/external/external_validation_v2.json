@@ -1,0 +1,791 @@
+{
+  "dataset": "data/external/dataset without affinities.xlsx",
+  "n_pairs": 159,
+  "n_pos": 114,
+  "n_neg": 45,
+  "n_proteins": 96,
+  "rna_len_stats": {
+    "min": 6,
+    "median": 152,
+    "max": 17918,
+    "pct_long": 0.5660377358490566
+  },
+  "sliding_window": {
+    "rna_max": 60,
+    "step": 30
+  },
+  "v2_cnn": {
+    "auroc": 0.7976608187134502,
+    "auprc": 0.9270071195177876
+  },
+  "per_protein_v2": [
+    {
+      "protein": "AKT1",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "ASF/SF2",
+      "n_pos": 4,
+      "n_neg": 2,
+      "auroc": 1.0,
+      "auprc": 1.0,
+      "note": ""
+    },
+    {
+      "protein": "BSA",
+      "n_pos": 0,
+      "n_neg": 1,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "CDK6",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "CELF1",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "CIZ1",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "DDX17",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "DDX39B",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "ELAVL1",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "ERH",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "ERK1 (MAPK3)",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "ERK2 (MAPK1)",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "EZH2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "FBF-1",
+      "n_pos": 1,
+      "n_neg": 4,
+      "auroc": 0.5,
+      "auprc": 0.3333,
+      "note": ""
+    },
+    {
+      "protein": "FBF-1 (part)",
+      "n_pos": 2,
+      "n_neg": 4,
+      "auroc": 0.375,
+      "auprc": 0.3667,
+      "note": ""
+    },
+    {
+      "protein": "FBF-2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "FBF-2 (part)",
+      "n_pos": 2,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "FMRP-KH1",
+      "n_pos": 0,
+      "n_neg": 1,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "FMRP-KH2",
+      "n_pos": 0,
+      "n_neg": 1,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "FMRP-NT",
+      "n_pos": 1,
+      "n_neg": 2,
+      "auroc": 1.0,
+      "auprc": 1.0,
+      "note": ""
+    },
+    {
+      "protein": "HNRNPA0",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "HNRNPAB",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "HNRNPC",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "HNRNPD",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "HNRNPK",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "HNRNPL",
+      "n_pos": 1,
+      "n_neg": 1,
+      "auroc": null,
+      "auprc": 0.5,
+      "note": ""
+    },
+    {
+      "protein": "HNRNPM",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "HNRNPR",
+      "n_pos": 1,
+      "n_neg": 1,
+      "auroc": null,
+      "auprc": 0.5,
+      "note": ""
+    },
+    {
+      "protein": "HNRNPU",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "HNRNPUL2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "HNRPDL",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "HsPUM1",
+      "n_pos": 3,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "IGF2BP1",
+      "n_pos": 6,
+      "n_neg": 8,
+      "auroc": 0.6042,
+      "auprc": 0.6576,
+      "note": ""
+    },
+    {
+      "protein": "IGF2BP2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "IGF2BP3",
+      "n_pos": 4,
+      "n_neg": 1,
+      "auroc": 0.25,
+      "auprc": 0.8042,
+      "note": ""
+    },
+    {
+      "protein": "L1TD1",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "L7Ae",
+      "n_pos": 0,
+      "n_neg": 2,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "LIN28A",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "LSD1 (KDM1A)",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "MCP (MS2 Coat Protein)",
+      "n_pos": 2,
+      "n_neg": 1,
+      "auroc": 1.0,
+      "auprc": 1.0,
+      "note": ""
+    },
+    {
+      "protein": "METTL14",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "METTL3",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "MYBBP1A",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "MYEF2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "NusG",
+      "n_pos": 0,
+      "n_neg": 1,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "PCBP2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "PCGF5",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "POLDIP3",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "PTB1",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "PTB1 (RBD1)",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "PTB1 (RBD2)",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "PTB1 (RBD3)",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "PTB1 (RBD34)",
+      "n_pos": 7,
+      "n_neg": 1,
+      "auroc": 0.8571,
+      "auprc": 0.9821,
+      "note": ""
+    },
+    {
+      "protein": "PTB1 (RBD4)",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "PTBP2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "PUF-5",
+      "n_pos": 0,
+      "n_neg": 2,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "Puf3",
+      "n_pos": 3,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RALY",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RBFOX2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RBM14",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RBM15",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RBM3",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RBM4",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RBM5 (part)",
+      "n_pos": 1,
+      "n_neg": 1,
+      "auroc": null,
+      "auprc": 0.5,
+      "note": ""
+    },
+    {
+      "protein": "RBMXL1",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RNF2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RNF20",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RNMT",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RSK1 (RPS6KA1)",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "RYBP",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SAFB",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SAP18",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SARNP",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SC35",
+      "n_pos": 2,
+      "n_neg": 3,
+      "auroc": 0.3333,
+      "auprc": 0.4167,
+      "note": ""
+    },
+    {
+      "protein": "SLBP",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SPEN",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SRSF1 RRM1 E87N",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SRSF10",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SRSF2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SRSF3",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SRSF7",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "SRSF9",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "TARDBP",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "TCTP",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "THOC4",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "TRIM6",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "TRIM71",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "WTAP",
+      "n_pos": 2,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "YBX1",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "YBX1 (CSD domain)",
+      "n_pos": 2,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "YBX1 (CTD domain)",
+      "n_pos": 0,
+      "n_neg": 2,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "YTHDC1",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "YTHDF1",
+      "n_pos": 0,
+      "n_neg": 1,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "YTHDF2",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "ZBP1 (part)",
+      "n_pos": 0,
+      "n_neg": 5,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    },
+    {
+      "protein": "ZFR",
+      "n_pos": 1,
+      "n_neg": 0,
+      "auroc": null,
+      "auprc": null,
+      "note": "single_class"
+    }
+  ]
+}

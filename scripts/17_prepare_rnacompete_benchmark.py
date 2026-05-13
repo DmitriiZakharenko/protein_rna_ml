@@ -97,6 +97,9 @@ def standardise(df: pd.DataFrame) -> pd.DataFrame:
     df = df[PROJECT_SCHEMA].copy()
     df["binding_label"] = df["binding_label"].astype(int)
     df["rna_sequence"]  = df["rna_sequence"].str.upper().str.replace("T", "U", regex=False)
+    # Normalise organism names: ucRBP uses underscores, others use spaces
+    if "organism" in df.columns:
+        df["organism"] = df["organism"].str.replace("_", " ", regex=False)
     return df
 
 
