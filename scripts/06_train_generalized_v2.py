@@ -9,11 +9,13 @@ This is a significant step up from k-mer MLP:
 
 Usage (from protein_rna_ml/):
     python scripts/06_train_generalized_v2.py
+    python scripts/06_train_generalized_v2.py --data_dir data/generalized_v2 --seed 42
     python scripts/06_train_generalized_v2.py --rna_max 60 --prot_max 800
 """
 
 import argparse
 import json
+import random
 import os
 import sys
 import time
@@ -73,8 +75,16 @@ def main():
     parser.add_argument("--lr",         type=float, default=5e-4)
     parser.add_argument("--dropout",    type=float, default=0.3)
     parser.add_argument("--patience",   type=int,   default=8)
+    parser.add_argument("--seed",       type=int,   default=42,
+                        help="Random seed (torch / NumPy / Python; shuffle generator). Needed by scripts/18_run_multiseed.py.")
     parser.add_argument("--no_cuda",    action="store_true")
     args = parser.parse_args()
+
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(args.seed)
 
     os.makedirs(args.out_dir,   exist_ok=True)
     os.makedirs(args.model_dir, exist_ok=True)
@@ -104,11 +114,17 @@ def main():
     test_ds  = make_ds("test")
     print(f"  Train: {len(train_ds):,}  Val: {len(val_ds):,}  Test: {len(test_ds):,}")
     print(f"  RNA padded to {args.rna_max} nt  |  Protein padded to {args.prot_max} aa")
+    print(f"  seed={args.seed}")
 
     train_labels = train_ds.df["binding_label"].values.tolist()
     # Shuffle only — class imbalance is handled entirely by pos_weight in the loss.
-    train_loader = DataLoader(train_ds, batch_size=args.batch_size,
-                              shuffle=True, num_workers=2, pin_memory=(device.type=="cuda"))
+    gen = torch.Generator()
+    gen.manual_seed(args.seed)
+    train_loader = DataLoader(
+        train_ds, batch_size=args.batch_size,
+        shuffle=True, generator=gen,
+        num_workers=2, pin_memory=(device.type == "cuda"),
+    )
     val_loader   = DataLoader(val_ds, batch_size=args.batch_size*2, shuffle=False, num_workers=2)
     test_loader  = DataLoader(test_ds, batch_size=args.batch_size*2, shuffle=False, num_workers=2)
 
