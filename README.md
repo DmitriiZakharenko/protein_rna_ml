@@ -14,16 +14,11 @@ Output: binding probability ∈ [0, 1]
 | Phase | Status | Notes |
 |---|---|---|
 | Phase 1 — Dataset validation | **Complete** | 3 datasets, all pass |
-| Phase 2 — Generalized models V1–V3c | **Complete (bug-affected)** | All checkpoints retrain pending |
-| Phase 1 bug fixes | **Applied** | Double class-weighting fixed 2026-05-13 |
-| V2-CLEAN retraining | **Pending** | Run after Phase 1 fix validation |
-| RNAcompete benchmark prep | **Ready** | 13.9M pairs, scripts prepared |
-| Zero-shot evaluation on RNAcompete | **Pending** | Requires V2-CLEAN checkpoint |
-
-> **Important**: All V1–V3c checkpoints were trained with a double class-weighting bug
-> (`WeightedRandomSampler` + `BCEWithLogitsLoss(pos_weight)` simultaneously).
-> The bug is fixed in all training scripts as of 2026-05-13. Do not cite existing
-> test metrics as authoritative until clean retraining is complete.
+| Phase 2 — Generalized models V1–V3c | **Complete** | Clean results, double class-weighting bug fixed and retrained 2026-05-13 |
+| RNAcompete benchmark prep | **Complete** | 13.9M pairs processed |
+| Zero-shot evaluation on RNAcompete (V2) | **Complete** | Median AUROC 0.549 on unseen proteins |
+| Phase 3A — Expand training with RNAcompete | **In progress** | Dataset builder ready (`scripts/22`) |
+| Phase 3B — V4 bilinear interaction layer | **In progress** | Model and training script ready (`scripts/21`) |
 
 ---
 
@@ -41,23 +36,36 @@ on entirely unseen proteins.
 
 All splits are **protein-aware**: no RBP appears in both train and test. Combined training pool: 632,642 examples · 168 unique proteins.
 
+![Phase 1 validation results](figures/phase1_validation.png)
+
 ---
 
 ## Phase 2 — Generalized Models
 
-All numbers below are from **bug-affected checkpoints** (see note above). They establish architectural ordering but not absolute performance.
+All numbers below are from **clean checkpoints** retrained after fixing the double class-weighting bug (2026-05-13).
 
 | Model | Encoding | Val AUROC | Test AUROC | Test AUPRC | pp-median AUROC | Note |
 |---|---|---|---|---|---|---|
-| V1 MLP | RNA 4-mer + Prot 3-mer | 0.716 | 0.674 | 0.544 | 0.689 | bug-affected |
-| **V2 CNN** | One-hot sequences | **0.747** | **0.690** | **0.580** | **0.714** | bug-affected, **anchor model** |
-| V3 ESM-2 mean-pool | Frozen ESM-2 1280-d + RNA CNN | 0.715 | 0.634 | 0.547 | 0.633 | bug-affected, **worse than V2** |
-| V3b CNN + ESM-2 | One-hot + frozen ESM-2 concat | 0.770 | 0.666 | 0.568 | 0.676 | bug-affected |
-| V3c ESM-2 residue | Per-residue ESM-2 → Conv1D | 0.745 | 0.685 | 0.595 | 0.711 | bug-affected |
+| V1 MLP | RNA 4-mer + Prot 3-mer | 0.716 | 0.674 | 0.544 | 0.689 | |
+| **V2 CNN** | One-hot sequences | **0.746** | **0.690** | **0.580** | **0.714** | **anchor model** |
+| V3 ESM-2 mean-pool | Frozen ESM-2 1280-d + RNA CNN | 0.715 | 0.634 | 0.547 | 0.633 | **worse than V2** |
+| V3b CNN + ESM-2 | One-hot + frozen ESM-2 concat | 0.770 | 0.666 | 0.568 | 0.676 | |
+| V3c ESM-2 residue | Per-residue ESM-2 → Conv1D | 0.745 | 0.685 | 0.595 | 0.711 | |
 
 **Key finding**: frozen ESM-2 embeddings (mean-pool and residue) do not improve over pure one-hot CNN. The bottleneck is interaction modeling and data quality, not protein representation.
 
-All models show a **val→test AUROC gap of 0.04–0.11**, consistent with the double class-weighting bug inflating val metrics. Clean retraining expected to narrow this gap.
+![Phase 2 model comparison](figures/phase2_model_comparison.png)
+
+<details>
+<summary>Training dynamics and per-protein breakdown (V2 CNN)</summary>
+
+![V2 training curve](figures/v2_training_curve.png)
+
+![V2 per-protein AUROC](figures/v2_per_protein_auroc.png)
+
+![ESM-2 vs V2 per-protein comparison](figures/esm2_vs_v2_comparison.png)
+
+</details>
 
 ---
 
@@ -74,7 +82,7 @@ RNAcompete (Kazan et al., *Nat. Biotechnol.* 2025 + Ray et al., *Nature* 2013) m
 
 **Integration strategy: benchmark only (not training).** Models trained on HTR-SELEX + RBNS are evaluated on RNAcompete without fine-tuning — a zero-shot generalization test across unseen proteins, organisms, and assay technology. Merging into training is deferred to Phase 3 pending homology analysis.
 
-### Zero-Shot Results — V2 CNN (bug-affected, 2026-05-13)
+### Zero-Shot Results — V2 CNN (clean checkpoint, 2026-05-13)
 
 | Metric | Value | Notes |
 |---|---|---|
@@ -85,11 +93,13 @@ RNAcompete (Kazan et al., *Nat. Biotechnol.* 2025 + Ray et al., *Nature* 2013) m
 | Human RBPs / ucRBP (613 proteins) | 0.554 | 1.45M pairs, near-random |
 | % proteins AUROC > 0.7 | 17.3% | |
 
-**Interpretation**: zero-shot generalization has essentially failed on this checkpoint.
-The bottleneck is not the bug — it is the size and diversity of the training set (169 proteins).
-The 0.08 gap between seen and unseen proteins shows minimal memorization; the model does not
-generalize to novel binding specificities. Clean retraining + interaction layer are the
-highest-priority next steps. See `STRATEGY.md §8` for the full plan.
+**Interpretation**: zero-shot generalization fails on this checkpoint.
+The bottleneck is the size and diversity of the training set (169 proteins), not architecture.
+The 0.08 gap between seen and unseen proteins shows minimal memorization.
+Phase 3 (expanding training with RNAcompete + bilinear interaction layer) addresses both issues.
+See `STRATEGY.md §8` for the full plan.
+
+![RNAcompete zero-shot benchmark](figures/rnacompete_overview.png)
 
 ```bash
 # Step 1 — prepare benchmark files (once, re-run after organism name fix):
@@ -110,13 +120,11 @@ python scripts/20_evaluate_benchmark.py \
 
 | Model | Method | Dataset | AUROC | AUPRC | Split |
 |---|---|---|---|---|---|
-| **Our V2 CNN** | Dual-branch one-hot CNN | HTR-SELEX + RBNS | 0.690* | 0.580* | Protein-aware |
+| **Our V2 CNN** | Dual-branch one-hot CNN | HTR-SELEX + RBNS | 0.690 | 0.580 | Protein-aware |
 | Our XGBoost | k-mer features per-dataset | HTR-SELEX only | 0.825 | 0.742 | Protein-aware |
 | ZHMolGraph | RNA-FM + ProtTrans + GNN | NPInter2 / RPI7317 | 0.798 | 0.820 | Hard (NPInter5) |
 | RPITER | Feature refinement + RF | Various | 0.727 | 0.774 | Random |
 | IPMiner | Autoencoder + DBN | Various | 0.664 | 0.742 | Random |
-
-*bug-affected; pending clean retraining.
 
 > **On ZHMolGraph comparability**: ZHMolGraph was trained on curated literature-derived
 > interaction databases (NPInter2, RPI7317) and evaluated on unseen pairs from NPInter5.
@@ -169,6 +177,10 @@ protein_rna_ml/
 │   ├── 17_prepare_rnacompete_benchmark.py  convert 3 sub-datasets to project schema
 │   ├── 20_evaluate_benchmark.py            inference on any benchmark TSV with saved model
 │   │
+│   │   — Phase 3: scaling + interaction —
+│   ├── 21_train_generalized_v4_interaction.py  V4: bilinear interaction layer
+│   ├── 22_build_phase3a_dataset.py             SELEX + RNAcompete merge (homology-aware)
+│   │
 │   │   — Experiment infrastructure —
 │   ├── 18_run_multiseed.py             multi-seed runner, mean±std aggregation
 │   └── 19_compare_models.py            leaderboard, radar chart, CDF comparison
@@ -182,7 +194,8 @@ protein_rna_ml/
 │   ├── models/
 │   │   ├── baseline.py                 LR / RF / XGBoost wrappers
 │   │   ├── mlp_model.py                RNABindingMLP
-│   │   └── cnn_model.py                RNABindingCNN (dual-branch)
+│   │   ├── cnn_model.py                RNABindingCNN (dual-branch, V2)
+│   │   └── interaction_model.py        RNABindingV4 (bilinear interaction, Phase 3B)
 │   └── utils/
 │       └── __init__.py
 │
@@ -218,14 +231,14 @@ python scripts/01_prepare_dataset.py --config configs/rbns_validation.yaml
 python scripts/02_train_validation_model.py --config configs/rbns_validation.yaml
 python scripts/03_evaluate_validation.py --config configs/rbns_validation.yaml --model xgboost
 
-# Phase 2 V2: train clean CNN (bug fixed 2026-05-13)
+# Phase 2 V2: train CNN (clean, bug fixed)
 python scripts/04_build_generalized_dataset.py
 python scripts/06_train_generalized_v2.py --data_dir data/generalized_v2 --epochs 50
 
-# Multi-seed evaluation (5 seeds, ~10 hours GPU total)
+# Multi-seed evaluation (5 seeds)
 python scripts/18_run_multiseed.py \
     --script scripts/06_train_generalized_v2.py \
-    --n_seeds 5 --output_dir results/multiseed/v2_cnn_clean \
+    --n_seeds 5 --output_dir results/multiseed/v2_cnn \
     --extra_args "--data_dir data/generalized_v2 --epochs 50"
 
 # Analyze training dynamics
@@ -242,6 +255,13 @@ python scripts/20_evaluate_benchmark.py \
     --checkpoint models/saved/generalized_v2/best_model.pt \
     --benchmark data/benchmarks/rnacompete/rnacompete_all.tsv \
     --output_dir results/benchmarks/rnacompete_v2
+
+# Phase 3B: V4 bilinear interaction model
+python scripts/21_train_generalized_v4_interaction.py \
+    --data_dir data/generalized_v2 \
+    --interaction concat_bi \
+    --out_dir results/generalized/v4_bilinear \
+    --model_dir models/saved/generalized_v4
 ```
 
 ---

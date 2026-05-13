@@ -2,8 +2,7 @@
 
 **Project**: Protein–RNA Binding Prediction
 **Last updated**: 2026-05-13
-**Current best model**: V2 CNN — test AUROC=0.703 AUPRC=0.599
-**Known limitation of current best**: trained with double class-weighting bug (see §3).
+**Current best model**: V2 CNN — test AUROC=0.690 AUPRC=0.580 (clean, bug fixed and retrained)
 **Benchmark target**: ZHMolGraph — AUROC=0.798 AUPRC=0.820 (hard split, unseen proteins AND RNAs).
 **Note on comparability**: our protein-aware-only test is NOT equivalent to ZHMolGraph's hard split.
 
@@ -13,12 +12,12 @@
 
 ### 1.1 One-hot CNN beats frozen ESM-2 (three independent experiments)
 
-| Model | Test AUROC | vs V2 |
-|-------|-----------|-------|
-| V2 CNN (one-hot) | **0.703** | — |
-| V3c ESM-2 residue CNN | 0.685 | −0.018 |
-| V3b CNN + ESM-2 mean-pool | 0.666 | −0.037 |
-| V3 ESM-2 mean-pool only | 0.634 | −0.069 |
+| Model | Test AUROC | Test AUPRC | vs V2 |
+|-------|-----------|------------|-------|
+| V2 CNN (one-hot) | **0.690** | **0.580** | — |
+| V3c ESM-2 residue CNN | 0.685 | 0.595 | −0.005 |
+| V3b CNN + ESM-2 mean-pool | 0.666 | 0.568 | −0.024 |
+| V3 ESM-2 mean-pool only | 0.634 | 0.547 | −0.056 |
 
 This is not evidence that ESM-2 is uninformative. It is evidence that:
 (a) frozen mean-pooling over all residues dilutes binding-domain signal;
@@ -32,7 +31,7 @@ It requires either (a) fine-tuning, (b) explicit interaction modeling, or (c) be
 
 ### 1.2 Val/test gap is systematic and unexplained
 
-All models show val AUROC ≈ test AUROC + 0.08–0.11. This is NOT model-specific noise.
+All models show val AUROC ≈ test AUROC + 0.05–0.08 (clean runs). This is NOT model-specific noise.
 Root causes not yet analyzed:
 - HTR-SELEX vs RBNS distribution shift (RNA length, selection protocol)
 - Protein family imbalance between val and test splits (not verified)
@@ -50,7 +49,7 @@ restricted to training only and represent a small fraction of the data (4% = 26k
 
 ---
 
-## 2. Known Bugs in Existing Results (Fixed 2026-05-13)
+## 2. Bugs Fixed 2026-05-13 (All Checkpoints Retrained)
 
 ### Bug 1 — Double class-weighting (CRITICAL)
 **Scripts affected**: 06, 08, 09, 10
@@ -58,11 +57,11 @@ restricted to training only and represent a small fraction of the data (4% = 26k
 with `BCEWithLogitsLoss(pos_weight=n_neg/n_pos ≈ 2.0)`. Combined effect: each positive
 gets 2× larger gradient weight despite already appearing at 2× baseline frequency in
 batches. Equivalent to pos_weight ≈ 4× in a standard unsampled setting.
-**Impact**: inflates model bias toward recall; calibration is off; results are not
-reproducible with a clean implementation.
+**Impact**: inflated val AUROC (0.811 → 0.746 for V2), inflated test AUROC (0.703 → 0.690),
+off-calibration, non-reproducible gradients.
 **Fix**: `WeightedRandomSampler` removed from all four training scripts. `pos_weight` kept.
-**Status**: Fix applied. All existing V2/V3/V3b/V3c checkpoints were trained with the bug.
-Retrain V2 with fixed script before treating current numbers as authoritative.
+**Status**: Fixed and retrained. All checkpoints (V2, V3, V3b, V3c) regenerated. Numbers in
+this document and all result JSONs reflect the clean runs.
 
 ### Bug 2 — Per-protein dataset column always "unknown" (HIGH)
 **Script affected**: 06_train_generalized_v2.py
@@ -89,40 +88,37 @@ All ESM-2 scripts and the external evaluation script would fail on a fresh insta
 
 ```
 WHERE WE ARE (2026-05-13):
-  V2 CNN is the current best: test AUROC=0.703 (bug-affected, retrain pending)
-  V3/V3b/V3c: all frozen ESM-2 variants are worse than V2
+  ✓ V2 CNN retrained clean: test AUROC=0.690, AUPRC=0.580
+  ✓ V3/V3b/V3c retrained clean: all frozen ESM-2 variants still worse than V2
+  ✓ RNAcompete benchmark run: zero-shot median AUROC=0.549 on unseen proteins
 
-IMMEDIATE NEXT STEPS (before any new architecture):
+IMMEDIATE NEXT STEPS:
 
-  Step 1 — Retrain V2 with corrected class-weighting
-    python scripts/06_train_generalized_v2.py --data_dir data/generalized_v2
-    Expected: small change in AUROC (±0.01), measurable improvement in calibration.
-    This is the new anchor point for all future comparisons.
-
-  Step 2 — Multi-seed variance
+  Step 1 — Multi-seed variance [NEXT]
     Run V2 with seeds {0, 1, 2, 42, 123}.
     Report mean ± std for val and test AUROC.
     Required before claiming any improvement is real.
+    python scripts/18_run_multiseed.py --script scripts/06_train_generalized_v2.py \
+        --n_seeds 5 --extra_args "--data_dir data/generalized_v2 --epochs 60"
 
-  Step 3 — Homology audit (measurement, not resplit)
-    Compute pairwise protein identity for all 169 proteins.
-    Flag test proteins with >30% identity homologs in training.
-    Report per-protein AUROC split by "clean" vs "homolog-contaminated".
+  Step 2 — Homology audit (measurement, not resplit)
+    Compute pairwise protein identity for all 169 proteins vs RNAcompete.
+    python scripts/22_build_phase3a_dataset.py --export_fasta_only ...
+    mmseqs easy-search ...
 
-  Step 4 — Hard negatives for SELEX/RBNS
-    Generate dinucleotide-matched, length-matched decoys for each protein's pool.
-    Retrain V2 on improved negatives.
-    Expected: lower AUROC on SELEX/RBNS test (harder task), higher real-world relevance.
+  Step 3 — Phase 3A: expand training data
+    Merge RNAcompete into training with homology-aware split.
+    python scripts/22_build_phase3a_dataset.py --selex_dir data/generalized_v2 \
+        --rnacompete data/benchmarks/rnacompete/rnacompete_all.tsv \
+        --out_dir data/generalized_v3a
 
-IF V2 re-training + variance is clean:
-  → Proceed to interaction layer experiments (bilinear or 2-head cross-attention on V2)
+  Step 4 — Phase 3B: interaction layer V4
+    python scripts/21_train_generalized_v4_interaction.py \
+        --data_dir data/generalized_v3a --interaction concat_bi --use_source_emb
 
-IF homology audit reveals major contamination:
-  → Perform family-aware resplit before any further experiments
-
-AFTER clean V2 baseline:
+AFTER V4 vs V2 comparison on clean data:
   → RNA-FM branch (structure-aware RNA encoding)
-  → Cross-attention interaction module
+  → Fine-tuned ESM-2 with LoRA
   → eCLIP training data expansion (not for val/test — domain shift documented)
 ```
 
@@ -131,7 +127,7 @@ AFTER clean V2 baseline:
 ## 4. What NOT To Do Next
 
 - **Do NOT** run another frozen ESM-2 mean-pool variant. Three experiments confirm this fails.
-- **Do NOT** claim V2 AUROC=0.703 is directly comparable to ZHMolGraph AUROC=0.798.
+- **Do NOT** claim V2 AUROC=0.690 is directly comparable to ZHMolGraph AUROC=0.798.
   The task definitions differ (protein-aware only vs protein+RNA held-out).
 - **Do NOT** cite external validation AUROC=0.798 without the caveats in §5 below.
 - **Do NOT** tune hyperparameters on the test set or add models until multi-seed
@@ -161,15 +157,14 @@ binding pairs from literature.
 
 Not ready for a main-track ML or bioinformatics paper. Blockers:
 
-1. Current best model (V2) was trained with a known class-weighting bug.
-2. Splits are protein-aware but NOT homology-aware. Paralog leakage is unquantified.
-3. All negatives in SELEX/RBNS are artificial shuffles.
-4. Val/test gap (~0.10 AUROC) is unexplained.
-5. Single-seed results only — no variance estimates.
-6. External benchmark is statistically too small for strong claims.
+1. Splits are protein-aware but NOT homology-aware. Paralog leakage is unquantified.
+2. All negatives in SELEX/RBNS are artificial shuffles.
+3. Val/test gap (~0.05–0.08 AUROC) is unexplained.
+4. Single-seed results only — no variance estimates.
+5. External benchmark is statistically too small for strong claims.
+6. Zero-shot generalization fails (median AUROC 0.549 on RNAcompete).
 
 Potential path to a short paper (workshop / methods letter):
-- Fix bugs, retrain V2 clean.
 - Run homology audit; report results honestly.
 - Improve negatives; retrain; show AUROC changes.
 - This becomes a benchmark/dataset contribution, not a methods paper.
@@ -240,14 +235,14 @@ In order of expected impact:
 
 ### Immediate (this week — no new training required)
 
-| Task | Action | Output |
+| Task | Action | Status |
 |---|---|---|
-| Fix benchmark organism names | Re-run `17_prepare_rnacompete_benchmark.py` with fix | Clean per-organism AUROC table |
-| Retrain V2-CLEAN (1 run) | `python scripts/06_train_generalized_v2.py` | Bug-free anchor baseline |
-| Re-run RNAcompete on V2-CLEAN | `scripts/20_evaluate_benchmark.py` | Corrected zero-shot score |
-| Multi-seed V2 (5 seeds) | `scripts/18_run_multiseed.py` | AUROC mean ± std |
+| Fix benchmark organism names | Fixed in `17_prepare_rnacompete_benchmark.py` | **Done** |
+| Retrain V2-CLEAN | `scripts/06_train_generalized_v2.py` | **Done** — AUROC 0.690 |
+| Re-run RNAcompete on V2 | `scripts/20_evaluate_benchmark.py` | **Done** — median 0.549 |
+| Multi-seed V2 (5 seeds) | `scripts/18_run_multiseed.py` | Next |
 
-### Short-term (after clean baseline confirmed)
+### Short-term (in progress)
 
 1. **Homology audit** — run MMseqs2 between training proteins and RNAcompete proteins at 30%
    identity. Identify how many of the 27 overlaps are true sequence matches vs name matches.

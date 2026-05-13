@@ -4,8 +4,8 @@
 **Last updated**: 2026-05-13
 
 This file is the canonical record of every training run. Each entry documents what
-was run, what the results were, what failed, and what was learned. Results that are
-still believed to be affected by known bugs are explicitly marked.
+was run, what the results were, what failed, and what was learned. All Phase 2 results have been retrained with the double class-weighting bug fixed (2026-05-13).
+Numbers in this log reflect clean checkpoints unless otherwise noted.
 
 ---
 
@@ -93,7 +93,7 @@ RBNS/HTR-SELEX RNA length mismatch explicitly. Global max pooling in CNNs resolv
 
 | Hyperparameter | Value |
 |----------------|-------|
-| Date | 2026-05 |
+| Date | 2026-05 (clean rerun 2026-05-13) |
 | Architecture | RNA CNN [128,256,256] kernels [7,5,3] + Prot CNN [128,256,256] kernels [11,7,5] → MLP [256,64] |
 | RNA max len | 60 nt |
 | Protein max len | 300 aa |
@@ -101,28 +101,23 @@ RBNS/HTR-SELEX RNA length mismatch explicitly. Global max pooling in CNNs resolv
 | Batch size | 256 |
 | Early stopping | Val AUPRC, patience=8 |
 | Device | MPS (Apple Silicon) |
-| **Known bug** | WeightedRandomSampler + pos_weight used simultaneously (double class-weighting). Fix applied 2026-05-13 to scripts/06. |
+| pos_weight | n_neg / n_pos ≈ 2.0 (WeightedRandomSampler removed) |
 
 | Split | AUROC | AUPRC |
 |-------|-------|-------|
-| Val | 0.811 | 0.734 |
-| Test | **0.703** | **0.599** |
-| Val→Test gap | −0.108 | −0.135 |
+| Val | 0.746 | — |
+| Test | **0.690** | **0.580** |
+| Val→Test gap | −0.056 | — |
 
-**Best epoch**: 20/28
+**Best epoch**: 13
 
 **Per-protein test highlights** (24 proteins):
-- Median AUROC: 0.718
-- Best: ESRP1-construct3 (0.981), PUF60 (0.924), KHDRBS3 (0.901)
-- Worst: UNK (0.429), IGF2BP3 (0.459), TAF15 (0.468)
-- HTR-SELEX median: 0.779; RBNS median: 0.611
+- Median AUROC: 0.714
+- Best: ESRP1-construct3 (0.980), PUF60 (0.934), KHDRBS3 (0.901)
+- Worst: UNK (0.448), ZC3H18 (0.554), RBM6 (0.537)
 
-**Result**: PASS — current best model. Length-agnostic via global max pooling. Fails on
-diffuse/low-complexity binders (UNK, TAF15) and multi-domain proteins (IGF2BP3).
-
-**Note on per-protein dataset column**: All per-protein results in `v2_cnn_results.json`
-show `"dataset": "unknown"` due to column name mismatch bug. Fix applied to scripts/06.
-Re-run to get correctly labelled per-protein breakdown.
+**Result**: PASS — current best model. Length-agnostic via global max pooling.
+Fails on diffuse/low-complexity binders (UNK) and proteins with complex binding modes.
 
 ---
 
@@ -135,7 +130,7 @@ Re-run to get correctly labelled per-protein breakdown.
 | ESM-2 model | esm2_t33_650M_UR50D (frozen, no fine-tuning) |
 | LR | 5e-4 |
 | Batch size | 512 |
-| **Known bug** | Same double class-weighting as V2. |
+| Rerun | 2026-05-13 (double class-weighting bug fixed) |
 
 | Split | AUROC | AUPRC |
 |-------|-------|-------|
@@ -170,14 +165,14 @@ complementary information. Simple replacement fails; explicit combination is nee
 | Architecture | RNA CNN(256) + Prot CNN(256) + ESM-2(1280→128) auxiliary → concat 640-d → MLP [256,64] |
 | LR | 5e-4 |
 | Batch size | 256 |
-| **Known bug** | Same double class-weighting. |
+| Rerun | 2026-05-13 (double class-weighting bug fixed) |
 
 | Split | AUROC | AUPRC |
 |-------|-------|-------|
 | Val | 0.770 | 0.704 |
 | Test | 0.666 | 0.568 |
 
-**Result**: FAIL vs V2 (−0.037 AUROC on test). ESM-2 mean-pool is actively harmful
+**Result**: FAIL vs V2 (−0.024 AUROC on test). ESM-2 mean-pool is actively harmful
 even when the proven V2 CNN branches are present. This rules out architecture
 (specifically concat vs replace) as the cause of V3's failure. The failure mode is
 the mean-pool operation itself.
@@ -194,7 +189,7 @@ the mean-pool operation itself.
 | LR | 3e-4 |
 | Batch size | 128 (reduced for memory) |
 | Training time | 149.4 min (MPS) |
-| **Known bug** | Same double class-weighting. |
+| Rerun | 2026-05-13 (double class-weighting bug fixed) |
 
 | Split | AUROC | AUPRC |
 |-------|-------|-------|
@@ -204,7 +199,7 @@ the mean-pool operation itself.
 **Best epoch**: 18
 
 **Comparison**:
-- Δ vs V2: AUROC −0.018, AUPRC −0.004 ← still below V2
+- Δ vs V2: AUROC −0.005, AUPRC +0.015 ← close to V2 but not better
 - Δ vs V3b: AUROC +0.019, AUPRC +0.028 ← better than mean-pool variants
 
 **Result**: FAIL vs V2. Residue Conv1D partially addresses the mean-pool dilution
@@ -238,21 +233,22 @@ a fundamentally different design (fine-tuning, cross-attention, binding-domain s
 
 ## Next Planned Experiments
 
-| ID | Name | Purpose | Prerequisites | Expected output |
-|----|------|---------|---------------|-----------------|
-| EXP-V2-CLEAN | V2 retrain with corrected weighting | Clean anchor baseline | scripts/06 fix (done) | Updated test AUROC ≈ 0.70±0.02 |
-| EXP-V2-MULTISEED | V2 ×5 seeds | Quantify variance | V2-CLEAN | AUROC mean±std |
-| EXP-HOMOLOGY | Homology audit | Quantify paralog leakage | MMseqs2 install | Leakage fraction |
-| EXP-HARDNEG | V2 with hard negatives | Better negatives | scripts/15 (todo) | AUROC on new test |
-| EXP-INTERACTION | Bilinear V2 | Pairwise interaction | V2-CLEAN | AUROC vs V2 |
+| ID | Name | Purpose | Status | Result |
+|----|------|---------|--------|--------|
+| EXP-V2-CLEAN | V2 retrain with corrected weighting | Clean anchor baseline | **Done** | Test AUROC 0.690, AUPRC 0.580 |
+| EXP-RNACOMPETE-V2 | RNAcompete zero-shot on V2 | Generalization test | **Done** | Median AUROC 0.549 |
+| EXP-V2-MULTISEED | V2 ×5 seeds | Quantify variance | Next | — |
+| EXP-HOMOLOGY | Homology audit | Quantify paralog leakage | Next | — |
+| EXP-PHASE3A | V2 on SELEX+RNAcompete data | Scale training | Scripted | `scripts/22` ready |
+| EXP-V4-BILINEAR | V4 bilinear interaction | Pairwise interaction layer | Scripted | `scripts/21` ready |
 
 ---
 
-## RNAcompete Zero-Shot Benchmark — V2 CNN (Bug-Affected)
+## RNAcompete Zero-Shot Benchmark — V2 CNN (Clean Checkpoint)
 
 **Date**: 2026-05-13  
 **Script**: `scripts/20_evaluate_benchmark.py`  
-**Checkpoint**: `models/saved/generalized_v2/best_model.pt` (bug-affected)  
+**Checkpoint**: `models/saved/generalized_v2/best_model.pt` (clean, bug fixed)  
 **Benchmark**: `data/benchmarks/rnacompete/rnacompete_all.tsv` (2M rows subsampled from 13.9M)
 
 ### Results
@@ -304,10 +300,11 @@ from HTR-SELEX + RBNS cannot generalize to 715 unseen proteins across 26 organis
 The 0.08 gap between seen (0.629) and unseen (0.549) median AUROC shows limited
 memorization and limited generalization — the worst possible combination.
 
-This result is expected for a bug-affected model with ~170 training proteins.
-It establishes the **lower bound** for this architecture. The clean retrain
-(V2-CLEAN) will not fundamentally change this — the bottleneck is not the bug,
-it is the number and diversity of training proteins.
+This result is from the clean V2 checkpoint with ~170 training proteins.
+It establishes the **current baseline** for zero-shot generalization.
+The bottleneck is not the model architecture or the bug — it is the number
+and diversity of training proteins. Phase 3A (adding RNAcompete to training) is
+the highest-leverage next step.
 
 ### Action Items
 

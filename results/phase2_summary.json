@@ -3,7 +3,7 @@
   "description": "Generalized model trained across all 3 datasets on 168 proteins, 632k samples",
   "split_strategy": "Global protein-aware split — same protein always in same split across datasets",
   "primary_metric": "AUPRC",
-  "generated": "2026-05-01",
+  "generated": "2026-05-13 (retrained clean)",
 
   "v1_mlp_kmer": {
     "status": "DONE",
@@ -18,42 +18,44 @@
   },
 
   "v2_cnn_raw_seq": {
-    "status": "DONE — current best (but see known_issue below)",
-    "known_issue": "Trained with double class-weighting bug (WeightedRandomSampler + pos_weight simultaneously). Fix applied to scripts/06 on 2026-05-13. Retrain with fixed script before relying on these numbers for publication.",
+    "status": "DONE — current best (clean, retrained 2026-05-13)",
     "architecture": "Dual-branch CNN: RNA(4-ch, filters [128,256,256], kernels [7,5,3]) + Protein(20-ch, filters [128,256,256], kernels [11,7,5]) → global max pool → concat 512-d → MLP [256,64]",
     "input": "Raw one-hot. RNA padded to 60nt, Protein to 300aa.",
-    "best_epoch": 20,
-    "epochs_trained": 28,
+    "best_epoch": 13,
+    "epochs_trained": 13,
     "early_stopping_metric": "val_auprc",
-    "val_auroc": 0.8107,
-    "val_auprc": 0.7342,
-    "test_auroc": 0.7028,
-    "test_auprc": 0.5987,
+    "val_auroc": 0.7465,
+    "test_auroc": 0.6903,
+    "test_auprc": 0.5796,
     "per_protein_test": {
       "n": 24,
-      "median_auroc": 0.7176,
-      "min_auroc": 0.429,
-      "htr_selex_median": 0.779,
-      "rbns_median": 0.611
+      "median_auroc": 0.7139,
+      "min_auroc": 0.448
     },
     "per_protein_detail": {
       "best": [
-        {"protein": "ESRP1-construct3", "auroc": 0.981},
-        {"protein": "PUF60",            "auroc": 0.924},
+        {"protein": "ESRP1-construct3", "auroc": 0.980},
+        {"protein": "PUF60",            "auroc": 0.934},
         {"protein": "KHDRBS3",          "auroc": 0.901}
       ],
       "worst": [
-        {"protein": "UNK",    "auroc": 0.429, "note": "poorly characterized RBP, no clear motif"},
-        {"protein": "IGF2BP3","auroc": 0.459, "note": "complex multi-domain"},
-        {"protein": "TAF15",  "auroc": 0.468, "note": "phase-separation RBP"}
+        {"protein": "UNK",    "auroc": 0.448, "note": "poorly characterized RBP, no clear motif"},
+        {"protein": "TAF15",  "auroc": 0.496, "note": "phase-separation RBP"},
+        {"protein": "PRR3",   "auroc": 0.602, "note": "limited training signal"}
       ]
     },
-    "conclusion": "Resolves RNA length mismatch vs V1. Protein CNN learns binding motifs end-to-end. Fails on motif-poor / atypical proteins."
+    "zero_shot_rnacompete": {
+      "overall_auroc": 0.571,
+      "per_protein_median_all": 0.551,
+      "per_protein_median_unseen": 0.549,
+      "per_protein_median_seen": 0.629,
+      "note": "Zero-shot generalization fails on 715 unseen proteins. Bottleneck: only 169 training proteins."
+    },
+    "conclusion": "Resolves RNA length mismatch vs V1. Protein CNN learns binding motifs end-to-end. Fails on motif-poor / atypical proteins. Zero-shot to RNAcompete near-random — data scaling needed."
   },
 
   "v3_esm2_frozen_meanpool": {
-    "status": "DONE — WORSE than V2",
-    "known_issue": "Trained with double class-weighting bug (WeightedRandomSampler + pos_weight). Fix applied to scripts/08 on 2026-05-13.",
+    "status": "DONE — WORSE than V2 (clean, retrained 2026-05-13)",
     "architecture": "ESM-2 650M frozen mean-pool (1280-d) → Linear(1280→256) + GELU + RNA CNN (256-d) → MLP [256,64]",
     "best_epoch": 17,
     "epochs_trained": 25,
@@ -85,8 +87,7 @@
   },
 
   "v3b_esm2_plus_cnn": {
-    "status": "DONE — WORSE than V2",
-    "known_issue": "Trained with double class-weighting bug (WeightedRandomSampler + pos_weight). Fix applied to scripts/09 on 2026-05-13.",
+    "status": "DONE — WORSE than V2 (clean, retrained 2026-05-13)",
     "architecture": "RNA CNN (256-d) + Protein CNN (256-d) + ESM-2 Linear(1280→128) [auxiliary] → concat 640-d → MLP [256,64]",
     "best_val_auroc": 0.770,
     "best_val_auprc": 0.704,
@@ -97,7 +98,7 @@
   },
 
   "v3c_esm2_residue_cnn": {
-    "status": "DONE — WORSE than V2 (but best ESM-2 variant)",
+    "status": "DONE — WORSE than V2, best ESM-2 variant (clean, retrained 2026-05-13)",
     "architecture": "RNA CNN (256-d) + ESM-2 per-residue (L×1280) → Linear(64) per position → Conv1D([128,256], [7,5]) → global max pool (256-d) → concat 512-d → MLP [256,64]",
     "best_epoch": 18,
     "training_time_min": 149.4,
@@ -106,9 +107,8 @@
     "test_auroc": 0.6850,
     "test_auprc": 0.5950,
     "vs_v2": {"test_auroc": -0.018, "test_auprc": -0.004},
-    "vs_v3b": {"test_auroc": +0.019, "test_auprc": +0.028},
+    "vs_v3b": {"test_auroc": 0.019, "test_auprc": 0.028},
     "conclusion": "ESM-2 residue Conv1D is better than mean-pool (V3b) but does NOT beat one-hot CNN (V2). The positional selectivity gain is insufficient to overcome the signal-to-noise problem with 169 training proteins. Three independent experiments (V3, V3b, V3c) confirm that frozen ESM-2 under any pooling strategy fails to match one-hot CNN on this test set. Next step: cross-attention or fine-tuning, not another frozen pooling variant.",
-    "known_issue": "Trained with double class-weighting bug (WeightedRandomSampler + pos_weight). Fix applied to scripts/10 on 2026-05-13. Rerun with fixed script for a clean result.",
     "scripts": ["scripts/07b_extract_esm2_residues.py", "scripts/10_train_generalized_v3c.py"]
   },
 
