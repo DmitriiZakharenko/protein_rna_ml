@@ -30,7 +30,13 @@ from src.models.cnn_model import RNABindingCNN
 from src.data.dataset import SeqDataset
 
 
-def make_weighted_sampler(labels):
+# NOTE: WeightedRandomSampler is intentionally NOT used in this script.
+# Using it simultaneously with BCEWithLogitsLoss(pos_weight=n_neg/n_pos) would
+# double-count the class imbalance: the sampler creates ~50/50 batches while
+# pos_weight applies a further 2× loss multiplier to positives, equivalent to
+# an effective pos_weight of ~4× in a raw 1:2 setting.
+# Fix: use pos_weight only. The sampler definition is kept here for reference.
+def make_weighted_sampler(labels):  # noqa: F401  (kept for reference, not called)
     n_pos = sum(labels)
     n_neg = len(labels) - n_pos
     weights = [n_neg / n_pos if l == 1 else 1.0 for l in labels]
@@ -100,9 +106,9 @@ def main():
     print(f"  RNA padded to {args.rna_max} nt  |  Protein padded to {args.prot_max} aa")
 
     train_labels = train_ds.df["binding_label"].values.tolist()
-    sampler = make_weighted_sampler(train_labels)
+    # Shuffle only — class imbalance is handled entirely by pos_weight in the loss.
     train_loader = DataLoader(train_ds, batch_size=args.batch_size,
-                              sampler=sampler, num_workers=2, pin_memory=(device.type=="cuda"))
+                              shuffle=True, num_workers=2, pin_memory=(device.type=="cuda"))
     val_loader   = DataLoader(val_ds, batch_size=args.batch_size*2, shuffle=False, num_workers=2)
     test_loader  = DataLoader(test_ds, batch_size=args.batch_size*2, shuffle=False, num_workers=2)
 
@@ -180,13 +186,19 @@ def main():
     # Per-protein on test
     test_df = pd.read_csv(os.path.join(args.data_dir, "test.tsv"), sep="\t")
     test_df["prob"] = test_m["probs"]
+    # Normalise dataset column: scripts/04 uses "dataset_source"; scripts/14 uses "dataset".
+    # Prefer "dataset", fall back to "dataset_source", then "unknown".
+    if "dataset" not in test_df.columns and "dataset_source" in test_df.columns:
+        test_df = test_df.rename(columns={"dataset_source": "dataset"})
     per_protein = []
     for prot, grp in test_df.groupby("protein_name"):
         if grp["binding_label"].nunique() < 2: continue
         per_protein.append({
-            "protein": prot, "dataset": grp["dataset_source"].iloc[0],
+            "protein": prot,
+            "dataset": grp["dataset"].iloc[0] if "dataset" in grp.columns else "unknown",
             "auroc": float(roc_auc_score(grp["binding_label"], grp["prob"])),
-            "n": len(grp), "is_flagged": int(grp["is_flagged"].iloc[0])})
+            "n": len(grp),
+            "is_flagged": int(grp["is_flagged"].iloc[0]) if "is_flagged" in grp.columns else 0})
     pp_aurocs = [p["auroc"] for p in per_protein]
     print(f"  Per-protein median: {np.median(pp_aurocs):.4f}  "
           f"min: {np.min(pp_aurocs):.4f}")

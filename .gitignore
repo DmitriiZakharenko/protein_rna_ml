@@ -1,16 +1,23 @@
 # Large data files — not tracked (reproduce via scripts)
 data/processed/
 data/generalized/
+data/generalized_v2/
 data/splits/*/train.tsv
 data/splits/*/val.tsv
 data/splits/*/test.tsv
+data/embeddings/
+data/benchmarks/
+data/eclip/
+data/external/
 
 # Trained model weights
 models/saved/
 models/checkpoints/
 
-# Results plots (regenerate via script 03)
+# Results plots (regenerate via analysis scripts)
 results/*/plots/
+results/analysis/
+results/benchmarks/
 
 # Python
 __pycache__/
@@ -24,3 +31,7 @@ __pycache__/
 
 # Jupyter
 .jupyter/
+
+# R
+.Rhistory
+.RData

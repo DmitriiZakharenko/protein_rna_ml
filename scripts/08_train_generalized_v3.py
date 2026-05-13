@@ -146,7 +146,9 @@ class ESM2RNACNNModel(nn.Module):
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
-def make_sampler(labels):
+# WeightedRandomSampler is NOT used — see note in 06_train_generalized_v2.py.
+# Using it together with BCEWithLogitsLoss(pos_weight) double-counts class imbalance.
+def make_sampler(labels):  # noqa: F401  (kept for reference, not called)
     n_pos = sum(labels); n_neg = len(labels) - n_pos
     w = [n_neg / n_pos if l == 1 else 1.0 for l in labels]
     return WeightedRandomSampler(torch.tensor(w, dtype=torch.float32), len(w), replacement=True)
@@ -225,8 +227,7 @@ def main():
     print(f"  Train: {len(train_ds):,}  Val: {len(val_ds):,}  Test: {len(test_ds):,}")
 
     train_labels = train_ds.df["binding_label"].values.tolist()
-    sampler = make_sampler(train_labels)
-    train_loader = DataLoader(train_ds, batch_size=args.batch_size, sampler=sampler,
+    train_loader = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True,
                               num_workers=4, pin_memory=(device.type == "cuda"))
     val_loader   = DataLoader(val_ds,   batch_size=args.batch_size * 2, shuffle=False, num_workers=4)
     test_loader  = DataLoader(test_ds,  batch_size=args.batch_size * 2, shuffle=False, num_workers=4)
@@ -343,13 +344,12 @@ def main():
     print(f"\n✅ Phase 2 V3 complete. Results: {out_path}")
 
     if test_m["auroc"] >= 0.798:
-        print("  🎯 AUROC target REACHED — beats ZHMolGraph!")
+        print("  🎯 AUROC target REACHED!")
     elif test_m["auprc"] >= 0.820:
-        print("  🎯 AUPRC target REACHED — beats ZHMolGraph!")
+        print("  🎯 AUPRC target REACHED!")
     else:
         gap = 0.798 - test_m["auroc"]
-        print(f"  AUROC gap vs ZHMolGraph: {gap:+.3f}")
-        print("  → Consider V3b: fine-tune ESM-2 last 2 layers + cross-attention")
+        print(f"  Still {gap:.3f} AUROC below target → run scripts/09_train_generalized_v3b.py")
 
 
 if __name__ == "__main__":

@@ -28,7 +28,7 @@ check_deps() {
 phase1_htr() {
     echo -e "\n${GREEN}=== Phase 1: HTR-SELEX PRJEB25907 ===${NC}"
     echo "Training validation models (LR, RF, XGBoost)..."
-    python3 scripts/02b_train_htr_selex_validation.py
+    python3 scripts/02_train_validation_model.py --config configs/htr_selex_validation.yaml
     echo -e "${GREEN}✅ Phase 1 HTR-SELEX PRJEB25907 complete${NC}"
 }
 
