@@ -1,0 +1,190 @@
+{
+  "model": "generalized_v3c_esm2_residue_cnn",
+  "architecture": "RNA CNN(256) + ESM-2 residue Linear(64) \u2192 Conv1D \u2192 max pool(256) \u2192 MLP",
+  "best_val_auroc": 0.7445190468526467,
+  "best_val_auprc": 0.6826091572593544,
+  "best_epoch": 18,
+  "test_metrics": {
+    "auroc": 0.6849755144112688,
+    "auprc": 0.5950179336972555
+  },
+  "vs_v2": {
+    "auroc": -0.0178,
+    "auprc": -0.0037
+  },
+  "vs_v3b": {
+    "auroc": 0.0194,
+    "auprc": 0.0275
+  },
+  "training_time_min": 149.4,
+  "per_protein": [
+    {
+      "protein": "CSDA",
+      "dataset": "unknown",
+      "auroc": 0.817705,
+      "auprc": 0.651735,
+      "n": 3000
+    },
+    {
+      "protein": "DAZAP1",
+      "dataset": "unknown",
+      "auroc": 0.719381,
+      "auprc": 0.63719,
+      "n": 6000
+    },
+    {
+      "protein": "ESRP1-construct3",
+      "dataset": "unknown",
+      "auroc": 0.964137,
+      "auprc": 0.923133,
+      "n": 3000
+    },
+    {
+      "protein": "HNRNPA0",
+      "dataset": "unknown",
+      "auroc": 0.895871,
+      "auprc": 0.858057,
+      "n": 6000
+    },
+    {
+      "protein": "IGF2BP1",
+      "dataset": "unknown",
+      "auroc": 0.696758,
+      "auprc": 0.543799,
+      "n": 6000
+    },
+    {
+      "protein": "IGF2BP2",
+      "dataset": "unknown",
+      "auroc": 0.593207,
+      "auprc": 0.374427,
+      "n": 3000
+    },
+    {
+      "protein": "IGF2BP3",
+      "dataset": "unknown",
+      "auroc": 0.547053,
+      "auprc": 0.377105,
+      "n": 2976
+    },
+    {
+      "protein": "KHDRBS3",
+      "dataset": "unknown",
+      "auroc": 0.900261,
+      "auprc": 0.811298,
+      "n": 6000
+    },
+    {
+      "protein": "LARP6",
+      "dataset": "unknown",
+      "auroc": 0.695439,
+      "auprc": 0.477387,
+      "n": 6000
+    },
+    {
+      "protein": "LARP7-construct4",
+      "dataset": "unknown",
+      "auroc": 0.808637,
+      "auprc": 0.596178,
+      "n": 3000
+    },
+    {
+      "protein": "MEX3D-construct3",
+      "dataset": "unknown",
+      "auroc": 0.73664,
+      "auprc": 0.718423,
+      "n": 3000
+    },
+    {
+      "protein": "NUPL2",
+      "dataset": "unknown",
+      "auroc": 0.437321,
+      "auprc": 0.301307,
+      "n": 2843
+    },
+    {
+      "protein": "PCBP1",
+      "dataset": "unknown",
+      "auroc": 0.682569,
+      "auprc": 0.557858,
+      "n": 9000
+    },
+    {
+      "protein": "PRR3",
+      "dataset": "unknown",
+      "auroc": 0.590788,
+      "auprc": 0.394252,
+      "n": 2843
+    },
+    {
+      "protein": "PUF60",
+      "dataset": "unknown",
+      "auroc": 0.995675,
+      "auprc": 0.987081,
+      "n": 3000
+    },
+    {
+      "protein": "PUM2",
+      "dataset": "unknown",
+      "auroc": 0.709264,
+      "auprc": 0.592024,
+      "n": 6000
+    },
+    {
+      "protein": "RBM28",
+      "dataset": "unknown",
+      "auroc": 0.86718,
+      "auprc": 0.771711,
+      "n": 3000
+    },
+    {
+      "protein": "RBM6",
+      "dataset": "unknown",
+      "auroc": 0.539813,
+      "auprc": 0.42525,
+      "n": 6000
+    },
+    {
+      "protein": "SNRNP70",
+      "dataset": "unknown",
+      "auroc": 0.728572,
+      "auprc": 0.577983,
+      "n": 3000
+    },
+    {
+      "protein": "SRSF8",
+      "dataset": "unknown",
+      "auroc": 0.714391,
+      "auprc": 0.509244,
+      "n": 3000
+    },
+    {
+      "protein": "TAF15",
+      "dataset": "unknown",
+      "auroc": 0.465346,
+      "auprc": 0.286148,
+      "n": 3000
+    },
+    {
+      "protein": "TRA2A",
+      "dataset": "unknown",
+      "auroc": 0.601448,
+      "auprc": 0.422261,
+      "n": 3000
+    },
+    {
+      "protein": "UNK",
+      "dataset": "unknown",
+      "auroc": 0.713435,
+      "auprc": 0.531696,
+      "n": 3000
+    },
+    {
+      "protein": "ZC3H18",
+      "dataset": "unknown",
+      "auroc": 0.525768,
+      "auprc": 0.340167,
+      "n": 3000
+    }
+  ]
+}

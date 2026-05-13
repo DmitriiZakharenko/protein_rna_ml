@@ -1,0 +1,413 @@
+{
+  "model": "generalized_v3b_esm2_plus_cnn",
+  "architecture": "RNA CNN(256) + Prot CNN(256) + ESM-2 proj(128) \u2192 MLP",
+  "best_val_auprc": 0.7042078605032827,
+  "best_val_auroc": 0.769821115432761,
+  "test_metrics": {
+    "auroc": 0.6655981687208044,
+    "auprc": 0.5675326027118851
+  },
+  "vs_v2": {
+    "auroc": -0.0372,
+    "auprc": -0.0312
+  },
+  "per_protein_summary": {
+    "median_auroc": 0.6754728923611111,
+    "median_auprc": 0.5222477008136405,
+    "min_auroc": 0.3460330982094411
+  },
+  "per_protein": [
+    {
+      "protein": "CSDA",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.7906445,
+      "auprc": 0.6251590934562042,
+      "n": 3000
+    },
+    {
+      "protein": "DAZAP1",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.6605718125,
+      "auprc": 0.6167638865873127,
+      "n": 6000
+    },
+    {
+      "protein": "ESRP1-construct3",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.983074,
+      "auprc": 0.9575861623709627,
+      "n": 3000
+    },
+    {
+      "protein": "HNRNPA0",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.8389303125,
+      "auprc": 0.7941099661272204,
+      "n": 6000
+    },
+    {
+      "protein": "IGF2BP1",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.6799115625000001,
+      "auprc": 0.5049101512867051,
+      "n": 6000
+    },
+    {
+      "protein": "IGF2BP2",
+      "dataset": "rbns",
+      "auroc": 0.909949,
+      "auprc": 0.7558056010092725,
+      "n": 3000
+    },
+    {
+      "protein": "IGF2BP3",
+      "dataset": "rbns",
+      "auroc": 0.4920075910931174,
+      "auprc": 0.32665269290808585,
+      "n": 2976
+    },
+    {
+      "protein": "KHDRBS3",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.8703088125,
+      "auprc": 0.7734206544665556,
+      "n": 6000
+    },
+    {
+      "protein": "LARP6",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.6130778125,
+      "auprc": 0.42699083936946425,
+      "n": 6000
+    },
+    {
+      "protein": "LARP7-construct4",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.7347310000000001,
+      "auprc": 0.5411410173930742,
+      "n": 3000
+    },
+    {
+      "protein": "MEX3D-construct3",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.7379185,
+      "auprc": 0.7111840624547614,
+      "n": 3000
+    },
+    {
+      "protein": "NUPL2",
+      "dataset": "rbns",
+      "auroc": 0.3460330982094411,
+      "auprc": 0.28084306963354033,
+      "n": 2843
+    },
+    {
+      "protein": "PCBP1",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.6710342222222222,
+      "auprc": 0.5395852503405758,
+      "n": 9000
+    },
+    {
+      "protein": "PRR3",
+      "dataset": "rbns",
+      "auroc": 0.36543841562669555,
+      "auprc": 0.2752759993321273,
+      "n": 2843
+    },
+    {
+      "protein": "PUF60",
+      "dataset": "rbns",
+      "auroc": 0.959334,
+      "auprc": 0.9085259741365592,
+      "n": 3000
+    },
+    {
+      "protein": "PUM2",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.73983975,
+      "auprc": 0.6041986518918624,
+      "n": 6000
+    },
+    {
+      "protein": "RBM28",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.8625400000000001,
+      "auprc": 0.7759967904718647,
+      "n": 3000
+    },
+    {
+      "protein": "RBM6",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.64606525,
+      "auprc": 0.48148466578635873,
+      "n": 6000
+    },
+    {
+      "protein": "SNRNP70",
+      "dataset": "htr_selex_25907",
+      "auroc": 0.6954355000000001,
+      "auprc": 0.5005981727671706,
+      "n": 3000
+    },
+    {
+      "protein": "SRSF8",
+      "dataset": "rbns",
+      "auroc": 0.6370305,
+      "auprc": 0.4233143978086533,
+      "n": 3000
+    },
+    {
+      "protein": "TAF15",
+      "dataset": "rbns",
+      "auroc": 0.3871915,
+      "auprc": 0.2662960606036117,
+      "n": 3000
+    },
+    {
+      "protein": "TRA2A",
+      "dataset": "rbns",
+      "auroc": 0.6666785000000002,
+      "auprc": 0.5029111781179133,
+      "n": 3000
+    },
+    {
+      "protein": "UNK",
+      "dataset": "rbns",
+      "auroc": 0.6089282500000001,
+      "auprc": 0.4244870235003264,
+      "n": 3000
+    },
+    {
+      "protein": "ZC3H18",
+      "dataset": "rbns",
+      "auroc": 0.39977150000000006,
+      "auprc": 0.2774899240813505,
+      "n": 3000
+    }
+  ],
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.7193,
+      "val_auroc": 0.694,
+      "val_auprc": 0.6166
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5638,
+      "val_auroc": 0.7173,
+      "val_auprc": 0.6315
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5155,
+      "val_auroc": 0.7232,
+      "val_auprc": 0.643
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4887,
+      "val_auroc": 0.7127,
+      "val_auprc": 0.6433
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4711,
+      "val_auroc": 0.7149,
+      "val_auprc": 0.6505
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.4523,
+      "val_auroc": 0.7431,
+      "val_auprc": 0.6757
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.4426,
+      "val_auroc": 0.7202,
+      "val_auprc": 0.6571
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.4316,
+      "val_auroc": 0.7225,
+      "val_auprc": 0.6483
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.4252,
+      "val_auroc": 0.7468,
+      "val_auprc": 0.6775
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.4174,
+      "val_auroc": 0.7425,
+      "val_auprc": 0.6816
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.4078,
+      "val_auroc": 0.7269,
+      "val_auprc": 0.6615
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.4019,
+      "val_auroc": 0.743,
+      "val_auprc": 0.6692
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.3984,
+      "val_auroc": 0.7419,
+      "val_auprc": 0.6801
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.3929,
+      "val_auroc": 0.7625,
+      "val_auprc": 0.687
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.388,
+      "val_auroc": 0.7533,
+      "val_auprc": 0.6886
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.3843,
+      "val_auroc": 0.7415,
+      "val_auprc": 0.6743
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.381,
+      "val_auroc": 0.7387,
+      "val_auprc": 0.6804
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.3764,
+      "val_auroc": 0.747,
+      "val_auprc": 0.6825
+    },
+    {
+      "epoch": 19,
+      "train_loss": 0.3754,
+      "val_auroc": 0.7527,
+      "val_auprc": 0.6886
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.3717,
+      "val_auroc": 0.75,
+      "val_auprc": 0.6899
+    },
+    {
+      "epoch": 21,
+      "train_loss": 0.3689,
+      "val_auroc": 0.7297,
+      "val_auprc": 0.6684
+    },
+    {
+      "epoch": 22,
+      "train_loss": 0.3631,
+      "val_auroc": 0.7539,
+      "val_auprc": 0.686
+    },
+    {
+      "epoch": 23,
+      "train_loss": 0.3627,
+      "val_auroc": 0.7512,
+      "val_auprc": 0.6874
+    },
+    {
+      "epoch": 24,
+      "train_loss": 0.3608,
+      "val_auroc": 0.7567,
+      "val_auprc": 0.6905
+    },
+    {
+      "epoch": 25,
+      "train_loss": 0.3591,
+      "val_auroc": 0.7532,
+      "val_auprc": 0.6862
+    },
+    {
+      "epoch": 26,
+      "train_loss": 0.355,
+      "val_auroc": 0.749,
+      "val_auprc": 0.6874
+    },
+    {
+      "epoch": 27,
+      "train_loss": 0.3541,
+      "val_auroc": 0.7698,
+      "val_auprc": 0.7042
+    },
+    {
+      "epoch": 28,
+      "train_loss": 0.3514,
+      "val_auroc": 0.76,
+      "val_auprc": 0.6999
+    },
+    {
+      "epoch": 29,
+      "train_loss": 0.35,
+      "val_auroc": 0.7443,
+      "val_auprc": 0.6757
+    },
+    {
+      "epoch": 30,
+      "train_loss": 0.3465,
+      "val_auroc": 0.7567,
+      "val_auprc": 0.6927
+    },
+    {
+      "epoch": 31,
+      "train_loss": 0.3469,
+      "val_auroc": 0.7626,
+      "val_auprc": 0.6941
+    },
+    {
+      "epoch": 32,
+      "train_loss": 0.3421,
+      "val_auroc": 0.7586,
+      "val_auprc": 0.6973
+    },
+    {
+      "epoch": 33,
+      "train_loss": 0.3408,
+      "val_auroc": 0.7585,
+      "val_auprc": 0.6927
+    },
+    {
+      "epoch": 34,
+      "train_loss": 0.3417,
+      "val_auroc": 0.7556,
+      "val_auprc": 0.687
+    },
+    {
+      "epoch": 35,
+      "train_loss": 0.3393,
+      "val_auroc": 0.7557,
+      "val_auprc": 0.6924
+    },
+    {
+      "epoch": 36,
+      "train_loss": 0.3372,
+      "val_auroc": 0.7449,
+      "val_auprc": 0.6861
+    },
+    {
+      "epoch": 37,
+      "train_loss": 0.3354,
+      "val_auroc": 0.75,
+      "val_auprc": 0.688
+    }
+  ]
+}
