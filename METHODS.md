@@ -196,13 +196,13 @@ The following published models are tracked as reference points. All numbers are 
 
 | Model | Method | Protein split | AUROC | AUPRC | Year | Reference |
 |---|---|---|---|---|---|---|
-| **ZHMolGraph** | RNA-FM + ProtTrans (frozen) + GNN on interaction network | Unknown protein + unknown RNA (hard) | **0.798** | **0.820** | 2025 | [Liu et al., Commun. Biol.](https://doi.org/10.1038/s42003-025-07657-4) |
+| **ZHMolGraph** | RNA-FM + ProtTrans (frozen) + GNN on interaction network | Unknown protein + unknown RNA (hard, NPInter5) | **0.798** | **0.820** | 2025 | [Liu et al., Commun. Biol.](https://doi.org/10.1038/s42003-025-07694-9) |
 | RPITER | Iterative feature refinement + random forest | Random | 0.727 | 0.774 | 2019 | [Peng et al., Int. J. Mol. Sci.](https://doi.org/10.3390/ijms20225543) |
 | IPMiner | Deep learning (auto-encoder + deep belief network) | Random | 0.664 | 0.742 | 2016 | [Pan et al., BMC Bioinformatics](https://doi.org/10.1186/s12859-016-1334-2) |
 | NPI-GNN | Graph neural network | Random | 0.511 | 0.520 | 2021 | [Yu et al., Briefings in Bioinformatics](https://doi.org/10.1093/bib/bbab255) |
 | **Our XGBoost (k-mer)** | XGBoost on k-mer frequency vectors | Protein-aware | 0.844 | 0.765 | 2025 | This project — HTR-SELEX only |
 
-**Note on comparability**: Direct numerical comparison across models is difficult because each uses a different dataset, different negatives, and different train/test splits. The ZHMolGraph "hard split" is the closest to our protein-aware evaluation setting.
+**Note on comparability**: Direct numerical comparison across models is not valid. ZHMolGraph was trained on NPInter2 + RPI7317 (curated literature-derived RPI databases) and evaluated on NPInter5 / TheNovel (entirely unseen protein–RNA pairs from database curation). Our project trains and evaluates on in vitro assay data (HTR-SELEX, RBNS). These are fundamentally different tasks: database RPI prediction vs. in vitro binding specificity prediction. ZHMolGraph AUROC 0.798 is cited as an aspirational performance target, not a directly comparable number.
 
 ---
 
@@ -233,16 +233,22 @@ The following methods will be implemented after all datasets pass Phase 1 valida
 
 ### 6.3 Pretrained Protein Language Model (ESM-2)
 
-**Description**: Extract per-residue embeddings from ESM-2 (650M parameter model, Meta AI) for each protein sequence. Average-pool over residues to obtain a fixed-size protein embedding (1,280 dimensions). Use as protein features in place of k-mer vectors.
+**Description**: Extract per-residue embeddings from ESM-2 (650M parameter model, Meta AI) for each protein sequence. Use as protein features in place of k-mer vectors.
 
-**Why this matters**: ESM-2 was trained on 250 million protein sequences and encodes evolutionary, structural, and functional information that k-mers cannot capture. Proteins with similar binding domains (e.g., all RRM-domain proteins) will have similar embeddings even if their primary sequences diverge.
+**Implemented variants** (see §7 for actual results):
 
-**Modes**:
-- **Frozen** (zero-shot): extract embeddings without fine-tuning; fast; implemented in V3
-- **Fine-tuned**: continue training ESM-2 on our RBP dataset; expected to substantially outperform frozen; planned for V3b
+- **V3 — frozen mean-pool**: average over all residues → 1280-d vector. Fast. Tested and **failed** to beat V2 CNN (test AUROC 0.634 vs 0.703).
+- **V3b — frozen mean-pool as auxiliary**: concatenate ESM-2 mean-pool (128-d projection) with V2 CNN branches. Tested and **failed** (test AUROC 0.666 vs 0.703).
+- **V3c — frozen residue Conv1D**: Linear(1280→64) per position, then Conv1D + global max pool. Tested and **partially addressed** mean-pool dilution issue but still **failed** to beat V2 (test AUROC 0.685 vs 0.703).
 
-**Expected AUROC (frozen)**: 0.85–0.90  
-**Expected AUROC (fine-tuned)**: 0.90–0.95  
+**Why mean-pool fails**: The RNA-binding domain is ~20–50 residues in a protein of 300 aa. Averaging over all residues dilutes the domain signal by 6–15×. Conv1D + max pool (V3c) partially recovers positional selectivity but is insufficient when trained on only 169 proteins.
+
+**Actual test AUROC (frozen, this dataset)**:
+- V3 mean-pool: 0.634 (expected 0.85–0.90 based on literature — expectation was wrong for this task)
+- V3c residue Conv1D: 0.685
+
+**Conclusion**: Frozen ESM-2 embeddings do NOT improve over one-hot CNN on this dataset. ESM-2 helps motif-poor proteins (UNK +0.25 AUROC) but hurts motif-rich proteins (PUM2 −0.25 AUROC). Mean-pooling is the mechanism of failure, not the model itself.
+
 **Reference**: [Lin et al. (2023), Science](https://doi.org/10.1126/science.ade2574) — ESM-2; [Rives et al. (2021), PNAS](https://doi.org/10.1073/pnas.2016239118) — ESM-1
 
 ---
@@ -333,7 +339,9 @@ Updated after each experiment. Phase 1 numbers are on the **test set** (unseen p
 |---|---|---|---|---|---|---|---|
 | V1 MLP | k-mer 8262-d → MLP [512,256,128] | 0.716 | 0.636 | 0.674 | 0.544 | 1 (then degraded) | 2026-04 |
 | V2 CNN | One-hot → dual CNN → MLP | **0.811** | **0.734** | **0.703** | **0.599** | 20 / 28 | 2026-05 |
-| V3 ESM-2 | ESM-2(1280) + RNA CNN → MLP | in progress | in progress | — | — | — | 2026-05 |
+| V3 ESM-2 (frozen mean-pool) | ESM-2(1280) mean-pool → Linear(256) + RNA CNN | 0.715 | 0.675 | 0.634 | 0.547 | 17 / 25 | 2026-05 |
+| V3b ESM-2 + CNN concat | RNA CNN(256) + Prot CNN(256) + ESM-2(1280→128) concat | 0.770 | 0.704 | 0.666 | 0.568 | — | 2026-05 |
+| V3c ESM-2 residue CNN (planned) | RNA CNN(256) + ESM-2 residue Conv1D → max pool(256) | — | — | — | — | — | — |
 
 **V2 CNN per-protein test results** (24 proteins, median AUROC=0.718):
 
@@ -364,14 +372,85 @@ Updated after each experiment. Phase 1 numbers are on the **test set** (unseen p
 | IGF2BP3 | RBNS | 0.459 | — |
 | UNK | RBNS | 0.429 | — |
 
-**V1 MLP failure analysis**: k-mer features are length-dependent — RBNS (20 nt RNA) and HTR-SELEX (40 nt RNA) produce incompatible frequency distributions. Val AUROC peaked at epoch 1 (0.716) then monotonically degraded as the model overfit to dataset-specific frequency scales. StandardScaler normalization does not resolve a structural feature mismatch. V2 CNN resolves this by using raw sequences with global max pooling (length-agnostic).
+**V1 MLP failure**: k-mer features are length-dependent — RBNS 20nt vs HTR-SELEX 40nt produce incompatible frequency distributions. Val AUROC peaked at epoch 1 then degraded. StandardScaler does not resolve a structural feature mismatch. V2 CNN resolves this via global max pooling (length-agnostic).
+
+**V3 ESM-2 frozen mean-pool failure**: Mean-pooling over all residues dilutes the binding domain signal. Proteins with strong position-specific motifs (PUM2, LARP7, TRA2A) lost 0.15–0.41 AUROC vs V2. Proteins without clear motifs (UNK, TAF15, IGF2BP3) gained 0.06–0.25 AUROC — ESM-2 provides useful family context for these. Key lesson: V2 CNN and ESM-2 encode *complementary* information. V3b was designed to concatenate both.
+
+**V3b ESM-2 + CNN concat failure**: Adding ESM-2 mean-pool as an auxiliary signal alongside the proven V2 CNN branches still degraded performance (test AUROC 0.666 vs 0.703). This confirms that the failure mode is fundamental to mean-pooling, not to the architecture or weight of the ESM-2 branch. Two independent experiments (V3 and V3b) both degraded relative to pure one-hot CNN — the mean-pool ESM-2 representation is actively harmful for motif-rich proteins even when the CNN branch is present. V3c addresses this by replacing mean-pool with a residue-level Conv1D branch, letting the model focus on binding-relevant positions via learned filters.
+
+### External Validation — Preliminary Assessment
+
+V2 CNN was evaluated on a manually curated literature dataset (`dataset without affinities.xlsx`, 165 pairs from 96 proteins). Reported AUROC=0.798 AUPRC=0.927 should be interpreted with caution due to three structural limitations:
+
+1. **Single-class proteins** (88%): 84 of 96 proteins have only positive *or* only negative examples. Per-protein AUROC is undefined for these; only 9 proteins contribute to the metric.
+
+2. **Sliding window max-pooling bias**: RNAs >60 nt are split into overlapping 60 nt windows; the pair score is the maximum window score. Long RNAs (56% of pairs) receive mean probability 0.809 vs 0.186 for short RNAs, independent of actual binding. This inflates AUROC/AUPRC for datasets where positives tend to be long RNAs.
+
+3. **High positive class rate** (72%): Random classifier AUPRC baseline is already 0.717. The effective improvement over random is +0.21, not the apparent 0.21 above 0.5.
+
+A reliable external benchmark requires ≥500 pairs with both positive and negative examples per protein (≥5 per class per protein). The current dataset is most useful for qualitative validation and dataset expansion efforts.
 
 ### External benchmarks (reference only)
 
 | Model | Method | AUROC | AUPRC | Split | Reference |
 |---|---|---|---|---|---|
-| ZHMolGraph | RNA-FM + ProtTrans (frozen) + GNN | 0.798 | 0.820 | Hard (unseen prot+RNA) | Liu et al. 2025 |
+| ZHMolGraph | RNA-FM + ProtTrans (frozen) + GNN | 0.798 | 0.820 | Hard (NPInter5, unseen prot+RNA) ⚠️ different dataset | Liu et al. 2025 |
 | RPITER | Iterative feature refinement + RF | 0.727 | 0.774 | Random | Peng et al. 2019 |
 | IPMiner | Deep autoencoder + DBN | 0.664 | 0.742 | Random | Pan et al. 2016 |
 | NPI-GNN | Graph neural network | 0.511 | 0.520 | Random | Yu et al. 2021 |
+
+**Comparability note**: ZHMolGraph trains on NPInter2/RPI7317 (curated database interactions)
+and tests on NPInter5 (TheNovel — completely unseen protein–RNA pairs). Our project trains
+on HTR-SELEX/RBNS (in vitro selection assays) and tests on protein-aware splits from the
+same assay type. These are different biological tasks, different data sources, and different
+negative sampling strategies. ZHMolGraph 0.798 is an aspirational reference only.
+
+---
+
+## 8. Known Methodological Limitations
+
+This section documents limitations that affect the validity of reported results.
+Updated: 2026-05-13.
+
+### 8.1 Double Class-Weighting Bug (Fixed 2026-05-13)
+
+**Affected models**: V2, V3, V3b, V3c.
+
+`WeightedRandomSampler` (which creates ~50/50 pos:neg batches) was used simultaneously
+with `BCEWithLogitsLoss(pos_weight = n_neg / n_pos ≈ 2.0)`. The combined effect is
+equivalent to applying pos_weight ≈ 4× in a standard unsampled setting. This biases
+the model toward recall at the cost of precision and shifts probability calibration.
+
+**All existing checkpoints are affected.** Fix applied to scripts on 2026-05-13 (removed
+WeightedRandomSampler; pos_weight retained as the sole class-imbalance correction).
+All models should be retrained with the fixed scripts before results are cited.
+
+### 8.2 Protein Splits Are Not Homology-Aware
+
+Proteins are split by gene symbol / construct ID. Paralogs (e.g. RBM4 and RBM4B, confirmed)
+can land in different splits. ESM-2 embeddings for paralogs are similar; the model can
+effectively "see" the binding profile of a test protein through its training-set homolog.
+The magnitude of this effect has not been measured. A homology audit is required before
+any generalization claim is made.
+
+### 8.3 Negative Samples Are Artificial
+
+SELEX/RBNS negatives are either shuffled sequences from the same library or non-cognate
+pairings. They do not represent the distribution of naturally non-binding RNA sequences.
+A model trained exclusively on these negatives may fail on real transcriptome scans.
+eCLIP negatives (flanking, GC/length-matched) are biologically grounded but currently
+represent only 4% of training data and are excluded from val/test.
+
+### 8.4 Val/Test Gap is Unexplained
+
+Systematic val AUROC - test AUROC ≈ +0.08–0.11 across all models.
+Root cause is unknown. Possible contributors: dataset-level distribution shift (RBNS vs
+HTR-SELEX RNA length distributions), protein family imbalance between val and test,
+early stopping on val AUPRC amplifying split-specific overfitting. Until this is
+explained, val AUPRC is an unreliable optimization target.
+
+### 8.5 Single-Seed Results Only
+
+All reported test metrics are single-seed (seed=42). Variance is unquantified.
+A difference of ±0.02 AUROC between models is within plausible random seed variation.
 

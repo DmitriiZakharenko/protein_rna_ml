@@ -1,180 +1,180 @@
 {
   "model": "generalized_v2_cnn",
-  "best_val_auroc": 0.8106739064735338,
+  "best_val_auroc": 0.7464665432761086,
   "test_metrics": {
-    "auroc": 0.7028440186796847,
-    "auprc": 0.5986527745309225
+    "auroc": 0.690265497409599,
+    "auprc": 0.5795674999656366
   },
   "per_protein_summary": {
-    "median": 0.7175715,
-    "min": 0.42901599999999995
+    "median": 0.71390175,
+    "min": 0.44832375
   },
   "per_protein": [
     {
       "protein": "CSDA",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.819258,
+      "dataset": "selex_rbns",
+      "auroc": 0.7087344999999999,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "DAZAP1",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.7830396875000001,
+      "dataset": "selex_rbns",
+      "auroc": 0.7262931250000001,
       "n": 6000,
       "is_flagged": 0
     },
     {
       "protein": "ESRP1-construct3",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.9808565000000001,
+      "dataset": "selex_rbns",
+      "auroc": 0.9799475,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "HNRNPA0",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.8509024999999999,
+      "dataset": "selex_rbns",
+      "auroc": 0.7981175,
       "n": 6000,
       "is_flagged": 0
     },
     {
       "protein": "IGF2BP1",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.6315141249999999,
+      "dataset": "selex_rbns",
+      "auroc": 0.6269819375000001,
       "n": 6000,
       "is_flagged": 0
     },
     {
       "protein": "IGF2BP2",
-      "dataset": "rbns",
-      "auroc": 0.700633,
+      "dataset": "selex_rbns",
+      "auroc": 0.8476805000000001,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "IGF2BP3",
-      "dataset": "rbns",
-      "auroc": 0.4587667004048583,
+      "dataset": "selex_rbns",
+      "auroc": 0.5324139676113361,
       "n": 2976,
       "is_flagged": 0
     },
     {
       "protein": "KHDRBS3",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.9005496250000001,
+      "dataset": "selex_rbns",
+      "auroc": 0.900943125,
       "n": 6000,
       "is_flagged": 0
     },
     {
       "protein": "LARP6",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.585267,
+      "dataset": "selex_rbns",
+      "auroc": 0.612065125,
       "n": 6000,
       "is_flagged": 0
     },
     {
       "protein": "LARP7-construct4",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.773975,
+      "dataset": "selex_rbns",
+      "auroc": 0.7236642500000001,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "MEX3D-construct3",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.73451,
+      "dataset": "selex_rbns",
+      "auroc": 0.7176395,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "NUPL2",
-      "dataset": "rbns",
-      "auroc": 0.6101329354313619,
+      "dataset": "selex_rbns",
+      "auroc": 0.6833054801953337,
       "n": 2843,
       "is_flagged": 0
     },
     {
       "protein": "PCBP1",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.6746905,
+      "dataset": "selex_rbns",
+      "auroc": 0.7150460000000001,
       "n": 9000,
       "is_flagged": 0
     },
     {
       "protein": "PRR3",
-      "dataset": "rbns",
-      "auroc": 0.7586565382528486,
+      "dataset": "selex_rbns",
+      "auroc": 0.6020542593597396,
       "n": 2843,
       "is_flagged": 0
     },
     {
       "protein": "PUF60",
-      "dataset": "rbns",
-      "auroc": 0.923648,
+      "dataset": "selex_rbns",
+      "auroc": 0.9336925,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "PUM2",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.8345491875,
+      "dataset": "selex_rbns",
+      "auroc": 0.8116125000000001,
       "n": 6000,
       "is_flagged": 0
     },
     {
       "protein": "RBM28",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.8417560000000001,
+      "dataset": "selex_rbns",
+      "auroc": 0.8190845,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "RBM6",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.6104759375,
+      "dataset": "selex_rbns",
+      "auroc": 0.5368288125,
       "n": 6000,
       "is_flagged": 0
     },
     {
       "protein": "SNRNP70",
-      "dataset": "htr_selex_25907",
-      "auroc": 0.574372,
+      "dataset": "selex_rbns",
+      "auroc": 0.7127574999999999,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "SRSF8",
-      "dataset": "rbns",
-      "auroc": 0.577311,
+      "dataset": "selex_rbns",
+      "auroc": 0.658221,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "TAF15",
-      "dataset": "rbns",
-      "auroc": 0.46827699999999994,
+      "dataset": "selex_rbns",
+      "auroc": 0.4955145,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "TRA2A",
-      "dataset": "rbns",
-      "auroc": 0.799701,
+      "dataset": "selex_rbns",
+      "auroc": 0.7627145,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "UNK",
-      "dataset": "rbns",
-      "auroc": 0.42901599999999995,
+      "dataset": "selex_rbns",
+      "auroc": 0.44832375,
       "n": 3000,
       "is_flagged": 0
     },
     {
       "protein": "ZC3H18",
-      "dataset": "rbns",
-      "auroc": 0.6121750000000001,
+      "dataset": "selex_rbns",
+      "auroc": 0.554265,
       "n": 3000,
       "is_flagged": 0
     }
@@ -182,171 +182,81 @@
   "history": [
     {
       "epoch": 1,
-      "train_loss": 0.7248,
-      "val_auroc": 0.7267,
-      "val_auprc": 0.6352
+      "train_loss": 0.7093,
+      "val_auroc": 0.7153,
+      "val_auprc": 0.6208
     },
     {
       "epoch": 2,
-      "train_loss": 0.5628,
-      "val_auroc": 0.7637,
-      "val_auprc": 0.6695
+      "train_loss": 0.5727,
+      "val_auroc": 0.7337,
+      "val_auprc": 0.6493
     },
     {
       "epoch": 3,
-      "train_loss": 0.5082,
-      "val_auroc": 0.7566,
-      "val_auprc": 0.6779
+      "train_loss": 0.5295,
+      "val_auroc": 0.7359,
+      "val_auprc": 0.6527
     },
     {
       "epoch": 4,
-      "train_loss": 0.4789,
-      "val_auroc": 0.761,
-      "val_auprc": 0.6814
+      "train_loss": 0.5021,
+      "val_auroc": 0.7383,
+      "val_auprc": 0.665
     },
     {
       "epoch": 5,
-      "train_loss": 0.4593,
-      "val_auroc": 0.7588,
-      "val_auprc": 0.6759
+      "train_loss": 0.4818,
+      "val_auroc": 0.7465,
+      "val_auprc": 0.6758
     },
     {
       "epoch": 6,
-      "train_loss": 0.4393,
-      "val_auroc": 0.7555,
-      "val_auprc": 0.6773
+      "train_loss": 0.4679,
+      "val_auroc": 0.7317,
+      "val_auprc": 0.6549
     },
     {
       "epoch": 7,
-      "train_loss": 0.4264,
-      "val_auroc": 0.7698,
-      "val_auprc": 0.6823
+      "train_loss": 0.4543,
+      "val_auroc": 0.7339,
+      "val_auprc": 0.6599
     },
     {
       "epoch": 8,
-      "train_loss": 0.4192,
-      "val_auroc": 0.7896,
-      "val_auprc": 0.7044
+      "train_loss": 0.447,
+      "val_auroc": 0.7281,
+      "val_auprc": 0.6606
     },
     {
       "epoch": 9,
-      "train_loss": 0.408,
-      "val_auroc": 0.7615,
-      "val_auprc": 0.6766
+      "train_loss": 0.4365,
+      "val_auroc": 0.7149,
+      "val_auprc": 0.6462
     },
     {
       "epoch": 10,
-      "train_loss": 0.4012,
-      "val_auroc": 0.7798,
-      "val_auprc": 0.6984
+      "train_loss": 0.4301,
+      "val_auroc": 0.7318,
+      "val_auprc": 0.6585
     },
     {
       "epoch": 11,
-      "train_loss": 0.3929,
-      "val_auroc": 0.7623,
-      "val_auprc": 0.6887
+      "train_loss": 0.4239,
+      "val_auroc": 0.7469,
+      "val_auprc": 0.6749
     },
     {
       "epoch": 12,
-      "train_loss": 0.3853,
-      "val_auroc": 0.7867,
-      "val_auprc": 0.7068
+      "train_loss": 0.4183,
+      "val_auroc": 0.7378,
+      "val_auprc": 0.6669
     },
     {
       "epoch": 13,
-      "train_loss": 0.3808,
-      "val_auroc": 0.7844,
-      "val_auprc": 0.7025
-    },
-    {
-      "epoch": 14,
-      "train_loss": 0.375,
-      "val_auroc": 0.7911,
-      "val_auprc": 0.7113
-    },
-    {
-      "epoch": 15,
-      "train_loss": 0.3709,
-      "val_auroc": 0.7786,
-      "val_auprc": 0.6974
-    },
-    {
-      "epoch": 16,
-      "train_loss": 0.3684,
-      "val_auroc": 0.7914,
-      "val_auprc": 0.7077
-    },
-    {
-      "epoch": 17,
-      "train_loss": 0.3634,
-      "val_auroc": 0.7943,
-      "val_auprc": 0.7185
-    },
-    {
-      "epoch": 18,
-      "train_loss": 0.3592,
-      "val_auroc": 0.7842,
-      "val_auprc": 0.705
-    },
-    {
-      "epoch": 19,
-      "train_loss": 0.3527,
-      "val_auroc": 0.788,
-      "val_auprc": 0.7135
-    },
-    {
-      "epoch": 20,
-      "train_loss": 0.3528,
-      "val_auroc": 0.8107,
-      "val_auprc": 0.7342
-    },
-    {
-      "epoch": 21,
-      "train_loss": 0.3492,
-      "val_auroc": 0.7902,
-      "val_auprc": 0.7147
-    },
-    {
-      "epoch": 22,
-      "train_loss": 0.3465,
-      "val_auroc": 0.7846,
-      "val_auprc": 0.713
-    },
-    {
-      "epoch": 23,
-      "train_loss": 0.3432,
-      "val_auroc": 0.7946,
-      "val_auprc": 0.7225
-    },
-    {
-      "epoch": 24,
-      "train_loss": 0.3395,
-      "val_auroc": 0.7873,
-      "val_auprc": 0.7136
-    },
-    {
-      "epoch": 25,
-      "train_loss": 0.3377,
-      "val_auroc": 0.7928,
-      "val_auprc": 0.7168
-    },
-    {
-      "epoch": 26,
-      "train_loss": 0.3375,
-      "val_auroc": 0.7777,
-      "val_auprc": 0.7029
-    },
-    {
-      "epoch": 27,
-      "train_loss": 0.3357,
-      "val_auroc": 0.7834,
-      "val_auprc": 0.7094
-    },
-    {
-      "epoch": 28,
-      "train_loss": 0.3307,
-      "val_auroc": 0.7883,
-      "val_auprc": 0.7131
+      "train_loss": 0.4124,
+      "val_auroc": 0.7331,
+      "val_auprc": 0.6656
     }
   ]
 }
