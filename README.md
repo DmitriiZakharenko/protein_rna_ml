@@ -235,11 +235,13 @@ python scripts/03_evaluate_validation.py --config configs/rbns_validation.yaml -
 python scripts/04_build_generalized_dataset.py
 python scripts/06_train_generalized_v2.py --data_dir data/generalized_v2 --epochs 50
 
-# Multi-seed evaluation (5 seeds)
+# Multi-seed evaluation (5 seeds). Each seed writes results to
+# results/multiseed/v2_cnn/seed_<N>/ and checkpoints to seed_<N>/checkpoints/.
 python scripts/18_run_multiseed.py \
     --script scripts/06_train_generalized_v2.py \
     --n_seeds 5 --output_dir results/multiseed/v2_cnn \
     --extra_args "--data_dir data/generalized_v2 --epochs 50"
+# Append --live to stream epoch logs to the terminal (still written to seed_N/train.log).
 
 # Analyze training dynamics
 python scripts/15_analyze_training.py --results_dir results/generalized

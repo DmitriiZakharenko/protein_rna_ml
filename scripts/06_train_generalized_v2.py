@@ -11,6 +11,7 @@ Usage (from protein_rna_ml/):
     python scripts/06_train_generalized_v2.py
     python scripts/06_train_generalized_v2.py --data_dir data/generalized_v2 --seed 42
     python scripts/06_train_generalized_v2.py --rna_max 60 --prot_max 800
+    python scripts/06_train_generalized_v2.py --data_dir data/generalized_v2 --dry_run
 """
 
 import argparse
@@ -72,11 +73,17 @@ def main():
     parser.add_argument("--prot_max",   type=int,   default=300)  # max observed prot len=283
     parser.add_argument("--epochs",     type=int,   default=60)
     parser.add_argument("--batch_size", type=int,   default=256)
+    parser.add_argument("--num_workers", type=int, default=None,
+                        help="DataLoader worker processes. Default: 0 on macOS "
+                             "(avoids frequent multiprocessing freezes), 2 elsewhere.")
     parser.add_argument("--lr",         type=float, default=5e-4)
     parser.add_argument("--dropout",    type=float, default=0.3)
     parser.add_argument("--patience",   type=int,   default=8)
     parser.add_argument("--seed",       type=int,   default=42,
                         help="Random seed (torch / NumPy / Python; shuffle generator). Needed by scripts/18_run_multiseed.py.")
+    parser.add_argument("--dry_run",    action="store_true",
+                        help="Load data, build model, run one train step on the first batch, then exit "
+                             "without checkpoints or v2_cnn_results.json.")
     parser.add_argument("--no_cuda",    action="store_true")
     args = parser.parse_args()
 
@@ -86,8 +93,12 @@ def main():
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(args.seed)
 
-    os.makedirs(args.out_dir,   exist_ok=True)
-    os.makedirs(args.model_dir, exist_ok=True)
+    if not args.dry_run:
+        os.makedirs(args.out_dir,   exist_ok=True)
+        os.makedirs(args.model_dir, exist_ok=True)
+
+    num_workers = args.num_workers if args.num_workers is not None else (
+        0 if sys.platform == "darwin" else 2)
 
     if not args.no_cuda:
         if torch.cuda.is_available():
@@ -99,6 +110,7 @@ def main():
     else:
         device = torch.device("cpu")
     print(f"\n  Device: {device}")
+    print(f"  DataLoader num_workers={num_workers}", flush=True)
     if device.type == "cpu":
         print("  ⚠️  No GPU/MPS detected. CNN training on CPU (~90 min on fast machine).")
         print("  Tip: on Apple Silicon, MPS is auto-detected (no flag needed).")
@@ -123,10 +135,12 @@ def main():
     train_loader = DataLoader(
         train_ds, batch_size=args.batch_size,
         shuffle=True, generator=gen,
-        num_workers=2, pin_memory=(device.type == "cuda"),
+        num_workers=num_workers, pin_memory=(device.type == "cuda"),
     )
-    val_loader   = DataLoader(val_ds, batch_size=args.batch_size*2, shuffle=False, num_workers=2)
-    test_loader  = DataLoader(test_ds, batch_size=args.batch_size*2, shuffle=False, num_workers=2)
+    val_loader   = DataLoader(val_ds, batch_size=args.batch_size*2, shuffle=False,
+                              num_workers=num_workers)
+    test_loader  = DataLoader(test_ds, batch_size=args.batch_size*2, shuffle=False,
+                              num_workers=num_workers)
 
     # ── Model ─────────────────────────────────────────────────────────────────
     model = RNABindingCNN(
@@ -145,6 +159,22 @@ def main():
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer, T_max=args.epochs, eta_min=args.lr * 0.01)
+
+    if args.dry_run:
+        print("\n=== DRY RUN (no checkpoint, no JSON) ===")
+        model.train()
+        rna, prot, y = next(iter(train_loader))
+        rna, prot, y = rna.to(device), prot.to(device), y.to(device)
+        optimizer.zero_grad()
+        logits = model(rna, prot)
+        loss = criterion(logits, y)
+        loss.backward()
+        nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        optimizer.step()
+        print(f"  One train step OK  |  loss={loss.item():.4f}")
+        print(f"  logits: {tuple(logits.shape)}  labels: {tuple(y.shape)}  device={device}")
+        print("✅ Dry run complete — rerun without --dry_run for full training.")
+        return
 
     # ── Training loop ─────────────────────────────────────────────────────────
     print(f"\n=== Training CNN (max {args.epochs} epochs, early stop on val AUPRC, patience={args.patience}) ===")

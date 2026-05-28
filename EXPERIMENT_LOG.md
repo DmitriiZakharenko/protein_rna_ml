@@ -237,10 +237,41 @@ a fundamentally different design (fine-tuning, cross-attention, binding-domain s
 |----|------|---------|--------|--------|
 | EXP-V2-CLEAN | V2 retrain with corrected weighting | Clean anchor baseline | **Done** | Test AUROC 0.690, AUPRC 0.580 |
 | EXP-RNACOMPETE-V2 | RNAcompete zero-shot on V2 | Generalization test | **Done** | Median AUROC 0.549 |
-| EXP-V2-MULTISEED | V2 ×5 seeds | Quantify variance | Next | — |
+| EXP-V2-MULTISEED | V2 ×5 seeds | Quantify variance | In Progress | seed_0 checkpoint saved; seeds 1-4 pending |
 | EXP-HOMOLOGY | Homology audit | Quantify paralog leakage | Next | — |
 | EXP-PHASE3A | V2 on SELEX+RNAcompete data | Scale training | Scripted | `scripts/22` ready |
 | EXP-V4-BILINEAR | V4 bilinear interaction | Pairwise interaction layer | Scripted | `scripts/21` ready |
+
+---
+
+## Infrastructure Update — Reproducibility & Multi-seed Runner (2026-05-28)
+
+**Scripts updated**: `scripts/06_train_generalized_v2.py`, `scripts/18_run_multiseed.py`
+
+### Changes
+
+| Component | Change |
+|-----------|--------|
+| `06_train_generalized_v2.py` | Added `--seed` (seeds random/numpy/torch + DataLoader Generator) |
+| `06_train_generalized_v2.py` | Added `--dry_run` (single batch pass, no disk writes) |
+| `06_train_generalized_v2.py` | `num_workers=0` default on macOS (prevents multiprocessing freeze) |
+| `18_run_multiseed.py` | Auto-injects `--model_dir seed_N/checkpoints` + `--out_dir seed_N/` per seed |
+| `18_run_multiseed.py` | `--live` flag streams epoch logs to terminal while still writing `train.log` |
+| `18_run_multiseed.py` | Sets `PYTHONUNBUFFERED=1` in child process environment |
+
+### Multi-seed Status
+
+seed_0 checkpoint saved to `results/multiseed/v2_cnn/seed_0/checkpoints/best_model.pt`.
+Seeds 1-4 pending. Run command:
+
+```bash
+python scripts/18_run_multiseed.py \
+    --script scripts/06_train_generalized_v2.py \
+    --seeds 1 2 3 4 \
+    --output_dir results/multiseed/v2_cnn \
+    --extra_args "--data_dir data/generalized_v2 --epochs 60" \
+    --live
+```
 
 ---
 

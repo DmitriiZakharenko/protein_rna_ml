@@ -16,18 +16,21 @@ Usage:
       --extra_args "--data_dir data/generalized_v2 --epochs 50" \
       [--dry_run]
 
-  # Run V2 CNN with automatic seed range:
+  # Automatic seeds 0 … n_seeds−1:
   python scripts/18_run_multiseed.py \
       --script scripts/06_train_generalized_v2.py \
       --n_seeds 5 \
-      --output_dir results/multiseed/v2_cnn
+      --output_dir results/multiseed/v2_cnn \
+      [--live] [--dry_run]
+
+  # Default: subprocess output only to seed_N/train.log (interactive terminal stays quiet until each seed finishes).
+  # Pass --live to echo the same bytes to stderr/stdout while still writing train.log.
 
 Output:
-  results/multiseed/<model>/
-    seed_{N}/         ← per-seed result JSON (moved here automatically)
-    summary.json      ← mean ± std across seeds
-    summary.tsv       ← human-readable table
-    variance_plot.png ← AUROC / AUPRC box plot
+  results/multiseed/<run>/
+    seed_{N}/              ← per seed: logs, metrics JSON (--out_dir)
+    seed_{N}/checkpoints/  ← per seed: best_model.pt etc. (--model_dir, auto-set)
+    summary.json ...
 """
 
 import argparse
@@ -52,13 +55,29 @@ except ImportError:
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
-def run_seed(script: str, seed: int, seed_dir: str, extra_args: list[str],
-             python: str, dry_run: bool) -> tuple[int, float]:
+def run_seed(
+    script: str,
+    seed: int,
+    seed_dir: str,
+    checkpoints_dir: str,
+    inject_model_dir: bool,
+    extra_args: list[str],
+    python: str,
+    dry_run: bool,
+    live: bool,
+) -> tuple[int, float]:
     os.makedirs(seed_dir, exist_ok=True)
+    if inject_model_dir:
+        os.makedirs(checkpoints_dir, exist_ok=True)
     log_path = os.path.join(seed_dir, "train.log")
 
-    cmd = [python, script] + extra_args + ["--seed", str(seed),
-                                            "--out_dir", seed_dir]
+    trailing: list[str] = ["--seed", str(seed)]
+    # After extra_args so we override duplicate flags from extra_args (argparse last wins).
+    if inject_model_dir:
+        trailing += ["--model_dir", checkpoints_dir]
+    trailing += ["--out_dir", seed_dir]
+
+    cmd = [python, script] + extra_args + trailing
     cmd_str = " ".join(shlex.quote(c) for c in cmd)
     print(f"\n  [seed={seed}] {cmd_str}")
     print(f"  log → {log_path}")
@@ -67,9 +86,35 @@ def run_seed(script: str, seed: int, seed_dir: str, extra_args: list[str],
         print("  [DRY-RUN] skipping execution")
         return 0, 0.0
 
+    child_env = os.environ.copy()
+    child_env["PYTHONUNBUFFERED"] = "1"
+
+    if not live:
+        print(f"  (no console output; run: tail -f {log_path})")
+
     t0 = time.time()
+    if live:
+        # Echo child stdout/stderr to terminal while writing train.log (line-buffered-ish).
+        with open(log_path, "wb") as log_fh:
+            proc = subprocess.Popen(
+                cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=child_env,
+            )
+            try:
+                assert proc.stdout is not None
+                while True:
+                    chunk = proc.stdout.read(8192)
+                    if not chunk:
+                        break
+                    sys.stdout.buffer.write(chunk)
+                    sys.stdout.buffer.flush()
+                    log_fh.write(chunk)
+            finally:
+                retcode = proc.wait()
+        elapsed = time.time() - t0
+        return retcode, elapsed
+
     with open(log_path, "w") as log_fh:
-        result = subprocess.run(cmd, stdout=log_fh, stderr=subprocess.STDOUT)
+        result = subprocess.run(cmd, stdout=log_fh, stderr=subprocess.STDOUT, env=child_env)
     elapsed = time.time() - t0
     return result.returncode, elapsed
 
@@ -195,8 +240,14 @@ def main():
                         help="Extra arguments to forward to the training script (quoted string)")
     parser.add_argument("--python",     default=sys.executable,
                         help="Python interpreter to use")
+    parser.add_argument("--live", action="store_true",
+                        help="Stream each training script's stdout to the terminal "
+                             "(still saved to seed_N/train.log). Default: silent, log-only.")
     parser.add_argument("--dry_run",    action="store_true",
                         help="Print commands without executing")
+    parser.add_argument("--no_auto_model_dir", action="store_true",
+                        help="Do not set --model_dir per seed under seed_N/checkpoints/ "
+                             "(use only if target script has no --model_dir). Default: auto.")
     parser.add_argument("--skip_failed",action="store_true",
                         help="Skip seeds that fail instead of aborting")
     args = parser.parse_args()
@@ -212,6 +263,8 @@ def main():
     print(f"  seeds      : {seeds}")
     print(f"  output_dir : {args.output_dir}")
     print(f"  extra_args : {extra}")
+    print(f"  per-seed checkpoints: {'disabled' if args.no_auto_model_dir else 'seed_<N>/checkpoints/'}")
+    print(f"  live stdout: {args.live}  (--live to echo epochs to terminal)")
     print(f"  dry_run    : {args.dry_run}\n")
 
     os.makedirs(args.output_dir, exist_ok=True)
@@ -220,8 +273,18 @@ def main():
 
     for seed in seeds:
         seed_dir = os.path.join(args.output_dir, f"seed_{seed}")
+        ckpt_dir = os.path.join(seed_dir, "checkpoints")
         retcode, elapsed = run_seed(
-            args.script, seed, seed_dir, extra, args.python, args.dry_run)
+            args.script,
+            seed,
+            seed_dir,
+            ckpt_dir,
+            not args.no_auto_model_dir,
+            extra,
+            args.python,
+            args.dry_run,
+            args.live,
+        )
 
         if args.dry_run:
             continue

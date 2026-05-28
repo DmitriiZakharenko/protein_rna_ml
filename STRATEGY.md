@@ -99,7 +99,9 @@ IMMEDIATE NEXT STEPS:
     Report mean ± std for val and test AUROC.
     Required before claiming any improvement is real.
     python scripts/18_run_multiseed.py --script scripts/06_train_generalized_v2.py \
-        --n_seeds 5 --extra_args "--data_dir data/generalized_v2 --epochs 60"
+        --n_seeds 5 --output_dir results/multiseed/v2_cnn \
+        --extra_args "--data_dir data/generalized_v2 --epochs 60"
+    Checkpoints land in results/multiseed/v2_cnn/seed_<N>/checkpoints/ (no cross-seed overwrite).
 
   Step 2 — Homology audit (measurement, not resplit)
     Compute pairwise protein identity for all 169 proteins vs RNAcompete.
