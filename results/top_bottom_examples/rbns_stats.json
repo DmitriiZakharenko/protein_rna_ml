@@ -1,0 +1,685 @@
+{
+  "protocol": "rbns",
+  "data_file": "../rbns_analysis/results/ml_dataset_rbns_clean.tsv",
+  "zscore_file": null,
+  "motif_dir": null,
+  "n_proteins_processed": 96,
+  "n_proteins_skipped": 0,
+  "top_k_kmers": 10,
+  "n_examples": 5,
+  "kmer_len": 7,
+  "proteins": [
+    {
+      "protein_name": "A1CF",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "AKAP8L",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "BOLL",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CELF1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CNOT4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CPEB1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CSDE1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "DAZ3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "DAZAP1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "EIF3D",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "EIF4G2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ELAVL4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ESRP1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "EWSR1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "EXOSC4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "FUBP1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "FUBP3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "FUS",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPA0",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPA1L2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPA2B1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPC",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPCL1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPD",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPDL",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPF",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPH2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPK",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPL",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "IGF2BP1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "IGF2BP2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "IGF2BP3",
+      "n_input_pos": 1000,
+      "n_input_neg": 1976,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ILF2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "KHDRBS2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "KHDRBS3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "LIN28B",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MBNL1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MSI1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "NOVA1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "NSUN2",
+      "n_input_pos": 1000,
+      "n_input_neg": 600,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "NUPL2",
+      "n_input_pos": 1000,
+      "n_input_neg": 1843,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PABPC3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PCBP1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PCBP2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PCBP4",
+      "n_input_pos": 1000,
+      "n_input_neg": 1660,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PRR3",
+      "n_input_pos": 1000,
+      "n_input_neg": 1843,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PUF60",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PUM1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RALYL",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBFOX2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBFOX3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM11",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM15B",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM22",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM23",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM24",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM25",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM41",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM45",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM47",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM4B",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM5",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM6",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBMS2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBMS3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RC3H1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SAFB2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SF1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SFPQ",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SNRPA",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SNRPB2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SRSF11",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SRSF2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SRSF4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SRSF5",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SRSF8",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SRSF9",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SUCLG1",
+      "n_input_pos": 1000,
+      "n_input_neg": 720,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "TAF15",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "TARDBP",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "THUMPD1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "TIA1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "TRA2A",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "TRA2B",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "UNK",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "XRCC6",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "XRN2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "YBX2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZC3H18",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZCRB1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZFP36",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZFP36L1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZNF326",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZRANB2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    }
+  ]
+}

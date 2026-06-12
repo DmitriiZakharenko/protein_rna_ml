@@ -19,6 +19,18 @@ results/*/plots/
 results/analysis/
 results/benchmarks/
 
+# Large per-protein model pickles (optimistic 80/20 run; regenerate via script 25)
+results/rna_only_per_protein/
+results/multiseed/
+
+# Staging dirs from separate RNAcompete runs (merged into top_bottom_examples/)
+results/top_bottom_examples_rbpzoo/
+results/top_bottom_examples_ucrbp/
+results/top_bottom_examples_ucrbp_filtered.tsv.gz
+
+# Editor / local session files
+.cursor/
+
 # Python
 __pycache__/
 *.pyc

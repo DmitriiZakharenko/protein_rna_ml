@@ -1,0 +1,34 @@
+{
+  "dataset": "rnacompete_eukarya",
+  "data_file": "../rnacompete_analysis/eukarya/results/ml_dataset_eukarya_clean.tsv.gz",
+  "split_mode": "honest_60_20_20",
+  "dedupe_sequences": true,
+  "n_proteins_trained": 200,
+  "n_proteins_skipped": 0,
+  "kmer_k": 4,
+  "model_comparison": {
+    "logistic_regression": {
+      "median_val_auroc": 0.9910297303631687,
+      "median_val_auprc": 0.9825614958343489,
+      "median_test_auroc": 0.9915313893905605,
+      "median_test_auprc": 0.9826956979681147,
+      "mean_test_auroc": 0.9862602416591689,
+      "mean_test_auprc": 0.9723432438678281,
+      "n_proteins": 200,
+      "wins": 63
+    },
+    "random_forest": {
+      "median_val_auroc": 0.9931842201731547,
+      "median_val_auprc": 0.9848103110558779,
+      "median_test_auroc": 0.9933314196885763,
+      "median_test_auprc": 0.9843378698124607,
+      "mean_test_auroc": 0.9886160951984279,
+      "mean_test_auprc": 0.9761312417462621,
+      "n_proteins": 200,
+      "wins": 137
+    }
+  },
+  "recommended_model": "random_forest",
+  "median_test_auroc": 0.9934857646710887,
+  "median_test_auprc": 0.9848019828515193
+}

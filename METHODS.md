@@ -1,7 +1,7 @@
 # Methods & Model Tracking
 
 **Project**: Protein–RNA Binding Prediction  
-**Last updated**: 2026-05-01  
+**Last updated**: 2026-06-12  
 **Language**: English  
 
 This document records every methodological choice made in the project — encoding strategies, splitting decisions, model architectures, and training configurations — together with the rationale for each choice and literature references. It is updated each time a new method is introduced or an existing one is modified.
@@ -404,6 +404,42 @@ and tests on NPInter5 (TheNovel — completely unseen protein–RNA pairs). Our 
 on HTR-SELEX/RBNS (in vitro selection assays) and tests on protein-aware splits from the
 same assay type. These are different biological tasks, different data sources, and different
 negative sampling strategies. ZHMolGraph 0.798 is an aspirational reference only.
+
+### RNA-only per-protein classifiers (script 25, 2026-06)
+
+Independent per-protein baseline: **one classifier per RBP**, RNA 4-mer
+frequencies only (256-d), no protein sequence. Models: Logistic Regression (L2, scaled)
+and Random Forest (200 trees). XGBoost optional if installed.
+
+**Split protocol (`--honest`, default)**:
+1. Deduplicate rows with identical `rna_sequence` (keep first label).
+2. Stratified 60/20/20 train / val / test per protein.
+3. Pick best model on **validation** AUROC (tie-break: AUPRC).
+4. Report **test** AUROC and AUPRC only (held-out).
+5. Refit chosen model on train+val for optional export (`--save_models`).
+
+RNAcompete: when multiple `hyb_id` per protein, keep best experiment (highest mean
+positive intensity); modal RNA length computed from **train positives only** and applied
+to filter val/test (same logic as script 24).
+
+| Dataset | n RBPs | Median test AUROC | Median test AUPRC | RF wins |
+|---|---|---|---|---|
+| HTR-SELEX | 93 | 0.949 | 0.927 | 73/93 |
+| RBNS | 96 | 0.995 | 0.985 | 79/96 |
+| RNAcompete Eukarya | 200 | 0.993 | 0.985 | 137/200 |
+| RNAcompete RBPZoo | 174 | 0.990 | 0.974 | 153/174 |
+
+Figures: `python scripts/26_visualize_rna_only_results.py` → `figures/rna_only_*.png`.
+
+**Caveats**: per-protein k-mer models are expected to score high on in vitro binding data.
+RNAcompete positive labels partially overlap with 7-mer enrichment criteria used in script 24
+(more circular). This is **not** comparable to generalized V2 CNN (protein-aware cross-RBP split).
+
+### Top/bottom example extraction (script 24, 2026-06)
+
+For structural follow-up: 5 positives + 5 negatives per RBP, anchored on top-10 enriched
+7-mers. RNAcompete: modal length among kmer-positive probes; negatives at same length without
+top-10 7-mer. Output master TSV: `results/top_bottom_examples/all_protocols_summary.tsv`.
 
 ---
 

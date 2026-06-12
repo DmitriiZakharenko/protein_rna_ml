@@ -1,0 +1,664 @@
+{
+  "protocol": "htr_selex",
+  "data_file": "../htr_selex_analysis/results/ml_dataset_simple_clean.tsv",
+  "zscore_file": null,
+  "motif_dir": "../htr_selex_analysis/results/motifs",
+  "n_proteins_processed": 93,
+  "n_proteins_skipped": 0,
+  "top_k_kmers": 10,
+  "n_examples": 5,
+  "kmer_len": 7,
+  "proteins": [
+    {
+      "protein_name": "BOLL",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CARHSP1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CELF1-construct2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CELF3-construct2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CELF4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CELF4-construct2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CSDA",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CSTF2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "CSTF2T",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "DAZ1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "DAZ1-construct2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "DAZ1-construct3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "DAZ3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "DAZ4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "DAZAP1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "DAZL",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ELAVL1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ELAVL3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ELAVL4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ESRP1-construct3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HEXIM1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HEXIM2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPA0",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPA1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPA1L2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPA3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPC",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPCL1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRNPL-construct2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "HNRPLL",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "IGF2BP1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "IGF2BP1-construct4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "KHDRBS1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "KHDRBS2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "KHDRBS3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "LARP6",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "LARP7-construct4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MCM3AP",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MEX3B-construct3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MEX3C",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MEX3D",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MEX3D-construct3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MKRN1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MSI1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "MSI2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "NOVA2-construct3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PABPC5",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PCBP1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PUM1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "PUM2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "QKI",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RALY",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBFOX1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBFOX1-construct2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBFOX1-construct4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBFOX3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM14",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM24",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM28",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM38",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM42",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM46",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM4B",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBM6",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBMS1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBMS2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBMS3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBMY1E",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBMY1F",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBMY1J",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBPMS",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RBPMS2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RC3H1-construct2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RC3H2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "RNPC3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SART3",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SNRNP70",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SNRPA",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 2,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "SNRPB2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "TARDBP",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "THUMPD1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "YBX1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "YBX2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZC3H10",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZC3H12A",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZC3H12B",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZC3H12C",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZC3H8",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZCRB1",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZFP36",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZFR-construct4",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    },
+    {
+      "protein_name": "ZRANB2",
+      "n_input_pos": 1000,
+      "n_input_neg": 2000,
+      "n_output_pos": 5,
+      "n_output_neg": 5
+    }
+  ]
+}

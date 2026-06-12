@@ -71,11 +71,11 @@ All numbers below are from **clean checkpoints** retrained after fixing the doub
 
 ## RNAcompete Benchmark (Zero-Shot Evaluation)
 
-RNAcompete (Kazan et al., *Nat. Biotechnol.* 2025 + Ray et al., *Nature* 2013) measures in vitro RNA-binding specificity of recombinant RBPs against a pool of ~241,000 synthetic RNA probes (35–41 nt). Three sub-datasets aggregated:
+RNAcompete (Sasse et al., *Nat. Biotechnol.* 2025 + Ray et al., *Nature* 2013) measures in vitro RNA-binding specificity of recombinant RBPs against a pool of ~241,000 synthetic RNA probes (35–41 nt). Three sub-datasets aggregated:
 
 | Sub-dataset | Experiments | Pairs | Organisms |
 |---|---|---|---|
-| RBPZoo (Kazan 2025) | 176 | 2,592,720 | 26 |
+| RBPZoo (Sasse et al. 2025) | 176 | 2,592,720 | 26 |
 | Eukarya (Ray 2013) | 244 | 3,726,353 | 24 |
 | ucRBP (Hughes Lab) | 667 | 7,584,616 | 4 |
 | **Combined** | **1,087** | **~13.9M** | **~26** |
@@ -113,6 +113,85 @@ python scripts/20_evaluate_benchmark.py \
     --benchmark  data/benchmarks/rnacompete/rnacompete_all.tsv \
     --output_dir results/benchmarks/rnacompete_v2
 ```
+
+---
+
+## Top/Bottom RNA Examples
+
+Script `24_extract_top_bottom_examples.py` selects **5 highest-confidence positives** and **5 strongest negatives** per RBP, anchored on the top-10 enriched 7-mers.
+
+| Protocol | Dataset | Proteins | Examples |
+|---|---|---|---|
+| HTR-SELEX | PRJEB25907 | 93 | 927 |
+| RBNS | Lambert 2020 | 96 | 960 |
+| RNAcompete | Eukarya (Ray 2013) | 200 | 2,000 |
+| RNAcompete | RBPZoo (Sasse 2025) | 174 | 1,740 |
+| RNAcompete | ucRBP23 (Ray & Laverty 2023) | 23 | 230 |
+| **Combined** | | **586** | **5,857** |
+
+RNAcompete positives require a top-10 7-mer match + modal probe length (from positives); negatives have no top-10 7-mer at the same length. When multiple experiments exist per protein, the best experiment is selected (highest mean positive intensity).
+
+![Top/bottom examples overview](figures/top_bottom_examples_overview.png)
+
+```bash
+# HTR-SELEX + RBNS + RNAcompete Eukarya (default output dir)
+python scripts/24_extract_top_bottom_examples.py --protocol all
+
+# RBPZoo (Z-score matrix) and ucRBP23 whitelist
+python scripts/24_extract_top_bottom_examples.py --protocol rnacompete_rbpzoo \
+    --zscore_file /path/to/Zscores_RNAcompete2025.txt.gz
+python scripts/24_extract_top_bottom_examples.py --protocol rnacompete_ucrbp --ucrbp_mode
+```
+
+Output: `results/top_bottom_examples/all_protocols_summary.tsv` (master file with `protocol`, `dataset`, `matched_kmer`, `kmer_position`).
+
+---
+
+## RNA-Only Per-Protein Classifiers
+
+Per-protein baseline: **one RNA 4-mer model per protein**, no protein features. Compares Logistic Regression vs Random Forest on the original `*_clean.tsv` files (not the top/bottom summary).
+
+**Evaluation (default `--honest`)**: dedupe by `rna_sequence`, stratified 60/20/20 train/val/test, model picked on validation, **metrics reported on held-out test** (AUROC + AUPRC). RNAcompete uses best-experiment selection + modal length from train only.
+
+| Dataset | Proteins | Median Test AUROC | Median Test AUPRC | Best Model |
+|---|---|---|---|---|
+| HTR-SELEX | 93 | **0.949** | **0.927** | RF (73/93 wins) |
+| RBNS | 96 | **0.995** | **0.985** | RF (79/96 wins) |
+| RNAcompete Eukarya | 200 | **0.993** | **0.985** | RF (137/200 wins) |
+| RNAcompete RBPZoo | 174 | **0.990** | **0.974** | RF (153/174 wins) |
+
+~20 HTR-SELEX proteins have test AUROC < 0.90 (worst: MEX3D-construct3 ≈ 0.71). RBNS has one borderline protein (IGF2BP3 ≈ 0.90). RNAcompete panels are near-saturated.
+
+![RNA-only dataset comparison](figures/rna_only_dataset_comparison.png)
+
+![Per-protein AUROC distributions](figures/rna_only_pp_distributions.png)
+
+<details>
+<summary>Model comparison and weakest proteins</summary>
+
+![LR vs RF wins](figures/rna_only_model_wins.png)
+
+![Weakest per-protein AUROC](figures/rna_only_weakest_proteins.png)
+
+</details>
+
+```bash
+# Train on one dataset (honest split, summaries only — no model pickles by default)
+python scripts/25_train_rna_only_per_protein.py \
+    --data_file ../htr_selex_analysis/results/ml_dataset_simple_clean.tsv \
+    --dataset htr_selex
+
+python scripts/25_train_rna_only_per_protein.py \
+    --data_file ../rnacompete_analysis/eukarya/results/ml_dataset_eukarya_clean.tsv.gz \
+    --dataset rnacompete_eukarya --rnacompete_best_experiment
+
+# Regenerate figures
+python scripts/26_visualize_rna_only_results.py
+```
+
+Results: `results/rna_only_per_protein_honest/` (`*_stats.json`, `*_per_protein_metrics.tsv`, `all_datasets_summary.tsv`).
+
+> **Interpretation**: high AUROC is expected for per-protein k-mer models on in vitro assays. RNAcompete labels partly overlap with 7-mer enrichment (dual filter) → more circular than SELEX/RBNS. Test set uses sequence only — no label leakage at inference.
 
 ---
 
@@ -181,9 +260,15 @@ protein_rna_ml/
 │   ├── 21_train_generalized_v4_interaction.py  V4: bilinear interaction layer
 │   ├── 22_build_phase3a_dataset.py             SELEX + RNAcompete merge (homology-aware)
 │   │
+│   │   — Example extraction & RNA-only baselines —
+│   ├── 24_extract_top_bottom_examples.py   top-5/bottom-5 RNA per RBP (7-mer anchored)
+│   ├── 25_train_rna_only_per_protein.py    per-protein RNA 4-mer LR/RF classifiers
+│   └── 26_visualize_rna_only_results.py    figures for scripts 24–25
+│   │
 │   │   — Experiment infrastructure —
 │   ├── 18_run_multiseed.py             multi-seed runner, mean±std aggregation
-│   └── 19_compare_models.py            leaderboard, radar chart, CDF comparison
+│   ├── 19_compare_models.py            leaderboard, radar chart, CDF comparison
+│   └── 23_generate_readme_figures.py     Phase 1–2 + RNAcompete README figures
 │
 ├── src/
 │   ├── data/
@@ -205,7 +290,9 @@ protein_rna_ml/
 │   ├── generalized/                    V1–V3c result JSONs
 │   ├── htr_selex/
 │   ├── rbns/
-│   └── htr_selex_prjeb47428/
+│   ├── htr_selex_prjeb47428/
+│   ├── top_bottom_examples/            script 24 outputs + all_protocols_summary.tsv
+│   └── rna_only_per_protein_honest/      script 25 honest-split metrics (no .pkl)
 │
 ├── tasks/
 │   ├── todo.md
@@ -282,7 +369,7 @@ python scripts/21_train_generalized_v4_interaction.py \
 - Ray et al. (2019). *Genome Research* — HTR-SELEX PRJEB25907
 - Lambert et al. (2020). *Nature* — RBNS dataset
 - Laverty et al. (2022). *Nucleic Acids Research* — HTR-SELEX PRJEB47428
-- Kazan et al. (2025). *Nature Biotechnology* — RBPZoo / EuPRI RNAcompete
+- Sasse et al. (2025). *Nature Biotechnology* — RBPZoo / EuPRI RNAcompete
 - Ray et al. (2013). *Nature* — RNAcompete eukarya panel
 - Liu et al. (2025). *Communications Biology* — ZHMolGraph (NPInter2/RPI7317 benchmark)
 - Lin et al. (2023). *Science* — ESM-2 protein language model

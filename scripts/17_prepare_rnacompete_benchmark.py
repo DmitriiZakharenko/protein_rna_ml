@@ -23,7 +23,7 @@ Benchmark subsets prepared:
   1. rnacompete_all.tsv     — full combined benchmark (~13.9M pairs, subsampled to 2M)
   2. rnacompete_human.tsv   — human-only RBPs from ucRBP (most directly comparable to training)
   3. rnacompete_nonhuman.tsv— non-human eukaryotes (true zero-shot)
-  4. rnacompete_rbpzoo.tsv  — RBPZoo sub-dataset only (cleanest negatives, Kazan 2025)
+  4. rnacompete_rbpzoo.tsv  — RBPZoo sub-dataset only (cleanest negatives, Sasse et al. 2025)
 
 Usage:
   python scripts/17_prepare_rnacompete_benchmark.py \
