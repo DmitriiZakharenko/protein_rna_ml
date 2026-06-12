@@ -1,0 +1,34 @@
+{
+  "dataset": "rbns",
+  "data_file": "../rbns_analysis/results/ml_dataset_rbns_clean.tsv",
+  "split_mode": "honest_60_20_20",
+  "dedupe_sequences": true,
+  "n_proteins_trained": 96,
+  "n_proteins_skipped": 0,
+  "kmer_k": 4,
+  "model_comparison": {
+    "logistic_regression": {
+      "median_val_auroc": 0.9933624999999999,
+      "median_val_auprc": 0.9787822703544502,
+      "median_test_auroc": 0.992675,
+      "median_test_auprc": 0.9805054923562112,
+      "mean_test_auroc": 0.986168363370758,
+      "mean_test_auprc": 0.9654972835083643,
+      "n_proteins": 96,
+      "wins": 17
+    },
+    "random_forest": {
+      "median_val_auroc": 0.9955875000000001,
+      "median_val_auprc": 0.9866362691699111,
+      "median_test_auroc": 0.99551875,
+      "median_test_auprc": 0.9843058546678736,
+      "mean_test_auroc": 0.9911185105536706,
+      "mean_test_auprc": 0.9739770692469295,
+      "n_proteins": 96,
+      "wins": 79
+    }
+  },
+  "recommended_model": "random_forest",
+  "median_test_auroc": 0.99546875,
+  "median_test_auprc": 0.9854358572755667
+}
