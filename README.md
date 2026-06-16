@@ -118,7 +118,7 @@ python scripts/20_evaluate_benchmark.py \
 
 ## Top/Bottom RNA Examples
 
-Script `24_extract_top_bottom_examples.py` selects **5 highest-confidence positives** and **5 strongest negatives** per RBP, anchored on the top-10 enriched 7-mers.
+Script `24_extract_top_bottom_examples.py` selects **5 motif-anchored positives** and **5 motif-negative examples** per RBP from each protocol’s `*_clean.tsv` files. Selection is on top of the label definitions below — not the same as classifier training pools.
 
 | Protocol | Dataset | Proteins | Examples |
 |---|---|---|---|
@@ -129,7 +129,20 @@ Script `24_extract_top_bottom_examples.py` selects **5 highest-confidence positi
 | RNAcompete | ucRBP23 (Ray & Laverty 2023) | 23 | 230 |
 | **Combined** | | **586** | **5,857** |
 
-RNAcompete positives require a top-10 7-mer match + modal probe length (from positives); negatives have no top-10 7-mer at the same length. When multiple experiments exist per protein, the best experiment is selected (highest mean positive intensity).
+**Underlying labels in clean data** (built upstream in `htr_selex_analysis` / `rbns_analysis`):
+
+- **HTR-SELEX positives** (`source=enriched`): top-frequency sequences from the **last selection cycle** (top-1000 per protein).
+- **HTR-SELEX negatives** (`source=background`): sequences from **ZeroCycle background** libraries that are **not** in the enriched set (up to 2× positives per protein). Background and enriched come from **different library types** (no-selection control vs post-selection).
+- **RBNS positives** (`source=enriched`): pulldown-enriched sequences (with `R_max` enrichment score).
+- **RBNS negatives** (`source=background`): sequences from the **0 nM input pool** that are **absent from positive concentrations**.
+
+**Top/bottom selection (script 24)** on top of those pools:
+
+- **HTR-SELEX / RBNS positives:** must contain ≥1 top-10 enriched 7-mer; ranked by motif k-mer frequency in the positive pool (RBNS also uses `R_max` when available).
+- **HTR-SELEX / RBNS negatives:** must contain **no** top-10 7-mer; ranked by k-mer frequency in the negative pool.
+- **RNAcompete positives:** top-10 7-mer match + **modal probe length**; ranked by probe intensity.
+- **RNAcompete negatives:** no top-10 7-mer at the same length; ranked by lowest intensity.
+- When multiple RNAcompete experiments exist per protein, the best experiment is selected (highest mean positive intensity).
 
 ![Top/bottom examples overview](figures/top_bottom_examples_overview.png)
 
