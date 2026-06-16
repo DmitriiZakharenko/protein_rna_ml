@@ -18,18 +18,29 @@ rnacompete
   Annotation   : matched_kmer + kmer_position (0-based) added to output.
 
 rbns
+  Underlying clean data (rbns_analysis):
+    Positives  : pulldown-enriched sequences (source=enriched; R_max available).
+    Negatives  : 0 nM input-pool sequences absent from positive concentrations
+                 (source=background).
   k-mer source : Computed per-protein from binding_label pools.
-  Positives    : Probes in positive pool (binding_label=1) containing top-K 7-mers,
-                 sorted by R_max (if column available) then by 7-mer pool frequency.
-  Negatives    : Probes in negative pool (binding_label=0) NOT containing any top-K
-                 7-mer, sorted by 7-mer frequency in negative pool (amplifiable but
-                 absent from positives — strongest evidence for non-binding).
+  Top-5 pos    : binding_label=1, contains ≥1 top-K 7-mer; ranked by R_max (primary),
+                 then motif k-mer frequency in positive pool.
+  Top-5 neg    : binding_label=0, contains NO top-K 7-mer; ranked by k-mer frequency
+                 in the negative pool (typical background composition, no motif hit).
   Note         : RBNS uses column 'target_name' for protein; handled automatically.
 
 htr_selex
-  k-mer source : MEME motif files, one per protein (motif_dir/<protein>_meme/meme.txt).
-                 If --motif_dir is absent, falls back to computing from binding_label.
-  Positives/Negatives: same as rbns.
+  Underlying clean data (htr_selex_analysis):
+    Positives  : last-cycle enriched sequences (source=enriched; top-1000 by frequency).
+    Negatives  : ZeroCycle background sequences not present in enriched set
+                 (source=background; up to 2x positives). Background and enriched are
+                 different library types (no-selection control vs post-selection).
+  k-mer source : MEME motif files (motif_dir/<protein>_meme/meme.txt), else computed
+                 from binding_label pools.
+  Top-5 pos    : binding_label=1, contains ≥1 top-K 7-mer; ranked by motif k-mer
+                 frequency in positive pool (no probe_intensity in clean HTR file).
+  Top-5 neg    : binding_label=0, contains NO top-K 7-mer; ranked by k-mer frequency
+                 in the negative pool. Modal length applied when mixed 26/40 nt libraries.
 
 ucRBP filtering (--ucrbp_mode)
   Restricts processing to the 23 reproducible ucRBPs identified by the pass/fail
