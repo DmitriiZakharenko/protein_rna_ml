@@ -341,3 +341,25 @@ the highest-leverage next step.
 
 See STRATEGY.md §Next Steps for the full prioritized plan.
 
+---
+
+## 2026-06-16 — RNAcompete intensity spectrum samples (scripts 27–28)
+
+**Request**: 100 probes per protein, evenly sampled across log-intensity percentiles at modal
+probe length; top 3 RBPs by mean positive intensity; test protein length vs intensity correlation.
+
+**Ran on**: RNAcompete Eukarya (`ml_dataset_eukarya_clean.tsv.gz`, 200 RBPs) and RBPZoo
+(`ml_dataset_rbpzoo_clean.tsv.gz`, 174 RBPs).
+
+| Panel | Top 3 sampled | Modal length | Length vs intensity (Pearson) |
+|---|---|---|---|
+| Eukarya | ARET, SF2, BRU-3 | 38 nt | r = −0.050, p = 0.49 |
+| RBPZoo | LmjF.24.1570, RBFOX2, LmjF.34.4560 | 38 nt | r = −0.036, p = 0.63 |
+
+**Outputs**:
+- `results/rnacompete_intensity_spectrum/{dataset}/spectrum_samples_{dataset}.tsv`
+- `figures/rnacompete_length_vs_intensity.png`, `figures/rnacompete_intensity_spectrum.png`
+
+**Conclusion**: no evidence that longer RBPs yield higher mean positive RNAcompete intensity.
+Spectrum TSVs ready to share with supervisor.
+

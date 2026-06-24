@@ -142,21 +142,37 @@ Script `24_extract_top_bottom_examples.py` selects **5 motif-anchored positives*
 - **HTR-SELEX / RBNS negatives:** must contain **no** top-10 7-mer; ranked by k-mer frequency in the negative pool.
 - **RNAcompete positives:** top-10 7-mer match + **modal probe length**; ranked by probe intensity.
 - **RNAcompete negatives:** no top-10 7-mer at the same length; ranked by lowest intensity.
-- When multiple RNAcompete experiments exist per protein, the best experiment is selected (highest mean positive intensity).
+- When multiple RNAcompete experiments exist per protein, the best experiment is selected (highest mean Z-score across top-10 7-mers; intensity fallback if Z-scores are unavailable).
 
 ![Top/bottom examples overview](figures/top_bottom_examples_overview.png)
 
 ```bash
-# HTR-SELEX + RBNS + RNAcompete Eukarya (default output dir)
-python scripts/24_extract_top_bottom_examples.py --protocol all
+# Eukarya (per-experiment k-mer Z-score TSVs)
+python scripts/24_extract_top_bottom_examples.py --protocol rnacompete \
+  --data_file ../rnacompete_analysis/eukarya/results/ml_dataset_eukarya_clean.tsv.gz \
+  --kmer_dir ../rnacompete_analysis/eukarya/data/kmers \
+  --dataset_label RNAcompete_Eukarya
 
-# RBPZoo (Z-score matrix) and ucRBP23 whitelist
-python scripts/24_extract_top_bottom_examples.py --protocol rnacompete_rbpzoo \
-    --zscore_file /path/to/Zscores_RNAcompete2025.txt.gz
-python scripts/24_extract_top_bottom_examples.py --protocol rnacompete_ucrbp --ucrbp_mode
+# RBPZoo (2025 Z-score matrix) and ucRBP23
+python scripts/24_extract_top_bottom_examples.py --protocol rnacompete \
+  --data_file ../rnacompete_analysis/rbpzoo/results/ml_dataset_rbpzoo_clean.tsv.gz \
+  --zscore_file ../rnacompete_analysis/data/raw/Zscores_RNAcompete2025.txt.gz \
+  --dataset_label RNAcompete_RBPZoo
+python scripts/24_extract_top_bottom_examples.py --protocol rnacompete \
+  --data_file ../rnacompete_analysis/ucrbp/results/ml_dataset_ucrbp_clean.tsv.gz \
+  --kmer_dir ../rnacompete_analysis/ucrbp/data/kmers \
+  --dataset_label RNAcompete_ucRBP23 --ucrbp_mode
 ```
 
-Output: `results/top_bottom_examples/all_protocols_summary.tsv` (master file with `protocol`, `dataset`, `matched_kmer`, `kmer_position`).
+Output: `results/top_bottom_examples/all_protocols_summary.tsv` with `protocol`, `dataset`,
+`experiment_id`, `matched_kmer`, `kmer_position`, and motif scores (`kmer_z_score` for
+RNAcompete; `kmer_enrichment_score` for RBNS / HTR-SELEX).
+
+```bash
+python scripts/29_annotate_top_bottom_experiment_ids.py
+```
+
+Also writes `results/top_bottom_examples/all_protocols_proteins.fasta`.
 
 ---
 
@@ -205,6 +221,61 @@ python scripts/26_visualize_rna_only_results.py
 Results: `results/rna_only_per_protein_honest/` (`*_stats.json`, `*_per_protein_metrics.tsv`, `all_datasets_summary.tsv`).
 
 > **Interpretation**: high AUROC is expected for per-protein k-mer models on in vitro assays. RNAcompete labels partly overlap with 7-mer enrichment (dual filter) → more circular than SELEX/RBNS. Test set uses sequence only — no label leakage at inference.
+
+---
+
+## RNAcompete Intensity Spectrum Sampling
+
+Per-supervisor request: sample **100 probes per protein** evenly across the **log₁₀(probe_intensity)** spectrum (modal probe length only), for the **top 3 RBPs by mean positive intensity** per RNAcompete panel. Also test whether mean positive intensity correlates with protein sequence length.
+
+**Pipeline** (`scripts/27` → `scripts/28`):
+
+1. **Best experiment** per protein — highest mean positive `probe_intensity` when multiple `hyb_id` exist.
+2. **Modal probe length** — keep only the most frequent `rna_sequence` length (38 nt for all proteins in both panels; dominant RNAcompete RBDmap v3 probe set).
+3. **Log transform** — `log10(probe_intensity − Smin + 1)` per protein (Smin = minimum raw intensity in the modal-length pool).
+4. **Spectrum sampling** — 100 probes at evenly spaced percentiles (0.5%, 1.5%, …, 99.5%) of log-intensity among modal-length probes (positives + negatives).
+5. **Length correlation** — Pearson / Spearman across all proteins in the panel.
+
+| Dataset | Top 3 (mean pos. intensity) | Length vs intensity |
+|---|---|---|
+| Eukarya (Ray 2013) | ARET, SF2, BRU-3 | Pearson r = −0.050, p = 0.49 (n = 200) |
+| RBPZoo (Sasse 2025) | LmjF.24.1570, RBFOX2, LmjF.34.4560 | Pearson r = −0.036, p = 0.63 (n = 174) |
+
+**Finding:** no significant correlation between protein length and mean positive intensity in either panel. Highlighted points below are the three sampled RBPs per dataset.
+
+![Mean positive intensity vs protein length (RNAcompete Eukarya and RBPZoo)](figures/rnacompete_length_vs_intensity.png)
+
+<details>
+<summary>Spectrum sampling curves & deliverable files</summary>
+
+![Sampled log-intensity vs percentile for top-3 proteins per panel](figures/rnacompete_intensity_spectrum.png)
+
+Low-intensity probes map to log 0 when raw intensity equals Smin. See script docstring for alternatives.
+
+**Files to share** (300 rows each = 3 proteins × 100 probes):
+
+| File | Description |
+|---|---|
+| `results/rnacompete_intensity_spectrum/rnacompete_eukarya/spectrum_samples_rnacompete_eukarya.tsv` | Eukarya spectrum samples |
+| `results/rnacompete_intensity_spectrum/rnacompete_rbpzoo/spectrum_samples_rnacompete_rbpzoo.tsv` | RBPZoo spectrum samples |
+
+Each row: `protein_name`, `rna_sequence`, `binding_label`, `probe_intensity`, `intensity_s_min`, `log_intensity`, `spectrum_rank`, `target_percentile`, `target_log_intensity`, `probe_id`, `hyb_id`, `organism`, `dataset`.
+
+</details>
+
+```bash
+python scripts/27_sample_rnacompete_intensity_spectrum.py \
+    --data_file ../rnacompete_analysis/eukarya/results/ml_dataset_eukarya_clean.tsv.gz \
+    --dataset rnacompete_eukarya --n_proteins 3
+
+python scripts/27_sample_rnacompete_intensity_spectrum.py \
+    --data_file ../rnacompete_analysis/rbpzoo/results/ml_dataset_rbpzoo_clean.tsv.gz \
+    --dataset rnacompete_rbpzoo --n_proteins 3
+
+python scripts/28_visualize_intensity_spectrum.py
+```
+
+Full output tree: `results/rnacompete_intensity_spectrum/{dataset}/` — `spectrum_samples_{dataset}.tsv`, per-protein `*.tsv`, `protein_intensity_summary.tsv`, `sampling_stats.json`, `length_vs_intensity_correlation.json`.
 
 ---
 
@@ -276,7 +347,10 @@ protein_rna_ml/
 │   │   — Example extraction & RNA-only baselines —
 │   ├── 24_extract_top_bottom_examples.py   top-5/bottom-5 RNA per RBP (7-mer anchored)
 │   ├── 25_train_rna_only_per_protein.py    per-protein RNA 4-mer LR/RF classifiers
-│   └── 26_visualize_rna_only_results.py    figures for scripts 24–25
+│   ├── 26_visualize_rna_only_results.py    figures for scripts 24–25
+│   ├── 27_sample_rnacompete_intensity_spectrum.py  log-intensity spectrum probes (RNAcompete)
+│   ├── 28_visualize_intensity_spectrum.py          figures for script 27
+│   └── 29_annotate_top_bottom_experiment_ids.py    experiment_id + protein FASTA for script 24
 │   │
 │   │   — Experiment infrastructure —
 │   ├── 18_run_multiseed.py             multi-seed runner, mean±std aggregation
@@ -305,7 +379,8 @@ protein_rna_ml/
 │   ├── rbns/
 │   ├── htr_selex_prjeb47428/
 │   ├── top_bottom_examples/            script 24 outputs + all_protocols_summary.tsv
-│   └── rna_only_per_protein_honest/      script 25 honest-split metrics (no .pkl)
+│   ├── rna_only_per_protein_honest/      script 25 honest-split metrics (no .pkl)
+│   └── rnacompete_intensity_spectrum/    script 27 spectrum samples + correlations
 │
 ├── tasks/
 │   ├── todo.md

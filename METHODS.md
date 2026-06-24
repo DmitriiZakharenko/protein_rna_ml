@@ -441,6 +441,47 @@ For structural follow-up: 5 positives + 5 negatives per RBP, anchored on top-10 
 7-mers. RNAcompete: modal length among kmer-positive probes; negatives at same length without
 top-10 7-mer. Output master TSV: `results/top_bottom_examples/all_protocols_summary.tsv`.
 
+Motif score columns (protocol-specific):
+- **RNAcompete** (`kmer_z_score`): official Hughes / RBPZoo 7-mer Z-score of the matched
+  top-kmer (max Z among top-10 hits in the probe).
+- **RBNS / HTR-SELEX** (`kmer_enrichment_score`): pos/neg pool k-mer enrichment ratio.
+  The master TSV carries both columns; each is populated only for the relevant protocol.
+
+### RNAcompete intensity spectrum sampling (scripts 27–28, 2026-06)
+
+Supervisor-requested probe set for downstream analysis: **100 modal-length probes per RBP**,
+evenly spaced across log₁₀(`probe_intensity`) percentiles, for the **top 3 RBPs by mean
+positive intensity** per RNAcompete panel.
+
+**Filters** (same best-experiment logic as scripts 24–25):
+- One `hyb_id` per protein (highest mean positive intensity).
+- Modal `rna_sequence` length only (38 nt in both Eukarya and RBPZoo).
+- Percentile targets: 0.5%, 1.5%, …, 99.5%; nearest probe by log-intensity, no replacement.
+
+**Length vs intensity** (full panel, not just top 3):
+
+| Panel | n RBPs | Pearson r | p |
+|---|---|---|---|
+| Eukarya | 200 | −0.050 | 0.49 |
+| RBPZoo | 174 | −0.036 | 0.63 |
+
+No significant association. Deliverables: `spectrum_samples_{dataset}.tsv` (300 rows each).
+Figure: `figures/rnacompete_length_vs_intensity.png`.
+
+**Note**: log transform is `log10(intensity − Smin + 1)` per protein (Smin = minimum raw
+intensity in the modal-length pool). Probes at Smin map to log 0.
+
+### Top/bottom example experiment IDs (script 29, 2026-06)
+
+Adds `experiment_id` to `all_protocols_summary.tsv` and exports
+`all_protocols_proteins.fasta` (headers `>experiment_id,protein_name`):
+
+| Protocol | ID source |
+|---|---|
+| RNAcompete | `hyb_id` (best experiment per protein) |
+| RBNS | ENCODE `experiment_accession` |
+| HTR-SELEX | `experiment_accession` (mode per protein in fastq metadata) |
+
 ---
 
 ## 8. Known Methodological Limitations
