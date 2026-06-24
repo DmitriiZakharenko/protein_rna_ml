@@ -10,9 +10,11 @@ Designed for structural follow-up and motif validation.
 Protocols and k-mer sources
 ----------------------------
 rnacompete
-  k-mer source : Pre-computed Z-score matrix (rows=7-mer, cols=experiment_id).
-                 Pass --zscore_file path/to/Zscores_RNAcompete2025.txt.gz.
-                 If absent, falls back to computing enrichment from probe_intensity.
+  k-mer source : (1) Wide Z-score matrix (--zscore_file; RBPZoo 2025 IDs), or
+                 (2) per-experiment TSVs (--kmer_dir; Eukarya/ucRBP legacy IDs:
+                 {RNCMPT}_zscores.tsv with z_setAB), matching rnacompete_analysis.
+                 Falls back to label-pool enrichment only when neither source matches
+                 the experiment ID (emits a warning).
   Positives    : Highest-intensity probes (binding_label=1) containing ≥1 top-K 7-mer.
   Negatives    : Lowest-intensity probes (binding_label=0) containing NO top-K 7-mers.
   Annotation   : matched_kmer + kmer_position (0-based) added to output.
@@ -38,9 +40,11 @@ htr_selex
   k-mer source : MEME motif files (motif_dir/<protein>_meme/meme.txt), else computed
                  from binding_label pools.
   Top-5 pos    : binding_label=1, contains ≥1 top-K 7-mer; ranked by motif k-mer
-                 frequency in positive pool (no probe_intensity in clean HTR file).
+                 frequency in positive pool (default), or by last-cycle frequency
+                 (--htr_rank_by_last_cycle_frequency + --htr_frequency_dir).
   Top-5 neg    : binding_label=0, contains NO top-K 7-mer; ranked by k-mer frequency
                  in the negative pool. Modal length applied when mixed 26/40 nt libraries.
+  Compare      : --htr_compare_ranking writes overlap between motif vs frequency top-5.
 
 ucRBP filtering (--ucrbp_mode)
   Restricts processing to the 23 reproducible ucRBPs identified by the pass/fail
@@ -57,7 +61,8 @@ Output
 Output columns:
   protein_name, rna_sequence, binding_label, probe_intensity,
   split (positive/negative), rank, matched_kmer, kmer_position,
-  kmer_enrichment_score
+  kmer_z_score (RNAcompete) or kmer_enrichment_score (RBNS / HTR-SELEX),
+  probe_length; RNAcompete rows also include experiment_id, dataset.
 
 References
 ----------
@@ -137,8 +142,27 @@ IUPAC_RNA = {
 # k-mer utilities
 # ---------------------------------------------------------------------------
 
+def normalize_rna_seq(seq: str) -> str:
+    return seq.upper().replace("T", "U")
+
+
+def load_htr_frequency_map(protein: str, freq_dir: Path) -> dict[str, float]:
+    """Map RNA sequence → last-cycle mean frequency from enriched_simple table."""
+    path = freq_dir / f"{protein}_enriched_simple.tsv"
+    if not path.exists():
+        return {}
+    tbl = pd.read_csv(path, sep="\t")
+    if "sequence" not in tbl.columns or "frequency" not in tbl.columns:
+        return {}
+    out: dict[str, float] = {}
+    for _, row in tbl.iterrows():
+        seq = normalize_rna_seq(str(row["sequence"]))
+        out[seq] = float(row["frequency"])
+    return out
+
+
 def get_kmers(seq: str, k: int) -> list[str]:
-    seq = seq.upper().replace("T", "U")
+    seq = normalize_rna_seq(seq)
     return [seq[i: i + k] for i in range(len(seq) - k + 1)]
 
 
@@ -190,6 +214,89 @@ def get_top_kmers_from_zscore(
     col = col[col >= min_z]
     top = col.nlargest(top_k)
     return list(top.index)
+
+
+def load_top_kmers_from_kmer_tsv(
+    kmer_dir: Path,
+    exp_id: str,
+    top_k: int,
+    min_z: float = 2.0,
+) -> tuple[list[str], dict[str, float]]:
+    """
+    Load official top-K 7-mers from per-experiment file (Eukarya / ucRBP format).
+    Files: {RNCMPT}_zscores.tsv with columns kmer, z_setA, z_setB, z_setAB.
+    """
+    path = kmer_dir / f"{exp_id}_zscores.tsv"
+    if not path.exists():
+        return [], {}
+    tbl = pd.read_csv(path, sep="\t")
+    if "kmer" not in tbl.columns:
+        return [], {}
+    zcol = "z_setAB" if "z_setAB" in tbl.columns else tbl.columns[1]
+    sub = tbl[["kmer", zcol]].copy()
+    sub[zcol] = pd.to_numeric(sub[zcol], errors="coerce")
+    sub = sub.dropna(subset=[zcol])
+    sub = sub[sub["kmer"].astype(str).str.len() == 7]
+    sub = sub[sub[zcol] >= min_z].nlargest(top_k, zcol)
+    if sub.empty:
+        return [], {}
+    kmers = sub["kmer"].astype(str).tolist()
+    enrich = dict(zip(kmers, sub[zcol].astype(float)))
+    return kmers, enrich
+
+
+def resolve_rnacompete_top_kmers(
+    exp_id: str,
+    zscore_df: pd.DataFrame | None,
+    kmer_dir: Path | None,
+    top_k: int,
+    min_z: float,
+) -> tuple[list[str], dict[str, float], str]:
+    """Return (top_kmers, score_map, source_tag). source: zscore_matrix | kmer_tsv | none."""
+    eid = str(exp_id)
+    if zscore_df is not None:
+        kmers = get_top_kmers_from_zscore(zscore_df, eid, top_k, min_z)
+        if kmers:
+            enrich = {
+                km: float(zscore_df.loc[km, eid])
+                for km in kmers
+                if km in zscore_df.index
+            }
+            return kmers, enrich, "zscore_matrix"
+    if kmer_dir is not None:
+        kmers, enrich = load_top_kmers_from_kmer_tsv(kmer_dir, eid, top_k, min_z)
+        if kmers:
+            return kmers, enrich, "kmer_tsv"
+    return [], {}, "none"
+
+
+def mean_top_kmer_score(
+    exp_id: str,
+    zscore_df: pd.DataFrame | None,
+    kmer_dir: Path | None,
+    top_k: int,
+    min_z: float,
+) -> float:
+    kmers, enrich, _ = resolve_rnacompete_top_kmers(
+        exp_id, zscore_df, kmer_dir, top_k, min_z
+    )
+    if not kmers:
+        return -1.0
+    if enrich:
+        return float(np.mean([enrich[km] for km in kmers if km in enrich]))
+    if zscore_df is not None and exp_id in zscore_df.columns:
+        return float(zscore_df[str(exp_id)].nlargest(top_k).mean())
+    return -1.0
+
+
+def infer_kmer_dir(data_path: Path) -> Path | None:
+    """If data_file lives under eukarya/ or ucrbp/, use sibling data/kmers/."""
+    for parent in [data_path.resolve().parent, *data_path.resolve().parents]:
+        if parent.name in ("eukarya", "ucrbp", "rbpzoo"):
+            cand = parent / "data" / "kmers"
+            if cand.is_dir() and any(cand.glob("*_zscores.tsv")):
+                return cand
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -304,6 +411,7 @@ def _select_examples(
     has_intensity: bool,
     protein: str,
     fix_length: bool = False,
+    motif_score_col: str = "kmer_enrichment_score",
 ) -> pd.DataFrame:
     """
     Core selection logic shared across protocols.
@@ -348,8 +456,7 @@ def _select_examples(
         if fix_length and fixed_len is not None and len(seq) != fixed_len:
             continue  # safety guard
         matched_km, kpos = find_first_kmer(seq, top_kmers)
-        rows.append(
-            {
+        row_out = {
                 "protein_name": protein,
                 "rna_sequence": seq,
                 "binding_label": int(row["binding_label"]),
@@ -359,10 +466,10 @@ def _select_examples(
                 "rank": rank,
                 "matched_kmer": matched_km,
                 "kmer_position": kpos,
-                "kmer_enrichment_score": row.get("_enrich_score", np.nan),
                 "probe_length": len(seq),
             }
-        )
+        row_out[motif_score_col] = row.get("_enrich_score", np.nan)
+        rows.append(row_out)
         if len([r for r in rows if r["split"] == "positive"]) >= n_examples:
             break
 
@@ -382,8 +489,7 @@ def _select_examples(
         cand_neg = cand_neg.sort_values("probe_intensity", ascending=True)
 
     for rank, (_, row) in enumerate(cand_neg.head(n_examples).iterrows(), 1):
-        rows.append(
-            {
+        row_out = {
                 "protein_name": protein,
                 "rna_sequence": row["rna_sequence"],
                 "binding_label": int(row["binding_label"]),
@@ -393,10 +499,10 @@ def _select_examples(
                 "rank": rank,
                 "matched_kmer": "-",
                 "kmer_position": -1,
-                "kmer_enrichment_score": np.nan,
                 "probe_length": len(row["rna_sequence"]),
             }
-        )
+        row_out[motif_score_col] = np.nan
+        rows.append(row_out)
 
     return pd.DataFrame(rows)
 
@@ -405,29 +511,26 @@ def process_rnacompete(
     df: pd.DataFrame,
     protein: str,
     zscore_df: pd.DataFrame | None,
+    kmer_dir: Path | None,
     top_k: int,
     n_examples: int,
     kmer_len: int,
     min_z: float,
 ) -> pd.DataFrame:
     # For proteins with multiple experiments, restrict to the best one:
-    # - if Z-score matrix available: pick experiment with highest mean Z across top-10 7-mers
+    # - pick experiment with highest mean Z across top-K 7-mers (matrix or per-experiment TSV)
     # - otherwise: pick experiment with highest mean positive probe_intensity
-    # This prevents mixing intensity scales from different experiments.
     id_col = next(
         (c for c in ("experiment_id", "hyb_id") if c in df.columns), None
     )
     if id_col and df[id_col].nunique() > 1:
-        if zscore_df is not None:
-            best_eid, best_score = None, -1.0
-            for eid in df[id_col].dropna().unique():
-                kmers = get_top_kmers_from_zscore(zscore_df, str(eid), top_k, min_z)
-                if kmers:
-                    score = float(zscore_df[str(eid)].nlargest(top_k).mean())
-                    if score > best_score:
-                        best_score, best_eid = score, str(eid)
-            if best_eid:
-                df = df[df[id_col] == best_eid].copy()
+        best_eid, best_score = None, -1.0
+        for eid in df[id_col].dropna().unique():
+            score = mean_top_kmer_score(str(eid), zscore_df, kmer_dir, top_k, min_z)
+            if score > best_score:
+                best_score, best_eid = score, str(eid)
+        if best_eid and best_score >= 0:
+            df = df[df[id_col] == best_eid].copy()
         else:
             has_int = "probe_intensity" in df.columns
             if has_int:
@@ -442,20 +545,29 @@ def process_rnacompete(
 
     has_intensity = "probe_intensity" in df.columns and not df["probe_intensity"].isna().all()
 
-    # Determine top kmers — start with z-score matrix if available.
     top_kmers: list[str] = []
     enrich_map: dict[str, float] = {}
-    matched_exp_id: str | None = None
+    kmer_source = "none"
 
-    if zscore_df is not None and id_col:
+    if id_col:
         for eid in df[id_col].dropna().unique():
-            top_kmers = get_top_kmers_from_zscore(zscore_df, str(eid), top_k, min_z)
+            top_kmers, enrich_map, kmer_source = resolve_rnacompete_top_kmers(
+                str(eid), zscore_df, kmer_dir, top_k, min_z
+            )
             if top_kmers:
-                matched_exp_id = str(eid)
                 break
 
     if not top_kmers:
-        # Fallback: compute from data pools
+        eids = (
+            [str(e) for e in df[id_col].dropna().unique()]
+            if id_col
+            else ["?"]
+        )
+        print(
+            f"  [WARN] {protein}: no Z-scores for {eids} "
+            f"(zscore_file / kmer_dir) — label-pool enrichment fallback",
+            file=sys.stderr,
+        )
         pos_pool = df[df["binding_label"] == 1]["rna_sequence"].tolist()
         neg_pool = df[df["binding_label"] == 0]["rna_sequence"].tolist()
         if not pos_pool:
@@ -463,13 +575,7 @@ def process_rnacompete(
         enrichments = compute_kmer_enrichment(pos_pool, neg_pool, kmer_len)
         top_kmers = sorted(enrichments, key=lambda x: enrichments[x], reverse=True)[:top_k]
         enrich_map = enrichments
-    elif zscore_df is not None and matched_exp_id and matched_exp_id in zscore_df.columns:
-        # Build enrich_map from Z-scores for the matched experiment
-        enrich_map = {
-            km: float(zscore_df.loc[km, matched_exp_id])
-            for km in top_kmers
-            if km in zscore_df.index
-        }
+        kmer_source = "label_pool_fallback"
 
     if not top_kmers:
         return pd.DataFrame()
@@ -486,10 +592,17 @@ def process_rnacompete(
                 default=0.0,
             )
         )
+    df.attrs["kmer_source"] = kmer_source
 
-    # RNAcompete probes vary in length (30–41 nt); fix length from first positive
-    # so that positives and negatives are always comparable in length.
-    return _select_examples(df, top_kmers, n_examples, has_intensity, protein, fix_length=True)
+    result = _select_examples(
+        df, top_kmers, n_examples, has_intensity, protein,
+        fix_length=True, motif_score_col="kmer_z_score",
+    )
+    if id_col and not result.empty:
+        eid = str(df[id_col].iloc[0])
+        result = result.copy()
+        result["experiment_id"] = eid
+    return result
 
 
 def process_rbns(
@@ -557,10 +670,16 @@ def process_htr_selex(
     top_k: int,
     n_examples: int,
     kmer_len: int,
+    rank_by_last_cycle: bool = False,
+    freq_map: dict[str, float] | None = None,
 ) -> pd.DataFrame:
     """
     HTR-SELEX protocol.
     Uses MEME meme.txt (if motif_dir provided) for top kmers, else computes from data.
+
+    Positive ranking (after top-kmer filter):
+      default: motif representativeness (_pos_score = sum of top-kmer pool frequencies)
+      rank_by_last_cycle: per-sequence last-cycle frequency from freq_map
     """
     top_kmers: list[str] = []
 
@@ -598,9 +717,15 @@ def process_htr_selex(
             neg_kf[km] += 1
 
     df = df.copy()
-    df["_pos_score"] = df["rna_sequence"].apply(
-        lambda s: sum(pos_kf[km] for km in get_kmers(s, kmer_len) if km in top_kmer_set)
-    )
+    if rank_by_last_cycle and freq_map:
+        df["_pos_score"] = df["rna_sequence"].map(
+            lambda s: freq_map.get(normalize_rna_seq(s), 0.0)
+        )
+        df["last_cycle_frequency"] = df["_pos_score"]
+    else:
+        df["_pos_score"] = df["rna_sequence"].apply(
+            lambda s: sum(pos_kf[km] for km in get_kmers(s, kmer_len) if km in top_kmer_set)
+        )
     df["_neg_score"] = df["rna_sequence"].apply(
         lambda s: sum(neg_kf[km] for km in get_kmers(s, kmer_len))
     )
@@ -616,6 +741,31 @@ def process_htr_selex(
         has_intensity=False, protein=protein,
         fix_length=has_length_variation,
     )
+
+
+def compare_htr_positive_rankings(
+    motif_result: pd.DataFrame,
+    freq_result: pd.DataFrame,
+    protein: str,
+) -> dict:
+    """Compare top-5 positive sequences between two HTR ranking modes."""
+    motif_seqs = motif_result.loc[motif_result["split"] == "positive", "rna_sequence"].tolist()
+    freq_seqs = freq_result.loc[freq_result["split"] == "positive", "rna_sequence"].tolist()
+    motif_set = set(motif_seqs)
+    freq_set = set(freq_seqs)
+    overlap = motif_set & freq_set
+    union = motif_set | freq_set
+    return {
+        "protein_name": protein,
+        "n_motif_top5": len(motif_seqs),
+        "n_freq_top5": len(freq_seqs),
+        "n_overlap": len(overlap),
+        "overlap_fraction": len(overlap) / len(motif_seqs) if motif_seqs else float("nan"),
+        "jaccard": len(overlap) / len(union) if union else float("nan"),
+        "motif_only": ";".join(sorted(motif_set - freq_set)),
+        "frequency_only": ";".join(sorted(freq_set - motif_set)),
+        "both": ";".join(sorted(overlap)),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -655,6 +805,13 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     p.add_argument(
+        "--kmer_dir", default=None,
+        help=(
+            "[rnacompete] Directory with per-experiment {RNCMPT}_zscores.tsv "
+            "(Eukarya/ucRBP legacy IDs). Auto-inferred from --data_file path when omitted."
+        ),
+    )
+    p.add_argument(
         "--min_z", type=float, default=2.0,
         help="[rnacompete] Minimum Z-score threshold for enriched kmers (default: 2.0).",
     )
@@ -667,6 +824,30 @@ def parse_args() -> argparse.Namespace:
             "E.g. htr_selex_analysis/results/motifs/"
         ),
     )
+    p.add_argument(
+        "--htr_frequency_dir",
+        default="../htr_selex_analysis/results/tables",
+        help=(
+            "[htr_selex] Directory with per-protein {protein}_enriched_simple.tsv "
+            "(last-cycle frequency tables)."
+        ),
+    )
+    p.add_argument(
+        "--htr_rank_by_last_cycle_frequency",
+        action="store_true",
+        help=(
+            "[htr_selex] Rank motif-filtered positives by last-cycle frequency "
+            "instead of motif representativeness in the positive pool."
+        ),
+    )
+    p.add_argument(
+        "--htr_compare_ranking",
+        action="store_true",
+        help=(
+            "[htr_selex] Run both ranking modes and write htr_selex_ranking_overlap.tsv "
+            "(output files still use the selected ranking mode)."
+        ),
+    )
     # Common
     p.add_argument("--top_k_kmers", type=int, default=10,
                    help="Number of top enriched k-mers to use as motif anchors (default: 10).")
@@ -676,6 +857,8 @@ def parse_args() -> argparse.Namespace:
                    help="k-mer length (default: 7).")
     p.add_argument("--filter_source", default=None,
                    help="Filter rows to dataset_source == this value before processing.")
+    p.add_argument("--dataset_label", default=None,
+                   help="[rnacompete] Dataset tag for master merge (e.g. RNAcompete_Eukarya).")
     p.add_argument("--ucrbp_mode", action="store_true",
                    help="Restrict to 23 reproducible ucRBPs (Ray & Laverty et al. 2023).")
     p.add_argument("--ucrbp_whitelist", default=None,
@@ -702,7 +885,11 @@ def main() -> None:
     if not data_path.exists():
         sys.exit(f"ERROR: --data_file not found: {data_path}")
 
-    out_dir = Path(args.output_dir) / args.protocol
+    if args.protocol == "rnacompete" and args.dataset_label:
+        slug = args.dataset_label.lower().replace("rnacompete_", "rnacompete_")
+        out_dir = Path(args.output_dir) / slug
+    else:
+        out_dir = Path(args.output_dir) / args.protocol
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # ── Load data ──────────────────────────────────────────────────────────
@@ -740,13 +927,25 @@ def main() -> None:
 
     # ── Load Z-score matrix (RNAcompete) ───────────────────────────────────
     zscore_df: pd.DataFrame | None = None
-    if args.protocol == "rnacompete" and args.zscore_file:
-        zpath = Path(args.zscore_file)
-        if zpath.exists():
-            print(f"Loading z-scores: {zpath}")
-            zscore_df = load_zscore_matrix(zpath)
+    kmer_dir: Path | None = None
+    if args.protocol == "rnacompete":
+        if args.kmer_dir:
+            kmer_dir = Path(args.kmer_dir)
+            if not kmer_dir.is_dir():
+                sys.exit(f"ERROR: --kmer_dir not found: {kmer_dir}")
+            print(f"K-mer Z-scores: {kmer_dir} (per-experiment TSV)")
         else:
-            print(f"  [WARN] --zscore_file not found: {zpath} — will compute from data")
+            inferred = infer_kmer_dir(data_path)
+            if inferred is not None:
+                kmer_dir = inferred
+                print(f"K-mer Z-scores: {kmer_dir} (auto from data path)")
+        if args.zscore_file:
+            zpath = Path(args.zscore_file)
+            if zpath.exists():
+                print(f"Loading z-scores: {zpath}")
+                zscore_df = load_zscore_matrix(zpath)
+            else:
+                print(f"  [WARN] --zscore_file not found: {zpath}")
 
     # ── ucRBP whitelist ────────────────────────────────────────────────────
     ucrbp_allowed: set[str] | None = None
@@ -766,13 +965,26 @@ def main() -> None:
 
     # ── MEME motif dir (HTR-SELEX) ─────────────────────────────────────────
     motif_dir: Path | None = None
-    if args.protocol == "htr_selex" and args.motif_dir:
-        motif_dir = Path(args.motif_dir)
-        if not motif_dir.exists():
-            print(f"  [WARN] --motif_dir not found: {motif_dir} — will compute from data")
-            motif_dir = None
+    htr_freq_dir: Path | None = None
+    if args.protocol == "htr_selex":
+        if args.motif_dir:
+            motif_dir = Path(args.motif_dir)
+            if not motif_dir.exists():
+                print(f"  [WARN] --motif_dir not found: {motif_dir} — will compute from data")
+                motif_dir = None
+            else:
+                print(f"MEME motif dir: {motif_dir}")
+        htr_freq_dir = Path(args.htr_frequency_dir)
+        if args.htr_rank_by_last_cycle_frequency or args.htr_compare_ranking:
+            if not htr_freq_dir.exists():
+                sys.exit(f"ERROR: --htr_frequency_dir not found: {htr_freq_dir}")
+            print(f"HTR frequency dir: {htr_freq_dir}")
+        if args.htr_rank_by_last_cycle_frequency:
+            print("HTR positive ranking: last-cycle frequency")
+        elif args.htr_compare_ranking:
+            print("HTR positive ranking: motif (default output) + compare overlap")
         else:
-            print(f"MEME motif dir: {motif_dir}")
+            print("HTR positive ranking: motif representativeness")
 
     # ── Per-protein loop ───────────────────────────────────────────────────
     proteins = sorted(df["protein_name"].unique())
@@ -787,6 +999,7 @@ def main() -> None:
     all_results: list[pd.DataFrame] = []
     skipped: list[str] = []
     stats: list[dict] = []
+    ranking_overlaps: list[dict] = []
 
     for prot in proteins:
         if ucrbp_allowed is not None and prot not in ucrbp_allowed:
@@ -804,20 +1017,50 @@ def main() -> None:
 
         if args.protocol == "rnacompete":
             result = process_rnacompete(
-                sub, prot, zscore_df, args.top_k_kmers, args.n_examples,
+                sub, prot, zscore_df, kmer_dir, args.top_k_kmers, args.n_examples,
                 args.kmer_len, args.min_z,
             )
         elif args.protocol == "rbns":
             result = process_rbns(sub, prot, args.top_k_kmers, args.n_examples, args.kmer_len)
         else:
-            result = process_htr_selex(
-                sub, prot, motif_dir, args.top_k_kmers, args.n_examples, args.kmer_len
+            freq_map = (
+                load_htr_frequency_map(prot, htr_freq_dir)
+                if htr_freq_dir is not None
+                else None
             )
+            if args.htr_compare_ranking:
+                motif_result = process_htr_selex(
+                    sub, prot, motif_dir, args.top_k_kmers, args.n_examples, args.kmer_len,
+                    rank_by_last_cycle=False, freq_map=freq_map,
+                )
+                freq_result = process_htr_selex(
+                    sub, prot, motif_dir, args.top_k_kmers, args.n_examples, args.kmer_len,
+                    rank_by_last_cycle=True, freq_map=freq_map,
+                )
+                if not motif_result.empty and not freq_result.empty:
+                    ranking_overlaps.append(
+                        compare_htr_positive_rankings(motif_result, freq_result, prot)
+                    )
+                result = (
+                    freq_result
+                    if args.htr_rank_by_last_cycle_frequency
+                    else motif_result
+                )
+            else:
+                result = process_htr_selex(
+                    sub, prot, motif_dir, args.top_k_kmers, args.n_examples, args.kmer_len,
+                    rank_by_last_cycle=args.htr_rank_by_last_cycle_frequency,
+                    freq_map=freq_map,
+                )
 
         if result.empty:
             print(f"  SKIP {prot:40s}  (no valid examples)")
             skipped.append(prot)
             continue
+
+        if args.dataset_label:
+            result = result.copy()
+            result["dataset"] = args.dataset_label
 
         n_out_pos = int((result["split"] == "positive").sum())
         n_out_neg = int((result["split"] == "negative").sum())
@@ -834,7 +1077,7 @@ def main() -> None:
     # ── Write summaries ────────────────────────────────────────────────────
     if all_results:
         summary_df = pd.concat(all_results, ignore_index=True)
-        summary_path = Path(args.output_dir) / f"{args.protocol}_summary.tsv"
+        summary_path = Path(args.output_dir) / f"{out_dir.name}_summary.tsv"
         summary_df.to_csv(summary_path, sep="\t", index=False)
         print(f"\nSummary TSV  : {summary_path}  ({len(summary_df):,} rows)")
 
@@ -845,7 +1088,14 @@ def main() -> None:
                     "protocol": args.protocol,
                     "data_file": portable_path(data_path),
                     "zscore_file": portable_path(args.zscore_file),
+                    "kmer_dir": portable_path(kmer_dir) if kmer_dir else None,
+                    "dataset_label": args.dataset_label,
                     "motif_dir": portable_path(args.motif_dir),
+                    "htr_frequency_dir": portable_path(args.htr_frequency_dir)
+                    if args.protocol == "htr_selex"
+                    else None,
+                    "htr_rank_by_last_cycle_frequency": args.htr_rank_by_last_cycle_frequency,
+                    "htr_compare_ranking": args.htr_compare_ranking,
                     "n_proteins_processed": len(stats),
                     "n_proteins_skipped": len(skipped),
                     "top_k_kmers": args.top_k_kmers,
@@ -857,6 +1107,16 @@ def main() -> None:
             )
         )
         print(f"Stats JSON   : {stats_path}")
+
+        if ranking_overlaps:
+            overlap_df = pd.DataFrame(ranking_overlaps)
+            overlap_path = Path(args.output_dir) / "htr_selex_ranking_overlap.tsv"
+            overlap_df.to_csv(overlap_path, sep="\t", index=False)
+            med = overlap_df["overlap_fraction"].median()
+            print(
+                f"Ranking overlap: {overlap_path}  "
+                f"(median top-5 overlap = {med:.2f}, n={len(overlap_df)} proteins)"
+            )
     else:
         print("\nWARN: no results — check input data and filters.")
 
@@ -867,23 +1127,39 @@ def main() -> None:
 
     # ── Optional: merge all protocol summaries into a single master TSV ───────
     root = Path(args.output_dir)
-    protocol_summaries = sorted(
+    summary_files = sorted(
         p for p in root.glob("*_summary.tsv")
         if p.name != "all_protocols_summary.tsv"
+        and p.name != "rnacompete_summary.tsv"  # superseded by rnacompete_* panels
     )
-    if len(protocol_summaries) > 1:
+    if len(summary_files) > 1:
         frames = []
-        for p in protocol_summaries:
+        for p in summary_files:
             tmp = pd.read_csv(p, sep="\t")
-            proto = p.stem.replace("_summary", "")
-            tmp["protocol"] = proto
-            # move protocol to first column
-            cols = ["protocol"] + [c for c in tmp.columns if c != "protocol"]
+            stem = p.stem.replace("_summary", "")
+            if stem.startswith("rnacompete_"):
+                tmp["protocol"] = "rnacompete"
+                if "dataset" not in tmp.columns:
+                    panel = stem.replace("rnacompete_", "")
+                    name_map = {
+                        "eukarya": "RNAcompete_Eukarya",
+                        "rbpzoo": "RNAcompete_RBPZoo",
+                        "ucrbp23": "RNAcompete_ucRBP23",
+                    }
+                    tmp["dataset"] = name_map.get(panel, f"RNAcompete_{panel}")
+            else:
+                tmp["protocol"] = stem
+                if "dataset" not in tmp.columns:
+                    tmp["dataset"] = {"rbns": "RBNS", "htr_selex": "HTR-SELEX"}.get(stem, stem)
+            cols = ["protocol", "dataset"] + [c for c in tmp.columns if c not in ("protocol", "dataset")]
             frames.append(tmp[cols])
         master = pd.concat(frames, ignore_index=True)
         master_path = root / "all_protocols_summary.tsv"
         master.to_csv(master_path, sep="\t", index=False)
-        print(f"Master TSV   : {master_path}  ({len(master):,} rows, {master['protocol'].nunique()} protocols)")
+        print(
+            f"Master TSV   : {master_path}  ({len(master):,} rows, "
+            f"{master['protocol'].nunique()} protocols)"
+        )
 
     print("\nDone.")
 
