@@ -119,7 +119,7 @@ UCRBP_23_KNOWN: list[str] = [
     # Class 3 – novel bona fide RBPs (5); confirmed from paper main text
     # ILF2 (GC-rich), PURA (GA-rich), SSBP1 (AUG core), GAR1, HARS2
     "GAR1", "PURA", "SSBP1", "HARS2", "ILF2",
-    # Source: Ray & Laverty et al. 2023 (Sci. Rep. 13:5238), confirmed by supervisor
+    # Source: Ray & Laverty et al. 2023 (Sci. Rep. 13:5238)
     # Experiment IDs: RNCMPT01219, RNCMPT01084, RNCMPT01297, RNCMPT01114, RNCMPT01363,
     #   RNCMPT01071, RNCMPT01740, RNCMPT01411, RNCMPT01299, RNCMPT01313, RNCMPT01267,
     #   RNCMPT00625, RNCMPT01140, RNCMPT01322, RNCMPT00592, RNCMPT01327, RNCMPT01357,

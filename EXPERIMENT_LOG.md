@@ -361,5 +361,5 @@ probe length; top 3 RBPs by mean positive intensity; test protein length vs inte
 - `figures/rnacompete_length_vs_intensity.png`, `figures/rnacompete_intensity_spectrum.png`
 
 **Conclusion**: no evidence that longer RBPs yield higher mean positive RNAcompete intensity.
-Spectrum TSVs ready to share with supervisor.
+Spectrum TSVs: `results/rnacompete_intensity_spectrum/*/spectrum_samples_*.tsv`.
 

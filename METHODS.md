@@ -449,11 +449,11 @@ Motif score columns (protocol-specific):
 
 ### RNAcompete intensity spectrum sampling (scripts 27–28, 2026-06)
 
-Supervisor-requested probe set for downstream analysis: **100 modal-length probes per RBP**,
+Probe set for structural / intensity follow-up: **100 modal-length probes per RBP**,
 evenly spaced across log₁₀(`probe_intensity`) percentiles, for the **top 3 RBPs by mean
 positive intensity** per RNAcompete panel.
 
-**Filters** (same best-experiment logic as scripts 24–25):
+**Filters**:
 - One `hyb_id` per protein (highest mean positive intensity).
 - Modal `rna_sequence` length only (38 nt in both Eukarya and RBPZoo).
 - Percentile targets: 0.5%, 1.5%, …, 99.5%; nearest probe by log-intensity, no replacement.

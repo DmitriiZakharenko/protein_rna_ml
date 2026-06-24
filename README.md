@@ -226,7 +226,7 @@ Results: `results/rna_only_per_protein_honest/` (`*_stats.json`, `*_per_protein_
 
 ## RNAcompete Intensity Spectrum Sampling
 
-Per-supervisor request: sample **100 probes per protein** evenly across the **log₁₀(probe_intensity)** spectrum (modal probe length only), for the **top 3 RBPs by mean positive intensity** per RNAcompete panel. Also test whether mean positive intensity correlates with protein sequence length.
+Sample **100 probes per protein** evenly across the **log₁₀(probe_intensity)** spectrum (modal probe length only), for the **top 3 RBPs by mean positive intensity** per RNAcompete panel. Also test whether mean positive intensity correlates with protein sequence length.
 
 **Pipeline** (`scripts/27` → `scripts/28`):
 
@@ -252,7 +252,7 @@ Per-supervisor request: sample **100 probes per protein** evenly across the **lo
 
 Low-intensity probes map to log 0 when raw intensity equals Smin. See script docstring for alternatives.
 
-**Files to share** (300 rows each = 3 proteins × 100 probes):
+**Output files** (300 rows each = 3 proteins × 100 probes):
 
 | File | Description |
 |---|---|
