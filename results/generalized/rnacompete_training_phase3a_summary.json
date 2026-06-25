@@ -1,0 +1,54 @@
+{
+  "purpose": "Phase 3A training subset",
+  "policy": {
+    "eukarya": "full panel",
+    "rbpzoo": "full panel",
+    "ucrbp": "filtered to 23 reproducible RBPs (Ray & Laverty 2023)"
+  },
+  "ucrbp_whitelist": [
+    "CNBP",
+    "GAR1",
+    "HARS2",
+    "IFIT2",
+    "ILF2",
+    "LSM6",
+    "NHP2L1",
+    "NUDT16L1",
+    "NUDT21",
+    "PEG10",
+    "PRPF31",
+    "PURA",
+    "RPL11",
+    "RPL22",
+    "RPL30",
+    "RPL5",
+    "RPP25",
+    "RPS12",
+    "RPS15A",
+    "RPS2",
+    "SERBP1",
+    "SSBP1",
+    "ZRANB2"
+  ],
+  "total_rows": 6785124,
+  "n_proteins": 392,
+  "positives": 2022389,
+  "negatives": 4762735,
+  "by_source": {
+    "rnacompete_eukarya": {
+      "rows": 3726353,
+      "proteins": 200,
+      "positives": 1177363
+    },
+    "rnacompete_rbpzoo": {
+      "rows": 2592720,
+      "proteins": 174,
+      "positives": 822675
+    },
+    "rnacompete_ucrbp": {
+      "rows": 915425,
+      "proteins": 23,
+      "positives": 291863
+    }
+  }
+}

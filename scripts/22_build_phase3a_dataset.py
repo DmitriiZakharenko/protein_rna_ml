@@ -298,8 +298,14 @@ def main():
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--selex_dir",       default="data/generalized_v2",
                         help="Existing SELEX+RBNS split directory")
-    parser.add_argument("--rnacompete",      required=True,
-                        help="RNAcompete benchmark TSV (from 17_prepare_rnacompete_benchmark.py)")
+    parser.add_argument("--rnacompete",      default=None,
+                        help="RNAcompete training TSV (default: build from eukarya+rbpzoo+ucrbp23)")
+    parser.add_argument("--benchmark_dir",   default="data/benchmarks/rnacompete",
+                        help="Directory with per-panel RNAcompete TSVs (used with --build_rnacompete)")
+    parser.add_argument("--ucrbp_whitelist", default="configs/ucrbp_23_reproducible.txt",
+                        help="Whitelist for ucRBP panel (23 reproducible RBPs)")
+    parser.add_argument("--build_rnacompete", action="store_true",
+                        help="Run 22a logic: eukarya+rbpzoo full, ucRBP filtered to whitelist")
     parser.add_argument("--homology_tsv",    default=None,
                         help="MMseqs2 easy-search output TSV (optional but recommended)")
     parser.add_argument("--out_dir",         default="data/generalized_v3a",
@@ -317,10 +323,27 @@ def main():
     print(f"\n{'='*65}")
     print(f"  Phase 3A Dataset Builder")
     print(f"  SELEX+RBNS + RNAcompete with homology-aware split")
-    print(f"{'='*65}")
+    print(f"{'='*65}\n")
+
+    # Resolve RNAcompete input
+    rnacompete_path = args.rnacompete
+    if args.build_rnacompete or rnacompete_path is None:
+        from src.data.rnacompete_training import (
+            load_rnacompete_training_subset,
+            save_training_subset,
+        )
+        default_out = os.path.join(
+            args.benchmark_dir, "rnacompete_training_phase3a.tsv")
+        print("\n--- Building RNAcompete training subset (eukarya+rbpzoo+ucrbp23) ---")
+        rna_train = load_rnacompete_training_subset(
+            args.benchmark_dir, args.ucrbp_whitelist)
+        rnacompete_path = default_out
+        save_training_subset(rna_train, rnacompete_path)
+    elif not os.path.exists(rnacompete_path):
+        sys.exit(f"RNAcompete file not found: {rnacompete_path}")
 
     selex_df, selex_prot_split = load_selex_splits(args.selex_dir)
-    rna_df = load_rnacompete(args.rnacompete, args.max_rnacompete, args.seed)
+    rna_df = load_rnacompete(rnacompete_path, args.max_rnacompete, args.seed)
 
     # ── Export FASTA for MMseqs2 ───────────────────────────────────────────
     os.makedirs(args.out_dir, exist_ok=True)
