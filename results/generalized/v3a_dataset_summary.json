@@ -1,0 +1,32 @@
+{
+  "total_rows": 2658999,
+  "n_proteins": 494,
+  "splits": {
+    "train": 2037593,
+    "val": 299131,
+    "test": 322275
+  },
+  "sources": {
+    "rnacompete_eukarya": 1038910,
+    "rnacompete_rbpzoo": 756277,
+    "selex_rbns": 632642,
+    "rnacompete_ucrbp": 204808,
+    "eclip": 26362
+  },
+  "class_balance": {
+    "positives": 817112,
+    "negatives": 1841887
+  },
+  "organisms": {
+    "Homo sapiens": 706826,
+    "Drosophila melanogaster": 281380,
+    "Cannabis sativa": 150314,
+    "Caenorhabditis elegans": 124509,
+    "Leishmania major": 99004,
+    "Trypanosoma brucei": 78853,
+    "Danio rerio": 59264,
+    "Plasmodium falciparum": 57901,
+    "Tetraodon nigroviridis": 45110,
+    "Xenopus tropicalis": 42811
+  }
+}

@@ -2,6 +2,7 @@
 data/processed/
 data/generalized/
 data/generalized_v2/
+data/generalized_v3a/
 data/splits/*/train.tsv
 data/splits/*/val.tsv
 data/splits/*/test.tsv

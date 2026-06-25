@@ -1,0 +1,28 @@
+# 23 reproducible ucRBPs — Ray & Laverty et al. 2023, Sci. Rep. 13:5238
+# Supplementary Table S1. Used for Phase 3A training (ucRBP panel subset).
+# Class 1 — ribosomal / ribosomal-domain (8)
+RPL5
+RPL11
+RPL22
+RPL30
+RPS12
+RPS2
+RPS15A
+NHP2L1
+# Class 2 — non-ribosomal, known RNA-binders (10)
+RPP25
+PEG10
+SERBP1
+LSM6
+NUDT21
+IFIT2
+CNBP
+ZRANB2
+PRPF31
+NUDT16L1
+# Class 3 — novel bona fide RBPs (5)
+GAR1
+PURA
+SSBP1
+HARS2
+ILF2
