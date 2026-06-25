@@ -390,6 +390,8 @@ protein_rna_ml/
 ├── DATA.md                             dataset provenance, leakage risks, negatives
 ├── METHODS.md                          methodological choices + references
 ├── STRATEGY.md                         experiment state, lessons learned, what not to do
+├── PHASE3A_PLAN.md                     immediate plan: RNAcompete training merge
+├── RESEARCH_ROADMAP.md                 medium-term goals beyond binary classification
 ├── EXPERIMENT_LOG.md                   chronological run history V1→V3c
 └── run_pipeline.sh                     end-to-end pipeline runner
 ```

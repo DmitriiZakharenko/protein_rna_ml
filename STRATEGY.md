@@ -258,6 +258,8 @@ In order of expected impact:
    appear in RNAcompete training overlap (TARDBP = TDP-43, FUS = EWSR1 family) and provide
    in vivo context for the proteins the model already partially handles.
 
+See `RESEARCH_ROADMAP.md` for Phases 3C–8 (affinity, localization, variants, in vivo bridge).
+
 ### Medium-term
 
 4. **RNAcompete → Training (Phase 3)** — after homology audit and interaction layer V4:

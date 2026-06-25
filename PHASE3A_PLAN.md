@@ -115,40 +115,7 @@ Report multi-seed variance (5 seeds) before claiming improvement.
 
 ---
 
-## 6. Local Machine vs Cloud VM
-
-### Safe on local laptop (Apple Silicon MPS or CPU)
-
-| Task | RAM | Time estimate | Notes |
-|------|-----|---------------|-------|
-| `22a` RNAcompete subset build | 8–16 GB | 10–30 min | Reads ~5 GB TSVs |
-| `22` dataset merge + subsample | 16 GB | 15–45 min | |
-| MMseqs2 homology search | 8 GB | 5–15 min | Already installed |
-| V2 CNN training (v3a, 60 epochs) | 16 GB | 2–6 h | Same as current V2 run |
-| V4 bilinear training | 16 GB | 3–8 h | Slightly larger head |
-| Multi-seed V2 (5×) | 16 GB | 10–30 h | Run overnight |
-| XGBoost stacking on CNN embeddings | 8 GB | < 1 h | |
-
-**Laptop safety**: sustained GPU/MPS training is normal workload. Modern laptops throttle
-under heat but are designed for this. Use a cooling pad, keep vents clear, plug in power.
-No permanent damage from training CNNs at batch size 256.
-
-### VM / cloud GPU recommended
-
-| Task | Why |
-|------|-----|
-| ESM-2 LoRA fine-tuning (650M params) | 24+ GB VRAM, long runs |
-| RNA-FM + cross-attention transformer | Large memory, multi-day training |
-| Full RNAcompete without subsampling (~8M+ rows) | Faster with GPU + more RAM |
-| Hyperparameter sweeps (10+ configs) | Parallel runs |
-
-**Practical cutoff**: everything through **Phase 3A + V4 + hard negatives + multi-task
-regression head** fits a powerful laptop. Move to VM when starting **pretrained encoder
-fine-tuning** or **transformer interaction layers**.
-
----
-
-## 7. Data to Collect in Parallel
+## 6. Data to Collect in Parallel
 
 While Phase 3A runs, gather these (priority order):
 
@@ -171,7 +138,7 @@ While Phase 3A runs, gather these (priority order):
 
 ---
 
-## 8. Experiment Queue After Phase 3A
+## 7. Experiment Queue After Phase 3A
 
 | ID | Experiment | Depends on |
 |----|------------|------------|
@@ -184,7 +151,7 @@ While Phase 3A runs, gather these (priority order):
 
 ---
 
-## 9. What NOT to Do
+## 8. What NOT to Do
 
 - Do not merge full ucRBP panel (613 experiments) — noisy proteins hurt training.
 - Do not use RNAcompete for both training and zero-shot eval on the same proteins.
