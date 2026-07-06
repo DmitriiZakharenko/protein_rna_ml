@@ -11,6 +11,9 @@ Experiment ID sources:
 
 FASTA headers: >experiment_id,protein_name
 
+Protein sequences are keyed by (experiment_id, protein_name), not protein name alone,
+so RNAcompete panels cannot overwrite each other (e.g. fly vs human SRP54).
+
 Usage:
     python scripts/29_annotate_top_bottom_experiment_ids.py
 
@@ -85,10 +88,12 @@ def best_rnacompete_experiment_id(
     return str(pos.groupby(id_col)["probe_intensity"].mean().idxmax())
 
 
-def load_rnacompete_maps(rnacompete_root: Path) -> tuple[dict[tuple[str, str], str], dict[str, str]]:
-    """(dataset, protein) -> experiment_id; protein -> sequence."""
+def load_rnacompete_maps(
+    rnacompete_root: Path,
+) -> tuple[dict[tuple[str, str], str], dict[tuple[str, str], str]]:
+    """(dataset, protein) -> experiment_id; (experiment_id, protein) -> sequence."""
     exp_map: dict[tuple[str, str], str] = {}
-    seq_map: dict[str, str] = {}
+    seq_map: dict[tuple[str, str], str] = {}
     for dataset, rel in RNAcompete_DATASETS.items():
         path = rnacompete_root / rel
         if not path.exists():
@@ -97,6 +102,7 @@ def load_rnacompete_maps(rnacompete_root: Path) -> tuple[dict[tuple[str, str], s
         df = pd.read_csv(path, sep="\t", low_memory=False)
         df = normalize_protein_col(df)
         df["binding_label"] = pd.to_numeric(df["binding_label"], errors="coerce")
+        id_col = next((c for c in ("experiment_id", "hyb_id") if c in df.columns), None)
         for prot, sub in df.groupby("protein_name", sort=False):
             rel_kmer = RNAcompete_KMER_DIRS.get(dataset)
             kmer_dir = (rnacompete_root / rel_kmer) if rel_kmer else None
@@ -105,9 +111,13 @@ def load_rnacompete_maps(rnacompete_root: Path) -> tuple[dict[tuple[str, str], s
             eid = best_rnacompete_experiment_id(sub, kmer_dir)
             if eid:
                 exp_map[(dataset, prot)] = eid
-            seqs = sub["protein_sequence"].dropna().astype(str)
-            if not seqs.empty:
-                seq_map[prot] = seqs.iloc[0].strip()
+            if id_col is None:
+                continue
+            for hyb_id in sub[id_col].dropna().astype(str).unique():
+                eid_rows = sub[sub[id_col].astype(str) == hyb_id]
+                seqs = eid_rows["protein_sequence"].dropna().astype(str)
+                if not seqs.empty:
+                    seq_map[(hyb_id, prot)] = seqs.iloc[0].strip()
     return exp_map, seq_map
 
 
@@ -118,12 +128,19 @@ def load_rbns_map(rbns_experiments: Path) -> tuple[dict[str, str], dict[str, str
     return exp, {}
 
 
-def load_rbns_sequences(rbns_clean: Path, seq_map: dict[str, str]) -> None:
+def load_rbns_sequences(
+    rbns_clean: Path,
+    rbns_exp: dict[str, str],
+    seq_map: dict[tuple[str, str], str],
+) -> None:
     df = pd.read_csv(rbns_clean, sep="\t", usecols=["target_name", "protein_sequence"], low_memory=False)
     for prot, sub in df.groupby("target_name", sort=False):
         seqs = sub["protein_sequence"].dropna().astype(str)
-        if not seqs.empty:
-            seq_map[prot] = seqs.iloc[0].strip()
+        if seqs.empty:
+            continue
+        eid = rbns_exp.get(prot)
+        if eid:
+            seq_map[(eid, prot)] = seqs.iloc[0].strip()
 
 
 def load_htr_map(htr_metadata: Path) -> tuple[dict[str, str], dict[str, str]]:
@@ -137,12 +154,19 @@ def load_htr_map(htr_metadata: Path) -> tuple[dict[str, str], dict[str, str]]:
     return exp_map, {}
 
 
-def load_htr_sequences(htr_clean: Path, seq_map: dict[str, str]) -> None:
+def load_htr_sequences(
+    htr_clean: Path,
+    htr_exp: dict[str, str],
+    seq_map: dict[tuple[str, str], str],
+) -> None:
     df = pd.read_csv(htr_clean, sep="\t", usecols=["protein_name", "protein_sequence"], low_memory=False)
     for prot, sub in df.groupby("protein_name", sort=False):
         seqs = sub["protein_sequence"].dropna().astype(str)
-        if not seqs.empty:
-            seq_map[prot] = seqs.iloc[0].strip()
+        if seqs.empty:
+            continue
+        eid = htr_exp.get(prot)
+        if eid:
+            seq_map[(eid, prot)] = seqs.iloc[0].strip()
 
 
 def annotate_summary(
@@ -190,7 +214,7 @@ def annotate_summary(
 
 def write_fasta(
     summary: pd.DataFrame,
-    seq_map: dict[str, str],
+    seq_map: dict[tuple[str, str], str],
     out_path: Path,
 ) -> int:
     pairs = summary[["experiment_id", "protein_name"]].drop_duplicates()
@@ -198,9 +222,9 @@ def write_fasta(
     lines: list[str] = []
     skipped = 0
     for _, row in pairs.sort_values(["experiment_id", "protein_name"]).iterrows():
-        prot = row["protein_name"]
-        eid = row["experiment_id"]
-        seq = seq_map.get(prot)
+        prot = str(row["protein_name"])
+        eid = str(row["experiment_id"])
+        seq = seq_map.get((eid, prot))
         if not seq:
             skipped += 1
             continue
@@ -259,7 +283,7 @@ def main() -> None:
 
     print(f"Loading summary: {summary_path}")
     summary = pd.read_csv(summary_path, sep="\t")
-    seq_map: dict[str, str] = {}
+    seq_map: dict[tuple[str, str], str] = {}
 
     print("Building RNAcompete experiment map ...")
     rc_exp, rc_seq = load_rnacompete_maps(Path(args.rnacompete_root))
@@ -267,11 +291,11 @@ def main() -> None:
 
     print("Building RBNS experiment map ...")
     rbns_exp, _ = load_rbns_map(Path(args.rbns_experiments))
-    load_rbns_sequences(Path(args.rbns_clean), seq_map)
+    load_rbns_sequences(Path(args.rbns_clean), rbns_exp, seq_map)
 
     print("Building HTR-SELEX experiment map ...")
     htr_exp, _ = load_htr_map(Path(args.htr_metadata))
-    load_htr_sequences(Path(args.htr_clean), seq_map)
+    load_htr_sequences(Path(args.htr_clean), htr_exp, seq_map)
 
     annotated = annotate_summary(summary, rc_exp, rbns_exp, htr_exp)
     out_summary = Path(args.out_summary) if args.out_summary else summary_path
