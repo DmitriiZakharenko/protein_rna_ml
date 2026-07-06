@@ -1,0 +1,3 @@
+protein_name	reason	domain_values
+MSI	conflicting_domain_strings	RRM|RRM;RRM
+ARET	conflicting_domain_strings	RRM|RRM;RRM;RRM
