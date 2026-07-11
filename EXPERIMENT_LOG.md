@@ -1,7 +1,7 @@
 # Experiment Log
 
 **Project**: Protein–RNA Binding Prediction
-**Last updated**: 2026-05-13
+**Last updated**: 2026-07-11
 
 This file is the canonical record of every training run. Each entry documents what
 was run, what the results were, what failed, and what was learned. All Phase 2 results have been retrained with the double class-weighting bug fixed (2026-05-13).
@@ -219,6 +219,38 @@ a fundamentally different design (fine-tuning, cross-attention, binding-domain s
 
 ---
 
+## Phase 3A — V2 CNN on `generalized_v3a`
+
+**Date**: 2026-07-11  
+**Dataset**: `data/generalized_v3a/` — 2,658,999 pairs, 494 proteins (SELEX + RBNS + RNAcompete Eukarya/RBPZoo + ucRBP 23)  
+**Scripts**: `scripts/22a`, `scripts/22`, `scripts/06_train_generalized_v2.py`, `scripts/06_eval_generalized_v2_test.py`  
+**Checkpoint**: `models/saved/generalized_v2/best_model.pt` (epoch 24, early stop on val AUPRC)  
+**Hardware**: VM CPU, `prot_max=700`, batch 512, ~11 h/epoch
+
+| Split | AUROC | AUPRC |
+|-------|-------|-------|
+| Val | 0.818 | 0.693 |
+| Test | **0.813** | **0.713** |
+| Per-protein median test AUROC | **0.817** | (55 test proteins) |
+
+**Status**: PASS vs Phase 3A targets (test AUROC ≥ 0.70). Single seed only.
+
+### External validation (same checkpoint)
+
+| Benchmark | n | AUROC | AUPRC | Notes |
+|-----------|---|-------|-------|-------|
+| Curated literature | 159 | 0.763 | 0.915 | pos rate 72%; baseline AUPRC 0.717 |
+| Expanded + generated negs | 540 | 0.688 | 0.488 | pos rate 21%; baseline AUPRC 0.211; diagnostic |
+
+Built expanded set with `scripts/31_build_external_benchmark.py` (shuffle + cross-pair decoys).
+
+### Not yet run on v3a checkpoint
+
+- RNAcompete zero-shot (`scripts/20`) — compare to v2 median 0.549
+- Multi-seed variance (`scripts/18`) on v3a
+
+---
+
 ## Known Bugs Discovered During Phase 2
 
 | Bug | Discovery | Scripts affected | Fix date |
@@ -237,9 +269,10 @@ a fundamentally different design (fine-tuning, cross-attention, binding-domain s
 |----|------|---------|--------|--------|
 | EXP-V2-CLEAN | V2 retrain with corrected weighting | Clean anchor baseline | **Done** | Test AUROC 0.690, AUPRC 0.580 |
 | EXP-RNACOMPETE-V2 | RNAcompete zero-shot on V2 | Generalization test | **Done** | Median AUROC 0.549 |
-| EXP-V2-MULTISEED | V2 ×5 seeds | Quantify variance | In Progress | seed_0 checkpoint saved; seeds 1-4 pending |
-| EXP-HOMOLOGY | Homology audit | Quantify paralog leakage | Next | — |
-| EXP-PHASE3A | V2 on SELEX+RNAcompete data | Scale training | Scripted | `scripts/22` ready |
+| EXP-PHASE3A | V2 on SELEX+RNAcompete data | Scale training | **Done** | Test AUROC 0.813 on v3a |
+| EXP-EXT-31 | Literature benchmark + generated negs | External diagnostic | **Done** | Curated 0.763; expanded 0.688 |
+| EXP-V2-MULTISEED-V3A | V2 ×5 seeds on v3a | Quantify variance | **Next** | — |
+| EXP-RNACOMPETE-V3A | RNAcompete zero-shot on v3a ckpt | Generalization test | Next | — |
 | EXP-V4-BILINEAR | V4 bilinear interaction | Pairwise interaction layer | Scripted | `scripts/21` ready |
 
 ---

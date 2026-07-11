@@ -520,42 +520,75 @@ def main():
     # ── Stratified metrics (expanded benchmark) ───────────────────────────────
     if "example_class" in df.columns and (df["example_class"] != "").any():
         print(f"\n  Stratified metrics (V2 CNN):")
+        print(f"  (Neg-type rows always include all curated positives as contrast set.)")
 
-        def subset_metrics(name: str, mask: pd.Series) -> dict | None:
+        def subset_metrics(name: str, mask: pd.Series, *, quiet_single: bool = False) -> dict | None:
             sub = df[mask]
             if len(sub) == 0:
                 return None
             labs = sub["label"].values
             probs = sub["prob_v2"].values
             if len(set(labs)) < 2:
-                print(f"    {name:<28} n={len(sub):4d}  [single class — skipped]")
+                if not quiet_single:
+                    print(f"    {name:<32} n={len(sub):4d}  [single class — skipped]")
                 return {"n": int(len(sub)), "auroc": None, "auprc": None, "note": "single_class"}
             auroc_s, auprc_s = safe_metrics(labs, probs, name)
-            print(f"    {name:<28} n={len(sub):4d}  AUROC={auroc_s:.4f}  AUPRC={auprc_s:.4f}")
+            pos_rate_s = float(labs.mean())
+            print(
+                f"    {name:<32} n={len(sub):4d}  "
+                f"pos={int(labs.sum())}/{len(labs)} ({pos_rate_s:.0%})  "
+                f"AUROC={auroc_s:.4f}  AUPRC={auprc_s:.4f}"
+            )
             return {
                 "n": int(len(sub)),
                 "n_pos": int(labs.sum()),
                 "n_neg": int((labs == 0).sum()),
+                "pos_rate": round(pos_rate_s, 4),
                 "auroc": round(auroc_s, 4),
                 "auprc": round(auprc_s, 4),
             }
 
         stratified: dict[str, dict] = {}
+        pos_mask = df["label"] == 1
+        gen_neg_mask = df["example_class"] == "generated_negative"
         curated_mask = df["example_class"].isin(["curated_positive", "curated_negative"])
-        generated_mask = df["example_class"] == "generated_negative"
+
         if curated_mask.any():
             m = subset_metrics("curated_only", curated_mask)
             if m:
                 stratified["curated_only"] = m
-        if generated_mask.any():
-            m = subset_metrics("generated_only", generated_mask)
+
+        if pos_mask.any() and gen_neg_mask.any():
+            m = subset_metrics(
+                "curated_pos_vs_generated_neg",
+                pos_mask | gen_neg_mask,
+            )
             if m:
-                stratified["generated_only"] = m
+                stratified["curated_pos_vs_generated_neg"] = m
+
+        shuffle_mask = df["neg_strategy"].isin(["shuffle_uniform", "shuffle_dinucleotide"])
+        if pos_mask.any() and shuffle_mask.any():
+            m = subset_metrics("curated_pos_vs_shuffle_negs", pos_mask | shuffle_mask)
+            if m:
+                stratified["curated_pos_vs_shuffle_negs"] = m
+
+        cross_mask = df["neg_strategy"].isin(["cross_protein", "cross_rna"])
+        if pos_mask.any() and cross_mask.any():
+            m = subset_metrics("curated_pos_vs_cross_negs", pos_mask | cross_mask)
+            if m:
+                stratified["curated_pos_vs_cross_negs"] = m
+
         if "neg_strategy" in df.columns:
-            for strategy, grp in df[df["neg_strategy"] != ""].groupby("neg_strategy"):
-                m = subset_metrics(f"neg:{strategy}", df["neg_strategy"] == strategy)
+            neg_df = df[df["label"] == 0].copy()
+            neg_df["neg_strategy"] = neg_df["neg_strategy"].fillna("").astype(str)
+            for strategy in sorted(s for s in neg_df["neg_strategy"].unique() if s):
+                m = subset_metrics(
+                    f"pos_vs_{strategy}",
+                    pos_mask | (df["neg_strategy"].fillna("").astype(str) == strategy),
+                )
                 if m:
-                    stratified[f"neg_{strategy}"] = m
+                    stratified[f"pos_vs_{strategy}"] = m
+
         results["stratified_v2"] = stratified
 
     # ── Per-protein breakdown (V2) ────────────────────────────────────────────
@@ -570,20 +603,43 @@ def main():
             note = "single_class"
             auroc_p, auprc_p = None, None
         else:
-            auroc_p, auprc_p = safe_metrics(labs, probs)
-            note = ""
+            try:
+                auroc_p, auprc_p = safe_metrics(labs, probs)
+            except ValueError:
+                auroc_p, auprc_p = None, None
+                note = "constant_scores"
+            else:
+                note = ""
         per_prot.append({
             "protein": prot,
             "n_pos": n_pos,
             "n_neg": n_neg,
-            "auroc": round(auroc_p, 4) if auroc_p else None,
-            "auprc": round(auprc_p, 4) if auprc_p else None,
+            "auroc": round(auroc_p, 4) if auroc_p is not None else None,
+            "auprc": round(auprc_p, 4) if auprc_p is not None else None,
             "note": note,
         })
-        marker = f"  AUROC={auroc_p:.3f} AUPRC={auprc_p:.3f}" if auroc_p else f"  [{note}]"
+        if auroc_p is not None:
+            marker = f"  AUROC={auroc_p:.3f} AUPRC={auprc_p:.3f}"
+        else:
+            marker = f"  [{note}]"
         print(f"    {prot:<30} n={n_pos}+/{n_neg}-{marker}")
 
     results["per_protein_v2"] = per_prot
+
+    scored_prots = [p for p in per_prot if p["auroc"] is not None]
+    if scored_prots:
+        median_auroc = float(np.median([p["auroc"] for p in scored_prots]))
+        median_auprc = float(np.median([p["auprc"] for p in scored_prots]))
+        print(
+            f"\n  Per-protein summary: {len(scored_prots)}/{len(per_prot)} proteins "
+            f"with both classes → median AUROC={median_auroc:.3f}, median AUPRC={median_auprc:.3f}"
+        )
+        results["per_protein_summary_v2"] = {
+            "n_proteins_scored": len(scored_prots),
+            "n_proteins_total": len(per_prot),
+            "median_auroc": round(median_auroc, 4),
+            "median_auprc": round(median_auprc, 4),
+        }
 
     # Comparison to in-distribution test performance
     print(f"\n  In-distribution (SELEX/RBNS, 24 proteins) → V2: AUROC=0.703  AUPRC=0.599")

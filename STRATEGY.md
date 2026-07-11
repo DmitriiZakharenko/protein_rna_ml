@@ -1,8 +1,9 @@
 # Research Strategy
 
 **Project**: Protein–RNA Binding Prediction
-**Last updated**: 2026-05-13
-**Current best model**: V2 CNN — test AUROC=0.690 AUPRC=0.580 (clean, bug fixed and retrained)
+**Last updated**: 2026-07-11
+**Current best model**: V2 CNN on `generalized_v3a` — test AUROC=**0.813** AUPRC=**0.713** (epoch 24, single seed, VM)
+**Phase 2 baseline (v2 data)**: test AUROC=0.690 AUPRC=0.580 (169 proteins)
 **Benchmark target**: ZHMolGraph — AUROC=0.798 AUPRC=0.820 (hard split, unseen proteins AND RNAs).
 **Note on comparability**: our protein-aware-only test is NOT equivalent to ZHMolGraph's hard split.
 
@@ -87,41 +88,31 @@ All ESM-2 scripts and the external evaluation script would fail on a fresh insta
 ## 3. Current Decision Tree
 
 ```
-WHERE WE ARE (2026-05-13):
-  ✓ V2 CNN retrained clean: test AUROC=0.690, AUPRC=0.580
-  ✓ V3/V3b/V3c retrained clean: all frozen ESM-2 variants still worse than V2
-  ✓ RNAcompete benchmark run: zero-shot median AUROC=0.549 on unseen proteins
+WHERE WE ARE (2026-07-11):
+  ✓ Phase 3A dataset built: generalized_v3a, 2.66M pairs, 494 proteins
+  ✓ V2 CNN retrained on v3a: test AUROC=0.813, AUPRC=0.713 (single seed)
+  ✓ External curated validation: AUROC=0.763 (159 literature pairs)
+  ✓ External expanded benchmark: scripts/31 + eval (540 pairs, diagnostic only)
+  ✓ V3/V3b/V3c on v2 data: all frozen ESM-2 variants worse than V2
 
 IMMEDIATE NEXT STEPS:
 
-  Step 1 — Multi-seed variance [NEXT]
-    Run V2 with seeds {0, 1, 2, 42, 123}.
-    Report mean ± std for val and test AUROC.
-    Required before claiming any improvement is real.
+  Step 1 — Multi-seed V2 on v3a [NEXT]
     python scripts/18_run_multiseed.py --script scripts/06_train_generalized_v2.py \
-        --n_seeds 5 --output_dir results/multiseed/v2_cnn \
-        --extra_args "--data_dir data/generalized_v2 --epochs 60"
-    Checkpoints land in results/multiseed/v2_cnn/seed_<N>/checkpoints/ (no cross-seed overwrite).
+        --n_seeds 5 --output_dir results/multiseed/v3a_v2 \
+        --extra_args "--data_dir data/generalized_v3a --prot_max 700 --epochs 60"
 
-  Step 2 — Homology audit (measurement, not resplit)
-    Compute pairwise protein identity for all 169 proteins vs RNAcompete.
-    python scripts/22_build_phase3a_dataset.py --export_fasta_only ...
-    mmseqs easy-search ...
+  Step 2 — RNAcompete zero-shot on v3a checkpoint
+    python scripts/20_evaluate_benchmark.py \
+        --checkpoint models/saved/generalized_v2/best_model.pt \
+        --benchmark data/benchmarks/rnacompete/rnacompete_all.tsv
 
-  Step 3 — Phase 3A: expand training data
-    Merge RNAcompete into training with homology-aware split.
-    python scripts/22_build_phase3a_dataset.py --selex_dir data/generalized_v2 \
-        --rnacompete data/benchmarks/rnacompete/rnacompete_all.tsv \
-        --out_dir data/generalized_v3a
-
-  Step 4 — Phase 3B: interaction layer V4
+  Step 3 — Phase 3B: V4 bilinear on v3a
     python scripts/21_train_generalized_v4_interaction.py \
         --data_dir data/generalized_v3a --interaction concat_bi --use_source_emb
 
-AFTER V4 vs V2 comparison on clean data:
-  → RNA-FM branch (structure-aware RNA encoding)
-  → Fine-tuned ESM-2 with LoRA
-  → eCLIP training data expansion (not for val/test — domain shift documented)
+  Step 4 — Homology audit (publication blocker, measurement)
+    MMseqs2 on full 494-protein panel; report clean vs contaminated test proteins
 ```
 
 ---
@@ -131,7 +122,7 @@ AFTER V4 vs V2 comparison on clean data:
 - **Do NOT** run another frozen ESM-2 mean-pool variant. Three experiments confirm this fails.
 - **Do NOT** claim V2 AUROC=0.690 is directly comparable to ZHMolGraph AUROC=0.798.
   The task definitions differ (protein-aware only vs protein+RNA held-out).
-- **Do NOT** cite external validation AUROC=0.798 without the caveats in §5 below.
+- **Do NOT** cite external validation AUROC=0.763 without the caveats in §5 below.
 - **Do NOT** tune hyperparameters on the test set or add models until multi-seed
   variance on V2 is established.
 - **Do NOT** add eCLIP data to val or test splits (domain shift from in vitro labels).
@@ -140,18 +131,27 @@ AFTER V4 vs V2 comparison on clean data:
 
 ## 5. External Validation — Correct Interpretation
 
-V2 CNN evaluated on `dataset without affinities.xlsx` (159 pairs, 96 proteins):
+V2 CNN (v3a checkpoint) evaluated on literature Excel + expanded TSV from `scripts/31`.
+
+### Curated only (`dataset_without_affinities.xlsx`, 159 pairs)
 
 | Number | What it means |
 |--------|--------------|
-| AUROC = 0.798 | Computed over all 159 pairs. 87/96 proteins are single-class. |
-| AUPRC = 0.927 | Positive rate = 72%. Random classifier baseline = 0.717. Gain over random = +0.21. |
-| 57% of RNAs > 60 nt | Scored by window-max. Longer RNAs get systematically higher scores. |
-| 9 proteins evaluable | Remaining 87 have only pos or only neg examples. |
+| AUROC = **0.763** | 114 pos / 45 neg; primary qualitative OOD check |
+| AUPRC = 0.915 | Positive rate = 72%. Random baseline = **0.717**. Gain = +0.20 |
+| 88% single-class proteins | Per-protein AUROC mostly undefined on curated set alone |
+| 57% RNAs > 60 nt | Window-max scoring inflates scores for long RNAs |
 
-**Valid use**: qualitative check that the model assigns non-zero probability to known
-binding pairs from literature.
-**Invalid use**: numeric comparison to SELEX/RBNS test AUROC or to published baselines.
+### Expanded (`external_benchmark_expanded.tsv`, 540 pairs)
+
+| Number | What it means |
+|--------|--------------|
+| AUROC = 0.688 | 114 pos + 426 neg (381 generated + 45 curated neg) |
+| AUPRC = 0.488 | Positive rate = **21%**. Random baseline = **0.211**. Gain = **+0.28** |
+| Do NOT compare 0.488 to 0.915 | Different class balance; compare gain over random or use stratified `curated_pos_vs_generated_neg` |
+
+**Valid use**: sanity check on literature pairs; diagnostic decoy rejection (shuffle / cross-pair).  
+**Invalid use**: numeric comparison to SELEX test AUROC (0.813) or ZHMolGraph without caveats.
 
 ---
 

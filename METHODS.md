@@ -380,7 +380,11 @@ Updated after each experiment. Phase 1 numbers are on the **test set** (unseen p
 
 ### External Validation — Preliminary Assessment
 
-V2 CNN was evaluated on a manually curated literature dataset (`dataset without affinities.xlsx`, 165 pairs from 96 proteins). Reported AUROC=0.798 AUPRC=0.927 should be interpreted with caution due to three structural limitations:
+V2 CNN was evaluated on the literature dataset (`dataset_without_affinities.xlsx`, 159 pairs).
+Updated numbers (v3a checkpoint, 2026-07): AUROC=**0.763** AUPRC=0.915 (curated); expanded
+540-pair benchmark via `scripts/31` — see `DATA.md §2.3`.
+
+Reported AUROC=0.798 in older notes used a slightly different row filter; treat **0.763** as canonical curated result.
 
 1. **Single-class proteins** (88%): 84 of 96 proteins have only positive *or* only negative examples. Per-protein AUROC is undefined for these; only 9 proteins contribute to the metric.
 
