@@ -1,0 +1,405 @@
+{
+  "model": "generalized_v2_cnn",
+  "data_dir": "data/generalized_v3a",
+  "checkpoint": "models/saved/generalized_v2/best_model.pt",
+  "checkpoint_epoch": 24,
+  "best_val_auroc": 0.8175829993300161,
+  "best_val_auprc": 0.6931046220361632,
+  "test_metrics": {
+    "auroc": 0.8133496968826661,
+    "auprc": 0.7129693840940119
+  },
+  "per_protein_summary": {
+    "median": 0.8171792527713061,
+    "min": 0.18299294628323387,
+    "n_proteins": 55
+  },
+  "per_protein": [
+    {
+      "protein": "ASD-1",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.983056391649143,
+      "n": 4853,
+      "is_flagged": 0
+    },
+    {
+      "protein": "BRUNOL5",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9949841734822271,
+      "n": 4760,
+      "is_flagged": 0
+    },
+    {
+      "protein": "BRUNOL6",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9739263136811298,
+      "n": 3599,
+      "is_flagged": 0
+    },
+    {
+      "protein": "CBG00421",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.8363748749189993,
+      "n": 4309,
+      "is_flagged": 0
+    },
+    {
+      "protein": "CBG03563",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9727091345529194,
+      "n": 5837,
+      "is_flagged": 0
+    },
+    {
+      "protein": "CSDA",
+      "dataset": "selex_rbns",
+      "auroc": 0.725343,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "DAZAP1",
+      "dataset": "selex_rbns",
+      "auroc": 0.8171792527713061,
+      "n": 10468,
+      "is_flagged": 0
+    },
+    {
+      "protein": "ENOX1",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.5655373491991177,
+      "n": 4237,
+      "is_flagged": 0
+    },
+    {
+      "protein": "ENSMODG00000011903",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9938963770882712,
+      "n": 3202,
+      "is_flagged": 0
+    },
+    {
+      "protein": "ESRP1-construct3",
+      "dataset": "selex_rbns",
+      "auroc": 0.96920175,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "ETR-1",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9826046109839432,
+      "n": 4687,
+      "is_flagged": 0
+    },
+    {
+      "protein": "FXR2",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9368680602940265,
+      "n": 4109,
+      "is_flagged": 0
+    },
+    {
+      "protein": "HNRNPA0",
+      "dataset": "selex_rbns",
+      "auroc": 0.86616175,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "IGF2BP1",
+      "dataset": "selex_rbns",
+      "auroc": 0.605048625,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "IGF2BP2",
+      "dataset": "selex_rbns",
+      "auroc": 0.8091629340181188,
+      "n": 7098,
+      "is_flagged": 0
+    },
+    {
+      "protein": "IGF2BP3",
+      "dataset": "selex_rbns",
+      "auroc": 0.6534132002445107,
+      "n": 6952,
+      "is_flagged": 0
+    },
+    {
+      "protein": "KHDRBS3",
+      "dataset": "selex_rbns",
+      "auroc": 0.9530336429740061,
+      "n": 10882,
+      "is_flagged": 0
+    },
+    {
+      "protein": "LARK",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.7271602295765696,
+      "n": 9286,
+      "is_flagged": 0
+    },
+    {
+      "protein": "LARP6",
+      "dataset": "selex_rbns",
+      "auroc": 0.60676925,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "LARP7-construct4",
+      "dataset": "selex_rbns",
+      "auroc": 0.7609355000000001,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "LmjF.24.1570",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.624864477219873,
+      "n": 5099,
+      "is_flagged": 0
+    },
+    {
+      "protein": "LmjF.25.0500",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.953685941783057,
+      "n": 5155,
+      "is_flagged": 0
+    },
+    {
+      "protein": "MEX3D-construct3",
+      "dataset": "selex_rbns",
+      "auroc": 0.7146204999999999,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "MSI",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9217166667421012,
+      "n": 9729,
+      "is_flagged": 0
+    },
+    {
+      "protein": "NUDT16L1",
+      "dataset": "rnacompete_ucrbp",
+      "auroc": 0.6347219228274228,
+      "n": 5800,
+      "is_flagged": 0
+    },
+    {
+      "protein": "NUDT21",
+      "dataset": "rnacompete_ucrbp",
+      "auroc": 0.5437388668348403,
+      "n": 15642,
+      "is_flagged": 0
+    },
+    {
+      "protein": "NUPL2",
+      "dataset": "selex_rbns",
+      "auroc": 0.18299294628323387,
+      "n": 2843,
+      "is_flagged": 0
+    },
+    {
+      "protein": "Ng_0261",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9741096290477702,
+      "n": 4291,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PABP",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9976132926394021,
+      "n": 5603,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PCBP1",
+      "dataset": "selex_rbns",
+      "auroc": 0.8643357112580183,
+      "n": 16614,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PEG10",
+      "dataset": "rnacompete_ucrbp",
+      "auroc": 0.5331073038718458,
+      "n": 15106,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PK00840.1",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9951041421193545,
+      "n": 3614,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PK03611.1",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9129966223277781,
+      "n": 4336,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PRR3",
+      "dataset": "selex_rbns",
+      "auroc": 0.7070227580142594,
+      "n": 7384,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PUB1",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9378121923220788,
+      "n": 3273,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PUF60",
+      "dataset": "selex_rbns",
+      "auroc": 0.9922353679697172,
+      "n": 6959,
+      "is_flagged": 0
+    },
+    {
+      "protein": "PUM2",
+      "dataset": "selex_rbns",
+      "auroc": 0.8166535,
+      "n": 6000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "RBM28",
+      "dataset": "selex_rbns",
+      "auroc": 0.855336457582312,
+      "n": 6319,
+      "is_flagged": 0
+    },
+    {
+      "protein": "RBM6",
+      "dataset": "selex_rbns",
+      "auroc": 0.5821093083205917,
+      "n": 9151,
+      "is_flagged": 0
+    },
+    {
+      "protein": "SF2",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9908018920135481,
+      "n": 6819,
+      "is_flagged": 0
+    },
+    {
+      "protein": "SM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.7675237609502455,
+      "n": 5377,
+      "is_flagged": 0
+    },
+    {
+      "protein": "SNRNP70",
+      "dataset": "selex_rbns",
+      "auroc": 0.6013444124251348,
+      "n": 7958,
+      "is_flagged": 0
+    },
+    {
+      "protein": "SRSF8",
+      "dataset": "selex_rbns",
+      "auroc": 0.670445,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "Smp_024140",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.975546875357753,
+      "n": 2453,
+      "is_flagged": 0
+    },
+    {
+      "protein": "TAF15",
+      "dataset": "selex_rbns",
+      "auroc": 0.694952,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "TRA2A",
+      "dataset": "selex_rbns",
+      "auroc": 0.80714,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "Tb_0252",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.5724596572996756,
+      "n": 4038,
+      "is_flagged": 0
+    },
+    {
+      "protein": "UNK",
+      "dataset": "selex_rbns",
+      "auroc": 0.7032299999999999,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "ZC3H18",
+      "dataset": "selex_rbns",
+      "auroc": 0.45350525,
+      "n": 3000,
+      "is_flagged": 0
+    },
+    {
+      "protein": "cwf2",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.6984925957076296,
+      "n": 4563,
+      "is_flagged": 0
+    },
+    {
+      "protein": "hnrnpa0b",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.957115636019817,
+      "n": 4367,
+      "is_flagged": 0
+    },
+    {
+      "protein": "mex3c",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.7660168266821893,
+      "n": 9020,
+      "is_flagged": 0
+    },
+    {
+      "protein": "rnp-3",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.989885260502818,
+      "n": 4974,
+      "is_flagged": 0
+    },
+    {
+      "protein": "sart3",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.8914447016892953,
+      "n": 5955,
+      "is_flagged": 0
+    },
+    {
+      "protein": "srsf3",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9583639047603443,
+      "n": 4554,
+      "is_flagged": 0
+    }
+  ],
+  "eval_only": true
+}
