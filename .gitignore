@@ -9,7 +9,11 @@ data/splits/*/test.tsv
 data/embeddings/
 data/benchmarks/
 data/eclip/
-data/external/
+data/external/*
+!data/external/.gitkeep
+!data/external/external_benchmark_expanded.tsv
+!data/external/external_benchmark_expanded_manifest.json
+!data/external/dataset_without_affinities.xlsx
 
 # Trained model weights
 models/saved/
