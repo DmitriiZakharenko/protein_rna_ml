@@ -113,19 +113,38 @@
   },
 
   "external_validation_v2": {
-    "dataset": "dataset without affinities.xlsx (manually curated, lncRNA + literature)",
-    "n_pairs": 159,
-    "n_pos": 114,
-    "n_neg": 45,
-    "v2_auroc": 0.798,
-    "v2_auprc": 0.927,
-    "reliability": "LOW — statistical artefacts present",
+    "checkpoint": "models/saved/generalized_v2/best_model.pt (trained on generalized_v3a, epoch 24)",
+    "curated_only": {
+      "dataset": "dataset_without_affinities.xlsx (159 usable pairs)",
+      "n_pairs": 159,
+      "n_pos": 114,
+      "n_neg": 45,
+      "pos_rate": 0.717,
+      "random_auprc_baseline": 0.717,
+      "v2_auroc": 0.763,
+      "v2_auprc": 0.915,
+      "note": "Canonical curated result; older 0.798 AUROC used a slightly different row filter (see METHODS.md)"
+    },
+    "expanded": {
+      "dataset": "data/external/external_benchmark_expanded.tsv",
+      "n_pairs": 540,
+      "n_pos": 114,
+      "n_neg": 426,
+      "n_generated_neg": 381,
+      "pos_rate": 0.211,
+      "random_auprc_baseline": 0.211,
+      "v2_auroc": 0.688,
+      "v2_auprc": 0.488,
+      "auprc_gain_over_random": 0.277,
+      "builder": "scripts/31_build_external_benchmark.py"
+    },
+    "reliability": "LOW — diagnostic only, not comparable to SELEX test AUROC",
     "issues": [
-      "88% of proteins are single-class (no per-protein AUROC possible)",
-      "Sliding window max-pooling inflates scores for long RNAs: mean prob=0.81 for >60nt vs 0.19 for short",
-      "High positive rate (72%): random baseline AUPRC=0.717, real improvement over random is only +0.21",
-      "Only 9 of 96 proteins evaluable, average 6 pairs each — near-zero statistical power"
+      "51% of RNAs exceed 60 nt; sliding-window max-pool inflates scores for long RNAs",
+      "Curated set: 88% single-class proteins; expanded set improves to 87/96 with both classes",
+      "High positive rate on curated (72%): random AUPRC baseline = 0.717"
     ],
-    "interpretation": "Cannot draw conclusions about generalization to natural lncRNA interactions. Dataset needs expansion to >500 balanced pairs per protein for reliable assessment."
+    "interpretation": "Curated AUROC 0.763 stable vs pre-v3a runs. Expanded benchmark is for negative-strategy diagnostics, not primary model selection.",
+    "results_json": "results/external/v3a_v2_expanded/external_validation_v2.json"
   }
 }

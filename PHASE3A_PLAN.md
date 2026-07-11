@@ -113,7 +113,13 @@ python scripts/20_evaluate_benchmark.py \
 | RNAcompete zero-shot median (unseen proteins) | 0.549 | ≥ 0.60 | **Not re-run yet** (3A-3) |
 
 Checkpoint: `models/saved/generalized_v2/best_model.pt` (trained on `generalized_v3a`, VM CPU).  
-Results JSON: `results/generalized/v3a_scale/v2_cnn_results.json` (on VM).
+Results JSON: `results/generalized/v3a_scale/v2_cnn_results.json`  
+Summary: `results/phase3a_summary.json`
+
+**Figures** (regenerate after result JSON updates):
+```bash
+python scripts/32_visualize_phase3a_results.py
+```
 
 Report multi-seed variance (5 seeds) before publication claims.
 

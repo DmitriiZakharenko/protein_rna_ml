@@ -1,0 +1,59 @@
+{
+  "phase": "3A",
+  "status": "COMPLETE",
+  "generated": "2026-07-11",
+  "description": "V2 CNN retrained on generalized_v3a (SELEX + RBNS + RNAcompete Eukarya/RBPZoo + ucRBP 23)",
+
+  "dataset": {
+    "path": "data/generalized_v3a",
+    "n_pairs": 2658999,
+    "n_proteins": 494,
+    "splits": {
+      "train": {"rows": 2037593, "proteins": 393},
+      "val": {"rows": 299131, "proteins": 49},
+      "test": {"rows": 322275, "proteins": 55}
+    }
+  },
+
+  "v2_cnn_v3a": {
+    "checkpoint": "models/saved/generalized_v2/best_model.pt",
+    "checkpoint_epoch": 24,
+    "prot_max": 700,
+    "seeds": 1,
+    "val_auroc": 0.818,
+    "val_auprc": 0.693,
+    "test_auroc": 0.813,
+    "test_auprc": 0.713,
+    "per_protein_test_median_auroc": 0.817,
+    "n_test_proteins": 55,
+    "results_json": "results/generalized/v3a_scale/v2_cnn_results.json"
+  },
+
+  "vs_v2_baseline": {
+    "data": "generalized_v2 (169 proteins)",
+    "test_auroc_delta": 0.123,
+    "test_auprc_delta": 0.133,
+    "per_protein_median_delta": 0.103
+  },
+
+  "external_validation": {
+    "checkpoint": "same as v2_cnn_v3a",
+    "curated": {"n": 159, "auroc": 0.763, "auprc": 0.915},
+    "expanded": {"n": 540, "auroc": 0.688, "auprc": 0.488, "auprc_gain_over_random": 0.277},
+    "results_json": "results/external/v3a_v2_expanded/external_validation_v2.json"
+  },
+
+  "figures": [
+    "figures/phase3a_v2_scale_comparison.png",
+    "figures/phase3a_per_protein_auroc.png",
+    "figures/phase2_model_comparison.png",
+    "figures/external_eval_comparison.png",
+    "figures/external_score_distributions.png"
+  ],
+
+  "next": [
+    "EXP-V2-MULTISEED-V3A — scripts/18 on generalized_v3a",
+    "EXP-RNACOMPETE-V3A — scripts/20 on v3a checkpoint",
+    "EXP-V4-BILINEAR — scripts/21 on generalized_v3a"
+  ]
+}
