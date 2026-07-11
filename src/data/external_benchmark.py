@@ -378,6 +378,10 @@ def load_benchmark_tsv(tsv_path: str | os.PathLike) -> pd.DataFrame:
     for _, row in df.iterrows():
         rna = normalize_rna(str(row["rna_sequence"]))
         prot = str(row["protein_sequence"]).upper()
+        example_class = str(row.get("example_class", "") or "")
+        neg_strategy = str(row.get("neg_strategy", "") or "")
+        if pd.isna(row.get("neg_strategy")):
+            neg_strategy = ""
         records.append(
             {
                 "pair_id": str(row.get("pair_id", "") or ""),
@@ -387,8 +391,8 @@ def load_benchmark_tsv(tsv_path: str | os.PathLike) -> pd.DataFrame:
                 "label": int(row["binding_label"]),
                 "rna_len": len(rna),
                 "prot_len": len(prot),
-                "example_class": str(row.get("example_class", "") or ""),
-                "neg_strategy": str(row.get("neg_strategy", "") or ""),
+                "example_class": example_class,
+                "neg_strategy": neg_strategy,
                 "parent_pair_id": str(row.get("parent_pair_id", "") or ""),
             }
         )

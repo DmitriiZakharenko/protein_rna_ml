@@ -14,11 +14,21 @@ Output: binding probability ∈ [0, 1]
 | Phase | Status | Notes |
 |---|---|---|
 | Phase 1 — Dataset validation | **Complete** | 3 datasets, all pass |
-| Phase 2 — Generalized models V1–V3c | **Complete** | Clean results, double class-weighting bug fixed and retrained 2026-05-13 |
+| Phase 2 — Generalized models V1–V3c | **Complete** | Clean retrain 2026-05-13; V2 anchor on `generalized_v2` |
 | RNAcompete benchmark prep | **Complete** | 13.9M pairs processed |
-| Zero-shot evaluation on RNAcompete (V2) | **Complete** | Median AUROC 0.549 on unseen proteins |
-| Phase 3A — Expand training with RNAcompete | **In progress** | Dataset builder ready (`scripts/22`) |
-| Phase 3B — V4 bilinear interaction layer | **In progress** | Model and training script ready (`scripts/21`) |
+| Phase 3A — V2 on `generalized_v3a` | **Complete** | Test AUROC **0.813**, AUPRC **0.713** (494 proteins, 2.66M pairs) |
+| External validation (literature) | **Complete** | Curated AUROC 0.763; expanded benchmark + generated negs (`scripts/31`) |
+| Phase 3A-2 — Multi-seed V2 on v3a | **Next** | `scripts/18_run_multiseed.py` |
+| Phase 3B — V4 bilinear interaction | **Queued** | `scripts/21` on `generalized_v3a` |
+
+**Canonical references**: [`strategy_dashboard.html`](strategy_dashboard.html) (architecture & queue) · [`PHASE3A_PLAN.md`](PHASE3A_PLAN.md) · [`STRATEGY.md`](STRATEGY.md) · [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md)
+
+<details>
+<summary>Legacy dashboard</summary>
+
+[`dashboard.html`](dashboard.html) — Phase 1–2 charts only; **not updated** for Phase 3A. Use `strategy_dashboard.html` instead.
+
+</details>
 
 ---
 
@@ -56,16 +66,72 @@ All numbers below are from **clean checkpoints** retrained after fixing the doub
 
 ![Phase 2 model comparison](figures/phase2_model_comparison.png)
 
-<details>
-<summary>Training dynamics and per-protein breakdown (V2 CNN)</summary>
+---
 
-![V2 training curve](figures/v2_training_curve.png)
+## Phase 3A — Scaled Training (Complete)
 
-![V2 per-protein AUROC](figures/v2_per_protein_auroc.png)
+Merged HTR-SELEX + RBNS + RNAcompete (Eukarya + RBPZoo full; ucRBP 23 only) into
+`data/generalized_v3a/` with homology-aware protein splits. Retrained V2 CNN
+(`prot_max=700`, same architecture as Phase 2).
 
-![ESM-2 vs V2 per-protein comparison](figures/esm2_vs_v2_comparison.png)
+| Split | Rows | Proteins |
+|---|---|---|
+| train | 2,037,593 | 393 |
+| val | 299,131 | 49 |
+| test | 322,275 | 55 |
+| **Total** | **2,658,999** | **494** |
 
-</details>
+### V2 CNN on `generalized_v3a` (checkpoint epoch 24, VM CPU run)
+
+| Metric | `generalized_v2` (169 prot) | **`generalized_v3a` (494 prot)** |
+|---|---|---|
+| Val AUROC / AUPRC | 0.746 / — | **0.818 / 0.693** |
+| Test AUROC / AUPRC | 0.690 / 0.580 | **0.813 / 0.713** |
+| Per-protein median test AUROC | 0.714 | **0.817** (55 test proteins) |
+
+Phase 3A success criteria (test AUROC ≥ 0.70) **met**. Single-seed; run multi-seed before claiming robust improvement.
+
+```bash
+# Build dataset (once)
+python scripts/22a_prepare_rnacompete_training.py
+python scripts/22_build_phase3a_dataset.py \
+    --selex_dir data/generalized_v2 \
+    --rnacompete data/benchmarks/rnacompete/rnacompete_training_phase3a.tsv \
+    --homology_tsv results/homology/train_vs_rnacompete.tsv \
+    --out_dir data/generalized_v3a
+
+# Train + test eval
+python scripts/06_train_generalized_v2.py \
+    --data_dir data/generalized_v3a --prot_max 700 --epochs 60 --no_cuda
+python scripts/06_eval_generalized_v2_test.py \
+    --data_dir data/generalized_v3a \
+    --checkpoint models/saved/generalized_v2/best_model.pt \
+    --prot_max 700 --no_cuda
+```
+
+---
+
+## External Validation (Literature)
+
+Manually curated pairs from `data/external/dataset_without_affinities.xlsx` (159 usable:
+114 pos / 45 neg, long lncRNAs). **Not comparable to SELEX test AUROC** — different
+lengths, labels, and negative semantics. See `DATA.md §2.2` and `STRATEGY.md §5`.
+
+| Benchmark | Pairs | Pos rate | V2 AUROC | V2 AUPRC | Notes |
+|---|---|---|---|---|---|
+| Curated only | 159 | 72% | **0.763** | 0.915 | Random AUPRC baseline = 0.717 |
+| Expanded (+ generated negs) | 540 | 21% | 0.688 | 0.488 | Random AUPRC baseline = 0.211; gain +0.28 |
+
+```bash
+# Build expanded benchmark (shuffle + cross-pair negs per positive)
+python scripts/31_build_external_benchmark.py \
+    --xlsx data/external/dataset_without_affinities.xlsx \
+    --train_tsv data/generalized_v3a/train.tsv
+
+python scripts/11_evaluate_external.py \
+    --benchmark_tsv data/external/external_benchmark_expanded.tsv \
+    --v2_dir models/saved/generalized_v2 --prot_max 700 --no_cuda
+```
 
 ---
 
@@ -283,7 +349,8 @@ Full output tree: `results/rnacompete_intensity_spectrum/{dataset}/` — `spectr
 
 | Model | Method | Dataset | AUROC | AUPRC | Split |
 |---|---|---|---|---|---|
-| **Our V2 CNN** | Dual-branch one-hot CNN | HTR-SELEX + RBNS | 0.690 | 0.580 | Protein-aware |
+| **Our V2 CNN (v3a)** | Dual-branch one-hot CNN | SELEX + RBNS + RNAcompete | **0.813** | **0.713** | Protein-aware, 494 prot |
+| **Our V2 CNN (v2)** | Dual-branch one-hot CNN | HTR-SELEX + RBNS | 0.690 | 0.580 | Protein-aware, 169 prot |
 | Our XGBoost | k-mer features per-dataset | HTR-SELEX only | 0.825 | 0.742 | Protein-aware |
 | ZHMolGraph | RNA-FM + ProtTrans + GNN | NPInter2 / RPI7317 | 0.798 | 0.820 | Hard (NPInter5) |
 | RPITER | Feature refinement + RF | Various | 0.727 | 0.774 | Random |
@@ -320,6 +387,7 @@ protein_rna_ml/
 │   ├── 04_build_generalized_dataset.py merge all validated datasets
 │   ├── 05_train_generalized_v1.py      V1: MLP on k-mer features
 │   ├── 06_train_generalized_v2.py      V2: dual-branch CNN (anchor model)
+│   ├── 06_eval_generalized_v2_test.py  held-out test eval for V2 checkpoint
 │   ├── 07_extract_esm2_embeddings.py   extract ESM-2 mean-pool embeddings
 │   ├── 07b_extract_esm2_residues.py    extract ESM-2 per-residue embeddings
 │   ├── 08_train_generalized_v3.py      V3: frozen ESM-2 + RNA CNN
@@ -327,7 +395,8 @@ protein_rna_ml/
 │   ├── 10_train_generalized_v3c.py     V3c: per-residue ESM-2 → Conv1D
 │   │
 │   │   — Data acquisition —
-│   ├── 11_evaluate_external.py         external validation with integrity checks
+│   ├── 11_evaluate_external.py         literature external validation (+ integrity checks)
+│   ├── 31_build_external_benchmark.py  expand literature set with generated negatives
 │   ├── 12_download_eclip.py            download eCLIP datasets from ENCODE
 │   ├── 13_download_rnainter.py         download RNAInter interaction data
 │   ├── 14_merge_new_data.py            merge new datasets into training pool
@@ -342,7 +411,8 @@ protein_rna_ml/
 │   │
 │   │   — Phase 3: scaling + interaction —
 │   ├── 21_train_generalized_v4_interaction.py  V4: bilinear interaction layer
-│   ├── 22_build_phase3a_dataset.py             SELEX + RNAcompete merge (homology-aware)
+│   ├── 22a_prepare_rnacompete_training.py  RNAcompete training subset (Phase 3A policy)
+│   ├── 22_build_phase3a_dataset.py         SELEX + RNAcompete merge (homology-aware)
 │   │
 │   │   — Example extraction & RNA-only baselines —
 │   ├── 24_extract_top_bottom_examples.py   top-5/bottom-5 RNA per RBP (7-mer anchored)
@@ -360,6 +430,10 @@ protein_rna_ml/
 ├── src/
 │   ├── data/
 │   │   ├── dataset.py                  KmerDataset, SeqDataset (PyTorch)
+│   │   ├── external_benchmark.py       literature benchmark load + neg expansion
+│   │   ├── negative_sampling.py        shuffle / cross-pair negative generators
+│   │   ├── rna_sequence.py             RNA validation, GC, dinucleotide utilities
+│   │   ├── protein_sequence.py         protein sequence sanitization
 │   │   ├── loaders.py                  unified loader API for all data sources
 │   │   ├── preprocessing.py            k-mer encoding, one-hot
 │   │   └── splits.py                   protein-aware splitting
@@ -387,12 +461,14 @@ protein_rna_ml/
 │   ├── TASKS_AND_DATASETS.md
 │   └── NEXT_SESSION_PROMPT.md          context prompt for new sessions
 │
+├── strategy_dashboard.html             **current** architecture & experiment queue (HTML)
+├── dashboard.html                      legacy Phase 1–2 charts (stale)
 ├── DATA.md                             dataset provenance, leakage risks, negatives
 ├── METHODS.md                          methodological choices + references
 ├── STRATEGY.md                         experiment state, lessons learned, what not to do
-├── PHASE3A_PLAN.md                     immediate plan: RNAcompete training merge
+├── PHASE3A_PLAN.md                     Phase 3A plan + results (complete)
 ├── RESEARCH_ROADMAP.md                 medium-term goals beyond binary classification
-├── EXPERIMENT_LOG.md                   chronological run history V1→V3c
+├── EXPERIMENT_LOG.md                   chronological run history
 └── run_pipeline.sh                     end-to-end pipeline runner
 ```
 

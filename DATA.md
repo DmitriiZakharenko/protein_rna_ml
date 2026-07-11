@@ -1,6 +1,6 @@
 # Data Provenance, Leakage Risks, and Negative Sampling
 
-**Last updated**: 2026-05-13
+**Last updated**: 2026-07-11
 
 This document describes all datasets used in training and evaluation,
 their known biases, their leakage risks, and the negative sampling strategy
@@ -113,21 +113,37 @@ the eCLIP examples are helping or hurting SELEX/RBNS generalization.
 
 ## 2. Evaluation Datasets
 
-### 2.1 Internal Test Set (generalized_v2)
+### 2.1 Internal Test Set
 
-- 98,662 rows, 169-protein protein-aware split (seed=42)
-- Same negative quality as training data (SELEX/RBNS shuffled + eCLIP flanking)
-- **Primary benchmark for all model comparisons**
+| Dataset | Rows | Proteins | Role |
+|---------|------|----------|------|
+| `generalized_v2` test | 98,662 | 169 (24 in test) | Phase 2 primary benchmark |
+| **`generalized_v3a` test** | **322,275** | **494 (55 in test)** | **Phase 3A primary benchmark** |
 
-### 2.2 External Literature Dataset (`dataset without affinities.xlsx`)
+Same negative quality as training (SELEX/RBNS pool negs + eCLIP flanking in train only).
+
+### 2.2 External Literature Dataset (`dataset_without_affinities.xlsx`)
 
 - 159 pairs, 96 proteins, manually curated from literature
 - 72% positive rate; 88% of proteins single-class (no per-protein AUROC possible)
 - 57% of RNAs exceed 60 nt (scored by window-max, inflates AUPRC for long lncRNAs)
-- Random classifier AUPRC baseline = 0.717; reported V2 AUPRC = 0.927
-- **DO NOT** compare these numbers to SELEX test metrics
+- 159 pairs, 96 proteins, manually curated from literature
+- 72% positive rate; 88% of proteins single-class (no per-protein AUROC on curated alone)
+- 57% of RNAs exceed 60 nt (scored by window-max, inflates AUPRC for long lncRNAs)
+- V2 (v3a checkpoint): AUROC **0.763**, AUPRC 0.915 (random AUPRC baseline = 0.717)
+- **DO NOT** compare these numbers to SELEX/v3a test metrics
 
-### 2.3 External Dataset with Affinities (`dataset with affinities.xlsx`)
+### 2.3 Expanded External Benchmark (`external_benchmark_expanded.tsv`)
+
+Built by `scripts/31_build_external_benchmark.py`:
+- **540 pairs** = 114 curated pos + 45 curated neg + **381 generated neg**
+- Generated strategies per positive: `shuffle_uniform`, `shuffle_dinucleotide`, `cross_protein`, `cross_rna`
+- 21% positive rate → random AUPRC baseline = **0.211** (not 0.5)
+- V2 eval: AUROC 0.688, AUPRC 0.488, gain over random +0.28
+- **Diagnostic only** — generated negs are decoys, not experimentally validated non-binders
+- Manifest: `data/external/external_benchmark_expanded_manifest.json`
+
+### 2.4 External Dataset with Affinities (`dataset_with_affinities.xlsx`)
 
 - Contains mutation data: wild-type vs mutant binding comparisons
 - Not yet used in training or evaluation

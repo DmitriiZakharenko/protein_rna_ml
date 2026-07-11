@@ -102,13 +102,12 @@ and interaction layers. Phase 3C onward advances to T1–T3.
 
 ## 5. Phased Roadmap
 
-### Phase 3A — Training data scale-up *(in progress)*
+### Phase 3A — Training data scale-up *(complete 2026-07)*
 
 **Goal**: Increase protein diversity by merging SELEX/RBNS with a curated RNAcompete
 training subset (Eukarya and RBPZoo full; ucRBP restricted to 23 reproducible RBPs).
 
-**Deliverables**: `data/generalized_v3a/`, V2 retrained on expanded data, updated
-zero-shot RNAcompete benchmark.
+**Deliverables**: `data/generalized_v3a/`, V2 retrained — test AUROC **0.813** (2026-07). Multi-seed + RNAcompete re-eval pending.
 
 **Document**: `PHASE3A_PLAN.md`
 

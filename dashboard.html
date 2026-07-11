@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protein–RNA Binding Prediction — Project Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --card: #20232f;
+    --border: #2e3140;
+    --text: #e8eaf0;
+    --subtle: #8b90a0;
+    --accent: #5b8dee;
+    --success: #4caf7d;
+    --warn: #e8a838;
+    --danger: #e05454;
+    --info: #5b8dee;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; }
+  a { color: var(--accent); text-decoration: none; }
+
+  .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  /* Header */
+  .header { margin-bottom: 32px; }
+  .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .header .meta { color: var(--subtle); font-size: 13px; }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  .section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--subtle); margin-bottom: 14px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+
+  /* KPI row */
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .kpi .label { font-size: 11px; color: var(--subtle); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .kpi .value { font-size: 24px; font-weight: 700; }
+  .kpi .caption { font-size: 11px; color: var(--subtle); margin-top: 4px; }
+  .kpi.warn .value { color: var(--warn); }
+  .kpi.success .value { color: var(--success); }
+  .kpi.info .value { color: var(--accent); }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* Card */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .card-header { padding: 14px 18px 10px; border-bottom: 1px solid var(--border); }
+  .card-header h3 { font-size: 13px; font-weight: 600; }
+  .card-header .sub { font-size: 11px; color: var(--subtle); margin-top: 2px; }
+  .card-body { padding: 16px 18px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--subtle); padding: 6px 10px; border-bottom: 1px solid var(--border); }
+  tbody td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; font-family: var(--mono); font-size: 12px; }
+  td.mono { font-family: var(--mono); font-size: 12px; }
+
+  /* Pill */
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .pill.success { background: rgba(76,175,125,0.15); color: var(--success); }
+  .pill.warn { background: rgba(232,168,56,0.15); color: var(--warn); }
+  .pill.danger { background: rgba(224,84,84,0.15); color: var(--danger); }
+  .pill.info { background: rgba(91,141,238,0.15); color: var(--accent); }
+  .pill.neutral { background: rgba(255,255,255,0.06); color: var(--subtle); }
+
+  /* Callout */
+  .callout { border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; }
+  .callout.warn { background: rgba(232,168,56,0.08); border-left: 3px solid var(--warn); }
+  .callout.info { background: rgba(91,141,238,0.08); border-left: 3px solid var(--accent); }
+  .callout.danger { background: rgba(224,84,84,0.08); border-left: 3px solid var(--danger); }
+  .callout strong { display: block; margin-bottom: 4px; }
+
+  /* Arch box */
+  .arch { font-family: var(--mono); font-size: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; color: #a8b4d0; line-height: 1.8; }
+  .arch .arrow { color: var(--accent); }
+  .arch .dim { color: var(--warn); }
+  .arch .op { color: var(--success); }
+  .arch .comment { color: var(--subtle); }
+
+  /* Progress bar */
+  .prog-bar { height: 6px; background: var(--surface); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+  .prog-bar .fill { height: 100%; border-radius: 3px; }
+
+  /* Highlight row */
+  tr.highlight td { background: rgba(91,141,238,0.06); }
+  tr.best-row td { background: rgba(76,175,125,0.06); }
+
+  /* Chart container */
+  .chart-wrap { position: relative; }
+
+  .source-caption { font-size: 11px; color: var(--subtle); margin-top: 8px; }
+
+  /* Q card */
+  .q-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+  .q-num { display: inline-block; font-size: 11px; font-weight: 600; color: var(--subtle); background: var(--surface); padding: 1px 7px; border-radius: 3px; margin-right: 8px; }
+  .q-title { font-weight: 600; font-size: 13px; }
+  .q-detail { color: var(--subtle); font-size: 12px; margin-top: 6px; padding-left: 32px; }
+
+  /* Nav tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+  .tab { padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--subtle); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Protein–RNA Binding Prediction — Research Dashboard</h1>
+    <div class="meta">Legacy Phase 1–2 view · For current status see <a href="strategy_dashboard.html">strategy_dashboard.html</a> and README.md · Jul 2026</div>
+  </div>
+
+  <div style="background:rgba(232,168,56,0.12);border:1px solid rgba(232,168,56,0.35);border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:13px;">
+    <strong>Stale:</strong> Phase 3A complete — V2 on <code>generalized_v3a</code> test AUROC <strong>0.813</strong>.
+    Charts below show Phase 2 (169 proteins). Use <a href="strategy_dashboard.html">strategy_dashboard.html</a> for architecture, queue, and v3a numbers.
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi success">
+      <div class="label">Best Model AUROC</div>
+      <div class="value">0.690</div>
+      <div class="caption">V2 CNN · internal test split</div>
+    </div>
+    <div class="kpi success">
+      <div class="label">Best Model AUPRC</div>
+      <div class="value">0.580</div>
+      <div class="caption">V2 CNN · internal test split</div>
+    </div>
+    <div class="kpi warn">
+      <div class="label">Gap to ZHMolGraph</div>
+      <div class="value">−0.108</div>
+      <div class="caption">AUROC · 0.798 target</div>
+    </div>
+    <div class="kpi info">
+      <div class="label">Zero-shot Eukarya</div>
+      <div class="value">0.665</div>
+      <div class="caption">200 unseen proteins · median 0.651</div>
+    </div>
+    <div class="kpi warn">
+      <div class="label">Training Proteins</div>
+      <div class="value">169</div>
+      <div class="caption">vs 420 available (Eukarya+RBPZoo)</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('results')">Results</div>
+    <div class="tab" onclick="switchTab('models')">Model Specs</div>
+    <div class="tab" onclick="switchTab('datasets')">Datasets</div>
+    <div class="tab" onclick="switchTab('zeroshot')">Zero-shot</div>
+    <div class="tab" onclick="switchTab('roadmap')">Roadmap</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 1: RESULTS
+  ══════════════════════════════════════════════════════ -->
+  <div id="tab-results" class="tab-pane active">
+
+    <div class="section">
+      <div class="section-title">Phase 2 — Model Comparison (Internal Test Split)</div>
+      <div class="grid-2" style="gap:16px">
+        <div class="card">
+          <div class="card-header"><h3>AUROC by Model</h3><div class="sub">Higher is better · ZHMolGraph = 0.798 (dashed)</div></div>
+          <div class="card-body"><div class="chart-wrap"><canvas id="chartAUROC" height="260"></canvas></div>
+          <div class="source-caption">Source: results/phase2_summary.json · clean bug-fixed retrains · 2026-05-13</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>AUPRC by Model</h3><div class="sub">Higher is better · ZHMolGraph = 0.820 (on different test set)</div></div>
+          <div class="card-body"><div class="chart-wrap"><canvas id="chartAUPRC" height="260"></canvas></div>
+          <div class="source-caption">Note: ZHMolGraph AUPRC not directly comparable (different test data, different positive rate)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Detailed Model Results</div>
+      <div class="card">
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Input</th>
+                <th>Val AUROC</th>
+                <th>Test AUROC</th>
+                <th>Test AUPRC</th>
+                <th>Best Epoch</th>
+                <th>Params</th>
+                <th>vs V2</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>V1 MLP</strong></td>
+                <td>3-mer + 2-mer freq.</td>
+                <td class="num">0.7157</td>
+                <td class="num">0.6736</td>
+                <td class="num">0.5444</td>
+                <td class="num">1</td>
+                <td class="num">~300K</td>
+                <td class="num" style="color:var(--subtle)">baseline</td>
+                <td><span class="pill neutral">Done</span></td>
+              </tr>
+              <tr class="best-row">
+                <td><strong>V2 CNN</strong> ★</td>
+                <td>One-hot RNA+Prot</td>
+                <td class="num">0.7465</td>
+                <td class="num">0.6903</td>
+                <td class="num">0.5796</td>
+                <td class="num">13</td>
+                <td class="num">1,101K</td>
+                <td class="num" style="color:var(--success)">+0.017</td>
+                <td><span class="pill success">Best</span></td>
+              </tr>
+              <tr>
+                <td><strong>V3 ESM-2</strong></td>
+                <td>ESM-2 mean pool (frozen)</td>
+                <td class="num">0.7153</td>
+                <td class="num">0.6341</td>
+                <td class="num">0.5472</td>
+                <td class="num">17</td>
+                <td class="num">650M+head</td>
+                <td class="num" style="color:var(--danger)">−0.056</td>
+                <td><span class="pill danger">Worse</span></td>
+              </tr>
+              <tr>
+                <td><strong>V3b ESM-2+CNN</strong></td>
+                <td>ESM-2 (frozen) + CNN</td>
+                <td class="num">—</td>
+                <td class="num">0.6660</td>
+                <td class="num">0.5680</td>
+                <td class="num">—</td>
+                <td class="num">650M+head</td>
+                <td class="num" style="color:var(--danger)">−0.024</td>
+                <td><span class="pill danger">Worse</span></td>
+              </tr>
+              <tr>
+                <td><strong>V3c ESM-2 residue</strong></td>
+                <td>ESM-2 per-residue (frozen)</td>
+                <td class="num">0.7445</td>
+                <td class="num">0.6850</td>
+                <td class="num">0.5950</td>
+                <td class="num">18</td>
+                <td class="num">650M+head</td>
+                <td class="num" style="color:var(--danger)">−0.005</td>
+                <td><span class="pill warn">Close</span></td>
+              </tr>
+              <tr class="highlight">
+                <td><strong>V4 Bilinear</strong></td>
+                <td>One-hot + bilinear interact.</td>
+                <td class="num">—</td>
+                <td class="num">TBD</td>
+                <td class="num">TBD</td>
+                <td class="num">—</td>
+                <td class="num">~1,400K</td>
+                <td class="num" style="color:var(--subtle)">pending</td>
+                <td><span class="pill info">Scripted</span></td>
+              </tr>
+              <tr style="background:rgba(91,141,238,0.04)">
+                <td><strong>ZHMolGraph</strong> (target)</td>
+                <td>Graph neural network</td>
+                <td class="num">—</td>
+                <td class="num">0.7980</td>
+                <td class="num">0.8200</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num" style="color:var(--accent)">+0.108</td>
+                <td><span class="pill info">Target</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="callout warn" style="margin-top:12px">
+        <strong>Key finding: All ESM-2 variants underperform one-hot CNN.</strong>
+        Frozen ESM-2 encodes evolutionary fitness, not RNA-binding specificity. With only 169 training proteins, fine-tuning 650M parameters would overfit. The bottleneck is data quantity, not representation quality.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Per-protein Performance — V2 CNN (Test Split, 24 proteins)</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><h3>Best Proteins</h3></div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>Protein</th><th>AUROC</th><th>Note</th></tr></thead>
+              <tbody>
+                <tr><td>ESRP1-construct3</td><td class="num" style="color:var(--success)">0.980</td><td><span class="pill success">strong motif</span></td></tr>
+                <tr><td>PUF60</td><td class="num" style="color:var(--success)">0.934</td><td></td></tr>
+                <tr><td>KHDRBS3</td><td class="num" style="color:var(--success)">0.901</td><td></td></tr>
+                <tr><td colspan="3" style="color:var(--subtle);font-size:12px;padding-top:8px">Median test AUROC: 0.714 (24 proteins)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Worst Proteins</h3></div>
+          <div class="card-body">
+            <table>
+              <thead><tr><th>Protein</th><th>AUROC</th><th>Note</th></tr></thead>
+              <tbody>
+                <tr><td>UNK</td><td class="num" style="color:var(--danger)">0.448</td><td><span class="pill danger">no clear motif</span></td></tr>
+                <tr><td>TAF15</td><td class="num" style="color:var(--danger)">0.496</td><td><span class="pill warn">phase-separation RBP</span></td></tr>
+                <tr><td>PRR3</td><td class="num" style="color:var(--warn)">0.602</td><td><span class="pill neutral">limited signal</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-results -->
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 2: MODEL SPECS
+  ══════════════════════════════════════════════════════ -->
+  <div id="tab-models" class="tab-pane">
+
+    <!-- V1 MLP -->
+    <div class="section">
+      <div class="section-title">V1 — k-mer MLP (Baseline)</div>
+      <div class="card">
+        <div class="card-header"><h3>RNABindingMLP</h3><div class="sub">scripts/05_train_generalized_v1.py</div></div>
+        <div class="card-body">
+          <div class="grid-2" style="gap:24px">
+            <div>
+              <div class="arch">
+RNA: 3-mer freq vector <span class="dim">[256-d]</span><br>
+Prot: 2-mer freq vector <span class="dim">[400-d]</span><br>
+<span class="arrow">→</span> concat <span class="dim">[656-d]</span><br>
+<span class="arrow">→</span> Linear(656→256) + GELU + Dropout(0.3)<br>
+<span class="arrow">→</span> Linear(256→64) + GELU + Dropout(0.3)<br>
+<span class="arrow">→</span> Linear(64→1) <span class="comment">← logit</span>
+              </div>
+            </div>
+            <table>
+              <thead><tr><th>Property</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td>Input encoding</td><td>k-mer frequency (bag-of-words)</td></tr>
+                <tr><td>RNA k</td><td>3 (64 features)</td></tr>
+                <tr><td>Protein k</td><td>2 (400 features)</td></tr>
+                <tr><td>Parameters</td><td>~300K</td></tr>
+                <tr><td>Loss</td><td>BCEWithLogitsLoss + pos_weight</td></tr>
+                <tr><td>Optimizer</td><td>AdamW, lr=1e-3</td></tr>
+                <tr><td>Test AUROC</td><td>0.6736</td></tr>
+                <tr><td>Limitation</td><td>No position information; cannot learn motif spacing</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V2 CNN -->
+    <div class="section">
+      <div class="section-title">V2 — Dual-branch CNN (Current Best) ★</div>
+      <div class="card">
+        <div class="card-header"><h3>RNABindingCNN</h3><div class="sub">src/models/cnn_model.py · scripts/06_train_generalized_v2.py</div></div>
+        <div class="card-body">
+          <div class="grid-2" style="gap:24px">
+            <div>
+              <div class="arch">
+RNA one-hot <span class="dim">(B × 60 × 4)</span><br>
+<span class="arrow">→</span> Conv1d(4→128, k=7) + BN + GELU + Drop<br>
+<span class="arrow">→</span> Conv1d(128→256, k=5) + BN + GELU + Drop<br>
+<span class="arrow">→</span> Conv1d(256→256, k=3) + BN + GELU + Drop<br>
+<span class="arrow">→</span> <span class="op">GlobalMaxPool</span> <span class="dim">→ [256-d]</span><br><br>
+Protein one-hot <span class="dim">(B × 300 × 20)</span><br>
+<span class="arrow">→</span> Conv1d(20→128, k=11) + BN + GELU + Drop<br>
+<span class="arrow">→</span> Conv1d(128→256, k=7) + BN + GELU + Drop<br>
+<span class="arrow">→</span> Conv1d(256→256, k=5) + BN + GELU + Drop<br>
+<span class="arrow">→</span> <span class="op">GlobalMaxPool</span> <span class="dim">→ [256-d]</span><br><br>
+<span class="arrow">→</span> concat <span class="dim">[512-d]</span><br>
+<span class="arrow">→</span> Linear(512→256) + GELU + Dropout(0.3)<br>
+<span class="arrow">→</span> Linear(256→64) + GELU + Dropout(0.3)<br>
+<span class="arrow">→</span> Linear(64→1) <span class="comment">← logit</span>
+              </div>
+            </div>
+            <div>
+              <table>
+                <thead><tr><th>Property</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Input — RNA</td><td>One-hot, padded to 60 nt (4 channels)</td></tr>
+                  <tr><td>Input — Protein</td><td>One-hot, padded to 300 aa (20 channels)</td></tr>
+                  <tr><td>RNA filters</td><td>[128, 256, 256], kernels [7, 5, 3]</td></tr>
+                  <tr><td>Protein filters</td><td>[128, 256, 256], kernels [11, 7, 5]</td></tr>
+                  <tr><td>Pooling</td><td>Global max pooling (length-invariant)</td></tr>
+                  <tr><td>MLP head</td><td>[256, 64] → 1</td></tr>
+                  <tr><td>Activation</td><td>GELU throughout</td></tr>
+                  <tr><td>Normalization</td><td>BatchNorm1d after each Conv</td></tr>
+                  <tr><td>Dropout</td><td>0.3</td></tr>
+                  <tr><td>Parameters</td><td>1,100,929</td></tr>
+                  <tr><td>Loss</td><td>BCEWithLogitsLoss(pos_weight=n_neg/n_pos)</td></tr>
+                  <tr><td>Optimizer</td><td>AdamW, lr=5e-4, weight_decay=1e-4</td></tr>
+                  <tr><td>Scheduler</td><td>CosineAnnealingLR</td></tr>
+                  <tr><td>Early stopping</td><td>val AUPRC, patience=10</td></tr>
+                  <tr><td>Batch size</td><td>256</td></tr>
+                  <tr><td>Best epoch</td><td>13</td></tr>
+                  <tr><td>Val AUROC</td><td>0.7465</td></tr>
+                  <tr><td>Test AUROC</td><td>0.6903</td></tr>
+                  <tr><td>Test AUPRC</td><td>0.5796</td></tr>
+                  <tr><td>Interaction</td><td>Implicit (concat → MLP); no explicit pairwise term</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top:14px">
+            <strong>Why global max pooling?</strong>
+            Collapses the length dimension → fixed-size embedding regardless of input length. The max operation retains the strongest activation for each filter across all positions — equivalent to "does this motif appear anywhere in the sequence?"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- V3 ESM-2 variants -->
+    <div class="section">
+      <div class="section-title">V3 — ESM-2 Variants (All underperform V2)</div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header"><h3>V3 — Frozen mean-pool</h3></div>
+          <div class="card-body">
+            <div class="arch" style="font-size:11px">
+ESM-2 (650M, frozen)<br>
+<span class="arrow">→</span> mean-pool residues <span class="dim">[1280-d]</span><br>
+<span class="arrow">→</span> Linear → 256<br>
+Concat with RNA CNN emb<br>
+<span class="arrow">→</span> MLP → logit
+            </div>
+            <table style="margin-top:12px">
+              <tbody>
+                <tr><td>Test AUROC</td><td class="num" style="color:var(--danger)">0.6341</td></tr>
+                <tr><td>vs V2</td><td class="num" style="color:var(--danger)">−0.056</td></tr>
+                <tr><td>Params trainable</td><td>~1M (head only)</td></tr>
+                <tr><td>Best epoch</td><td>17</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>V3b — ESM-2 + CNN parallel</h3></div>
+          <div class="card-body">
+            <div class="arch" style="font-size:11px">
+ESM-2 (frozen) → 256<br>
+Prot CNN → 256<br>
+<span class="arrow">→</span> concat(512) + RNA CNN(256)<br>
+<span class="arrow">→</span> concat(768) → MLP → logit
+            </div>
+            <table style="margin-top:12px">
+              <tbody>
+                <tr><td>Test AUROC</td><td class="num" style="color:var(--danger)">0.6660</td></tr>
+                <tr><td>vs V2</td><td class="num" style="color:var(--danger)">−0.024</td></tr>
+                <tr><td>Rationale</td><td>CNN captures local motifs; ESM-2 adds global context</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>V3c — ESM-2 per-residue</h3></div>
+          <div class="card-body">
+            <div class="arch" style="font-size:11px">
+ESM-2 (frozen)<br>
+<span class="arrow">→</span> per-residue (L × 1280)<br>
+<span class="arrow">→</span> project to 256-ch<br>
+<span class="arrow">→</span> Conv1d + GlobalMaxPool<br>
+Concat with RNA CNN<br>
+<span class="arrow">→</span> MLP → logit
+            </div>
+            <table style="margin-top:12px">
+              <tbody>
+                <tr><td>Test AUROC</td><td class="num" style="color:var(--warn)">0.6850</td></tr>
+                <tr><td>vs V2</td><td class="num" style="color:var(--danger)">−0.005</td></tr>
+                <tr><td>Best epoch</td><td>18</td></tr>
+                <tr><td>Note</td><td>Best ESM-2 variant; still below V2</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="callout danger" style="margin-top:12px">
+        <strong>Root cause: Frozen ESM-2 encodes evolutionary fitness, not RNA-binding specificity.</strong>
+        ESM-2 was pretrained to predict masked amino acids using evolutionary covariance — this captures secondary structure and conservation, not whether a residue participates in RNA contact. With only 169 training RBPs, fine-tuning 650M parameters would overfit severely. Conclusion: ESM-2 is not helpful until we have ≥1000 training RBPs.
+      </div>
+    </div>
+
+    <!-- V4 -->
+    <div class="section">
+      <div class="section-title">V4 — Bilinear Interaction CNN (Not yet trained)</div>
+      <div class="card">
+        <div class="card-header"><h3>RNABindingV4</h3><div class="sub">src/models/interaction_model.py · scripts/21_train_generalized_v4_interaction.py</div></div>
+        <div class="card-body">
+          <div class="grid-2" style="gap:24px">
+            <div>
+              <div class="arch">
+RNA one-hot <span class="dim">(B × 60 × 4)</span><br>
+<span class="arrow">→</span> ConvBranch [128,256,256] <span class="arrow">→</span> rna_emb <span class="dim">[256]</span><br><br>
+Protein one-hot <span class="dim">(B × 300 × 20)</span><br>
+<span class="arrow">→</span> ConvBranch [128,256,256] <span class="arrow">→</span> prot_emb <span class="dim">[256]</span><br><br>
+<span class="comment">── Bilinear interaction (concat_bi mode) ──</span><br>
+<span class="op">interaction</span> = LayerNorm(<br>
+&nbsp;&nbsp;Linear(rna_emb) <span class="op">⊙</span> Linear(prot_emb)<br>
+) <span class="dim">[256]</span> <span class="comment">← Hadamard product in proj space</span><br><br>
+<span class="arrow">→</span> concat(rna_emb, prot_emb, interaction) <span class="dim">[768]</span><br>
+<span class="arrow">→</span> Linear(768→512) + GELU + Drop<br>
+<span class="arrow">→</span> Linear(512→128) + GELU + Drop<br>
+<span class="arrow">→</span> Linear(128→32) + GELU + Drop<br>
+<span class="arrow">→</span> Linear(32→1) <span class="comment">← logit</span><br><br>
+<span class="comment">optional: + DatasetSourceEmbedding [16-d]</span>
+              </div>
+            </div>
+            <div>
+              <table>
+                <thead><tr><th>Property</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Interaction mode</td><td>concat_bi (default) / bilinear / concat</td></tr>
+                  <tr><td>Bilinear formula</td><td>Linear(a) ⊙ Linear(b) (low-rank Tucker)</td></tr>
+                  <tr><td>Why bilinear?</td><td>Concatenation learns additive combos; bilinear learns multiplicative — explicitly models "does RNA motif X co-occur with protein motif Y?"</td></tr>
+                  <tr><td>inter_dim</td><td>256</td></tr>
+                  <tr><td>MLP head</td><td>[512, 128, 32] → 1</td></tr>
+                  <tr><td>Parameters</td><td>~1,400K (est.)</td></tr>
+                  <tr><td>Source embedding</td><td>Optional 16-d learned embedding (SELEX / RNAcompete / eCLIP) — source-specific calibration without leaking source as shortcut</td></tr>
+                  <tr><td>Reference</td><td>Kim et al. (2017) "Hadamard Product for Low-rank Bilinear Pooling" ICLR 2017</td></tr>
+                  <tr><td>Status</td><td>Script ready · not yet trained</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Training config -->
+    <div class="section">
+      <div class="section-title">Shared Training Configuration (V2 / V4)</div>
+      <div class="card">
+        <div class="card-body">
+          <div class="grid-3" style="gap:20px">
+            <table>
+              <thead><tr><th colspan="2">Optimization</th></tr></thead>
+              <tbody>
+                <tr><td>Optimizer</td><td>AdamW</td></tr>
+                <tr><td>Learning rate</td><td>5 × 10⁻⁴</td></tr>
+                <tr><td>Weight decay</td><td>1 × 10⁻⁴</td></tr>
+                <tr><td>Scheduler</td><td>CosineAnnealingLR</td></tr>
+                <tr><td>Batch size</td><td>256</td></tr>
+                <tr><td>Max epochs</td><td>60</td></tr>
+                <tr><td>Early stopping</td><td>val AUPRC, patience=10</td></tr>
+                <tr><td>Grad clip</td><td>max_norm=1.0</td></tr>
+              </tbody>
+            </table>
+            <table>
+              <thead><tr><th colspan="2">Loss &amp; Class Balance</th></tr></thead>
+              <tbody>
+                <tr><td>Loss</td><td>BCEWithLogitsLoss</td></tr>
+                <tr><td>pos_weight</td><td>n_neg / n_pos per batch</td></tr>
+                <tr><td>Sampler</td><td>None (pos_weight only)</td></tr>
+                <tr><td>Positive rate</td><td>~33% (SELEX/RBNS)</td></tr>
+                <tr><td colspan="2" style="color:var(--subtle);font-size:11px;padding-top:8px">WeightedRandomSampler was removed — using it together with pos_weight double-counts class imbalance (Bug fix Phase 1)</td></tr>
+              </tbody>
+            </table>
+            <table>
+              <thead><tr><th colspan="2">Reproducibility</th></tr></thead>
+              <tbody>
+                <tr><td>Seed</td><td>--seed flag (random/numpy/torch/CUDA)</td></tr>
+                <tr><td>DataLoader</td><td>torch.Generator(seed) for shuffle</td></tr>
+                <tr><td>num_workers</td><td>0 on macOS, 2 elsewhere</td></tr>
+                <tr><td>Dry-run mode</td><td>--dry_run (1 batch, no save)</td></tr>
+                <tr><td>Multi-seed</td><td>18_run_multiseed.py, per-seed output dirs</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-models -->
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 3: DATASETS
+  ══════════════════════════════════════════════════════ -->
+  <div id="tab-datasets" class="tab-pane">
+
+    <div class="section">
+      <div class="section-title">Training Data Overview</div>
+      <div class="grid-2" style="gap:16px;margin-bottom:16px">
+        <div class="card">
+          <div class="card-header"><h3>Proteins by Source</h3></div>
+          <div class="card-body"><canvas id="chartProteins" height="200"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Pairs by Source</h3></div>
+          <div class="card-body"><canvas id="chartPairs" height="200"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Training Datasets — Full Specifications</div>
+      <div class="card">
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Dataset</th><th>Reference</th><th>Proteins</th><th>Pairs</th>
+                <th>RNA len</th><th>Positives</th><th>Negatives source</th><th>Neg quality</th><th>Split</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>HTR-SELEX<br><small>PRJEB25907</small></strong></td>
+                <td>Ray et al., <em>Genome Res.</em> 2019</td>
+                <td class="num">93</td>
+                <td class="num">279K</td>
+                <td>40 nt</td>
+                <td>~33%</td>
+                <td>Non-enriched seqs from same library pool (zero enrichment, final cycle)</td>
+                <td><span class="pill warn">Medium</span></td>
+                <td>Train / Val / Test</td>
+              </tr>
+              <tr>
+                <td><strong>HTR-SELEX<br><small>PRJEB47428</small></strong></td>
+                <td>Laverty et al., <em>NAR</em> 2022</td>
+                <td class="num">23</td>
+                <td class="num">69K</td>
+                <td>40 nt</td>
+                <td>~33%</td>
+                <td>Same as PRJEB25907</td>
+                <td><span class="pill warn">Medium</span></td>
+                <td>Train / Val / Test</td>
+              </tr>
+              <tr>
+                <td><strong>RBNS</strong></td>
+                <td>Lambert et al., <em>Nature</em> 2020</td>
+                <td class="num">96</td>
+                <td class="num">285K</td>
+                <td>20 nt</td>
+                <td>~33%</td>
+                <td>0 nM input control library (unselected, R ≈ 1)</td>
+                <td><span class="pill warn">Medium</span></td>
+                <td>Train / Val / Test</td>
+              </tr>
+              <tr>
+                <td><strong>eCLIP</strong></td>
+                <td>Van Nostrand et al., <em>Nat. Methods</em> 2016</td>
+                <td class="num">10</td>
+                <td class="num">26K</td>
+                <td>variable</td>
+                <td>~33%</td>
+                <td>GC-matched flanking regions (same chromosome, no peak overlap)</td>
+                <td><span class="pill success">High</span></td>
+                <td><strong>Train only</strong></td>
+              </tr>
+              <tr style="background:rgba(91,141,238,0.03)">
+                <td colspan="9" style="color:var(--subtle);font-size:12px;padding:8px 10px">
+                  <strong style="color:var(--text)">Total training pool (generalized_v2):</strong> 169 unique proteins · ~659K pairs · Protein-aware split (seed=42)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="callout warn" style="margin-top:10px">
+        <strong>eCLIP is train-only</strong> — eCLIP positives (cellular IP peaks) are not comparable to SELEX/RBNS positives (enriched synthetic probes). Including eCLIP in val/test would mix incompatible label definitions.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Evaluation / Benchmark Datasets (NOT used for training)</div>
+      <div class="card">
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr><th>Dataset</th><th>Reference</th><th>Proteins</th><th>Pairs</th><th>Organisms</th><th>RNA length</th><th>Negatives</th><th>Quality</th><th>Use</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>RNAcompete Eukarya</strong></td>
+                <td>Ray et al., <em>Nature</em> 2013</td>
+                <td class="num">244</td>
+                <td class="num">3.7M</td>
+                <td>24</td>
+                <td class="num">35–41 nt</td>
+                <td>Intensity ≤P20 AND no enriched 7-mer (Z &lt; 2.0)</td>
+                <td><span class="pill success">High</span></td>
+                <td>Zero-shot benchmark</td>
+              </tr>
+              <tr>
+                <td><strong>RNAcompete RBPZoo</strong></td>
+                <td>Sasse et al., <em>Nat. Biotechnol.</em> 2025</td>
+                <td class="num">176</td>
+                <td class="num">2.6M</td>
+                <td>26</td>
+                <td class="num">35–41 nt</td>
+                <td>Same dual-filter as Eukarya</td>
+                <td><span class="pill success">High</span></td>
+                <td>Zero-shot benchmark</td>
+              </tr>
+              <tr>
+                <td><strong>RNAcompete ucRBP</strong></td>
+                <td>Hughes Lab, unconventional RBPs</td>
+                <td class="num">667 (568 in file)</td>
+                <td class="num">7.6M</td>
+                <td>4</td>
+                <td class="num">35–41 nt</td>
+                <td>Same dual-filter — but relative threshold inflates noise</td>
+                <td><span class="pill danger">Low</span></td>
+                <td>Do NOT use without Z-filter</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout danger" style="margin-top:12px">
+            <strong>ucRBP reliability problem:</strong>
+            ucRBP tests unconventional (non-canonical) RBPs. Only ~23 of 667 show reproducible RNA-binding signal (max k-mer Z ≥ 5.0). The dual-filter uses relative 90th-percentile thresholds — a protein with no RNA specificity still gets "positives" if its intensity distribution is broad enough. This creates ~2.4M spurious positive labels. Must filter by max(z_setAB) ≥ 5.0 before any use in training or benchmarking.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Manually Curated Datasets (data/external/)</div>
+      <div class="card">
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr><th>File</th><th>Pairs</th><th>Proteins</th><th>Positive rate</th><th>RNA length</th><th>Content</th><th>V2 result</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>dataset without affinities.xlsx</strong></td>
+                <td class="num">159</td>
+                <td class="num">96</td>
+                <td class="num">72%</td>
+                <td>variable; 57% &gt; 60 nt</td>
+                <td>Binary binding labels, manually curated from literature</td>
+                <td class="num">AUPRC 0.927</td>
+                <td><span class="pill warn">Eval only</span></td>
+              </tr>
+              <tr>
+                <td><strong>dataset with affinities.xlsx</strong></td>
+                <td class="num">~130</td>
+                <td class="num">~15</td>
+                <td class="num">mixed</td>
+                <td>6–1046 nt</td>
+                <td>
+                  Manually curated Kd/IC50 from literature (EMSA, ITC, NMR, BLI, MST).<br>
+                  <strong>Proteins:</strong> IGF2BP1/3, PUM1/2, SRSF1, ZBP1, FASTKΔN1-75, RBM5/39, FMRP, L7Ae, RBM15, LS4/LS12.<br>
+                  <strong>Kd range:</strong> 7 pM (LS4 engineered aptamer) to &gt;900 nM (loss-of-function mutants).<br>
+                  <strong>Labels:</strong> "Interaction (yes/no)" column present. Confirmed negatives include: IGF2BP1 KH34 + zipcode_del8 (Kd &gt;900 nM), RBM39/RBM15 domain mutants (Kd &gt;100 µM), RBM15 + Poly-A/C (&gt;1000 nM). A few ambiguous "yes?/no?" entries exist.<br>
+                  Multiple organisms: Human, Chicken, Mouse, Archaeon, Engineered.
+                </td>
+                <td class="num">Not yet used</td>
+                <td><span class="pill warn">High value</span></td>
+              </tr>
+              <tr>
+                <td><strong>Database.xlsx</strong></td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td class="num">—</td>
+                <td>—</td>
+                <td>20 MB — content not yet analyzed (network disk, read timeout)</td>
+                <td class="num">Not yet used</td>
+                <td><span class="pill neutral">Pending</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout warn" style="margin-top:12px">
+            <strong>DO NOT compare dataset without affinities.xlsx metrics to SELEX test metrics.</strong>
+            Positive rate = 72% (vs ~33% in SELEX/RBNS), 88% of proteins are single-class (no per-protein AUROC possible), and 57% of RNAs exceed 60 nt (scored by window-max, which inflates AUPRC). Random classifier AUPRC baseline = 0.717 — reported V2 AUPRC 0.927 is relative to this inflated baseline.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Dataset Overlap: Eukarya ∩ RBPZoo</div>
+      <div class="card">
+        <div class="card-body">
+          <div class="grid-2" style="gap:24px">
+            <div>
+              <p style="color:var(--subtle);font-size:13px;margin-bottom:10px">RNCMPT IDs are entirely non-overlapping (different experimental runs). However, 10 gene names appear in both collections — different construct, same protein.</p>
+              <table>
+                <thead><tr><th>Gene</th><th>In Eukarya</th><th>In RBPZoo</th></tr></thead>
+                <tbody>
+                  <tr><td>FMR1</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                  <tr><td>PABPC4</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                  <tr><td>RBM24</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                  <tr><td>RBM38</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                  <tr><td>RBM45</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                  <tr><td>RBM47</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                  <tr><td>SART3</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                  <tr><td>SUP-12</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                  <tr><td>TARDBP (TDP-43)</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                  <tr><td>TIA1</td><td><span class="pill success">✓</span></td><td><span class="pill success">✓</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <p style="color:var(--subtle);font-size:13px;margin-bottom:10px">For Phase 3A: deduplicate by gene_name when forming protein-aware split to avoid the same protein appearing in both train and test.</p>
+              <table>
+                <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Eukarya unique proteins</td><td>244</td></tr>
+                  <tr><td>RBPZoo unique proteins</td><td>176</td></tr>
+                  <tr><td>Gene-level overlap</td><td>10</td></tr>
+                  <tr><td>Combined after dedup</td><td>~410 unique genes</td></tr>
+                  <tr><td>Gain over training set</td><td>+241 proteins (+143%)</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Negative Sampling Quality by Protocol</div>
+      <div class="card">
+        <div class="card-body">
+          <table>
+            <thead><tr><th>Protocol</th><th>Negative definition</th><th>Strength</th><th>Weakness</th><th>Quality</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>HTR-SELEX</td>
+                <td>Sequences present in final selection cycle with zero enrichment</td>
+                <td>Same length/GC as positives; went through selection</td>
+                <td>Not directly confirmed non-binders — could be low-affinity binders</td>
+                <td><span class="pill warn">Medium</span></td>
+              </tr>
+              <tr>
+                <td>RBNS</td>
+                <td>Sequences from 0 nM input library with enrichment ratio R ≈ 1</td>
+                <td>From same pool; matched composition</td>
+                <td>Random pool; not matched on GC content per-protein</td>
+                <td><span class="pill warn">Medium</span></td>
+              </tr>
+              <tr>
+                <td>RNAcompete (Eukarya/RBPZoo)</td>
+                <td>Probe intensity ≤ P20 AND no enriched 7-mer (Z &lt; 2.0)</td>
+                <td>Two independent filters; confirmed by both intensity and k-mer specificity</td>
+                <td>Synthetic probes (35–41 nt) from array design — not naturally-occurring RNA</td>
+                <td><span class="pill success">High</span></td>
+              </tr>
+              <tr>
+                <td>eCLIP</td>
+                <td>GC-matched flanking genomic regions (no peak overlap, same chromosome)</td>
+                <td>Real cellular RNA; GC-matched; biologically grounded</td>
+                <td>Only 10 proteins; cellular context vs in vitro mismatch</td>
+                <td><span class="pill success">High</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-datasets -->
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 4: ZERO-SHOT
+  ══════════════════════════════════════════════════════ -->
+  <div id="tab-zeroshot" class="tab-pane">
+
+    <div class="section">
+      <div class="section-title">Zero-shot Benchmark — RNAcompete Eukarya (200 proteins)</div>
+      <div class="callout info" style="margin-bottom:16px">
+        <strong>What "zero-shot" means here:</strong> The model was trained on 169 proteins from HTR-SELEX + RBNS. None of these 200 Eukarya proteins appeared in training. This tests whether the model learned generalizable RNA-binding principles, not just memorized training protein specificity.
+      </div>
+      <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr)">
+        <div class="kpi info">
+          <div class="label">Overall AUROC</div>
+          <div class="value">0.665</div>
+          <div class="caption">rnacompete_eukarya.tsv</div>
+        </div>
+        <div class="kpi warn">
+          <div class="label">Overall AUPRC</div>
+          <div class="value">0.500</div>
+          <div class="caption">random baseline = 0.316</div>
+        </div>
+        <div class="kpi info">
+          <div class="label">Per-protein median</div>
+          <div class="value">0.651</div>
+          <div class="caption">200 proteins scored</div>
+        </div>
+        <div class="kpi success">
+          <div class="label">Proteins AUROC &gt; 0.7</div>
+          <div class="value">41%</div>
+          <div class="caption">82 of 200 proteins</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Per-organism AUROC — Eukarya</div>
+      <div class="card">
+        <div class="card-body">
+          <div class="chart-wrap"><canvas id="chartOrganisms" height="340"></canvas></div>
+          <div class="source-caption">Source: results/benchmarks/rnacompete_v2_eukarya/metrics.json · V2 CNN checkpoint · 2026-05-13</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Per-organism Details</div>
+      <div class="card">
+        <div class="card-body">
+          <table>
+            <thead><tr><th>Organism</th><th>AUROC</th><th>Pairs</th><th>Interpretation</th></tr></thead>
+            <tbody>
+              <tr><td>Schistosoma mansoni</td><td class="num" style="color:var(--success)">0.819</td><td class="num">13,312</td><td>Conserved RRM-domain proteins</td></tr>
+              <tr><td>Phytophthora ramorum</td><td class="num" style="color:var(--success)">0.817</td><td class="num">15,870</td><td></td></tr>
+              <tr><td>Caenorhabditis elegans</td><td class="num" style="color:var(--success)">0.801</td><td class="num">175,092</td><td>Model organism; conserved splicing factors</td></tr>
+              <tr><td>Neurospora crassa</td><td class="num" style="color:var(--success)">0.796</td><td class="num">42,555</td><td></td></tr>
+              <tr><td>Arabidopsis thaliana</td><td class="num" style="color:var(--success)">0.733</td><td class="num">18,378</td><td></td></tr>
+              <tr><td>Tetraodon nigroviridis</td><td class="num">0.714</td><td class="num">43,418</td><td></td></tr>
+              <tr><td>Homo sapiens</td><td class="num">0.689</td><td class="num">1,621,031</td><td>Largest group; broad domain diversity</td></tr>
+              <tr><td>Danio rerio</td><td class="num">0.658</td><td class="num">73,932</td><td></td></tr>
+              <tr><td>Drosophila melanogaster</td><td class="num">0.669</td><td class="num">911,529</td><td></td></tr>
+              <tr><td>Caenorhabditis briggsae</td><td class="num">0.616</td><td class="num">19,075</td><td></td></tr>
+              <tr><td>Saccharomyces cerevisiae</td><td class="num">0.558</td><td class="num">37,642</td><td>Yeast RBPs diverged significantly</td></tr>
+              <tr><td>Trypanosoma brucei</td><td class="num">0.522</td><td class="num">137,344</td><td>Highly diverged; non-canonical RBPs</td></tr>
+              <tr><td>Aspergillus nidulans</td><td class="num" style="color:var(--danger)">0.391</td><td class="num">27,780</td><td>Near-random; very diverged domain architecture</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Benchmark Comparison — Corrected View</div>
+      <div class="card">
+        <div class="card-body">
+          <table>
+            <thead><tr><th>Benchmark</th><th>AUROC</th><th>Proteins</th><th>Positive rate</th><th>Reliability</th><th>Note</th></tr></thead>
+            <tbody>
+              <tr class="highlight">
+                <td>rnacompete_all (combined)</td>
+                <td class="num">0.571</td>
+                <td class="num">742</td>
+                <td class="num">31.6%</td>
+                <td><span class="pill danger">Noisy</span></td>
+                <td>73% of pairs from ucRBP (unreliable labels)</td>
+              </tr>
+              <tr class="best-row">
+                <td>rnacompete_eukarya (clean)</td>
+                <td class="num">0.665</td>
+                <td class="num">200</td>
+                <td class="num">31.6%</td>
+                <td><span class="pill success">Reliable</span></td>
+                <td>Gold standard (Ray 2013); all confirmed RBPs</td>
+              </tr>
+              <tr>
+                <td>rnacompete_rbpzoo</td>
+                <td class="num">TBD</td>
+                <td class="num">174</td>
+                <td class="num">~31%</td>
+                <td><span class="pill success">Reliable</span></td>
+                <td>Run pending</td>
+              </tr>
+              <tr style="opacity:0.6">
+                <td>ZHMolGraph (reported)</td>
+                <td class="num">0.798</td>
+                <td class="num">—</td>
+                <td class="num">unknown</td>
+                <td><span class="pill info">Target</span></td>
+                <td>Different test set (NPInter2/RPI7317) — NOT directly comparable</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout warn" style="margin-top:12px">
+            <strong>AUPRC comparison caveat:</strong>
+            AUPRC is not comparable across datasets with different positive rates. Our Eukarya AUPRC=0.500 with positive_rate=0.316 (1.58× above random) is proportionally equivalent to AUROC=0.665. ZHMolGraph AUPRC=0.820 is on a different test set with an unknown positive rate.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-zeroshot -->
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 5: ROADMAP
+  ══════════════════════════════════════════════════════ -->
+  <div id="tab-roadmap" class="tab-pane">
+
+    <div class="section">
+      <div class="section-title">Phase Progress</div>
+      <div class="card">
+        <div class="card-body">
+          <table>
+            <thead><tr><th>Phase</th><th>Status</th><th>Key result / deliverable</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Phase 1 — Bug fixes</strong></td><td><span class="pill success">Done</span></td><td>Double class weighting removed; column mismatches fixed; pipeline standardized</td></tr>
+              <tr><td><strong>Phase 2 — V2 CNN clean retrain</strong></td><td><span class="pill success">Done</span></td><td>Test AUROC 0.690 / AUPRC 0.580 · Clean baseline established</td></tr>
+              <tr><td><strong>Phase 2 — ESM-2 variants (V3, V3b, V3c)</strong></td><td><span class="pill success">Done</span></td><td>All underperform V2 CNN · Conclusion: frozen embeddings not helpful at 169 proteins</td></tr>
+              <tr><td><strong>Zero-shot Eukarya benchmark</strong></td><td><span class="pill success">Done</span></td><td>AUROC 0.665 · median per-protein 0.651 · 200 proteins</td></tr>
+              <tr><td><strong>Multi-seed variance (V2)</strong></td><td><span class="pill warn">Partial</span></td><td>Seed 0 checkpoint saved · Seeds 1-4 pending</td></tr>
+              <tr><td><strong>Zero-shot RBPZoo benchmark</strong></td><td><span class="pill warn">Partial</span></td><td>Script ready · Run pending</td></tr>
+              <tr><td><strong>Phase 3A — Eukarya+RBPZoo training</strong></td><td><span class="pill info">Scripted</span></td><td>scripts/22_build_phase3a_dataset.py ready · Awaiting approval</td></tr>
+              <tr><td><strong>Phase 3B — V4 Bilinear model</strong></td><td><span class="pill info">Scripted</span></td><td>src/models/interaction_model.py + scripts/21 ready · Not yet run</td></tr>
+              <tr><td><strong>Homology audit (MMseqs2)</strong></td><td><span class="pill neutral">Pending</span></td><td>Quantify paralog leakage between train/eval</td></tr>
+              <tr><td><strong>ucRBP quality filter</strong></td><td><span class="pill neutral">Pending</span></td><td>Filter by max(z_setAB) ≥ 5.0 to extract ~23 reliable proteins</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Immediate Next Commands</div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header"><h3>1. Complete multi-seed</h3><div class="sub">Required before claiming improvements are real</div></div>
+          <div class="card-body">
+            <div class="arch" style="font-size:11px">
+python scripts/18_run_multiseed.py \<br>
+&nbsp;&nbsp;--script scripts/06_train_generalized_v2.py \<br>
+&nbsp;&nbsp;--seeds 1 2 3 4 \<br>
+&nbsp;&nbsp;--output_dir results/multiseed/v2_cnn \<br>
+&nbsp;&nbsp;--extra_args "--data_dir data/generalized_v2 \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--epochs 60" \<br>
+&nbsp;&nbsp;--live
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>2. RBPZoo zero-shot</h3><div class="sub">Completes the clean benchmark picture</div></div>
+          <div class="card-body">
+            <div class="arch" style="font-size:11px">
+python scripts/20_evaluate_benchmark.py \<br>
+&nbsp;&nbsp;--checkpoint models/saved/generalized_v2/best_model.pt \<br>
+&nbsp;&nbsp;--benchmark data/benchmarks/rnacompete/rnacompete_rbpzoo.tsv \<br>
+&nbsp;&nbsp;--output_dir results/benchmarks/rnacompete_v2_rbpzoo \<br>
+&nbsp;&nbsp;--model_type v2_cnn
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>3. Phase 3A dataset build</h3><div class="sub">After supervisor approves Eukarya+RBPZoo use</div></div>
+          <div class="card-body">
+            <div class="arch" style="font-size:11px">
+python scripts/22_build_phase3a_dataset.py \<br>
+&nbsp;&nbsp;--selex_dir data/generalized_v2 \<br>
+&nbsp;&nbsp;--eukarya data/benchmarks/rnacompete/rnacompete_eukarya.tsv \<br>
+&nbsp;&nbsp;--rbpzoo data/benchmarks/rnacompete/rnacompete_rbpzoo.tsv \<br>
+&nbsp;&nbsp;--output_dir data/phase3a
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Expected Gains — Phase 3A/3B</div>
+      <div class="card">
+        <div class="card-body">
+          <div class="chart-wrap"><canvas id="chartRoadmap" height="200"></canvas></div>
+          <div class="source-caption">Expected gains are estimates based on data-scaling literature for protein-RNA binding models. Actual results may differ.</div>
+        </div>
+      </div>
+    </div>
+
+
+  </div><!-- /tab-roadmap -->
+
+</div><!-- /page -->
+
+<script>
+// ── Tab switching ──────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    const ids = ['results','models','datasets','zeroshot','roadmap'];
+    t.classList.toggle('active', ids[i] === name);
+  });
+  document.querySelectorAll('.tab-pane').forEach(p => {
+    p.classList.toggle('active', p.id === 'tab-' + name);
+  });
+}
+
+// ── Chart defaults ─────────────────────────────────────────────────────────
+const COLORS = {
+  accent: 'rgba(91,141,238,0.85)',
+  success: 'rgba(76,175,125,0.85)',
+  warn: 'rgba(232,168,56,0.85)',
+  danger: 'rgba(224,84,84,0.85)',
+  subtle: 'rgba(139,144,160,0.6)',
+  border: '#2e3140',
+  text: '#8b90a0',
+};
+Chart.defaults.color = COLORS.text;
+Chart.defaults.borderColor = COLORS.border;
+const BASE_OPTS = {
+  responsive: true,
+  plugins: { legend: { display: false } },
+  scales: {
+    x: { grid: { color: COLORS.border }, ticks: { color: COLORS.text } },
+    y: { grid: { color: COLORS.border }, ticks: { color: COLORS.text } }
+  }
+};
+
+// ── AUROC chart ────────────────────────────────────────────────────────────
+const modelNames = ['V1 MLP', 'V2 CNN', 'V3 ESM-2', 'V3b ESM-2+CNN', 'V3c ESM-2 res.', 'ZHMolGraph'];
+const aurocs = [0.6736, 0.6903, 0.6341, 0.6660, 0.6850, 0.7980];
+const barColors_auroc = [COLORS.subtle, COLORS.success, COLORS.danger, COLORS.danger, COLORS.warn, COLORS.accent];
+
+new Chart(document.getElementById('chartAUROC'), {
+  type: 'bar',
+  data: {
+    labels: modelNames,
+    datasets: [{
+      data: aurocs,
+      backgroundColor: barColors_auroc,
+      borderRadius: 4,
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    ...BASE_OPTS,
+    scales: {
+      ...BASE_OPTS.scales,
+      y: { ...BASE_OPTS.scales.y, min: 0.55, max: 0.85,
+        title: { display: true, text: 'Test AUROC', color: COLORS.text } }
+    },
+    plugins: {
+      ...BASE_OPTS.plugins,
+      annotation: {},
+      tooltip: { callbacks: { label: ctx => ' AUROC: ' + ctx.raw.toFixed(4) } }
+    }
+  }
+});
+
+// ── AUPRC chart ────────────────────────────────────────────────────────────
+const auprcs = [0.5444, 0.5796, 0.5472, 0.5680, 0.5950, 0.8200];
+new Chart(document.getElementById('chartAUPRC'), {
+  type: 'bar',
+  data: {
+    labels: modelNames,
+    datasets: [{ data: auprcs, backgroundColor: barColors_auroc, borderRadius: 4, borderWidth: 0 }]
+  },
+  options: {
+    ...BASE_OPTS,
+    scales: {
+      ...BASE_OPTS.scales,
+      y: { ...BASE_OPTS.scales.y, min: 0.45, max: 0.85,
+        title: { display: true, text: 'Test AUPRC', color: COLORS.text } }
+    },
+    plugins: { ...BASE_OPTS.plugins,
+      tooltip: { callbacks: { label: ctx => ' AUPRC: ' + ctx.raw.toFixed(4) } }
+    }
+  }
+});
+
+// ── Proteins pie ───────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartProteins'), {
+  type: 'doughnut',
+  data: {
+    labels: ['HTR-SELEX 25907', 'HTR-SELEX 47428', 'RBNS', 'eCLIP'],
+    datasets: [{ data: [93, 23, 96, 10],
+      backgroundColor: [COLORS.accent, 'rgba(91,141,238,0.5)', COLORS.success, COLORS.warn],
+      borderWidth: 0, hoverOffset: 6 }]
+  },
+  options: { responsive: true, plugins: { legend: { display: true, position: 'bottom',
+    labels: { color: COLORS.text, padding: 12, font: { size: 11 } } } } }
+});
+
+// ── Pairs pie ──────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartPairs'), {
+  type: 'doughnut',
+  data: {
+    labels: ['HTR-SELEX 25907', 'HTR-SELEX 47428', 'RBNS', 'eCLIP'],
+    datasets: [{ data: [279000, 69000, 285000, 26000],
+      backgroundColor: [COLORS.accent, 'rgba(91,141,238,0.5)', COLORS.success, COLORS.warn],
+      borderWidth: 0, hoverOffset: 6 }]
+  },
+  options: { responsive: true, plugins: { legend: { display: true, position: 'bottom',
+    labels: { color: COLORS.text, padding: 12, font: { size: 11 } } } } }
+});
+
+// ── Per-organism bar ───────────────────────────────────────────────────────
+const orgNames = ['Schistosoma mansoni','Phytophthora ramorum','C. elegans','Neurospora crassa',
+  'Arabidopsis thaliana','Tetraodon nigroviridis','Homo sapiens','Danio rerio',
+  'Drosophila melanogaster','C. briggsae','S. cerevisiae','Trypanosoma brucei','Aspergillus nidulans'];
+const orgAurocs = [0.819,0.817,0.801,0.796,0.733,0.714,0.689,0.658,0.669,0.616,0.558,0.522,0.391];
+const orgColors = orgAurocs.map(v => v >= 0.75 ? COLORS.success : v >= 0.65 ? COLORS.accent : v >= 0.55 ? COLORS.warn : COLORS.danger);
+
+new Chart(document.getElementById('chartOrganisms'), {
+  type: 'bar',
+  data: {
+    labels: orgNames,
+    datasets: [{ data: orgAurocs, backgroundColor: orgColors, borderRadius: 3, borderWidth: 0 }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' AUROC: ' + ctx.raw.toFixed(3) } }
+    },
+    scales: {
+      x: { grid: { color: COLORS.border }, ticks: { color: COLORS.text }, min: 0.3, max: 0.9,
+        title: { display: true, text: 'AUROC', color: COLORS.text } },
+      y: { grid: { display: false }, ticks: { color: COLORS.text, font: { size: 12 } } }
+    }
+  }
+});
+
+// ── Roadmap expected AUROC ─────────────────────────────────────────────────
+new Chart(document.getElementById('chartRoadmap'), {
+  type: 'bar',
+  data: {
+    labels: ['V2 CNN\n(current)', 'Phase 3A\n(+Eukarya+RBPZoo)', 'Phase 3B\n(V4 Bilinear)', 'Phase 3A+3B\n(combined est.)', 'ZHMolGraph\n(target)'],
+    datasets: [{
+      label: 'Test AUROC (est.)',
+      data: [0.690, 0.745, 0.710, 0.760, 0.798],
+      backgroundColor: [COLORS.subtle, COLORS.success, COLORS.accent, COLORS.warn, COLORS.accent],
+      borderRadius: 4, borderWidth: 0
+    }]
+  },
+  options: {
+    ...BASE_OPTS,
+    scales: {
+      ...BASE_OPTS.scales,
+      y: { ...BASE_OPTS.scales.y, min: 0.65, max: 0.85,
+        title: { display: true, text: 'AUROC', color: COLORS.text } }
+    },
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' AUROC: ' + ctx.raw.toFixed(3) + (ctx.dataIndex > 0 && ctx.dataIndex < 4 ? ' (est.)' : '') } }
+    }
+  }
+});
+</script>
+</body>
+</html>

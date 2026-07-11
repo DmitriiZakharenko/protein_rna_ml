@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protein–RNA Binding — Model &amp; Plan Reference</title>
+<style>
+  :root {
+    --bg: #0f1117; --surface: #1a1d27; --card: #20232f; --border: #2e3140;
+    --text: #e8eaf0; --subtle: #8b90a0; --accent: #5b8dee; --success: #4caf7d;
+    --warn: #e8a838; --muted: #6a7080;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.55; }
+  .page { max-width: 1080px; margin: 0 auto; padding: 32px 20px 72px; }
+
+  h1 { font-size: 22px; font-weight: 700; }
+  .meta { color: var(--subtle); font-size: 12px; margin-top: 6px; }
+
+  .banner {
+    margin: 22px 0; padding: 14px 18px; border-radius: 8px;
+    border: 1px solid rgba(76,175,125,0.35); background: rgba(76,175,125,0.07);
+    font-size: 13px;
+  }
+  .banner strong { color: var(--success); }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--subtle);
+    margin-bottom: 12px; padding-bottom: 5px; border-bottom: 1px solid var(--border);
+  }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }
+  .card-h { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .card-h h3 { font-size: 14px; font-weight: 600; }
+  .card-h .sub { font-size: 11px; color: var(--subtle); font-family: var(--mono); }
+  .card-b { padding: 14px 16px; }
+
+  .pill { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+  .pill.run { background: rgba(76,175,125,0.15); color: var(--success); }
+  .pill.done { background: rgba(255,255,255,0.06); color: var(--subtle); }
+  .pill.next { background: rgba(91,141,238,0.15); color: var(--accent); }
+  .pill.plan { background: rgba(124,92,232,0.12); color: #a78bfa; }
+  .pill.skip { background: rgba(224,84,84,0.1); color: #e88; }
+
+  .arch {
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.8;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 12px 14px; color: #a8b4d0; overflow-x: auto;
+  }
+  .arch .hl { color: var(--accent); }
+  .arch .dim { color: var(--warn); }
+  .arch .cm { color: var(--muted); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;
+       color: var(--subtle); padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  td { padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.mono { font-family: var(--mono); font-size: 11.5px; }
+  td.num { font-family: var(--mono); text-align: right; font-size: 11.5px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .note { font-size: 12px; color: var(--subtle); margin-top: 8px; }
+  .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid var(--border);
+            font-size: 11px; color: var(--subtle); }
+  code { font-family: var(--mono); font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Protein–RNA Binding — Model &amp; Plan Reference</h1>
+  <div class="meta">June 2026 · repo <code>protein_rna_ml</code> · technical summary for discussion</div>
+
+  <div class="banner">
+    <strong>Phase 3A complete:</strong> V2 on <code>generalized_v3a</code> — test AUROC <strong>0.813</strong>, AUPRC <strong>0.713</strong>
+    (epoch 24, single seed). Next: multi-seed → RNAcompete zero-shot → V4 bilinear.
+  </div>
+
+  <!-- Shared encoding & training -->
+  <div class="section">
+    <div class="section-title">Shared input encoding &amp; training recipe (all CNN models)</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-h"><h3>Sequence → tensor</h3></div>
+        <div class="card-b">
+          <div class="arch">
+RNA:  string <span class="hl">→</span> uppercase, pad/truncate to L=60
+      one-hot <span class="dim">(60 × 4)</span>  channels A,U,G,C
+Prot: string <span class="hl">→</span> uppercase, pad/truncate to L=700
+      one-hot <span class="dim">(700 × 20)</span> standard 20 AA
+<span class="cm"># SeqDataset — src/data/dataset.py</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h3>Training hyperparameters (V2/V4 default)</h3></div>
+        <div class="card-b">
+          <table>
+            <tbody>
+              <tr><td>Loss</td><td class="mono">BCEWithLogitsLoss(pos_weight = n_neg/n_pos)</td></tr>
+              <tr><td>Optimizer</td><td class="mono">Adam lr=5e-4</td></tr>
+              <tr><td>Scheduler</td><td class="mono">CosineAnnealing T_max=epochs, eta_min=lr×0.01</td></tr>
+              <tr><td>Regularization</td><td class="mono">dropout=0.3, grad clip max_norm=1.0</td></tr>
+              <tr><td>Early stop</td><td class="mono">patience=8 on val AUPRC</td></tr>
+              <tr><td>Sampler</td><td class="mono">none (no WeightedRandomSampler)</td></tr>
+              <tr><td>Output</td><td class="mono">logit → sigmoid → P(bind)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>ConvBranch — building block used in V2, V3*, V4</h3><span class="sub">src/models/cnn_model.py</span></div>
+      <div class="card-b">
+        <div class="arch">
+Input <span class="dim">(B, L, C)</span>  <span class="hl">→</span> transpose <span class="dim">(B, C, L)</span>
+<span class="hl">→</span> Conv1d + BatchNorm + GELU + Dropout  <span class="cm">(repeated 3×)</span>
+<span class="hl">→</span> global max-pool over length  <span class="hl">→</span> vector <span class="dim">(B, out_dim)</span>
+
+Default filters: <span class="dim">[128, 256, 256]</span>
+RNA kernels:     <span class="dim">[7, 5, 3]</span>
+Prot kernels:    <span class="dim">[11, 7, 5]</span>   <span class="cm"># wider kernels for longer AA motifs</span>
+        </div>
+        <p class="note">Layer 1 Conv1d with kernel k ≈ learned PWM of width k. Max-pool = "does this motif appear anywhere in the sequence?"</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- All models -->
+  <div class="section">
+    <div class="section-title">Model architectures — implemented</div>
+
+    <!-- V1 -->
+    <div class="card">
+      <div class="card-h">
+        <h3>V1 — k-mer MLP</h3>
+        <span class="pill done">baseline · done</span>
+        <span class="sub">src/models/mlp_model.py · scripts/05_train_generalized_v1.py</span>
+      </div>
+      <div class="card-b">
+        <div class="arch">
+<span class="cm"># No raw sequences — precomputed k-mer counts from .npz</span>
+Input <span class="dim">(B, 8258)</span> = RNA 4-mer freq <span class="dim">(256)</span>
+                        + protein 3-mer freq <span class="dim">(8000)</span>
+                        + metadata <span class="dim">(2)</span>
+<span class="hl">→</span> Linear <span class="dim">8258→512</span> + BN + GELU + Dropout
+<span class="hl">→</span> Linear <span class="dim">512→256</span> + BN + GELU + Dropout
+<span class="hl">→</span> Linear <span class="dim">256→128</span> + BN + GELU + Dropout
+<span class="hl">→</span> Linear <span class="dim">128→1</span> <span class="hl">→</span> logit
+        </div>
+        <p class="note">Bag-of-k-mers, no position information. Test AUROC 0.674. Superseded by V2.</p>
+      </div>
+    </div>
+
+    <!-- V2 -->
+    <div class="card" style="border-color: rgba(76,175,125,0.4)">
+      <div class="card-h">
+        <h3>V2 — Dual-branch CNN ★ current best</h3>
+        <span class="pill done">v3a trained</span>
+        <span class="sub">RNABindingCNN · src/models/cnn_model.py · scripts/06</span>
+      </div>
+      <div class="card-b">
+        <div class="arch">
+RNA  one-hot <span class="dim">(B, 60, 4)</span>   <span class="hl">→</span> ConvBranch <span class="dim">→ (B, 256)</span>
+Prot one-hot <span class="dim">(B, 700, 20)</span> <span class="hl">→</span> ConvBranch <span class="dim">→ (B, 256)</span>
+concat <span class="dim">(B, 512)</span>
+<span class="hl">→</span> Linear <span class="dim">512→256</span> + GELU + Dropout
+<span class="hl">→</span> Linear <span class="dim">256→64</span>  + GELU + Dropout
+<span class="hl">→</span> Linear <span class="dim">64→1</span>   <span class="hl">→</span> logit
+<span class="cm"># ~1.1M trainable params</span>
+        </div>
+        <table style="margin-top:12px">
+          <thead><tr><th>Result</th><th class="num">v2 data (169 prot)</th><th class="num">v3a data (494 prot)</th></tr></thead>
+          <tbody>
+            <tr><td>Test AUROC / AUPRC</td><td class="num">0.690 / 0.580</td><td class="num"><strong>0.813 / 0.713</strong></td></tr>
+            <tr><td>Val AUROC</td><td class="num">0.746</td><td class="num">0.818</td></tr>
+            <tr><td>Zero-shot RNAcompete median</td><td class="num">0.549</td><td class="num">TBD</td></tr>
+            <tr><td>External curated AUROC</td><td class="num">—</td><td class="num">0.763</td></tr>
+          </tbody>
+        </table>
+        <p class="note">RNA and protein processed independently until concat. MLP must learn cross-modal combinations implicitly.</p>
+      </div>
+    </div>
+
+    <!-- V3 -->
+    <div class="card">
+      <div class="card-h">
+        <h3>V3 — RNA CNN + frozen ESM-2 mean-pool</h3>
+        <span class="pill skip">worse than V2</span>
+        <span class="sub">ESM2RNACNNModel · scripts/08_train_generalized_v3.py</span>
+      </div>
+      <div class="card-b">
+        <div class="arch">
+RNA  one-hot <span class="dim">(B, 60, 4)</span>  <span class="hl">→</span> ConvBranch <span class="dim">→ (B, 256)</span>
+
+Prot ESM-2 mean embedding <span class="dim">(B, 1280)</span>  <span class="cm"># precomputed, frozen</span>
+<span class="hl">→</span> Linear <span class="dim">1280→256</span> + LayerNorm + GELU + Dropout <span class="dim">→ (B, 256)</span>
+
+concat <span class="dim">(B, 512)</span> <span class="hl">→</span> MLP <span class="dim">512→256→64→1</span>
+        </div>
+        <p class="note">Protein branch has no sequence-level conv — one vector per protein. Test AUROC 0.634. Mean-pool dilutes binding-domain signal.</p>
+      </div>
+    </div>
+
+    <!-- V3b -->
+    <div class="card">
+      <div class="card-h">
+        <h3>V3b — RNA CNN + Protein CNN + ESM-2 side channel</h3>
+        <span class="pill skip">worse than V2</span>
+        <span class="sub">V3bModel · scripts/09_train_generalized_v3b.py</span>
+      </div>
+      <div class="card-b">
+        <div class="arch">
+RNA  one-hot <span class="dim">(B, 60, 4)</span>   <span class="hl">→</span> ConvBranch <span class="dim">→ (B, 256)</span>
+Prot one-hot <span class="dim">(B, 300, 20)</span> <span class="hl">→</span> ConvBranch <span class="dim">→ (B, 256)</span>
+ESM-2 mean <span class="dim">(B, 1280)</span> <span class="hl">→</span> Linear <span class="dim">1280→128</span> + LN + GELU <span class="dim">→ (B, 128)</span>
+
+concat <span class="dim">(B, 640)</span> <span class="hl">→</span> MLP <span class="dim">640→256→64→1</span>
+        </div>
+        <p class="note">Three parallel protein/RNA signals concatenated. Test AUROC 0.666. ESM-2 helps motif-poor proteins but hurts motif-rich ones on net.</p>
+      </div>
+    </div>
+
+    <!-- V3c -->
+    <div class="card">
+      <div class="card-h">
+        <h3>V3c — RNA CNN + ESM-2 per-residue CNN</h3>
+        <span class="pill skip">≈ V2, not better</span>
+        <span class="sub">V3cModel · scripts/10_train_generalized_v3c.py</span>
+      </div>
+      <div class="card-b">
+        <div class="arch">
+RNA one-hot <span class="dim">(B, 60, 4)</span> <span class="hl">→</span> ConvBranch [128,256,256] kernels [7,5,3] <span class="dim">→ (B, 256)</span>
+
+Prot ESM-2 per residue <span class="dim">(B, 300, 1280)</span>  <span class="cm"># frozen, precomputed</span>
+<span class="hl">→</span> Linear per position <span class="dim">1280→64</span> + LN + GELU
+<span class="hl">→</span> Conv1d [128, 256] kernels [7, 5] + max-pool <span class="dim">→ (B, 256)</span>
+
+concat <span class="dim">(B, 512)</span> <span class="hl">→</span> MLP <span class="dim">512→256→64→1</span>
+        </div>
+        <p class="note">Adds positional conv on top of ESM-2 residues (not raw AA). Test AUROC 0.685. Closest ESM-2 variant to V2 but still below.</p>
+      </div>
+    </div>
+
+    <!-- V4 -->
+    <div class="card" style="border-color: rgba(91,141,238,0.35)">
+      <div class="card-h">
+        <h3>V4 — Dual-branch CNN + bilinear interaction</h3>
+        <span class="pill next">next experiment</span>
+        <span class="sub">RNABindingV4 · src/models/interaction_model.py · scripts/21</span>
+      </div>
+      <div class="card-b">
+        <p style="font-size:13px;margin-bottom:10px">Same ConvBranch encoders as V2. Difference is how RNA and protein embeddings are combined before the MLP head.</p>
+
+        <div class="arch" style="margin-bottom:10px">
+<span class="cm"># BilinearInteraction (hadamard low-rank pooling)</span>
+rna_emb <span class="dim">(B, 256)</span>, prot_emb <span class="dim">(B, 256)</span>
+inter = LayerNorm( Linear_a(rna) <span class="hl">⊙</span> Linear_b(prot) )  <span class="dim">→ (B, 256)</span>
+<span class="cm"># ⊙ = element-wise product; captures multiplicative RNA×protein feature combos</span>
+        </div>
+
+        <table>
+          <thead><tr><th>Mode (--interaction)</th><th>MLP input dim</th><th>What gets concatenated</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="mono">concat</td>
+              <td class="num">512</td>
+              <td>rna_emb + prot_emb <span class="cm">(= V2, backward compatible)</span></td>
+            </tr>
+            <tr>
+              <td class="mono">bilinear</td>
+              <td class="num">256</td>
+              <td>inter only</td>
+            </tr>
+            <tr>
+              <td class="mono">concat_bi ★ default</td>
+              <td class="num">768</td>
+              <td>rna_emb + prot_emb + inter</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="arch" style="margin-top:10px">
+<span class="cm"># concat_bi full forward pass</span>
+rna_emb, prot_emb <span class="dim">(256 each)</span> from ConvBranches
+inter = BilinearInteraction(rna_emb, prot_emb)  <span class="dim">(256)</span>
+[optional] src_emb = Embedding(dataset_source)    <span class="dim">(16)</span>  <span class="cm"># --use_source_emb</span>
+concat <span class="dim">(768 + 16)</span>
+<span class="hl">→</span> MLP <span class="dim">768→512→128→32→1</span>  <span class="cm"># head_dims default in V4</span>
+        </div>
+        <p class="note">Source embedding maps assay tag (selex_rbns / rnacompete / eclip) to 16-d vector — lets model calibrate per-assay bias, not used in first V4 run unless flagged.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Planned -->
+  <div class="section">
+    <div class="section-title">Model architectures — planned (not yet implemented)</div>
+
+    <div class="card">
+      <div class="card-h">
+        <h3>Phase 3C — Multi-task V2/V4 + affinity head</h3>
+        <span class="pill plan">planned</span>
+      </div>
+      <div class="card-b">
+        <div class="arch">
+Shared trunk: V2 or V4 encoder <span class="hl">→</span> hidden vector h <span class="dim">(B, 64)</span>  <span class="cm"># before final linear</span>
+
+head_cls:      Linear <span class="dim">64→1</span>  <span class="hl">→</span> binding logit
+head_affinity: Linear <span class="dim">64→1</span>  <span class="hl">→</span> log-intensity prediction
+
+Loss = BCE(cls) + λ · MSE(affinity)   <span class="cm"># affinity loss masked where label missing</span>
+
+Targets:
+  RNAcompete rows: <span class="mono">probe_intensity</span> (log-scaled)
+  RBNS rows:       <span class="mono">R_max</span> (log-scaled)
+  SELEX rows:      cls only
+        </div>
+        <p class="note">Prototype exists for MLP only: <code>RNABindingMLPWithAffinity</code> in mlp_model.py. CNN version will split the V2/V4 head into two outputs.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">
+        <h3>Phase 4 — Localization auxiliary heads</h3>
+        <span class="pill plan">planned</span>
+      </div>
+      <div class="card-b">
+        <div class="arch">
+<span class="cm"># RNA motif position — auxiliary on ConvBranch feature maps</span>
+rna_feat <span class="dim">(B, 256, 60)</span>  <span class="cm"># before max-pool, from last conv layer</span>
+<span class="hl">→</span> Conv1d <span class="dim">256→1</span> kernel 1  <span class="hl">→</span> position scores <span class="dim">(B, 60)</span>
+<span class="hl">→</span> softmax <span class="hl">→</span> predicted motif start distribution
+Weak label: start index of top enriched 7-mer (from SELEX/RNAcompete analysis)
+
+<span class="cm"># Protein domain attribution — auxiliary on prot feature maps</span>
+prot_feat <span class="dim">(B, 256, 700)</span>
+<span class="hl">→</span> Conv1d <span class="dim">256→1</span> <span class="hl">→</span> per-residue importance <span class="dim">(B, 700)</span>
+Weak label: UniProt RRM/KH/Pumilio domain boundaries
+        </div>
+        <p class="note">Main binding classifier unchanged. Aux losses added with small weight. Does not require new labels beyond existing motif/domain annotations.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">
+        <h3>Phase 5 — Variant effect (inference-only, no new architecture)</h3>
+        <span class="pill plan">planned</span>
+      </div>
+      <div class="card-b">
+        <div class="arch">
+Given trained model f(prot, rna):
+
+wild-type:  score_wt  = σ( f(prot_wt,  rna) )
+mutant:     score_mut = σ( f(prot_mut, rna) )   <span class="cm"># one AA changed in one-hot input</span>
+Δscore = score_mut − score_wt
+
+Uses Phase 3C affinity head if available (Δ on log-intensity scale),
+otherwise Δ on probability scale.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">
+        <h3>Phase 7 — Structure channels (input extension)</h3>
+        <span class="pill plan">planned</span>
+      </div>
+      <div class="card-b">
+        <div class="arch">
+RNA input:  one-hot <span class="dim">(60×4)</span>  +  structure features <span class="dim">(60×F)</span>
+            <span class="cm"># F = pairing prob, accessibility from ViennaRNA — appended per position</span>
+<span class="hl">→</span> ConvBranch in_channels = 4 + F
+
+Prot input: one-hot <span class="dim">(700×20)</span> + domain mask <span class="dim">(700×1)</span>
+            <span class="cm"># optional: ESMFold-derived features per residue</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dataset -->
+  <div class="section">
+    <div class="section-title">Current dataset — generalized_v3a</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-h"><h3>Sources</h3></div>
+        <div class="card-b" style="padding:0">
+          <table>
+            <thead><tr><th>Source</th><th class="num">Pairs</th></tr></thead>
+            <tbody>
+              <tr><td>RNAcompete Eukarya</td><td class="num">1,038,910</td></tr>
+              <tr><td>RNAcompete RBPZoo</td><td class="num">756,277</td></tr>
+              <tr><td>HTR-SELEX + RBNS</td><td class="num">632,642</td></tr>
+              <tr><td>RNAcompete ucRBP (23 RBPs)</td><td class="num">204,808</td></tr>
+              <tr><td>eCLIP</td><td class="num">26,362</td></tr>
+              <tr><td><strong>Total</strong></td><td class="num"><strong>2,658,999</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h3>Splits &amp; policy</h3></div>
+        <div class="card-b">
+          <table>
+            <tbody>
+              <tr><td>Train / val / test</td><td class="mono">2,037,593 / 299,131 / 322,275</td></tr>
+              <tr><td>Proteins</td><td class="mono">494 unique</td></tr>
+              <tr><td>Labels</td><td class="mono">817K pos · 1.84M neg</td></tr>
+              <tr><td>ucRBP</td><td class="mono">23 proteins only (whitelist)</td></tr>
+              <tr><td>Homology rule</td><td class="mono">RNAcompete prot &gt;30% ID to val/test SELEX prot → train only</td></tr>
+              <tr><td>SELEX splits</td><td class="mono">frozen from generalized_v2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Queue -->
+  <div class="section">
+    <div class="section-title">Experiment queue</div>
+    <div class="card">
+      <div class="card-b" style="padding:0">
+        <table>
+          <thead><tr><th>Step</th><th>Model / script</th><th>Input data</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>3A-1</td>
+              <td class="mono">V2 CNN · scripts/06</td>
+              <td class="mono">generalized_v3a</td>
+              <td><span class="pill done">done · 0.813 test AUROC</span></td>
+            </tr>
+            <tr>
+              <td>3A-2</td>
+              <td class="mono">V2 · scripts/18_run_multiseed.py (5 seeds)</td>
+              <td class="mono">generalized_v3a</td>
+              <td><span class="pill next">next</span></td>
+            </tr>
+            <tr>
+              <td>3A-3</td>
+              <td class="mono">Zero-shot eval · scripts/20_evaluate_benchmark.py</td>
+              <td class="mono">RNAcompete benchmark (held-out proteins)</td>
+              <td><span class="pill next">next</span></td>
+            </tr>
+            <tr>
+              <td>3A-ext</td>
+              <td class="mono">Literature benchmark · scripts/31 + 11</td>
+              <td class="mono">external_benchmark_expanded.tsv</td>
+              <td><span class="pill done">done · diagnostic</span></td>
+            </tr>
+            <tr>
+              <td>3B-1</td>
+              <td class="mono">V4 concat_bi · scripts/21</td>
+              <td class="mono">generalized_v3a</td>
+              <td><span class="pill next">queued</span></td>
+            </tr>
+            <tr>
+              <td>3C-1</td>
+              <td class="mono">V2/V4 + affinity head (to implement)</td>
+              <td class="mono">v3a + probe_intensity / R_max columns</td>
+              <td><span class="pill plan">planned</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decisions - technical only -->
+  <div class="section">
+    <div class="section-title">Technical decisions (short)</div>
+    <div class="card">
+      <div class="card-b" style="padding:0">
+        <table>
+          <tbody>
+            <tr><td class="mono" style="width:200px">Primary benchmark</td><td><code>generalized_v3a</code> test split (not literature external)</td></tr>
+            <tr><td class="mono">Protein encoder</td><td>One-hot ConvBranch (V2/V4), not frozen ESM-2 — ESM-2 variants tested and rejected</td></tr>
+            <tr><td class="mono">Fusion</td><td>V2: concat → MLP. V4 next: explicit bilinear (hadamard) interaction before MLP</td></tr>
+            <tr><td class="mono">RNAcompete in training</td><td>Eukarya + RBPZoo full; ucRBP 23 only; homology-aware split</td></tr>
+            <tr><td class="mono">External eval</td><td>Curated AUROC 0.763; expanded 540-pair set is diagnostic (AUPRC vs random baseline 0.21)</td></tr>
+            <tr><td class="mono">Class imbalance</td><td>pos_weight in loss only — no WeightedRandomSampler</td></tr>
+            <tr><td class="mono">Claiming improvement</td><td>Multi-seed mean ± std on v3a before publication</td></tr>
+            <tr><td class="mono">Not pursuing</td><td>More frozen ESM-2 pooling variants; full ucRBP panel (~613 experiments)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+  Code references: <code>src/models/cnn_model.py</code> · <code>src/models/interaction_model.py</code> ·
+  <code>src/models/mlp_model.py</code> · <code>src/data/dataset.py</code> · <code>src/data/negative_sampling.py</code>
+  </div>
+
+</div>
+</body>
+</html>

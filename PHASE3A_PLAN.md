@@ -1,7 +1,7 @@
 # Phase 3A Plan — Expand Training with RNAcompete
 
-**Status**: In progress  
-**Last updated**: 2026-06-25  
+**Status**: **Complete** (2026-07-11)  
+**Last updated**: 2026-07-11  
 **Goal**: Scale protein diversity in the generalized training set by merging
 HTR-SELEX + RBNS with a curated RNAcompete training subset, using homology-aware
 protein splits.
@@ -102,16 +102,20 @@ python scripts/20_evaluate_benchmark.py \
 
 ---
 
-## 5. Success Criteria
+## 5. Success Criteria — Results
 
-| Metric | V2 baseline (v2 data) | Phase 3A target |
-|--------|----------------------|-----------------|
-| Test AUROC (held-out proteins) | 0.690 | ≥ 0.70 |
-| Test AUPRC | 0.580 | ≥ 0.58 |
-| RNAcompete zero-shot median (unseen proteins) | 0.549 | ≥ 0.60 |
-| Per-protein median test AUROC | 0.714 | ≥ 0.72 |
+| Metric | V2 baseline (v2 data) | Phase 3A target | **Achieved (v3a, seed default, epoch 24)** |
+|--------|----------------------|-----------------|---------------------------------------------|
+| Test AUROC (held-out proteins) | 0.690 | ≥ 0.70 | **0.813** ✅ |
+| Test AUPRC | 0.580 | ≥ 0.58 | **0.713** ✅ |
+| Val AUROC / AUPRC | 0.746 / — | — | **0.818 / 0.693** |
+| Per-protein median test AUROC | 0.714 | ≥ 0.72 | **0.817** (55 test proteins) ✅ |
+| RNAcompete zero-shot median (unseen proteins) | 0.549 | ≥ 0.60 | **Not re-run yet** (3A-3) |
 
-Report multi-seed variance (5 seeds) before claiming improvement.
+Checkpoint: `models/saved/generalized_v2/best_model.pt` (trained on `generalized_v3a`, VM CPU).  
+Results JSON: `results/generalized/v3a_scale/v2_cnn_results.json` (on VM).
+
+Report multi-seed variance (5 seeds) before publication claims.
 
 ---
 
@@ -134,7 +138,7 @@ While Phase 3A runs, gather these (priority order):
 ### Lower priority (Phase 4+)
 9. **RNAInter** interaction graph (hard negatives after homology filter).
 10. **RNA-FM embeddings** precomputed for all training RNAs.
-11. **Literature binding pairs** — expand external validation beyond 159 pairs.
+11. **Literature binding pairs** — expanded via `scripts/31_build_external_benchmark.py` (540 pairs with generated negs; curated-only eval AUROC 0.763).
 
 ---
 
@@ -142,8 +146,9 @@ While Phase 3A runs, gather these (priority order):
 
 | ID | Experiment | Depends on |
 |----|------------|------------|
-| 3A-1 | V2 on `generalized_v3a` | This plan |
-| 3A-2 | Multi-seed variance (5 seeds) | 3A-1 |
+| 3A-1 | V2 on `generalized_v3a` | **Done** — test AUROC 0.813 |
+| 3A-2 | Multi-seed variance (5 seeds) | **Next** |
+| 3A-3 | RNAcompete zero-shot on v3a checkpoint | Next |
 | 3B-1 | V4 `concat_bi` on v3a | 3A-1 |
 | 3B-2 | Hard negatives mix | New script |
 | 3C-1 | CNN embedding → XGBoost stack | 3A-1 checkpoint |
