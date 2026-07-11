@@ -17,6 +17,7 @@ Long RNA strategy — sliding window:
 Usage (from protein_rna_ml/):
     python scripts/11_evaluate_external.py
     python scripts/11_evaluate_external.py --xlsx "path/to/dataset without affinities.xlsx"
+    python scripts/11_evaluate_external.py --benchmark_tsv data/external/external_benchmark_expanded.tsv
     python scripts/11_evaluate_external.py --model_dir models/saved/generalized_v2 --model_type v2
 """
 
@@ -33,6 +34,7 @@ from sklearn.metrics import roc_auc_score, average_precision_score
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from src.models.cnn_model import RNABindingCNN
+from src.data.external_benchmark import load_benchmark_tsv
 
 try:
     import openpyxl
@@ -188,6 +190,9 @@ def main():
     parser.add_argument("--xlsx", default=None,
                         help="Path to 'dataset without affinities.xlsx'. "
                              "Defaults to auto-detected path in uploads/.")
+    parser.add_argument("--benchmark_tsv", default=None,
+                        help="Expanded benchmark TSV from scripts/31_build_external_benchmark.py. "
+                             "Takes precedence over --xlsx when set or auto-detected.")
     parser.add_argument("--v2_dir",  default="models/saved/generalized_v2")
     parser.add_argument("--v3b_dir", default="models/saved/generalized_v3b")
     parser.add_argument("--emb_path", default="data/embeddings/esm2_protein_embeddings.npz")
@@ -201,19 +206,25 @@ def main():
 
     os.makedirs(args.out_dir, exist_ok=True)
 
-    # Auto-detect xlsx path
-    if args.xlsx is None:
-        candidates = [
+    # Auto-detect benchmark TSV / xlsx path (only when neither is explicitly set)
+    if args.benchmark_tsv is None and args.xlsx is None:
+        tsv_candidates = ["data/external/external_benchmark_expanded.tsv"]
+        xlsx_candidates = [
             "dataset without affinities.xlsx",
             "data/external/dataset_without_affinities.xlsx",
         ]
-        for c in candidates:
+        for c in tsv_candidates:
             if os.path.exists(c):
-                args.xlsx = c
+                args.benchmark_tsv = c
                 break
-        if args.xlsx is None:
-            print("ERROR: Could not find 'dataset without affinities.xlsx'.")
-            print("Pass --xlsx /path/to/file.xlsx explicitly.")
+        if args.benchmark_tsv is None:
+            for c in xlsx_candidates:
+                if os.path.exists(c):
+                    args.xlsx = c
+                    break
+        if args.benchmark_tsv is None and args.xlsx is None:
+            print("ERROR: Could not find external benchmark.")
+            print("Pass --benchmark_tsv or --xlsx explicitly.")
             sys.exit(1)
 
     # Device
@@ -229,78 +240,93 @@ def main():
     print(f"\n  Device: {device}")
 
     # ── Load dataset ──────────────────────────────────────────────────────────
-    print(f"\n=== Loading external dataset: {args.xlsx} ===")
-    df_raw = load_external_dataset(args.xlsx)
-    print(f"  Raw rows: {len(df_raw)}")
+    if args.benchmark_tsv:
+        print(f"\n=== Loading expanded benchmark TSV: {args.benchmark_tsv} ===")
+        df = load_benchmark_tsv(args.benchmark_tsv)
+        dataset_source = args.benchmark_tsv
+        print(f"  Pairs: {len(df)}  (pos={df['label'].sum()}, neg={(df['label']==0).sum()})")
+        if "example_class" in df.columns:
+            print(f"  Example classes: {df['example_class'].value_counts().to_dict()}")
+        if "neg_strategy" in df.columns and (df["neg_strategy"] != "").any():
+            print(f"  Neg strategies:  {df[df['neg_strategy']!='']['neg_strategy'].value_counts().to_dict()}")
+    else:
+        print(f"\n=== Loading external dataset: {args.xlsx} ===")
+        df_raw = load_external_dataset(args.xlsx)
+        dataset_source = args.xlsx
+        print(f"  Raw rows: {len(df_raw)}")
 
-    # Find relevant columns (flexible name matching)
-    def find_col(df, *candidates):
-        for c in df.columns:
-            if c and any(k.lower() in c.lower() for k in candidates):
-                return c
-        return None
+        # Find relevant columns (flexible name matching)
+        def find_col(df, *candidates):
+            for c in df.columns:
+                if c and any(k.lower() in c.lower() for k in candidates):
+                    return c
+            return None
 
-    col_protein    = find_col(df_raw, "protein") or "Protein"
-    col_rna_seq    = find_col(df_raw, "rna sequence", "rna seq") or "RNA sequence"
-    col_label      = find_col(df_raw, "interaction") or "Interaction (yes/no)"
-    # Protein sequences: full sequence column and domain/cropped sequence column.
-    # Be specific to avoid matching length columns like "Protein lenght (part, if isolated domains were used)".
-    col_prot_seq = None
-    for c in df_raw.columns:
-        if c and "protein sequence" in c.lower():
-            col_prot_seq = c
-            break
-    col_prot_seq = col_prot_seq or "Protein Sequence"
-    # Domain/cropped sequence — must contain "domain" AND "sequence" (or "mutations sequence")
-    col_domain_seq = None
-    for c in df_raw.columns:
-        if c and "domain" in c.lower() and ("sequence" in c.lower() or "mutation" in c.lower()):
-            col_domain_seq = c
-            break
-    col_domain_seq = col_domain_seq or col_prot_seq
+        col_protein    = find_col(df_raw, "protein") or "Protein"
+        col_rna_seq    = find_col(df_raw, "rna sequence", "rna seq") or "RNA sequence"
+        col_label      = find_col(df_raw, "interaction") or "Interaction (yes/no)"
+        # Protein sequences: full sequence column and domain/cropped sequence column.
+        # Be specific to avoid matching length columns like "Protein lenght (part, if isolated domains were used)".
+        col_prot_seq = None
+        for c in df_raw.columns:
+            if c and "protein sequence" in c.lower():
+                col_prot_seq = c
+                break
+        col_prot_seq = col_prot_seq or "Protein Sequence"
+        # Domain/cropped sequence — must contain "domain" AND "sequence" (or "mutations sequence")
+        col_domain_seq = None
+        for c in df_raw.columns:
+            if c and "domain" in c.lower() and ("sequence" in c.lower() or "mutation" in c.lower()):
+                col_domain_seq = c
+                break
+        col_domain_seq = col_domain_seq or col_prot_seq
 
-    print(f"  Columns used:")
-    print(f"    protein name : {col_protein}")
-    print(f"    RNA sequence : {col_rna_seq}")
-    print(f"    protein seq  : {col_domain_seq} (fallback: {col_prot_seq})")
-    print(f"    label        : {col_label}")
+        print(f"  Columns used:")
+        print(f"    protein name : {col_protein}")
+        print(f"    RNA sequence : {col_rna_seq}")
+        print(f"    protein seq  : {col_domain_seq} (fallback: {col_prot_seq})")
+        print(f"    label        : {col_label}")
 
-    # Parse and filter
-    records = []
-    skipped_label = 0
-    skipped_seq   = 0
-    for _, row in df_raw.iterrows():
-        label = parse_label(row.get(col_label))
-        if label is None:
-            skipped_label += 1
-            continue
+        # Parse and filter
+        records = []
+        skipped_label = 0
+        skipped_seq   = 0
+        for _, row in df_raw.iterrows():
+            label = parse_label(row.get(col_label))
+            if label is None:
+                skipped_label += 1
+                continue
 
-        rna_seq = str(row.get(col_rna_seq, "") or "").strip()
-        # Prefer domain/cropped sequence for protein (more specific binding context)
-        prot_seq = str(row.get(col_domain_seq, "") or "").strip()
-        if len(prot_seq) < 10:
-            prot_seq = str(row.get(col_prot_seq, "") or "").strip()
-        prot_name = str(row.get(col_protein, "") or "").strip()
+            rna_seq = str(row.get(col_rna_seq, "") or "").strip()
+            # Prefer domain/cropped sequence for protein (more specific binding context)
+            prot_seq = str(row.get(col_domain_seq, "") or "").strip()
+            if len(prot_seq) < 10:
+                prot_seq = str(row.get(col_prot_seq, "") or "").strip()
+            prot_name = str(row.get(col_protein, "") or "").strip()
 
-        if len(rna_seq) < 4 or len(prot_seq) < 10:
-            skipped_seq += 1
-            continue
+            if len(rna_seq) < 4 or len(prot_seq) < 10:
+                skipped_seq += 1
+                continue
 
-        # Normalize RNA sequence (T→U)
-        rna_seq = rna_seq.upper().replace("T", "U")
+            # Normalize RNA sequence (T→U)
+            rna_seq = rna_seq.upper().replace("T", "U")
 
-        records.append({
-            "protein_name": prot_name,
-            "rna_seq":      rna_seq,
-            "prot_seq":     prot_seq,
-            "label":        label,
-            "rna_len":      len(rna_seq),
-            "prot_len":     len(prot_seq),
-        })
+            records.append({
+                "pair_id": "",
+                "protein_name": prot_name,
+                "rna_seq":      rna_seq,
+                "prot_seq":     prot_seq,
+                "label":        label,
+                "rna_len":      len(rna_seq),
+                "prot_len":     len(prot_seq),
+                "example_class": "",
+                "neg_strategy": "",
+            })
 
-    df = pd.DataFrame(records)
-    print(f"  Skipped (ambiguous label): {skipped_label}")
-    print(f"  Skipped (missing seq):     {skipped_seq}")
+        df = pd.DataFrame(records)
+        print(f"  Skipped (ambiguous label): {skipped_label}")
+        print(f"  Skipped (missing seq):     {skipped_seq}")
+
     print(f"  Usable pairs: {len(df)}  (pos={df['label'].sum()}, neg={(df['label']==0).sum()})")
     print(f"  Unique proteins: {df['protein_name'].nunique()}")
     print(f"  RNA length: min={df['rna_len'].min()}, median={df['rna_len'].median():.0f}, "
@@ -455,7 +481,7 @@ def main():
         auroc_v2, auprc_v2 = safe_metrics(labels, pv2, "V2")
 
     results = {
-        "dataset": args.xlsx,
+        "dataset": dataset_source,
         "n_pairs": int(len(df)),
         "n_pos":   int(df["label"].sum()),
         "n_neg":   int((df["label"]==0).sum()),
@@ -490,6 +516,47 @@ def main():
             print(f"  V3b     →  AUROC: {auroc_v3b:.4f}  |  AUPRC: {auprc_v3b:.4f}  "
                   f"(n={mask.sum()}, ESM-2 coverage)")
             results["v3b"] = {"auroc": auroc_v3b, "auprc": auprc_v3b, "n_scored": int(mask.sum())}
+
+    # ── Stratified metrics (expanded benchmark) ───────────────────────────────
+    if "example_class" in df.columns and (df["example_class"] != "").any():
+        print(f"\n  Stratified metrics (V2 CNN):")
+
+        def subset_metrics(name: str, mask: pd.Series) -> dict | None:
+            sub = df[mask]
+            if len(sub) == 0:
+                return None
+            labs = sub["label"].values
+            probs = sub["prob_v2"].values
+            if len(set(labs)) < 2:
+                print(f"    {name:<28} n={len(sub):4d}  [single class — skipped]")
+                return {"n": int(len(sub)), "auroc": None, "auprc": None, "note": "single_class"}
+            auroc_s, auprc_s = safe_metrics(labs, probs, name)
+            print(f"    {name:<28} n={len(sub):4d}  AUROC={auroc_s:.4f}  AUPRC={auprc_s:.4f}")
+            return {
+                "n": int(len(sub)),
+                "n_pos": int(labs.sum()),
+                "n_neg": int((labs == 0).sum()),
+                "auroc": round(auroc_s, 4),
+                "auprc": round(auprc_s, 4),
+            }
+
+        stratified: dict[str, dict] = {}
+        curated_mask = df["example_class"].isin(["curated_positive", "curated_negative"])
+        generated_mask = df["example_class"] == "generated_negative"
+        if curated_mask.any():
+            m = subset_metrics("curated_only", curated_mask)
+            if m:
+                stratified["curated_only"] = m
+        if generated_mask.any():
+            m = subset_metrics("generated_only", generated_mask)
+            if m:
+                stratified["generated_only"] = m
+        if "neg_strategy" in df.columns:
+            for strategy, grp in df[df["neg_strategy"] != ""].groupby("neg_strategy"):
+                m = subset_metrics(f"neg:{strategy}", df["neg_strategy"] == strategy)
+                if m:
+                    stratified[f"neg_{strategy}"] = m
+        results["stratified_v2"] = stratified
 
     # ── Per-protein breakdown (V2) ────────────────────────────────────────────
     print(f"\n  Per-protein breakdown (V2 CNN):")
