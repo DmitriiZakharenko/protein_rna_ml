@@ -1,0 +1,40 @@
+{
+  "n_total": 540,
+  "n_curated_positive": 114,
+  "n_curated_negative": 45,
+  "n_generated_negative": 381,
+  "neg_strategy_counts": {
+    "": 114,
+    "shuffle_uniform": 113,
+    "shuffle_dinucleotide": 107,
+    "cross_rna": 103,
+    "cross_protein": 58,
+    "curated": 45
+  },
+  "generation_failures": {
+    "cross_rna": 11,
+    "shuffle_uniform": 1,
+    "shuffle_dinucleotide": 7,
+    "cross_protein": 56
+  },
+  "proteins_with_both_classes_after": 87,
+  "single_class_proteins_after": 9,
+  "train_leakage_summary": {
+    "exact_pair_in_train": 0,
+    "rna_in_train_positives": 0,
+    "protein_name_in_train": 122
+  },
+  "config": {
+    "seed": 42,
+    "n_shuffle_uniform": 1,
+    "n_shuffle_dinucleotide": 1,
+    "n_cross_protein": 1,
+    "n_cross_rna": 1,
+    "min_hamming_absolute": 3,
+    "min_hamming_fraction": 0.05,
+    "gc_match_tolerance": 0.0,
+    "max_attempts_per_draw": 500,
+    "min_protein_jaccard_distance": 0.05,
+    "min_rna_jaccard_distance": 0.05
+  }
+}
