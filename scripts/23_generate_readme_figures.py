@@ -7,10 +7,10 @@ No models or datasets required — reads only result JSON files.
 
 Figures produced:
   figures/phase1_validation.png        — Phase 1: per-dataset AUROC bar chart
-  figures/phase2_model_comparison.png  — Phase 2: V1–V3c test AUROC + AUPRC
-  figures/v2_training_curve.png        — V2 training loss + val AUROC over epochs
-  figures/v2_per_protein_auroc.png     — V2 per-protein AUROC sorted bar chart
+  figures/phase2_model_comparison.png  — Phase 2: V1–V3c (skipped if v3a JSON exists; use script 32)
   figures/rnacompete_overview.png      — RNAcompete: organism AUROC + pp histogram
+
+Phase 3A + external figures: scripts/32_visualize_phase3a_results.py
 
 Usage:
     python scripts/23_generate_readme_figures.py
@@ -455,25 +455,18 @@ def main():
     else:
         print(f"  [skip] {p1} not found")
 
-    # Figure 2 — Phase 2 model comparison
     gen = os.path.join(R, "generalized")
-    if os.path.isdir(gen):
+    v3a_path = os.path.join(R, "generalized", "v3a_scale", "v2_cnn_results.json")
+
+    # Figure 2 — Phase 2 model comparison (includes v3a row when script 32 has run)
+    if os.path.exists(v3a_path):
+        print("  [skip] phase2_model_comparison.png — run scripts/32_visualize_phase3a_results.py")
+    elif os.path.isdir(gen):
         fig_phase2_comparison(gen, os.path.join(O, "phase2_model_comparison.png"))
     else:
         print(f"  [skip] {gen} not found")
 
-    # Figure 3 — V2 training curve
-    v2_path = os.path.join(R, "generalized", "v2_cnn_results.json")
-    if os.path.exists(v2_path):
-        fig_v2_training(v2_path, os.path.join(O, "v2_training_curve.png"))
-    else:
-        print(f"  [skip] {v2_path} not found")
-
-    # Figure 4 — V2 per-protein
-    if os.path.exists(v2_path):
-        fig_v2_per_protein(v2_path, os.path.join(O, "v2_per_protein_auroc.png"))
-
-    # Figure 5 — RNAcompete overview
+    # Figure 3 — RNAcompete overview
     rc_metrics  = os.path.join(R, "benchmarks", "rnacompete_v2", "metrics.json")
     rc_pp       = os.path.join(R, "benchmarks", "rnacompete_v2", "per_protein.tsv")
     if os.path.exists(rc_metrics):
@@ -481,10 +474,8 @@ def main():
     else:
         print(f"  [skip] {rc_metrics} not found")
 
-    # Figure 6 — ESM-2 comparison detail
-    v3c_path = os.path.join(R, "generalized", "v3c_esm2_residue_results.json")
-    if os.path.exists(v2_path) and os.path.exists(v3c_path):
-        fig_esm2_comparison(gen, os.path.join(O, "esm2_vs_v2_comparison.png"))
+    if os.path.exists(v3a_path):
+        print("  [hint] Phase 3A + external figures: python scripts/32_visualize_phase3a_results.py")
 
     print(f"\n  All figures saved to {O}/")
     print(f"  Add to README.md with: ![Caption]({O}/figure_name.png)")

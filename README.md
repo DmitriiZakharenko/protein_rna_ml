@@ -91,6 +91,10 @@ Merged HTR-SELEX + RBNS + RNAcompete (Eukarya + RBPZoo full; ucRBP 23 only) into
 
 Phase 3A success criteria (test AUROC ≥ 0.70) **met**. Single-seed; run multi-seed before claiming robust improvement.
 
+![Phase 3A scale comparison](figures/phase3a_v2_scale_comparison.png)
+
+![Phase 3A per-protein test AUROC](figures/phase3a_per_protein_auroc.png)
+
 ```bash
 # Build dataset (once)
 python scripts/22a_prepare_rnacompete_training.py
@@ -121,6 +125,13 @@ lengths, labels, and negative semantics. See `DATA.md §2.2` and `STRATEGY.md §
 |---|---|---|---|---|---|
 | Curated only | 159 | 72% | **0.763** | 0.915 | Random AUPRC baseline = 0.717 |
 | Expanded (+ generated negs) | 540 | 21% | 0.688 | 0.488 | Random AUPRC baseline = 0.211; gain +0.28 |
+
+Expanded set: 381 generated negatives (shuffle + cross-pair decoys) + 45 curated negatives.
+87/96 proteins have both classes (vs 9 evaluable on curated-only). See `DATA.md §2.2`.
+
+![External validation comparison](figures/external_eval_comparison.png)
+
+![External score distributions](figures/external_score_distributions.png)
 
 ```bash
 # Build expanded benchmark (shuffle + cross-pair negs per positive)
@@ -397,6 +408,7 @@ protein_rna_ml/
 │   │   — Data acquisition —
 │   ├── 11_evaluate_external.py         literature external validation (+ integrity checks)
 │   ├── 31_build_external_benchmark.py  expand literature set with generated negatives
+│   ├── 32_visualize_phase3a_results.py Phase 3A + external validation figures
 │   ├── 12_download_eclip.py            download eCLIP datasets from ENCODE
 │   ├── 13_download_rnainter.py         download RNAInter interaction data
 │   ├── 14_merge_new_data.py            merge new datasets into training pool
@@ -448,7 +460,9 @@ protein_rna_ml/
 ├── results/
 │   ├── phase1_summary.json
 │   ├── phase2_summary.json
-│   ├── generalized/                    V1–V3c result JSONs
+│   ├── phase3a_summary.json            V2 on v3a + external eval (canonical)
+│   ├── generalized/                    V1–V3c + v3a_scale result JSONs
+│   ├── external/                       literature benchmark eval outputs
 │   ├── htr_selex/
 │   ├── rbns/
 │   ├── htr_selex_prjeb47428/
@@ -498,6 +512,9 @@ python scripts/18_run_multiseed.py \
 
 # Analyze training dynamics
 python scripts/15_analyze_training.py --results_dir results/generalized
+
+# Phase 3A + external validation figures (from committed JSON)
+python scripts/32_visualize_phase3a_results.py
 
 # Model leaderboard
 python scripts/19_compare_models.py --results_dir results/generalized

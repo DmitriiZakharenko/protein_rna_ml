@@ -244,6 +244,13 @@ a fundamentally different design (fine-tuning, cross-attention, binding-domain s
 
 Built expanded set with `scripts/31_build_external_benchmark.py` (shuffle + cross-pair decoys).
 
+**Figures**: `python scripts/32_visualize_phase3a_results.py` →
+`figures/phase3a_v2_scale_comparison.png`, `phase3a_per_protein_auroc.png`,
+`phase2_model_comparison.png` (refreshed with v3a row),
+`external_eval_comparison.png`, `external_score_distributions.png`.
+
+**Summary JSON**: `results/phase3a_summary.json`
+
 ### Not yet run on v3a checkpoint
 
 - RNAcompete zero-shot (`scripts/20`) — compare to v2 median 0.549
