@@ -1,0 +1,43 @@
+{
+  "n_transfer_3assay": 210,
+  "median_auroc_3assay": 0.8132909060926485,
+  "by_domain_class": [
+    {
+      "domain_class": "CCCH",
+      "count": 4,
+      "median": 0.8929686019324374,
+      "mean": 0.892629216785012
+    },
+    {
+      "domain_class": "multi",
+      "count": 18,
+      "median": 0.8463377658101108,
+      "mean": 0.8054974015217351
+    },
+    {
+      "domain_class": "RRM",
+      "count": 122,
+      "median": 0.8380664740102409,
+      "mean": 0.7917966059499032
+    },
+    {
+      "domain_class": "KH",
+      "count": 28,
+      "median": 0.79849734933977,
+      "mean": 0.7980467179802567
+    },
+    {
+      "domain_class": "unknown",
+      "count": 30,
+      "median": 0.7002962743161094,
+      "mean": 0.699351060123237
+    },
+    {
+      "domain_class": "CSD",
+      "count": 8,
+      "median": 0.6595057528764383,
+      "mean": 0.6877672557585173
+    }
+  ],
+  "note": "Per-protein domain_class from roster/Table S1; not yet construct-masked model."
+}
