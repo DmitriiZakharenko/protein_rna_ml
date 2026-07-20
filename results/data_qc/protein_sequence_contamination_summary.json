@@ -1,0 +1,75 @@
+{
+  "targets": [
+    {
+      "file": "/Users/zahalae/Desktop/protein_rna_ml/data/generalized_v2/train.tsv",
+      "n_rows": 489742,
+      "n_unique_protein_seq": 157,
+      "n_flagged_unique": 2,
+      "n_unique_with_digits": 0,
+      "n_unique_with_star": 2,
+      "n_unique_with_other": 0
+    },
+    {
+      "file": "/Users/zahalae/Desktop/protein_rna_ml/data/generalized_v2/val.tsv",
+      "n_rows": 70600,
+      "n_unique_protein_seq": 22,
+      "n_flagged_unique": 0,
+      "n_unique_with_digits": 0,
+      "n_unique_with_star": 0,
+      "n_unique_with_other": 0
+    },
+    {
+      "file": "/Users/zahalae/Desktop/protein_rna_ml/data/generalized_v2/test.tsv",
+      "n_rows": 98662,
+      "n_unique_protein_seq": 30,
+      "n_flagged_unique": 0,
+      "n_unique_with_digits": 0,
+      "n_unique_with_star": 0,
+      "n_unique_with_other": 0
+    },
+    {
+      "file": "/Users/zahalae/Desktop/protein_rna_ml/data/generalized_v3a/train.tsv",
+      "n_rows": 2037593,
+      "n_unique_protein_seq": 478,
+      "n_flagged_unique": 15,
+      "n_unique_with_digits": 1,
+      "n_unique_with_star": 10,
+      "n_unique_with_other": 4
+    },
+    {
+      "file": "/Users/zahalae/Desktop/protein_rna_ml/data/generalized_v3a/val.tsv",
+      "n_rows": 299131,
+      "n_unique_protein_seq": 66,
+      "n_flagged_unique": 3,
+      "n_unique_with_digits": 0,
+      "n_unique_with_star": 3,
+      "n_unique_with_other": 0
+    },
+    {
+      "file": "/Users/zahalae/Desktop/protein_rna_ml/data/generalized_v3a/test.tsv",
+      "n_rows": 322275,
+      "n_unique_protein_seq": 76,
+      "n_flagged_unique": 1,
+      "n_unique_with_digits": 0,
+      "n_unique_with_star": 1,
+      "n_unique_with_other": 0
+    },
+    {
+      "file": "/Users/zahalae/Desktop/protein_rna_ml/data/eclip/eclip_all.tsv",
+      "n_rows": 26362,
+      "n_unique_protein_seq": 9,
+      "n_flagged_unique": 0,
+      "n_unique_with_digits": 0,
+      "n_unique_with_star": 0,
+      "n_unique_with_other": 0
+    }
+  ],
+  "apply": false,
+  "inplace": false,
+  "retrain_required_if_applied": [
+    "scripts/06_train_generalized_v2.py on cleaned generalized_v2",
+    "scripts/06_train_generalized_v2.py on cleaned generalized_v3a",
+    "external eval scripts/11",
+    "any ESM embedding extraction on these proteins"
+  ]
+}

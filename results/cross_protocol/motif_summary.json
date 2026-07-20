@@ -1,0 +1,28 @@
+{
+  "top_n": 10,
+  "n_motif_protein_protocol": 196,
+  "n_concordance_pairs": 142,
+  "median_jaccard": 0.0,
+  "median_jaccard_core5": 0.0,
+  "median_jaccard_by_domain": {
+    "CCCH": 0.0,
+    "CSD": 0.0,
+    "KH": 0.0,
+    "RRM": 0.0,
+    "multi": 0.0,
+    "unknown": 0.0
+  },
+  "median_jaccard_core5_by_domain": {
+    "CCCH": 0.09090909090909091,
+    "CSD": 0.0,
+    "KH": 0.0,
+    "RRM": 0.0,
+    "multi": 0.0,
+    "unknown": 0.0
+  },
+  "outputs": {
+    "motif_sets": "motif_sets.tsv",
+    "concordance": "motif_concordance.tsv",
+    "motif_vs_transfer": null
+  }
+}
