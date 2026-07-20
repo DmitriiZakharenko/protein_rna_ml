@@ -23,6 +23,6 @@
   "outputs": {
     "motif_sets": "motif_sets.tsv",
     "concordance": "motif_concordance.tsv",
-    "motif_vs_transfer": null
+    "motif_vs_transfer": "motif_vs_transfer.tsv"
   }
 }

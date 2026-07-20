@@ -1,0 +1,185 @@
+{
+  "model": "logistic_regression",
+  "k": 4,
+  "seed": 42,
+  "matching_policy": "representative_native_exact_match_only",
+  "load_stats": {
+    "htr_selex": {
+      "n_raw_rows": 279000,
+      "n_after_filters": 278494,
+      "n_invalid_rna_dropped": 506,
+      "n_proteins": 93,
+      "n_rows_roster_natives": 161706,
+      "n_roster_natives_present": 54,
+      "n_roster_natives_expected": 54,
+      "n_rows_before_native_filter": 278494
+    },
+    "rbns": {
+      "n_raw_rows": 284642,
+      "n_after_filters": 284642,
+      "n_invalid_rna_dropped": 0,
+      "n_proteins": 96,
+      "n_rows_roster_natives": 179819,
+      "n_roster_natives_present": 60,
+      "n_roster_natives_expected": 60,
+      "n_rows_before_native_filter": 284642
+    },
+    "rnacompete_eukarya": {
+      "n_raw_rows": 3726353,
+      "n_after_filters": 1777852,
+      "n_invalid_rna_dropped": 0,
+      "n_proteins": 200,
+      "n_rows_roster_natives": 533946,
+      "n_roster_natives_present": 58,
+      "n_roster_natives_expected": 58,
+      "n_rows_before_native_filter": 1777852
+    },
+    "rnacompete_rbpzoo": {
+      "n_raw_rows": 2592720,
+      "n_after_filters": 1479810,
+      "n_invalid_rna_dropped": 0,
+      "n_proteins": 174,
+      "n_rows_roster_natives": 213405,
+      "n_roster_natives_present": 24,
+      "n_roster_natives_expected": 24,
+      "n_rows_before_native_filter": 1479810
+    },
+    "eclip": {
+      "n_raw_rows": 26362,
+      "n_after_filters": 26362,
+      "n_invalid_rna_dropped": 0,
+      "n_proteins": 9,
+      "n_rows_roster_natives": 23381,
+      "n_roster_natives_present": 8,
+      "n_roster_natives_expected": 8,
+      "n_rows_before_native_filter": 26362
+    }
+  },
+  "n_within_rows": 204,
+  "n_transfer_rows": 322,
+  "protocols_loaded": [
+    "htr_selex",
+    "rbns",
+    "rnacompete_eukarya",
+    "rnacompete_rbpzoo",
+    "eclip"
+  ],
+  "within_median_auroc_by_protocol": {
+    "eclip": 0.6750093068140928,
+    "htr_selex": 0.9497564698492462,
+    "rbns": 0.99273125,
+    "rnacompete_eukarya": 0.9923222187347748,
+    "rnacompete_rbpzoo": 0.9852716645052167
+  },
+  "transfer_median_auroc_by_pair": {
+    "eclip->htr_selex": {
+      "median_auroc": 0.7060933750625313,
+      "n": 6,
+      "median_rna_overlap_frac": 0.0
+    },
+    "eclip->rbns": {
+      "median_auroc": 0.6681885,
+      "n": 5,
+      "median_rna_overlap_frac": 0.0
+    },
+    "eclip->rnacompete_eukarya": {
+      "median_auroc": 0.6947263485071749,
+      "n": 6,
+      "median_rna_overlap_frac": 0.0
+    },
+    "eclip->rnacompete_rbpzoo": {
+      "median_auroc": 0.6889715287936682,
+      "n": 2,
+      "median_rna_overlap_frac": 0.0
+    },
+    "htr_selex->eclip": {
+      "median_auroc": 0.6417015706760056,
+      "n": 6,
+      "median_rna_overlap_frac": 0.0
+    },
+    "htr_selex->rbns": {
+      "median_auroc": 0.8117015000000001,
+      "n": 33,
+      "median_rna_overlap_frac": 0.0
+    },
+    "htr_selex->rnacompete_eukarya": {
+      "median_auroc": 0.7832245104184088,
+      "n": 34,
+      "median_rna_overlap_frac": 0.0
+    },
+    "htr_selex->rnacompete_rbpzoo": {
+      "median_auroc": 0.7337641712897864,
+      "n": 12,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rbns->eclip": {
+      "median_auroc": 0.574238310708899,
+      "n": 5,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rbns->htr_selex": {
+      "median_auroc": 0.7095242621310656,
+      "n": 33,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rbns->rnacompete_eukarya": {
+      "median_auroc": 0.7656888300970154,
+      "n": 38,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rbns->rnacompete_rbpzoo": {
+      "median_auroc": 0.7709031774508652,
+      "n": 14,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_eukarya->eclip": {
+      "median_auroc": 0.6882765178226066,
+      "n": 6,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_eukarya->htr_selex": {
+      "median_auroc": 0.8313565177855711,
+      "n": 34,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_eukarya->rbns": {
+      "median_auroc": 0.94020225,
+      "n": 38,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_eukarya->rnacompete_rbpzoo": {
+      "median_auroc": 0.9533605253422124,
+      "n": 11,
+      "median_rna_overlap_frac": 0.23683559950556243
+    },
+    "rnacompete_rbpzoo->eclip": {
+      "median_auroc": 0.7117603373604751,
+      "n": 2,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_rbpzoo->htr_selex": {
+      "median_auroc": 0.8718667361122656,
+      "n": 12,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_rbpzoo->rbns": {
+      "median_auroc": 0.9606101994031471,
+      "n": 14,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_rbpzoo->rnacompete_eukarya": {
+      "median_auroc": 0.9873540792067148,
+      "n": 11,
+      "median_rna_overlap_frac": 0.2272475685933423
+    }
+  },
+  "transfer_median_exact_rna_overlap_fraction": 0.0,
+  "transfer_median_auroc_by_domain_class": {
+    "CCCH": 0.8810875513355846,
+    "CSD": 0.6595057528764383,
+    "KH": 0.7822323609999475,
+    "RRM": 0.8320739262139605,
+    "multi": 0.8463377658101108,
+    "unknown": 0.66552227331996
+  }
+}
