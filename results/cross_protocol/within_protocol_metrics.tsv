@@ -1,0 +1,205 @@
+protein_key	protein_name	protocol	model	domain_class	domain_architecture	source	auroc	auprc	n_train	n_test	n_pos	n_neg	n_deduped_removed	split_mode
+BOLL	BOLL	htr_selex	logistic_regression	unknown		computed	0.9503759398496241	0.9308937690189558	2395	599	1000	1994	0	honest_trainval_test
+CELF1	CELF1-construct2	htr_selex	logistic_regression	unknown		computed	0.9378625	0.9070202686736182	2399	600	1000	1999	0	honest_trainval_test
+DAZ3	DAZ3	htr_selex	logistic_regression	unknown		computed	0.9514625	0.9159409366910042	2400	600	1000	2000	0	honest_trainval_test
+DAZAP1	DAZAP1	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9031250000000001	0.8662662803309911	2399	600	1000	1999	0	honest_trainval_test
+ELAVL1	ELAVL1	htr_selex	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9997727272727273	0.9995369478542285	2380	596	1000	1976	0	honest_trainval_test
+ELAVL4	ELAVL4	htr_selex	logistic_regression	unknown		computed	0.8235	0.7376903717702701	2397	600	1000	1997	0	honest_trainval_test
+ESRP1	ESRP1-construct3	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9987875	0.9976533960072813	2399	600	1000	1999	0	honest_trainval_test
+HNRNPA0	HNRNPA0	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9862000000000001	0.983917166798666	2399	600	1000	1999	0	honest_trainval_test
+HNRNPA1	HNRNPA1	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.920525	0.8561678637319992	2399	600	1000	1999	0	honest_trainval_test
+HNRNPA1L2	HNRNPA1L2	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9870408163265306	0.9820642470853733	2365	592	1000	1957	0	honest_trainval_test
+HNRNPC	HNRNPC	htr_selex	logistic_regression	RRM	RRM	computed	0.9757750000000001	0.9617061613992902	2399	600	1000	1999	0	honest_trainval_test
+HNRNPCL1	HNRNPCL1	htr_selex	logistic_regression	RRM	RRM	computed	0.9887375	0.9810002874844611	2396	600	1000	1996	0	honest_trainval_test
+HNRNPL	HNRNPL-construct2	htr_selex	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.972075	0.9644229681613807	2400	600	1000	2000	0	honest_trainval_test
+HNRPLL	HNRPLL	htr_selex	logistic_regression	unknown		computed	0.8960253164556963	0.8248324512245028	2379	595	1000	1974	0	honest_trainval_test
+IGF2BP1	IGF2BP1	htr_selex	logistic_regression	unknown		computed	0.904375	0.8264145269218006	2396	600	1000	1996	0	honest_trainval_test
+KHDRBS1	KHDRBS1	htr_selex	logistic_regression	KH	KH	computed	0.9639375	0.9383924078355613	2399	600	1000	1999	0	honest_trainval_test
+KHDRBS2	KHDRBS2	htr_selex	logistic_regression	KH	KH	computed	0.9557644110275688	0.9247771246229648	2392	599	1000	1991	0	honest_trainval_test
+KHDRBS3	KHDRBS3	htr_selex	logistic_regression	KH	KH	computed	0.92755	0.8776604500904785	2399	600	1000	1999	0	honest_trainval_test
+MEX3C	MEX3C	htr_selex	logistic_regression	KH	KH	computed	0.9500879396984925	0.9027185711960658	2388	598	1000	1986	0	honest_trainval_test
+MSI1	MSI1	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9458625	0.9237526236425494	2396	600	1000	1996	0	honest_trainval_test
+PABPC5	PABPC5	htr_selex	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.9256875	0.8722310762268398	2400	600	1000	2000	0	honest_trainval_test
+PCBP1	PCBP1	htr_selex	logistic_regression	KH	KH;KH;KH	computed	0.9600124999999999	0.9283652254099986	2399	600	1000	1999	0	honest_trainval_test
+PUM1	PUM1	htr_selex	logistic_regression	unknown		computed	0.8508270676691729	0.713886831887279	2394	599	1000	1993	0	honest_trainval_test
+QKI	QKI	htr_selex	logistic_regression	KH	KH	computed	0.9480000000000001	0.9271971736545733	2400	600	1000	2000	0	honest_trainval_test
+RALY	RALY	htr_selex	logistic_regression	RRM	RRM	computed	0.9560875	0.9429228726585527	2400	600	1000	2000	0	honest_trainval_test
+RBFOX1	RBFOX1	htr_selex	logistic_regression	unknown		computed	0.9627721518987342	0.9449080475778444	2377	595	1000	1972	0	honest_trainval_test
+RBFOX3	RBFOX3	htr_selex	logistic_regression	unknown		computed	0.97465	0.957939213541404	2398	600	1000	1998	0	honest_trainval_test
+RBM14	RBM14	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.949425	0.9019595116687581	2396	600	1000	1996	0	honest_trainval_test
+RBM24	RBM24	htr_selex	logistic_regression	RRM	RRM	computed	0.9953680203045685	0.9918409938206354	2372	594	1000	1966	0	honest_trainval_test
+RBM28	RBM28	htr_selex	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.882825	0.7893151768997112	2397	600	1000	1997	0	honest_trainval_test
+RBM38	RBM38	htr_selex	logistic_regression	RRM	RRM	computed	0.9847	0.9787875098079947	2399	600	1000	1999	0	honest_trainval_test
+RBM4	RBM4	htr_selex	logistic_regression	multi	RRM;RRM;CCHC	computed	0.95255	0.9340015840158156	2400	600	1000	2000	0	honest_trainval_test
+RBM42	RBM42	htr_selex	logistic_regression	RRM	RRM	computed	0.995175	0.9962466665831791	2398	600	1000	1998	0	honest_trainval_test
+RBM46	RBM46	htr_selex	logistic_regression	RRM	RRM;RRM;RRM	computed	0.942925	0.9081373099438412	2396	600	1000	1996	0	honest_trainval_test
+RBM4B	RBM4B	htr_selex	logistic_regression	unknown		computed	0.9549625	0.9213216038150368	2400	600	1000	2000	0	honest_trainval_test
+RBM6	RBM6	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9057125	0.858023591581998	2400	600	1000	2000	0	honest_trainval_test
+RBMS1	RBMS1	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9091035353535353	0.8365300589485147	2384	596	1000	1980	0	honest_trainval_test
+RBMS2	RBMS2	htr_selex	logistic_regression	unknown		computed	0.8961500000000001	0.8268718507129993	2400	600	1000	2000	0	honest_trainval_test
+RBMS3	RBMS3	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.8800125313283207	0.8257073158173162	2395	599	1000	1994	0	honest_trainval_test
+RBPMS2	RBPMS2	htr_selex	logistic_regression	RRM	RRM	computed	0.996875	0.9928347528025717	2396	600	1000	1996	0	honest_trainval_test
+RC3H1	RC3H1-construct2	htr_selex	logistic_regression	unknown		computed	0.9102875	0.8895721588833699	2399	600	1000	1999	0	honest_trainval_test
+RNPC3	RNPC3	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.943625	0.9030812038194284	2396	600	1000	1996	0	honest_trainval_test
+SART3	SART3	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9302756892230577	0.8922311014233035	2394	599	1000	1993	0	honest_trainval_test
+SNRNP70	SNRNP70	htr_selex	logistic_regression	RRM	RRM	computed	0.9637874999999999	0.9420242742488343	2396	600	1000	1996	0	honest_trainval_test
+SNRPA	SNRPA	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9765624999999999	0.9664125872185597	2399	600	1000	1999	0	honest_trainval_test
+SNRPB2	SNRPB2	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9210175879396985	0.8780782512864539	2388	598	1000	1986	0	honest_trainval_test
+TARDBP	TARDBP	htr_selex	logistic_regression	RRM	RRM;RRM	computed	0.9921375	0.9926772214714753	2400	600	1000	2000	0	honest_trainval_test
+THUMPD1	THUMPD1	htr_selex	logistic_regression	unknown		computed	0.9387624999999999	0.8748079881081777	2400	600	1000	2000	0	honest_trainval_test
+YBX1	YBX1	htr_selex	logistic_regression	CSD	CSD	computed	0.9317375	0.9054623828332964	2399	600	1000	1999	0	honest_trainval_test
+YBX2	YBX2	htr_selex	logistic_regression	CSD	CSD	computed	0.8887499999999999	0.8340195335948474	2399	600	1000	1999	0	honest_trainval_test
+ZC3H10	ZC3H10	htr_selex	logistic_regression	CCCH	CCCH;CCCH;CCCH	computed	0.971025	0.9573320110380035	2400	600	1000	2000	0	honest_trainval_test
+ZCRB1	ZCRB1	htr_selex	logistic_regression	multi	RRM;CCHC	computed	0.9131874999999999	0.8558946576141272	2400	600	1000	2000	0	honest_trainval_test
+ZFP36	ZFP36	htr_selex	logistic_regression	unknown		computed	0.943675	0.9146396171175324	2400	600	1000	2000	0	honest_trainval_test
+ZRANB2	ZRANB2	htr_selex	logistic_regression	unknown		computed	0.9960249999999999	0.9922329000042204	2400	600	1000	2000	0	honest_trainval_test
+A1CF	A1CF	rbns	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9919250000000001	0.9801904789972302	2400	600	1000	2000	0	honest_trainval_test
+BOLL	BOLL	rbns	logistic_regression	unknown		computed	0.9967874999999999	0.9932309420422931	2400	600	1000	2000	0	honest_trainval_test
+CELF1	CELF1	rbns	logistic_regression	unknown		computed	0.9966999999999999	0.9924551384810727	2400	600	1000	2000	0	honest_trainval_test
+CNOT4	CNOT4	rbns	logistic_regression	RRM	RRM	computed	0.9938875	0.9808794210353606	2400	600	1000	2000	0	honest_trainval_test
+CPEB1	CPEB1	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9907999999999999	0.9770089219408531	2400	600	1000	2000	0	honest_trainval_test
+DAZ3	DAZ3	rbns	logistic_regression	unknown		computed	0.98365	0.9493143110164007	2400	600	1000	2000	0	honest_trainval_test
+DAZAP1	DAZAP1	rbns	logistic_regression	RRM	RRM;RRM	computed	0.970825	0.8886391259813325	2400	600	1000	2000	0	honest_trainval_test
+ELAVL4	ELAVL4	rbns	logistic_regression	unknown		computed	0.9963249999999999	0.993880512264377	2400	600	1000	2000	0	honest_trainval_test
+ESRP1	ESRP1	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9951	0.9792406357567797	2400	600	1000	2000	0	honest_trainval_test
+FUBP1	FUBP1	rbns	logistic_regression	KH	KH;KH;KH;KH	computed	0.996375	0.9882465501433398	2400	600	1000	2000	0	honest_trainval_test
+FUS	FUS	rbns	logistic_regression	RRM	RRM	computed	0.9936125	0.9769660004516059	2400	600	1000	2000	0	honest_trainval_test
+HNRNPA0	HNRNPA0	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9903749999999999	0.9607224578427287	2400	600	1000	2000	0	honest_trainval_test
+HNRNPA1L2	HNRNPA1L2	rbns	logistic_regression	RRM	RRM;RRM	computed	0.8693375	0.7430829218121101	2400	600	1000	2000	0	honest_trainval_test
+HNRNPA2B1	HNRNPA2B1	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9957125	0.9831537607174746	2400	600	1000	2000	0	honest_trainval_test
+HNRNPC	HNRNPC	rbns	logistic_regression	RRM	RRM	computed	0.991825	0.9878204622392199	2400	600	1000	2000	0	honest_trainval_test
+HNRNPCL1	HNRNPCL1	rbns	logistic_regression	RRM	RRM	computed	0.99905	0.9981296757028338	2400	600	1000	2000	0	honest_trainval_test
+HNRNPH2	HNRNPH2	rbns	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9971375	0.9927291363579438	2400	600	1000	2000	0	honest_trainval_test
+HNRNPK	HNRNPK	rbns	logistic_regression	KH	KH;KH;KH	computed	0.9950749999999999	0.9879133540602132	2400	600	1000	2000	0	honest_trainval_test
+HNRNPL	HNRNPL	rbns	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.994175	0.9873767916132862	2400	600	1000	2000	0	honest_trainval_test
+IGF2BP1	IGF2BP1	rbns	logistic_regression	unknown		computed	0.9896875	0.9639908334440128	2400	600	1000	2000	0	honest_trainval_test
+IGF2BP2	IGF2BP2	rbns	logistic_regression	multi	RRM;RRM;KH;KH;KH;KH	computed	0.989575	0.962310937473575	2400	600	1000	2000	0	honest_trainval_test
+IGF2BP3	IGF2BP3	rbns	logistic_regression	multi	RRM;RRM;KH;KH;KH;KH	computed	0.8630429292929291	0.7609851472908384	2380	596	1000	1976	0	honest_trainval_test
+KHDRBS2	KHDRBS2	rbns	logistic_regression	KH	KH	computed	0.994725	0.9887847660593636	2400	600	1000	2000	0	honest_trainval_test
+KHDRBS3	KHDRBS3	rbns	logistic_regression	KH	KH	computed	0.9917250000000001	0.9821204922746324	2400	600	1000	2000	0	honest_trainval_test
+MBNL1	MBNL1	rbns	logistic_regression	CCCH	CCCH;CCCH;CCCH;CCCH	computed	0.9949	0.9791569041294063	2400	600	1000	2000	0	honest_trainval_test
+MSI1	MSI1	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9959375	0.9902415497264089	2400	600	1000	2000	0	honest_trainval_test
+PABPC3	PABPC3	rbns	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.9889625	0.9666306438820383	2400	600	1000	2000	0	honest_trainval_test
+PCBP1	PCBP1	rbns	logistic_regression	KH	KH;KH;KH	computed	0.9991375	0.998327587789513	2400	600	1000	2000	0	honest_trainval_test
+PCBP2	PCBP2	rbns	logistic_regression	KH	KH;KH;KH	computed	0.994	0.980359709785268	2400	600	1000	2000	0	honest_trainval_test
+PRR3	PRR3	rbns	logistic_regression	CCCH	CCCH	computed	0.9760569105691057	0.9414288297825936	2274	569	1000	1843	0	honest_trainval_test
+PUF60	PUF60	rbns	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9962375	0.9917909560386551	2400	600	1000	2000	0	honest_trainval_test
+PUM1	PUM1	rbns	logistic_regression	unknown		computed	0.987	0.9503227177528145	2400	600	1000	2000	0	honest_trainval_test
+RBFOX2	RBFOX2	rbns	logistic_regression	RRM	RRM	computed	0.9906375000000001	0.974637037745245	2400	600	1000	2000	0	honest_trainval_test
+RBFOX3	RBFOX3	rbns	logistic_regression	unknown		computed	0.995725	0.9736893378617909	2400	600	1000	2000	0	honest_trainval_test
+RBM24	RBM24	rbns	logistic_regression	RRM	RRM	computed	0.9938125	0.9824437837705122	2400	600	1000	2000	0	honest_trainval_test
+RBM3	RBM3	rbns	logistic_regression	RRM	RRM	computed	0.9158375	0.7858890791090064	2400	600	1000	2000	0	honest_trainval_test
+RBM4	RBM4	rbns	logistic_regression	multi	RRM;RRM;CCHC	computed	0.9901249999999999	0.9572719899464366	2400	600	1000	2000	0	honest_trainval_test
+RBM41	RBM41	rbns	logistic_regression	RRM	RRM	computed	0.99605	0.9915267655645725	2400	600	1000	2000	0	honest_trainval_test
+RBM45	RBM45	rbns	logistic_regression	RRM	RRM;RRM;RRM	computed	0.99905	0.9981654722973956	2400	600	1000	2000	0	honest_trainval_test
+RBM47	RBM47	rbns	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9865375000000001	0.9624809010404138	2400	600	1000	2000	0	honest_trainval_test
+RBM4B	RBM4B	rbns	logistic_regression	unknown		computed	0.9939	0.9850493869303488	2400	600	1000	2000	0	honest_trainval_test
+RBM5	RBM5	rbns	logistic_regression	multi	RRM;RanBP;RRM	computed	0.9963875	0.9870531485923804	2400	600	1000	2000	0	honest_trainval_test
+RBM6	RBM6	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9974125	0.9936444364510701	2400	600	1000	2000	0	honest_trainval_test
+RBMS2	RBMS2	rbns	logistic_regression	unknown		computed	0.9909875	0.9760540099393287	2400	600	1000	2000	0	honest_trainval_test
+RBMS3	RBMS3	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9920749999999999	0.9821834921181372	2400	600	1000	2000	0	honest_trainval_test
+RC3H1	RC3H1	rbns	logistic_regression	unknown		computed	0.9799375	0.927149313402861	2400	600	1000	2000	0	honest_trainval_test
+SF1	SF1	rbns	logistic_regression	KH	KH	computed	0.9880625000000001	0.9586439197912037	2400	600	1000	2000	0	honest_trainval_test
+SFPQ	SFPQ	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9873375000000001	0.9684527430386464	2400	600	1000	2000	0	honest_trainval_test
+SNRPA	SNRPA	rbns	logistic_regression	RRM	RRM;RRM	computed	0.983875	0.9432629036030252	2400	600	1000	2000	0	honest_trainval_test
+SNRPB2	SNRPB2	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9971875	0.9935079441519941	2400	600	1000	2000	0	honest_trainval_test
+SRSF2	SRSF2	rbns	logistic_regression	RRM	RRM	computed	0.986475	0.9405620875927941	2400	600	1000	2000	0	honest_trainval_test
+SRSF9	SRSF9	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9967874999999999	0.9919830829975551	2400	600	1000	2000	0	honest_trainval_test
+TARDBP	TARDBP	rbns	logistic_regression	RRM	RRM;RRM	computed	0.9915625	0.974457146267629	2400	600	1000	2000	0	honest_trainval_test
+THUMPD1	THUMPD1	rbns	logistic_regression	unknown		computed	0.99645	0.986731410646559	2400	600	1000	2000	0	honest_trainval_test
+TIA1	TIA1	rbns	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9933875	0.9848218158676906	2400	600	1000	2000	0	honest_trainval_test
+TRA2B	TRA2B	rbns	logistic_regression	RRM	RRM	computed	0.9712624999999999	0.9152233692698972	2400	600	1000	2000	0	honest_trainval_test
+YBX2	YBX2	rbns	logistic_regression	CSD	CSD	computed	0.8986375	0.7827010648881076	2400	600	1000	2000	0	honest_trainval_test
+ZCRB1	ZCRB1	rbns	logistic_regression	multi	RRM;CCHC	computed	0.9832875	0.9588591855263675	2400	600	1000	2000	0	honest_trainval_test
+ZFP36	ZFP36	rbns	logistic_regression	unknown		computed	0.994475	0.9863053790835484	2400	600	1000	2000	0	honest_trainval_test
+ZRANB2	ZRANB2	rbns	logistic_regression	unknown		computed	0.9832875	0.9309900782606397	2400	600	1000	2000	0	honest_trainval_test
+A1CF	A1CF	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9970713939645626	0.9956146441466494	6815	1704	3358	5161	0	honest_trainval_test
+CNOT4	CNOT4	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9845764362220059	0.9635837954668095	9919	2480	3948	8451	0	honest_trainval_test
+DAZAP1	DAZAP1	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9917649634636965	0.9829235256218176	7228	1808	3050	5986	0	honest_trainval_test
+FMR1	FMR1	rnacompete_eukarya	logistic_regression	KH	KH;KH	computed	0.9388851767188324	0.9026161899535252	6176	1545	3023	4698	0	honest_trainval_test
+FUS	FUS	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9933304335218212	0.9845189131569592	4001	1001	1869	3133	0	honest_trainval_test
+HNRNPA1	HNRNPA1	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9986590980779539	0.9974987179370176	10499	2625	4428	8696	0	honest_trainval_test
+HNRNPA1L2	HNRNPA1L2	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9970132368884528	0.9944263128450576	7966	1992	3768	6190	0	honest_trainval_test
+HNRNPA2B1	HNRNPA2B1	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9983191063603435	0.9967750945047598	11664	2917	5335	9246	0	honest_trainval_test
+HNRNPC	HNRNPC	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9978213065232998	0.9946092531179317	7836	1960	3145	6651	0	honest_trainval_test
+HNRNPCL1	HNRNPCL1	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9985672080844966	0.9970239293843485	7563	1891	3103	6351	0	honest_trainval_test
+HNRNPH2	HNRNPH2	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM	computed	0.999424153995802	0.9988840499157299	13093	3274	5743	10624	0	honest_trainval_test
+HNRNPK	HNRNPK	rnacompete_eukarya	logistic_regression	KH	KH;KH;KH	computed	0.9895915404654221	0.9839717062506752	6272	1569	3235	4606	0	honest_trainval_test
+HNRNPL	HNRNPL	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.9970344009489918	0.9945900812423991	8547	2137	4214	6470	0	honest_trainval_test
+HNRPLL	HNRPLL	rnacompete_eukarya	logistic_regression	unknown		computed	0.9912491056543187	0.9849052240417655	8932	2233	4187	6978	0	honest_trainval_test
+ELAVL1	HuR	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM	computed	0.988313911523418	0.9771098217135965	8088	2023	3610	6501	0	honest_trainval_test
+IGF2BP2	IGF2BP2	rnacompete_eukarya	logistic_regression	multi	RRM;RRM;KH;KH;KH;KH	computed	0.9890894551553981	0.985868343511987	5744	1436	3327	3853	0	honest_trainval_test
+IGF2BP3	IGF2BP3	rnacompete_eukarya	logistic_regression	multi	RRM;RRM;KH;KH;KH;KH	computed	0.9800050061359931	0.9651882220266008	6180	1545	3128	4597	0	honest_trainval_test
+KHDRBS1	KHDRBS1	rnacompete_eukarya	logistic_regression	KH	KH	computed	0.9896665239488717	0.9786134960969616	7568	1892	3645	5815	0	honest_trainval_test
+KHDRBS2	KHDRBS2	rnacompete_eukarya	logistic_regression	KH	KH	computed	0.9892603465716674	0.9775690182541491	7116	1780	3178	5718	0	honest_trainval_test
+KHDRBS3	KHDRBS3	rnacompete_eukarya	logistic_regression	KH	KH	computed	0.9925167234961868	0.9850832307084967	7928	1982	3730	6180	0	honest_trainval_test
+MBNL1	MBNL1	rnacompete_eukarya	logistic_regression	CCCH	CCCH;CCCH;CCCH;CCCH	computed	0.9841427252146061	0.9597986705482173	6129	1533	2470	5192	0	honest_trainval_test
+MSI1	MSI1	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9990883620459188	0.998101458502761	10335	2584	4380	8539	0	honest_trainval_test
+PABPC3	PABPC3	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.9792215707290419	0.9590775416630242	5771	1443	2552	4662	0	honest_trainval_test
+PABPC4	PABPC4	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.9997144611936599	0.9996324253218487	6938	1735	3835	4838	0	honest_trainval_test
+PABPC5	PABPC5	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.9942230714317688	0.9928455869100201	7402	1851	4188	5065	0	honest_trainval_test
+PCBP1	PCBP1	rnacompete_eukarya	logistic_regression	KH	KH;KH;KH	computed	0.9845466278385484	0.9668591217214639	7528	1883	3171	6240	0	honest_trainval_test
+PCBP2	PCBP2	rnacompete_eukarya	logistic_regression	KH	KH;KH;KH	computed	0.9589798151750973	0.9368228856445688	3336	834	1598	2572	0	honest_trainval_test
+QKI	QKI	rnacompete_eukarya	logistic_regression	KH	KH	computed	0.8956305237943525	0.8371428377219995	3401	851	1587	2665	0	honest_trainval_test
+RALY	RALY	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9951753453772583	0.9895556181683236	5560	1391	2249	4702	0	honest_trainval_test
+RBFOX1	RBFOX1	rnacompete_eukarya	logistic_regression	unknown		computed	0.994231182415104	0.9878362579622961	7359	1840	3583	5616	0	honest_trainval_test
+RBM24	RBM24	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9978083367193832	0.9945019386329614	8265	2067	3004	7328	0	honest_trainval_test
+RBM28	RBM28	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.9965385874372314	0.9949060794608018	4336	1085	2287	3134	0	honest_trainval_test
+RBM3	RBM3	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9746992605672663	0.9725540593886408	6978	1745	4303	4420	0	honest_trainval_test
+RBM38	RBM38	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9854573735464691	0.9646188060246507	4317	1080	1552	3845	0	honest_trainval_test
+RBM4	RBM4	rnacompete_eukarya	logistic_regression	multi	RRM;RRM;CCHC	computed	0.9962949133556238	0.9885469870435685	7089	1773	2212	6650	0	honest_trainval_test
+RBM41	RBM41	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9935688594481245	0.9835920872000421	7072	1769	3176	5665	0	honest_trainval_test
+RBM42	RBM42	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9974310764880399	0.9935176206257114	8211	2053	3409	6855	0	honest_trainval_test
+RBM45	RBM45	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9969743748070392	0.9934634851537397	12944	3237	5124	11057	0	honest_trainval_test
+RBM46	RBM46	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9775016027353349	0.9576261786055361	8480	2121	3919	6682	0	honest_trainval_test
+RBM47	RBM47	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9921277139733627	0.9813888366758204	10117	2530	3879	8768	0	honest_trainval_test
+RBM5	RBM5	rnacompete_eukarya	logistic_regression	multi	RRM;RanBP;RRM	computed	0.9976313021901064	0.9956580594722972	7661	1916	3270	6307	0	honest_trainval_test
+RBM6	RBM6	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9914031180400891	0.981531420963942	4994	1249	2244	3999	0	honest_trainval_test
+RBMS1	RBMS1	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9842427826460943	0.9579284395376919	6194	1549	2849	4894	0	honest_trainval_test
+RBMS3	RBMS3	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9973356896179582	0.9957550424908644	6238	1560	3277	4521	0	honest_trainval_test
+SART3	SART3	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9919389072259619	0.9845928453380792	6852	1713	3268	5297	0	honest_trainval_test
+SF1	SF1	rnacompete_eukarya	logistic_regression	KH	KH	computed	0.9736359468133884	0.9375752797363591	4323	1081	1772	3632	0	honest_trainval_test
+SFPQ	SFPQ	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9711665777356179	0.9485578846290642	5232	1309	2504	4037	0	honest_trainval_test
+SNRNP70	SNRNP70	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9810823432925926	0.9580657709464607	7834	1959	3467	6326	0	honest_trainval_test
+SNRPA	SNRPA	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9980917748917749	0.9949447157255235	9078	2270	3851	7497	0	honest_trainval_test
+SRSF2	SRSF2	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9969713637287112	0.9945710873815475	8333	2084	3823	6594	0	honest_trainval_test
+SRSF9	SRSF9	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.9704336629367596	0.9457110758077201	7856	1965	3267	6554	0	honest_trainval_test
+SUP12	SUP-12	rnacompete_eukarya	logistic_regression	RRM	RRM	computed	0.9991924379442522	0.9981040180663467	9062	2266	3380	7948	0	honest_trainval_test
+TARDBP	TARDBP	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM	computed	0.992825015838004	0.9846507665015929	9880	2470	4596	7754	0	honest_trainval_test
+TIA1	TIA1	rnacompete_eukarya	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9955409649005894	0.9919654733104717	5310	1328	2743	3895	0	honest_trainval_test
+YBX1	YBX1	rnacompete_eukarya	logistic_regression	CSD	CSD	computed	0.9746033538201739	0.9580952772533055	5238	1310	2539	4009	0	honest_trainval_test
+YBX2	YBX2	rnacompete_eukarya	logistic_regression	CSD	CSD	computed	0.9500320652804883	0.915926478277992	7042	1761	3264	5539	0	honest_trainval_test
+ZC3H10	ZC3H10	rnacompete_eukarya	logistic_regression	CCCH	CCCH;CCCH;CCCH	computed	0.9870440964725432	0.9727142456441803	7069	1768	2904	5933	0	honest_trainval_test
+ZCRB1	ZCRB1	rnacompete_eukarya	logistic_regression	multi	RRM;CCHC	computed	0.9981993684799552	0.9968654451198367	8232	2058	3941	6349	0	honest_trainval_test
+CPEB1	CPEB1	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM	computed	0.9952192141313599	0.9906496565757978	4239	1060	1847	3452	0	honest_trainval_test
+ESRP1	ESRP1	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM	computed	0.9930182303562808	0.9830701122807828	9580	2395	3756	8219	0	honest_trainval_test
+FUBP1	FUBP1	rnacompete_rbpzoo	logistic_regression	KH	KH;KH;KH;KH	computed	0.9884068269445869	0.9726527658152611	6205	1552	2554	5203	0	honest_trainval_test
+PRR3	PRR3	rnacompete_rbpzoo	logistic_regression	CCCH	CCCH	computed	0.9687896933405916	0.9411825844536716	6762	1691	3338	5115	0	honest_trainval_test
+PUF60	PUF60	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9955910749716553	0.9919858682320022	5575	1394	2558	4411	0	honest_trainval_test
+RBFOX2	RBFOX2	rnacompete_rbpzoo	logistic_regression	RRM	RRM	computed	0.9955969992955198	0.9903309135645441	7744	1937	3277	6404	0	honest_trainval_test
+RBM24	RBM24	rnacompete_rbpzoo	logistic_regression	RRM	RRM	computed	0.9957780937586472	0.9875915329142677	7530	1883	2729	6684	0	honest_trainval_test
+RBM38	RBM38	rnacompete_rbpzoo	logistic_regression	RRM	RRM	computed	0.9623328715076201	0.9242158182530247	4113	1029	1714	3428	0	honest_trainval_test
+RBM45	RBM45	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9925895686083354	0.982497927271786	10976	2745	4399	9322	0	honest_trainval_test
+RBM47	RBM47	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9856771796769022	0.9672410492392142	9708	2427	3975	8160	0	honest_trainval_test
+RBPMS2	RBPMS2	rnacompete_rbpzoo	logistic_regression	RRM	RRM	computed	0.9813232284342135	0.9565567985497282	9336	2334	4045	7625	0	honest_trainval_test
+RNPC3	RNPC3	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM	computed	0.9778284952035557	0.9421293025777424	5304	1327	2129	4502	0	honest_trainval_test
+SNRPB2	SNRPB2	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM	computed	0.9679028831562974	0.9309561316318904	4136	1034	1875	3295	0	honest_trainval_test
+TIA1	TIA1	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM;RRM	computed	0.9895770827339608	0.9769803685668994	5092	1274	2174	4192	0	honest_trainval_test
+FMR1	fmr1	rnacompete_rbpzoo	logistic_regression	KH	KH;KH	computed	0.9617399264616506	0.9418100647423118	5895	1474	3042	4327	0	honest_trainval_test
+HNRNPA0	hnrnpa0	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM	computed	0.9798922523380728	0.9563144825459018	6468	1617	3146	4939	0	honest_trainval_test
+MEX3C	mex3c	rnacompete_rbpzoo	logistic_regression	KH	KH	computed	0.9756007940865575	0.944963762779066	12307	3077	5318	10066	0	honest_trainval_test
+PABPC4	pabpc4	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.9848661493335313	0.9628809139527321	6983	1746	2873	5856	0	honest_trainval_test
+RBM28	rbm-28	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM;RRM;RRM	computed	0.9684428091718107	0.9269694418776362	7336	1834	2861	6309	0	honest_trainval_test
+RBM14	rbm14	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM	computed	0.9957607717041801	0.9908929339972803	7475	1869	3126	6218	0	honest_trainval_test
+SART3	sart3	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM	computed	0.9846372359135332	0.9684369392752656	8796	2200	4025	6971	0	honest_trainval_test
+SUP12	sup-12	rnacompete_rbpzoo	logistic_regression	RRM	RRM	computed	0.9955782798285425	0.9887636620711838	6359	1590	2455	5494	0	honest_trainval_test
+TARDBP	tardbp	rnacompete_rbpzoo	logistic_regression	RRM	RRM;RRM	computed	0.990912816579072	0.9823160048136494	8637	2160	3534	7263	0	honest_trainval_test
+TRA2B	tra2b	rnacompete_rbpzoo	logistic_regression	RRM	RRM	computed	0.9603185627633468	0.9246841949840304	4160	1040	2072	3128	0	honest_trainval_test
+ELAVL1	ELAVL1	eclip	logistic_regression	RRM	RRM;RRM;RRM	computed	0.8294486215538848	0.7527699059276785	2392	599	1000	1991	0	honest_trainval_test
+FUS	FUS	eclip	logistic_regression	RRM	RRM	computed	0.5677010050251257	0.3873698996695979	2391	598	1000	1989	0	honest_trainval_test
+HNRNPA1	HNRNPA1	eclip	logistic_regression	RRM	RRM;RRM	computed	0.6274978106838627	0.4668488787360483	1898	475	792	1581	616	honest_trainval_test
+HNRNPC	HNRNPC	eclip	logistic_regression	RRM	RRM	computed	0.8110902255639099	0.7120123524552211	2396	599	999	1996	1	honest_trainval_test
+IGF2BP1	IGF2BP1	eclip	logistic_regression	unknown		computed	0.6685324675324675	0.5138248164861913	2336	585	1000	1921	5	honest_trainval_test
+QKI	QKI	eclip	logistic_regression	KH	KH	computed	0.681486146095718	0.5470062341880176	2385	597	997	1985	0	honest_trainval_test
+RBFOX2	RBFOX2	eclip	logistic_regression	RRM	RRM	computed	0.5937260273972602	0.4705066614939325	2258	565	999	1824	4	honest_trainval_test
+TARDBP	TARDBP	eclip	logistic_regression	RRM	RRM;RRM	computed	0.8625744047619048	0.8183331587198681	2141	536	1000	1677	4	honest_trainval_test
