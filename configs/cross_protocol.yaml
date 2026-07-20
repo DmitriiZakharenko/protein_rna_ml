@@ -1,0 +1,63 @@
+# Cross-protocol comparison configuration
+# Used by scripts/33–36
+
+seed: 42
+k: 4
+min_protocols: 2
+min_pos: 30
+min_neg: 30
+min_examples: 80
+
+# Primary model for headline metrics
+model: logistic_regression
+# Also fit these for ablation columns (optional)
+extra_models:
+  - random_forest
+
+# Honest within-protocol split
+test_frac: 0.20
+val_frac: 0.20
+
+paths:
+  table_s1: data/raw/rbpzoo/TableS1.xlsx
+  top_bottom_summary: results/top_bottom_examples/all_protocols_summary.tsv
+  eclip: data/eclip/eclip_all.tsv
+  out_dir: results/cross_protocol
+  figures_dir: figures
+
+  # Sibling analysis repos (override if your layout differs)
+  htr_selex: ../htr_selex_analysis/results/ml_dataset_simple_clean.tsv
+  rbns: ../rbns_analysis/results/ml_dataset_rbns_clean.tsv
+  rnacompete_eukarya: ../rnacompete_analysis/eukarya/results/ml_dataset_eukarya_clean.tsv.gz
+  rnacompete_rbpzoo: ../rnacompete_analysis/rbpzoo/results/ml_dataset_rbpzoo_clean.tsv.gz
+
+  # Cached within-protocol metrics from scripts/25 (optional shortcut)
+  cached_metrics:
+    htr_selex: results/rna_only_per_protein_honest/htr_selex_per_protein_metrics.tsv
+    rbns: results/rna_only_per_protein_honest/rbns_per_protein_metrics.tsv
+    rnacompete_eukarya: results/rna_only_per_protein_honest/rnacompete_eukarya_per_protein_metrics.tsv
+    rnacompete_rbpzoo: results/rna_only_per_protein_honest/rnacompete_rbpzoo_per_protein_metrics.tsv
+
+protocols:
+  - id: htr_selex
+    path_key: htr_selex
+    protein_col: null  # auto: protein_name or target_name
+    display: HTR-SELEX
+  - id: rbns
+    path_key: rbns
+    protein_col: target_name
+    display: RBNS
+  - id: rnacompete_eukarya
+    path_key: rnacompete_eukarya
+    protein_col: null
+    rnacompete: true
+    display: RNAcompete-Eukarya
+  - id: rnacompete_rbpzoo
+    path_key: rnacompete_rbpzoo
+    protein_col: null
+    rnacompete: true
+    display: RNAcompete-RBPZoo
+  - id: eclip
+    path_key: eclip
+    protein_col: protein_name
+    display: eCLIP

@@ -18,10 +18,13 @@ Output: binding probability ∈ [0, 1]
 | RNAcompete benchmark prep | **Complete** | 13.9M pairs processed |
 | Phase 3A — V2 on `generalized_v3a` | **Complete** | Test AUROC **0.813**, AUPRC **0.713** (494 proteins, 2.66M pairs) |
 | External validation (literature) | **Complete** | Curated AUROC 0.763; expanded benchmark + generated negs (`scripts/31`) |
-| Phase 3A-2 — Multi-seed V2 on v3a | **Next** | `scripts/18_run_multiseed.py` |
-| Phase 3B — V4 bilinear interaction | **Queued** | `scripts/21` on `generalized_v3a` |
+| Phase 3B — V4 bilinear on v3a | **Side track** | Not the Week-1 headline; see `CROSS_ASSAY_PLAN.md` |
+| Cross-protocol comparison | **Active** | Scripts 33–36; roster built (84 proteins, 83% domain-annotated) |
+| Domain-aware model | **Next** | After Week-1 transfer figures |
+| Phase 3A-2 — Multi-seed | **Deferred** | CPU-only VM; 2–3 seeds on final model, not 5× v3a V2 |
+| RNAcompete re-eval (v3a ckpt) | **Deferred** | Needs `scripts/17` → `data/benchmarks/rnacompete/` (gitignored) |
 
-**Canonical references**: [`strategy_dashboard.html`](strategy_dashboard.html) (architecture & queue) · [`PHASE3A_PLAN.md`](PHASE3A_PLAN.md) · [`STRATEGY.md`](STRATEGY.md) · [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md)
+**Canonical references**: [`strategy_dashboard.html`](strategy_dashboard.html) (architecture & queue) · [`CROSS_ASSAY_PLAN.md`](CROSS_ASSAY_PLAN.md) (cross-protocol → domains) · [`DATA_SOURCES_AND_DOWNLOADS.md`](DATA_SOURCES_AND_DOWNLOADS.md) (source integrity) · [`PHASE3A_PLAN.md`](PHASE3A_PLAN.md) · [`STRATEGY.md`](STRATEGY.md) · [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md)
 
 <details>
 <summary>Legacy dashboard</summary>

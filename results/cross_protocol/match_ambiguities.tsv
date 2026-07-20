@@ -1,0 +1,16 @@
+protein_key	protocol	protein_name_native	issue	detail
+RBFOX1	htr_selex	RBFOX1;RBFOX1-construct2;RBFOX1-construct4	multiple_natives_same_key	representative=RBFOX1; rule=prefer_no_construct_suffix
+CELF4	htr_selex	CELF4;CELF4-construct2	multiple_natives_same_key	representative=CELF4; rule=prefer_no_construct_suffix
+DAZ1	htr_selex	DAZ1;DAZ1-construct2;DAZ1-construct3	multiple_natives_same_key	representative=DAZ1; rule=prefer_no_construct_suffix
+IGF2BP1	htr_selex	IGF2BP1;IGF2BP1-construct4	multiple_natives_same_key	representative=IGF2BP1; rule=prefer_no_construct_suffix
+MEX3D	htr_selex	MEX3D;MEX3D-construct3	multiple_natives_same_key	representative=MEX3D; rule=prefer_no_construct_suffix
+A2BP1	rnacompete_eukarya	A2BP1	synonym_blocked_collision	kept base key; synonym blocked
+RBM38	rnacompete_eukarya	RBM38;Rbm38	multiple_natives_same_key	representative=RBM38; rule=prefer_plain_shortest_stable
+PCBP2	rnacompete_eukarya	PCBP2;Pcbp2	multiple_natives_same_key	representative=PCBP2; rule=prefer_plain_shortest_stable
+RBM42	rnacompete_eukarya	RBM42;Rbm42	multiple_natives_same_key	representative=RBM42; rule=prefer_plain_shortest_stable
+HNRNPR	rnacompete_eukarya	HNRNPR;Hnrnpr	multiple_natives_same_key	representative=HNRNPR; rule=prefer_plain_shortest_stable
+RBM47	rnacompete_eukarya	RBM47;Rbm47	multiple_natives_same_key	representative=RBM47; rule=prefer_plain_shortest_stable
+RBM24	rnacompete_eukarya	RBM24;Rbm24	multiple_natives_same_key	representative=RBM24; rule=prefer_plain_shortest_stable
+SRSF3	rnacompete_rbpzoo	SRSF3;srsf3	multiple_natives_same_key	representative=SRSF3; rule=prefer_plain_shortest_stable
+TIA1	rnacompete_rbpzoo	TIA1;tia1	multiple_natives_same_key	representative=TIA1; rule=prefer_plain_shortest_stable
+SNRPB2	rnacompete_rbpzoo	SNRPB2;snrpB2	multiple_natives_same_key	representative=SNRPB2; rule=prefer_plain_shortest_stable

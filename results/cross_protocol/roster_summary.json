@@ -1,0 +1,54 @@
+{
+  "n_roster_proteins": 84,
+  "min_protocols": 2,
+  "proteins_per_protocol": {
+    "htr_selex": 93,
+    "rbns": 96,
+    "rnacompete_eukarya": 200,
+    "rnacompete_rbpzoo": 174,
+    "eclip": 9
+  },
+  "source_notes": {
+    "htr_selex": "/Users/zahalae/Desktop/protein_rna_ml/results/rna_only_per_protein_honest/htr_selex_per_protein_metrics.tsv",
+    "rbns": "/Users/zahalae/Desktop/protein_rna_ml/results/rna_only_per_protein_honest/rbns_per_protein_metrics.tsv",
+    "rnacompete_eukarya": "/Users/zahalae/Desktop/protein_rna_ml/results/rna_only_per_protein_honest/rnacompete_eukarya_per_protein_metrics.tsv",
+    "rnacompete_rbpzoo": "/Users/zahalae/Desktop/protein_rna_ml/results/rna_only_per_protein_honest/rnacompete_rbpzoo_per_protein_metrics.tsv",
+    "eclip": "/Users/zahalae/Desktop/protein_rna_ml/data/eclip/eclip_all.tsv"
+  },
+  "combo_counts": {
+    "rbns|rnacompete_eukarya": 17,
+    "htr_selex|rbns|rnacompete_eukarya": 14,
+    "htr_selex|rbns": 12,
+    "htr_selex|rnacompete_eukarya": 11,
+    "rbns|rnacompete_rbpzoo": 5,
+    "htr_selex|rnacompete_rbpzoo": 4,
+    "eclip|htr_selex|rnacompete_eukarya": 3,
+    "htr_selex|rbns|rnacompete_rbpzoo": 3,
+    "htr_selex|rnacompete_eukarya|rnacompete_rbpzoo": 3,
+    "rbns|rnacompete_eukarya|rnacompete_rbpzoo": 3,
+    "rnacompete_eukarya|rnacompete_rbpzoo": 3,
+    "eclip|htr_selex|rbns|rnacompete_eukarya|rnacompete_rbpzoo": 1,
+    "eclip|htr_selex|rbns|rnacompete_eukarya": 1,
+    "htr_selex|rbns|rnacompete_eukarya|rnacompete_rbpzoo": 1,
+    "eclip|rbns|rnacompete_eukarya": 1,
+    "eclip|htr_selex|rbns": 1,
+    "eclip|rbns|rnacompete_rbpzoo": 1
+  },
+  "domain_annotation_fraction": 0.8214285714285714,
+  "domain_ambiguous_architecture_count": 3,
+  "n_match_ambiguity_rows": 15,
+  "matching_policy": {
+    "within_protocol_synonym_merge": false,
+    "construct_auto_merge_for_classifier": false,
+    "representative_required": true,
+    "notes": "Classifiers must use name_in_<protocol> exact native string only."
+  },
+  "domain_class_counts": {
+    "RRM": 48,
+    "unknown": 15,
+    "KH": 11,
+    "multi": 5,
+    "CCCH": 3,
+    "CSD": 2
+  }
+}
