@@ -1,0 +1,17 @@
+{
+  "n_roster": 84,
+  "n_table_s1": 69,
+  "n_uniprot": 0,
+  "n_missing": 15,
+  "n_with_intervals": 69,
+  "n_with_construct_seq": 69,
+  "domain_class_counts": {
+    "RRM": 48,
+    "unknown": 15,
+    "KH": 11,
+    "multi": 5,
+    "CCCH": 3,
+    "CSD": 2
+  },
+  "output": "data/domains/protein_domains.tsv"
+}
