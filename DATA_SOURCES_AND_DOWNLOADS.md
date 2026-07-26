@@ -1,6 +1,6 @@
 # Data Sources & Download Instructions
 
-**Last updated**: 2026-07-20  
+**Last updated**: 2026-07-21  
 **Purpose**: Every cross-protocol / domain step must be traceable to a primary source.
 Do not invent tables. If a file is missing, download it with the steps below and
 record the path in `configs/cross_protocol.yaml`.
@@ -94,6 +94,47 @@ python scripts/33_build_cross_protocol_roster.py
 **Do not** hand-edit domain strings. If a gene has multiple constructs with different
 architectures, script 33 flags `domain_match_status=ambiguous_architectures`.
 
+**Roster join aliases** (same Table S1 row, different gene spelling in SELEX/RBNS):
+
+| Roster key | Table S1 key |
+|------------|--------------|
+| `HNRPLL` | `HNRNPLL` |
+| `RBFOX1` | `A2BP1` |
+| `PUM1` | `PUM` |
+
+Wired in `scripts/37_annotate_protein_domains.py` (`TABLE_S1_JOIN_ALIASES`).
+
+---
+
+## 2b. UniProt bulk TSV — SELEX/RBNS-only genes absent from Table S1
+
+**Why**: ~12 roster proteins appear in HTR-SELEX/RBNS but not in Sasse Table S1
+(RNAcompete constructs). Prefer **one downloaded TSV**, not ad-hoc per-gene API
+scrapes mixed into the annotation table.
+
+**Local file**: `data/raw/uniprot/roster_missing_domains.tsv`
+
+**Genes covered** (reviewed human): `IGF2BP1`, `BOLL`, `CELF1`, `DAZ3`, `ELAVL4`,
+`RBFOX3`, `RBM4B`, `RBMS2`, `RC3H1`, `THUMPD1`, `ZFP36`, `ZRANB2`.
+
+### Re-download
+
+```bash
+mkdir -p data/raw/uniprot
+curl -fsSL -o data/raw/uniprot/roster_missing_domains.tsv \
+  'https://rest.uniprot.org/uniprotkb/stream?format=tsv&fields=accession%2Cgene_primary%2Cft_domain%2Cft_zn_fing%2Clength%2Csequence&query=%28%28gene_exact%3AIGF2BP1%29%20OR%20%28gene_exact%3ABOLL%29%20OR%20%28gene_exact%3ACELF1%29%20OR%20%28gene_exact%3ADAZ3%29%20OR%20%28gene_exact%3AELAVL4%29%20OR%20%28gene_exact%3ARBFOX3%29%20OR%20%28gene_exact%3ARBM4B%29%20OR%20%28gene_exact%3ARBMS2%29%20OR%20%28gene_exact%3ARC3H1%29%20OR%20%28gene_exact%3ATHUMPD1%29%20OR%20%28gene_exact%3AZFP36%29%20OR%20%28gene_exact%3AZRANB2%29%29%20AND%20%28organism_id%3A9606%29%20AND%20%28reviewed%3Atrue%29'
+```
+
+Then rebuild annotations (Table S1 first, then this TSV):
+
+```bash
+python scripts/37_annotate_protein_domains.py \
+  --uniprot_tsv data/raw/uniprot/roster_missing_domains.tsv
+```
+
+`source=uniprot_tsv` rows give full-length UniProt domain intervals (not RNAcompete
+construct boundaries). Use Table S1 for construct-mask experiments when available.
+
 ---
 
 ## 3. eCLIP (ENCODE)
@@ -156,5 +197,6 @@ RNA-only cross-protocol scripts do not read protein sequences.
 - Lambert et al., *Nature* 2020 — RBNS
 - Ray et al., *Nature* 2013 — RNAcompete eukarya
 - Sasse et al., *Nat. Biotechnol.* 2025 — RBPZoo / Table S1 domains
+- UniProt — reviewed human entries for SELEX/RBNS-only domain fill-in (§2b)
 - ENCODE eCLIP — Van Nostrand et al. / ENCODE portal peak files
 - Boyle et al., Skipper — *Cell Genomics* / STAR Protocols 2024 (future track)

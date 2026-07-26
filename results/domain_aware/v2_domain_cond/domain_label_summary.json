@@ -1,0 +1,36 @@
+{
+  "n_variants": 619,
+  "domain_class_counts": {
+    "RRM": 349,
+    "unknown": 154,
+    "KH": 54,
+    "multi": 32,
+    "CCCH": 14,
+    "ZF": 4,
+    "CSD": 4,
+    "PUM": 4,
+    "SAM": 2,
+    "THUMP": 1,
+    "S1": 1
+  },
+  "label_source_counts": {
+    "alignment_qc": 437,
+    "unknown": 154,
+    "domains_tsv": 28
+  },
+  "n_unknown": 154,
+  "vocab": [
+    "unknown",
+    "RRM",
+    "KH",
+    "multi",
+    "CCCH",
+    "CSD",
+    "PUM",
+    "ZF",
+    "THUMP",
+    "SAM",
+    "S1",
+    "other"
+  ]
+}

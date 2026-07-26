@@ -1,17 +1,25 @@
 {
   "n_roster": 84,
-  "n_table_s1": 69,
+  "n_table_s1": 72,
+  "n_uniprot_tsv": 12,
   "n_uniprot": 0,
-  "n_missing": 15,
-  "n_with_intervals": 69,
-  "n_with_construct_seq": 69,
+  "n_missing": 0,
+  "n_with_intervals": 84,
+  "n_with_construct_seq": 72,
   "domain_class_counts": {
-    "RRM": 48,
-    "unknown": 15,
+    "RRM": 54,
     "KH": 11,
-    "multi": 5,
-    "CCCH": 3,
-    "CSD": 2
+    "multi": 10,
+    "CCCH": 4,
+    "CSD": 2,
+    "PUM": 1,
+    "THUMP": 1,
+    "ZF": 1
+  },
+  "s1_join_aliases": {
+    "HNRPLL": "HNRNPLL",
+    "RBFOX1": "A2BP1",
+    "PUM1": "PUM"
   },
   "output": "data/domains/protein_domains.tsv"
 }
