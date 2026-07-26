@@ -114,3 +114,60 @@ class RNABindingCNN(nn.Module):
 
     def predict_proba(self, rna_onehot, prot_onehot):
         return torch.sigmoid(self.forward(rna_onehot, prot_onehot))
+
+
+class RNABindingCNNDomainCond(nn.Module):
+    """
+    Dual-branch CNN + learnable domain-class embedding in the head.
+
+    Same RNA/protein encoders as RNABindingCNN. After global max-pool,
+    concatenates a domain embedding before the MLP:
+
+        [rna_emb ∥ prot_emb ∥ domain_emb] → MLP → logit
+
+    domain_id is an integer class index (RRM, KH, multi, unknown, …).
+    """
+
+    def __init__(
+        self,
+        n_domain_classes: int,
+        domain_emb_dim: int = 32,
+        rna_filters: list[int] = [128, 256, 256],
+        prot_filters: list[int] = [128, 256, 256],
+        rna_kernels: list[int] = [7, 5, 3],
+        prot_kernels: list[int] = [11, 7, 5],
+        head_dims: list[int] = [256, 64],
+        dropout: float = 0.3,
+    ):
+        super().__init__()
+        if n_domain_classes < 1:
+            raise ValueError("n_domain_classes must be >= 1")
+        self.n_domain_classes = n_domain_classes
+        self.domain_emb_dim = domain_emb_dim
+
+        self.rna_branch = ConvBranch(4, rna_filters, rna_kernels, dropout)
+        self.prot_branch = ConvBranch(20, prot_filters, prot_kernels, dropout)
+        self.domain_emb = nn.Embedding(n_domain_classes, domain_emb_dim)
+
+        in_dim = rna_filters[-1] + prot_filters[-1] + domain_emb_dim
+        head = []
+        for h in head_dims:
+            head += [nn.Linear(in_dim, h), nn.GELU(), nn.Dropout(dropout)]
+            in_dim = h
+        head.append(nn.Linear(in_dim, 1))
+        self.head = nn.Sequential(*head)
+
+    def forward(
+        self,
+        rna_onehot: torch.Tensor,
+        prot_onehot: torch.Tensor,
+        domain_id: torch.Tensor,
+    ) -> torch.Tensor:
+        rna_emb = self.rna_branch(rna_onehot)
+        prot_emb = self.prot_branch(prot_onehot)
+        dom = self.domain_emb(domain_id.long())
+        combined = torch.cat([rna_emb, prot_emb, dom], dim=-1)
+        return self.head(combined).squeeze(-1)
+
+    def predict_proba(self, rna_onehot, prot_onehot, domain_id):
+        return torch.sigmoid(self.forward(rna_onehot, prot_onehot, domain_id))
