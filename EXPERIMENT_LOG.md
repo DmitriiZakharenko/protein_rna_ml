@@ -1,7 +1,7 @@
 # Experiment Log
 
 **Project**: Protein–RNA Binding Prediction
-**Last updated**: 2026-07-11
+**Last updated**: 2026-08-30
 
 This file is the canonical record of every training run. Each entry documents what
 was run, what the results were, what failed, and what was learned. All Phase 2 results have been retrained with the double class-weighting bug fixed (2026-05-13).
@@ -402,4 +402,32 @@ probe length; top 3 RBPs by mean positive intensity; test protein length vs inte
 
 **Conclusion**: no evidence that longer RBPs yield higher mean positive RNAcompete intensity.
 Spectrum TSVs: `results/rnacompete_intensity_spectrum/*/spectrum_samples_*.tsv`.
+
+---
+
+## 2026-08-30 — Phase 3B: V4 bilinear on generalized_v3a (GPU P100)
+
+**Script**: `scripts/21_train_generalized_v4_interaction.py`  
+**Config**: `concat_bi`, `--use_source_emb`, `prot_max=700`, `batch_size=512`, seed=42  
+**Checkpoint**: `models/saved/generalized_v4_phase3a/best_model.pt` (epoch 32, early stop 42)
+
+| Split | V2 v3a | V4 concat_bi | Δ |
+|-------|--------|--------------|---|
+| Test AUROC | 0.813 | **0.829** | +0.016 |
+| Test AUPRC | 0.713 | **0.735** | +0.022 |
+| Per-protein median test AUROC | 0.817 | **0.851** | +0.034 |
+
+**External (literature, long RNA, sliding window max)** — `scripts/11` / `scripts/21b`:
+
+| Subset | V2 AUROC | V4 AUROC | V2 AUPRC | V4 AUPRC |
+|--------|----------|----------|----------|----------|
+| Curated (159) | 0.763 | 0.737 | 0.915 | 0.890 |
+| Expanded (540) | 0.688 | 0.666 | 0.488 | 0.341 |
+
+**Learned**: Bilinear + source embedding improves held-out **in vitro** test but does **not**
+improve (slightly hurts) OOD literature external. Likely factors: assay-specific source_emb
+(zero vector at external inference), bilinear overfit to SELEX/RNAcompete pairing patterns.
+
+**Summary JSON**: `results/phase3b_summary.json`  
+**Next**: multi-seed V4 (`scripts/18`); cross-protocol (`scripts/33–36`); optional V4 w/o source_emb.
 
