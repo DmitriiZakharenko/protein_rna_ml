@@ -98,27 +98,52 @@ def score_pair_v4(
     return max(scores)
 
 
+def _is_valid_xlsx(path: str) -> bool:
+    """xlsx files are zip archives; reject empty/corrupt uploads."""
+    try:
+        if not os.path.isfile(path) or os.path.getsize(path) < 1024:
+            return False
+        with open(path, "rb") as fh:
+            return fh.read(2) == b"PK"
+    except OSError:
+        return False
+
+
+def _resolve_curated_xlsx(explicit: str | None) -> str | None:
+    candidates = []
+    if explicit:
+        candidates.append(explicit)
+    candidates.extend([
+        "data/external/dataset without affinities.xlsx",
+        "data/external/dataset_without_affinities.xlsx",
+        "dataset without affinities.xlsx",
+    ])
+    seen: set[str] = set()
+    for c in candidates:
+        if c in seen:
+            continue
+        seen.add(c)
+        if os.path.exists(c) and _is_valid_xlsx(c):
+            return c
+    return None
+
+
 def load_pairs(args) -> tuple[pd.DataFrame, str]:
     if args.benchmark_tsv:
-        print(f"\n=== Loading expanded benchmark TSV: {args.benchmark_tsv} ===")
+        print(f"\n=== Loading benchmark TSV: {args.benchmark_tsv} ===")
         df = load_benchmark_tsv(args.benchmark_tsv)
         return df, args.benchmark_tsv
 
-    xlsx = args.xlsx
+    xlsx = _resolve_curated_xlsx(args.xlsx)
     if xlsx is None:
-        for c in [
-            "data/external/dataset without affinities.xlsx",
-            "data/external/dataset_without_affinities.xlsx",
-            "dataset without affinities.xlsx",
-        ]:
-            if os.path.exists(c):
-                xlsx = c
-                break
-    if xlsx is None:
-        print("ERROR: pass --benchmark_tsv or --xlsx (or place xlsx under data/external/).")
+        print("ERROR: no valid curated xlsx found (need PK zip header, ~86 KB).")
+        print("  Fix: re-upload from Mac, or use expanded TSV:")
+        print("    --benchmark_tsv data/external/external_benchmark_expanded.tsv")
+        print("  Curated-only subset (~159 rows):")
+        print("    python -c \"import pandas as pd; df=pd.read_csv('data/external/external_benchmark_expanded.tsv', sep='\\t'); df[df.example_class.str.startswith('curated_')].to_csv('data/external/external_benchmark_curated.tsv', sep='\\t', index=False)\"")
         sys.exit(1)
 
-    print(f"\n=== Loading curated external xlsx: {xlsx} ===")
+    print(f"\n=== Loading curated external xlsx: {xlsx} ({os.path.getsize(xlsx):,} bytes) ===")
     df_raw = ext.load_external_dataset(xlsx)
 
     def find_col(df, *candidates):
