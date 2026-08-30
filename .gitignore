@@ -36,6 +36,10 @@ results/top_bottom_examples_ucrbp_filtered.tsv.gz
 # Editor / local session files
 .cursor/
 
+# Local planning / session notes (keep on disk, do not publish)
+tasks/
+PHASE3B_RUNBOOK.md
+
 # Python
 __pycache__/
 *.pyc
