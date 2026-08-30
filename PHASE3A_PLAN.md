@@ -84,12 +84,15 @@ python scripts/06_train_generalized_v2.py \
     --out_dir results/generalized/v3a_scale
 ```
 
-### Step 5 — Evaluate zero-shot benchmark (unchanged protocol)
-```bash
-python scripts/20_evaluate_benchmark.py \
-    --model_path models/saved/generalized_v3a/best_model.pt \
-    --benchmark_dir data/benchmarks/rnacompete
-```
+### Step 5 — ~~RNAcompete zero-shot benchmark~~ **INVALID after v3a training**
+
+Do **not** run `scripts/20` on `rnacompete_all.tsv` / `rnacompete_rbpzoo.tsv` for models
+trained on `generalized_v3a`: Eukarya + RBPZoo full panels are already in training.
+
+Use instead:
+- **Primary**: v3a held-out test split (`test.tsv`, 55 proteins)
+- **OOD**: literature external (`scripts/11`, `scripts/21b`)
+- **Future**: ucRBP proteins outside the 23-protein whitelist (true RNAcompete OOD)
 
 ---
 
@@ -110,7 +113,7 @@ python scripts/20_evaluate_benchmark.py \
 | Test AUPRC | 0.580 | ≥ 0.58 | **0.713** ✅ |
 | Val AUROC / AUPRC | 0.746 / — | — | **0.818 / 0.693** |
 | Per-protein median test AUROC | 0.714 | ≥ 0.72 | **0.817** (55 test proteins) ✅ |
-| RNAcompete zero-shot median (unseen proteins) | 0.549 | ≥ 0.60 | **Not re-run yet** (3A-3) |
+| RNAcompete zero-shot median (unseen proteins) | 0.549 | ≥ 0.60 | **N/A** — invalid after v3a (panels in train) |
 
 Checkpoint: `models/saved/generalized_v2/best_model.pt` (trained on `generalized_v3a`, VM CPU).  
 Results JSON: `results/generalized/v3a_scale/v2_cnn_results.json`  
@@ -153,9 +156,11 @@ While Phase 3A runs, gather these (priority order):
 | ID | Experiment | Depends on |
 |----|------------|------------|
 | 3A-1 | V2 on `generalized_v3a` | **Done** — test AUROC 0.813 |
-| 3A-2 | Multi-seed variance (5 seeds) | **Next** |
-| 3A-3 | RNAcompete zero-shot on v3a checkpoint | Next |
-| 3B-1 | V4 `concat_bi` on v3a | 3A-1 |
+| 3B-0 | V4 `concat` ablation on v2 | Optional sanity check |
+| 3B-1 | V4 `concat_bi` on v3a | **Done** — test AUROC **0.829** (see `results/phase3b_summary.json`) |
+| 3A-EXT | External re-eval stratified | **Next** — `PHASE3B_RUNBOOK.md` Steps 2–3 |
+| 3A-2 | Multi-seed variance | **Next** — GPU, 3 seeds (`scripts/18`) |
+| 3A-3 | RNAcompete re-eval on v3a ckpt | **Cancelled** — not zero-shot after v3a |
 | 3B-2 | Hard negatives mix | New script |
 | 3C-1 | CNN embedding → XGBoost stack | 3A-1 checkpoint |
 | 3C-2 | Multi-task affinity regression | RBNS R_max + RNAcompete intensity |
