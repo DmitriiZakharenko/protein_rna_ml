@@ -1,0 +1,73 @@
+{
+  "phase": "3B",
+  "status": "IN_PROGRESS",
+  "generated": "2026-08-30",
+  "description": "V4 bilinear interaction on generalized_v3a; external + multiseed pending",
+
+  "v4_concat_bi_v3a": {
+    "checkpoint": "models/saved/generalized_v4_phase3a/best_model.pt",
+    "interaction": "concat_bi",
+    "use_source_emb": true,
+    "data_dir": "data/generalized_v3a",
+    "prot_max": 700,
+    "batch_size": 512,
+    "best_epoch": 32,
+    "early_stop_epoch": 42,
+    "best_val_auroc": 0.8517,
+    "best_val_auprc": 0.7512,
+    "test_auroc": 0.8292,
+    "test_auprc": 0.7352,
+    "per_protein_test_median_auroc": 0.8509,
+    "per_protein_test_min_auroc": 0.4912,
+    "n_test_proteins": 55,
+    "epoch_time_sec_approx": 806,
+    "device": "Tesla P100-PCIE-16GB",
+    "results_json": "results/generalized/v4_phase3a/v4_concat_bi_results.json",
+    "train_log": "results/generalized/v4_phase3a/train.log"
+  },
+
+  "vs_v2_v3a": {
+    "v2_test_auroc": 0.813,
+    "v2_test_auprc": 0.713,
+    "v4_test_auroc_delta": 0.0162,
+    "v4_test_auprc_delta": 0.0222,
+    "v4_per_protein_median_delta": 0.0337
+  },
+
+  "external_validation": {
+    "v2_curated": {
+      "status": "done_pre_v4",
+      "auroc": 0.763,
+      "auprc": 0.915,
+      "results_json": "results/external/v3a_v2_expanded/external_validation_v2.json"
+    },
+    "v2_expanded": {
+      "status": "done_pre_v4",
+      "n": 540,
+      "auroc": 0.688,
+      "auprc": 0.488,
+      "results_json": "results/external/v3a_v2_expanded/external_validation_v2.json"
+    },
+    "v4_curated": {
+      "status": "pending",
+      "script": "scripts/21b_evaluate_external_v4.py",
+      "out_dir": "results/external/v4_phase3a_curated"
+    },
+    "v4_expanded": {
+      "status": "pending",
+      "script": "scripts/21b_evaluate_external_v4.py",
+      "out_dir": "results/external/v4_phase3a_expanded"
+    }
+  },
+
+  "invalid_evals": {
+    "rnacompete_all_zero_shot_after_v3a": "Eukarya+RBPZoo full panels are in training; do not report as zero-shot"
+  },
+
+  "next_steps": [
+    "Step 2–3: external eval V2 + V4 (PHASE3B_RUNBOOK.md)",
+    "Step 4: multi-seed V4 (seeds 42, 0, 1)",
+    "Step 5: cross-protocol scripts 33–36",
+    "Step 6: domain-conditioned V2 scripts 38 A/B/C"
+  ]
+}
