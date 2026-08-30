@@ -2,7 +2,7 @@
   "phase": "3B",
   "status": "IN_PROGRESS",
   "generated": "2026-08-30",
-  "description": "V4 bilinear interaction on generalized_v3a; external + multiseed pending",
+  "description": "V4 concat_bi on v3a: gains on held-out test, no gain on literature external OOD",
 
   "v4_concat_bi_v3a": {
     "checkpoint": "models/saved/generalized_v4_phase3a/best_model.pt",
@@ -11,6 +11,7 @@
     "data_dir": "data/generalized_v3a",
     "prot_max": 700,
     "batch_size": 512,
+    "seed": 42,
     "best_epoch": 32,
     "early_stop_epoch": 42,
     "best_val_auroc": 0.8517,
@@ -26,37 +27,53 @@
     "train_log": "results/generalized/v4_phase3a/train.log"
   },
 
-  "vs_v2_v3a": {
+  "vs_v2_v3a_test": {
     "v2_test_auroc": 0.813,
     "v2_test_auprc": 0.713,
     "v4_test_auroc_delta": 0.0162,
     "v4_test_auprc_delta": 0.0222,
-    "v4_per_protein_median_delta": 0.0337
+    "v4_per_protein_median_delta": 0.0337,
+    "interpretation": "V4 improves in-distribution held-out test on generalized_v3a"
   },
 
   "external_validation": {
+    "note": "Literature long-RNA pairs; curated subset from external_benchmark_curated.tsv (159 rows)",
     "v2_curated": {
-      "status": "done_pre_v4",
-      "auroc": 0.763,
+      "n": 159,
+      "n_pos": 114,
+      "auroc": 0.7634,
       "auprc": 0.915,
-      "results_json": "results/external/v3a_v2_expanded/external_validation_v2.json"
+      "random_auprc_baseline": 0.717,
+      "results_json": "results/external/v3a_v2_expanded_rerun/external_validation_v2.json"
     },
     "v2_expanded": {
-      "status": "done_pre_v4",
       "n": 540,
-      "auroc": 0.688,
-      "auprc": 0.488,
-      "results_json": "results/external/v3a_v2_expanded/external_validation_v2.json"
+      "auroc": 0.6882,
+      "auprc": 0.4878,
+      "random_auprc_baseline": 0.2111,
+      "results_json": "results/external/v3a_v2_expanded_rerun/external_validation_v2.json"
     },
     "v4_curated": {
-      "status": "pending",
-      "script": "scripts/21b_evaluate_external_v4.py",
-      "out_dir": "results/external/v4_phase3a_curated"
+      "n": 159,
+      "n_pos": 114,
+      "auroc": 0.7374,
+      "auprc": 0.8903,
+      "random_auprc_baseline": 0.717,
+      "results_json": "results/external/v4_phase3a_curated/external_validation_v4.json"
     },
     "v4_expanded": {
-      "status": "pending",
-      "script": "scripts/21b_evaluate_external_v4.py",
-      "out_dir": "results/external/v4_phase3a_expanded"
+      "n": 540,
+      "auroc": 0.6655,
+      "auprc": 0.3407,
+      "random_auprc_baseline": 0.2111,
+      "results_json": "results/external/v4_phase3a_expanded/external_validation_v4.json"
+    },
+    "v4_vs_v2_external": {
+      "curated_auroc_delta": -0.026,
+      "curated_auprc_delta": -0.025,
+      "expanded_auroc_delta": -0.023,
+      "expanded_auprc_delta": -0.147,
+      "interpretation": "V4 does not improve OOD literature generalization; possible source_emb / bilinear overfit to in vitro assays. External eval uses zero source embedding for unknown assay."
     }
   },
 
@@ -64,10 +81,15 @@
     "rnacompete_all_zero_shot_after_v3a": "Eukarya+RBPZoo full panels are in training; do not report as zero-shot"
   },
 
+  "headline_metrics": {
+    "primary": "v3a test AUROC 0.829 (V4) vs 0.813 (V2)",
+    "ood_curated": "literature external AUROC 0.737 (V4) vs 0.763 (V2) — V2 still better OOD"
+  },
+
   "next_steps": [
-    "Step 2–3: external eval V2 + V4 (PHASE3B_RUNBOOK.md)",
-    "Step 4: multi-seed V4 (seeds 42, 0, 1)",
-    "Step 5: cross-protocol scripts 33–36",
-    "Step 6: domain-conditioned V2 scripts 38 A/B/C"
+    "Multi-seed V4 (scripts/18, seeds 42/0/1) — test variance on test + external",
+    "Cross-protocol Week 1 (scripts/33-36) — primary science deliverable",
+    "Optional: V4 without --use_source_emb ablation",
+    "Domain-conditioned V2 (scripts/38 A/B/C) after cross-protocol"
   ]
 }

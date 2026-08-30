@@ -157,8 +157,8 @@ While Phase 3A runs, gather these (priority order):
 |----|------------|------------|
 | 3A-1 | V2 on `generalized_v3a` | **Done** — test AUROC 0.813 |
 | 3B-0 | V4 `concat` ablation on v2 | Optional sanity check |
-| 3B-1 | V4 `concat_bi` on v3a | **Done** — test AUROC **0.829** (see `results/phase3b_summary.json`) |
-| 3A-EXT | External re-eval stratified | **Next** — `PHASE3B_RUNBOOK.md` Steps 2–3 |
+| 3B-1 | V4 `concat_bi` on v3a | **Done** — test AUROC **0.829**; external curated **0.737** (V2 **0.763**) |
+| 3A-EXT | External re-eval stratified | **Done** — `results/phase3b_summary.json` |
 | 3A-2 | Multi-seed variance | **Next** — GPU, 3 seeds (`scripts/18`) |
 | 3A-3 | RNAcompete re-eval on v3a ckpt | **Cancelled** — not zero-shot after v3a |
 | 3B-2 | Hard negatives mix | New script |
