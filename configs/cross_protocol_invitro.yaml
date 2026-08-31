@@ -1,0 +1,53 @@
+# In-vitro cross-protocol comparison (no eCLIP)
+# Used by scripts/33–36
+
+seed: 42
+k: 4
+min_protocols: 2
+min_pos: 30
+min_neg: 30
+min_examples: 80
+
+model: logistic_regression
+extra_models:
+  - random_forest
+
+test_frac: 0.20
+val_frac: 0.20
+
+paths:
+  table_s1: data/raw/rbpzoo/TableS1.xlsx
+  top_bottom_summary: results/top_bottom_examples/all_protocols_summary.tsv
+  out_dir: results/cross_protocol_invitro
+  figures_dir: figures
+
+  htr_selex: ../htr_selex_analysis/results/ml_dataset_simple_clean.tsv
+  rbns: ../rbns_analysis/results/ml_dataset_rbns_clean.tsv
+  rnacompete_eukarya: ../rnacompete_analysis/eukarya/results/ml_dataset_eukarya_clean.tsv.gz
+  rnacompete_rbpzoo: ../rnacompete_analysis/rbpzoo/results/ml_dataset_rbpzoo_clean.tsv.gz
+
+  cached_metrics:
+    htr_selex: results/rna_only_per_protein_honest/htr_selex_per_protein_metrics.tsv
+    rbns: results/rna_only_per_protein_honest/rbns_per_protein_metrics.tsv
+    rnacompete_eukarya: results/rna_only_per_protein_honest/rnacompete_eukarya_per_protein_metrics.tsv
+    rnacompete_rbpzoo: results/rna_only_per_protein_honest/rnacompete_rbpzoo_per_protein_metrics.tsv
+
+protocols:
+  - id: htr_selex
+    path_key: htr_selex
+    protein_col: null
+    display: HTR-SELEX
+  - id: rbns
+    path_key: rbns
+    protein_col: target_name
+    display: RBNS
+  - id: rnacompete_eukarya
+    path_key: rnacompete_eukarya
+    protein_col: null
+    rnacompete: true
+    display: RNAcompete-Eukarya
+  - id: rnacompete_rbpzoo
+    path_key: rnacompete_rbpzoo
+    protein_col: null
+    rnacompete: true
+    display: RNAcompete-RBPZoo
