@@ -1,10 +1,10 @@
 {
   "phase": "3B",
   "status": "IN_PROGRESS",
-  "generated": "2026-08-30",
-  "description": "V4 concat_bi on v3a: gains on held-out test, no gain on literature external OOD",
+  "generated": "2026-08-31",
+  "description": "V4 concat_bi on v3a: stable multi-seed test gain vs V2; no OOD external gain",
 
-  "v4_concat_bi_v3a": {
+  "v4_concat_bi_v3a_single_run": {
     "checkpoint": "models/saved/generalized_v4_phase3a/best_model.pt",
     "interaction": "concat_bi",
     "use_source_emb": true,
@@ -27,12 +27,30 @@
     "train_log": "results/generalized/v4_phase3a/train.log"
   },
 
+  "v4_concat_bi_v3a_multiseed": {
+    "seeds": [42, 0, 1],
+    "n_runs": 3,
+    "failed_seeds": [],
+    "summary_json": "results/multiseed/v4_concat_bi_v3a/summary.json",
+    "aggregate": {
+      "test_auroc_mean": 0.8286,
+      "test_auroc_std": 0.0088,
+      "test_auprc_mean": 0.7320,
+      "test_auprc_std": 0.0110,
+      "per_protein_median_mean": 0.8535,
+      "per_protein_median_std": 0.0038
+    },
+    "per_seed_test_auroc": {"42": 0.8298, "0": 0.8367, "1": 0.8193},
+    "best_test_seed": 0,
+    "best_checkpoint": "results/multiseed/v4_concat_bi_v3a/seed_0/checkpoints/best_model.pt"
+  },
+
   "vs_v2_v3a_test": {
     "v2_test_auroc": 0.813,
     "v2_test_auprc": 0.713,
-    "v4_test_auroc_delta": 0.0162,
-    "v4_test_auprc_delta": 0.0222,
-    "v4_per_protein_median_delta": 0.0337,
+    "v4_single_test_auroc_delta": 0.0162,
+    "v4_multiseed_test_auroc_delta_mean": 0.0156,
+    "v4_multiseed_test_auprc_delta_mean": 0.0190,
     "interpretation": "V4 improves in-distribution held-out test on generalized_v3a"
   },
 
@@ -82,14 +100,13 @@
   },
 
   "headline_metrics": {
-    "primary": "v3a test AUROC 0.829 (V4) vs 0.813 (V2)",
+    "primary": "v3a test AUROC 0.829 ± 0.009 (V4, 3 seeds) vs 0.813 (V2, 1 seed)",
     "ood_curated": "literature external AUROC 0.737 (V4) vs 0.763 (V2) — V2 still better OOD"
   },
 
   "next_steps": [
-    "Multi-seed V4 (scripts/18, seeds 42/0/1) — test variance on test + external",
     "Cross-protocol Week 1 (scripts/33-36) — primary science deliverable",
-    "Optional: V4 without --use_source_emb ablation",
-    "Domain-conditioned V2 (scripts/38 A/B/C) after cross-protocol"
+    "Domain-conditioned V2 (scripts/38 A/B/C) after cross-protocol",
+    "Optional: V4 without --use_source_emb OOD ablation"
   ]
 }

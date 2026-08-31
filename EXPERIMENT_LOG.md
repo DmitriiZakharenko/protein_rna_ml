@@ -431,3 +431,17 @@ improve (slightly hurts) OOD literature external. Likely factors: assay-specific
 **Summary JSON**: `results/phase3b_summary.json`  
 **Next**: multi-seed V4 (`scripts/18`); cross-protocol (`scripts/33–36`); optional V4 w/o source_emb.
 
+### P3B-V4-MULTISEED — 3 seeds on generalized_v3a
+
+**Script**: `scripts/18_run_multiseed.py` → `scripts/21_train_generalized_v4_interaction.py`  
+**Seeds**: 42, 0, 1 — all succeeded  
+**Output**: `results/multiseed/v4_concat_bi_v3a/summary.json`
+
+| Metric | mean ± std | min | max |
+|--------|------------|-----|-----|
+| Test AUROC | **0.829 ± 0.009** | 0.819 | 0.837 |
+| Test AUPRC | **0.732 ± 0.011** | 0.720 | 0.741 |
+| Per-protein median AUROC | 0.854 ± 0.004 | 0.851 | 0.858 |
+
+Best test seed: **0** (AUROC 0.837). Variance is modest; V4 gain over V2 (0.813) is stable across seeds.
+
