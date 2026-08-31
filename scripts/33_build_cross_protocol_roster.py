@@ -368,6 +368,10 @@ def main() -> None:
             protocol_proteins[pid] = proteins_from_metrics(cpath)
             source_notes[pid] = str(cpath)
 
+    # Reserve roster columns for every configured protocol (empty set if data missing).
+    for proto in cfg.get("protocols", []):
+        protocol_proteins.setdefault(proto["id"], set())
+
     domains = None
     table_s1 = resolve(paths.get("table_s1", "data/raw/rbpzoo/TableS1.xlsx"))
     if table_s1.exists():

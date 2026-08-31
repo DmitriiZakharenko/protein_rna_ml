@@ -19,8 +19,33 @@
 
 ## Next on VM — cross-protocol (Step 5)
 
+### Data prerequisites (script 34 needs full TSVs, not just roster)
+
 ```bash
 cd /vol/space/protein_rna_ml
+ls -lh ../rbns_analysis/results/ml_dataset_rbns_clean.tsv
+ls -lh ../htr_selex_analysis/results/ml_dataset_simple_clean.tsv
+ls -lh ../rnacompete_analysis/eukarya/results/ml_dataset_eukarya_clean.tsv.gz
+ls -lh ../rnacompete_analysis/rbpzoo/results/ml_dataset_rbpzoo_clean.tsv.gz
+ls -lh data/eclip/eclip_all.tsv   # optional; 34 skips if missing
+```
+
+`rbns_analysis` is on `/vol/space/`. If HTR-SELEX / RNAcompete paths are missing, rsync from Mac or clone sibling repos next to `protein_rna_ml`.
+
+eCLIP only (~12 MB) — from Mac:
+
+```bash
+# Mac
+rsync -avP -e "ssh -i ~/.ssh/id_ed25519 -p PORT" \
+  /Users/zahalae/Desktop/protein_rna_ml/data/sanitized/eclip/eclip_all.tsv \
+  ubuntu@HOST:/vol/space/protein_rna_ml/data/eclip/eclip_all.tsv
+```
+
+On VM: `mkdir -p data/eclip`
+
+### Run pipeline
+
+```bash
 git pull
 source /vol/space/miniconda3/bin/activate prna
 
@@ -34,11 +59,4 @@ python scripts/35_cross_protocol_motif_concordance.py
 python scripts/36_visualize_cross_protocol.py
 ```
 
-If `34` fails on missing paths:
-
-```bash
-ls /vol/space/rbns_analysis/results/ml_dataset_rbns_clean.tsv
-# Edit configs/cross_protocol.yaml or clone htr_selex_analysis / rnacompete_analysis under /vol/space/
-```
-
-Then domain models (`scripts/38`) — see `DOMAIN_AWARE_PLAN.md`.
+If `33` warned about missing eCLIP — OK after git pull (empty `name_in_eclip` columns). Script `34` skips eCLIP when TSV absent.
