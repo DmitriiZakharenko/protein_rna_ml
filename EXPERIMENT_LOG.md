@@ -1,7 +1,7 @@
 # Experiment Log
 
 **Project**: Protein–RNA Binding Prediction
-**Last updated**: 2026-08-30
+**Last updated**: 2026-09-01
 
 This file is the canonical record of every training run. Each entry documents what
 was run, what the results were, what failed, and what was learned. All Phase 2 results have been retrained with the double class-weighting bug fixed (2026-05-13).
@@ -444,4 +444,54 @@ improve (slightly hurts) OOD literature external. Likely factors: assay-specific
 | Per-protein median AUROC | 0.854 ± 0.004 | 0.851 | 0.858 |
 
 Best test seed: **0** (AUROC 0.837). Variance is modest; V4 gain over V2 (0.813) is stable across seeds.
+
+---
+
+## 2026-09-01 — Phase 3B: Cross-protocol in-vitro (scripts 33–36)
+
+**VM**: pleasedimpala-8f147 (`/vol/space/protein_rna_ml`)  
+**Config**: `configs/cross_protocol_invitro.yaml` — HTR-SELEX, RBNS, RNAcompete Eukarya/RBPZoo (no eCLIP)  
+**Model**: k=4 logistic regression, representative native exact match (roster from script 33)
+
+**Roster**: 84 proteins (≥2 protocols), 82.1% domain-annotated (Table S1)
+
+### Within-protocol (matched proteins, honest train/val/test)
+
+| Protocol | Proteins evaluated | Median AUROC |
+|----------|-------------------|--------------|
+| HTR-SELEX | 54 | 0.950 |
+| RBNS | 60 | 0.993 |
+| RNAcompete Eukarya | 58 | 0.992 |
+| RNAcompete RBPZoo | 24 | 0.985 |
+
+**Mean within AUROC**: 0.974 (196 protein×protocol rows)
+
+### Cross-protocol transfer (train A → test B, same protein)
+
+| Direction | Median AUROC | n |
+|-----------|--------------|---|
+| htr_selex → rbns | 0.804 | 33 |
+| htr_selex → rnacompete_eukarya | 0.783 | 34 |
+| htr_selex → rnacompete_rbpzoo | 0.734 | 12 |
+| rbns → htr_selex | **0.703** | 33 |
+| rbns → rnacompete_eukarya | 0.766 | 38 |
+| rbns → rnacompete_rbpzoo | 0.771 | 14 |
+| rnacompete_eukarya → htr_selex | 0.832 | 34 |
+| rnacompete_eukarya → rbns | 0.936 | 38 |
+| rnacompete_eukarya → rnacompete_rbpzoo | 0.953 | 11 |
+| rnacompete_rbpzoo → htr_selex | 0.872 | 12 |
+| rnacompete_rbpzoo → rbns | **0.961** | 14 |
+| rnacompete_rbpzoo → rnacompete_eukarya | **0.987** | 11 |
+
+**Mean transfer AUROC**: 0.791 (284 rows). **24/284** below 0.55.  
+RNA sequence overlap ≈ 0 for SELEX/RBNS/RNAcompete cross-pairs; ~23% for Eukarya↔RBPZoo.
+
+### Motif concordance (script 35, top/bottom 7-mers from script 24)
+
+- 142 protein×protocol pairs; median Jaccard (exact 7-mer) = 0.0; core-5-mer > 0 in 66/142 pairs
+- Transfer works without shared top k-mers across assays
+
+**Outputs**: `results/cross_protocol_invitro/`; figures `figures/cross_protocol_*.png`  
+**Summary**: `results/phase3b_summary.json` → `cross_protocol_invitro`  
+**Next**: domain-conditioned V2 (`scripts/38`)
 

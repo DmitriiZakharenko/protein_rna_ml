@@ -1,0 +1,101 @@
+{
+  "model": "logistic_regression",
+  "k": 4,
+  "seed": 42,
+  "config": "configs/cross_protocol_invitro.yaml",
+  "matching_policy": "representative_native_exact_match_only",
+  "protocols": ["htr_selex", "rbns", "rnacompete_eukarya", "rnacompete_rbpzoo"],
+  "note": "In-vitro only (no eCLIP). VM run pleasedimpala-2026-09-01. Re-sync from VM for full load_stats.",
+  "n_within_rows": 196,
+  "n_transfer_rows": 284,
+  "within_mean_auroc": 0.974,
+  "transfer_mean_auroc": 0.791,
+  "transfer_auroc_below_0_55": 24,
+  "protocols_loaded": [
+    "htr_selex",
+    "rbns",
+    "rnacompete_eukarya",
+    "rnacompete_rbpzoo"
+  ],
+  "within_median_auroc_by_protocol": {
+    "htr_selex": 0.950,
+    "rbns": 0.993,
+    "rnacompete_eukarya": 0.992,
+    "rnacompete_rbpzoo": 0.985
+  },
+  "within_proteins_evaluated": {
+    "htr_selex": 54,
+    "rbns": 60,
+    "rnacompete_eukarya": 58,
+    "rnacompete_rbpzoo": 24
+  },
+  "transfer_median_auroc_by_pair": {
+    "htr_selex->rbns": {
+      "median_auroc": 0.804,
+      "n": 33,
+      "median_rna_overlap_frac": 0.0
+    },
+    "htr_selex->rnacompete_eukarya": {
+      "median_auroc": 0.783,
+      "n": 34,
+      "median_rna_overlap_frac": 0.0
+    },
+    "htr_selex->rnacompete_rbpzoo": {
+      "median_auroc": 0.734,
+      "n": 12,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rbns->htr_selex": {
+      "median_auroc": 0.703,
+      "n": 33,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rbns->rnacompete_eukarya": {
+      "median_auroc": 0.766,
+      "n": 38,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rbns->rnacompete_rbpzoo": {
+      "median_auroc": 0.771,
+      "n": 14,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_eukarya->htr_selex": {
+      "median_auroc": 0.832,
+      "n": 34,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_eukarya->rbns": {
+      "median_auroc": 0.936,
+      "n": 38,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_eukarya->rnacompete_rbpzoo": {
+      "median_auroc": 0.953,
+      "n": 11,
+      "median_rna_overlap_frac": 0.237
+    },
+    "rnacompete_rbpzoo->htr_selex": {
+      "median_auroc": 0.872,
+      "n": 12,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_rbpzoo->rbns": {
+      "median_auroc": 0.961,
+      "n": 14,
+      "median_rna_overlap_frac": 0.0
+    },
+    "rnacompete_rbpzoo->rnacompete_eukarya": {
+      "median_auroc": 0.987,
+      "n": 11,
+      "median_rna_overlap_frac": 0.227
+    }
+  },
+  "transfer_median_exact_rna_overlap_fraction": 0.0,
+  "interpretation": {
+    "within_vs_transfer_gap": "Mean within AUROC 0.974 vs transfer 0.791 (−0.18); cross-assay k-mer LR still well above chance for most pairs.",
+    "strongest_cross_assay": "RNAcompete → RBNS (median 0.94–0.96, zero RNA overlap).",
+    "weakest_pair": "RBNS → HTR-SELEX (median 0.703).",
+    "rnacompete_internal": "Eukarya ↔ RBPZoo transfer ~0.95–0.99 with ~23% probe overlap."
+  }
+}
