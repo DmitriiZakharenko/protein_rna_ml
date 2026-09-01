@@ -1,8 +1,8 @@
 {
   "phase": "3B",
   "status": "IN_PROGRESS",
-  "generated": "2026-08-31",
-  "description": "V4 concat_bi on v3a: stable multi-seed test gain vs V2; no OOD external gain",
+  "generated": "2026-09-01",
+  "description": "V4 in-distribution gain vs V2; cross-protocol in-vitro k-mer LR transfer complete; domain models next",
 
   "v4_concat_bi_v3a_single_run": {
     "checkpoint": "models/saved/generalized_v4_phase3a/best_model.pt",
@@ -99,14 +99,57 @@
     "rnacompete_all_zero_shot_after_v3a": "Eukarya+RBPZoo full panels are in training; do not report as zero-shot"
   },
 
+  "cross_protocol_invitro": {
+    "date": "2026-09-01",
+    "vm": "pleasedimpala-8f147",
+    "config": "configs/cross_protocol_invitro.yaml",
+    "protocols": ["htr_selex", "rbns", "rnacompete_eukarya", "rnacompete_rbpzoo"],
+    "model": "logistic_regression",
+    "k": 4,
+    "roster_proteins": 84,
+    "domain_annotation_fraction": 0.821,
+    "n_within_rows": 196,
+    "n_transfer_rows": 284,
+    "within_mean_auroc": 0.974,
+    "transfer_mean_auroc": 0.791,
+    "transfer_failures_auroc_lt_0_55": "24/284",
+    "within_median_auroc_by_protocol": {
+      "htr_selex": 0.950,
+      "rbns": 0.993,
+      "rnacompete_eukarya": 0.992,
+      "rnacompete_rbpzoo": 0.985
+    },
+    "transfer_median_auroc_highlights": {
+      "best_cross_assay_zero_overlap": "rnacompete_rbpzoo->rbns: 0.961 (n=14)",
+      "best_rnacompete_internal": "rnacompete_rbpzoo->rnacompete_eukarya: 0.987 (n=11, RNA overlap 23%)",
+      "weakest_pair": "rbns->htr_selex: 0.703 (n=33)"
+    },
+    "motif_concordance": {
+      "n_pairs": 142,
+      "median_jaccard_exact_7mer": 0.0,
+      "median_jaccard_core5": 0.0,
+      "pairs_core5_gt0": 66
+    },
+    "outputs_dir": "results/cross_protocol_invitro/",
+    "figures": [
+      "figures/cross_protocol_roster.png",
+      "figures/cross_protocol_transfer_heatmap.png",
+      "figures/cross_protocol_transfer_by_domain.png",
+      "figures/cross_protocol_within_vs_transfer.png",
+      "figures/cross_protocol_motif_vs_transfer.png"
+    ],
+    "summary_json": "results/cross_protocol_invitro/classifier_summary.json"
+  },
+
   "headline_metrics": {
     "primary": "v3a test AUROC 0.829 ± 0.009 (V4, 3 seeds) vs 0.813 (V2, 1 seed)",
-    "ood_curated": "literature external AUROC 0.737 (V4) vs 0.763 (V2) — V2 still better OOD"
+    "ood_curated": "literature external AUROC 0.737 (V4) vs 0.763 (V2) — V2 still better OOD",
+    "cross_protocol_transfer": "k=4 LR mean transfer AUROC 0.791 vs within 0.974 (4 in-vitro assays, 284 protein×pair evaluations)"
   },
 
   "next_steps": [
-    "Cross-protocol Week 1 (scripts/33-36) — primary science deliverable",
-    "Domain-conditioned V2 (scripts/38 A/B/C) after cross-protocol",
-    "Optional: V4 without --use_source_emb OOD ablation"
+    "Domain-conditioned V2 (scripts/38: baseline, domain_conditioned, domain_shuffle)",
+    "Optional: V4 without --use_source_emb OOD ablation",
+    "Rsync full cross_protocol_invitro TSVs + figures from VM to Mac for git"
   ]
 }
