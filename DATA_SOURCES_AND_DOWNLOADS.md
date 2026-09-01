@@ -7,7 +7,7 @@ record the path in `configs/cross_protocol.yaml`.
 
 ---
 
-## 1. Required for Week-1 cross-protocol
+## 1. Required for cross-protocol (complete 2026-09-01; in-vitro config)
 
 | Asset | Role | Default path | How to obtain |
 |-------|------|--------------|---------------|

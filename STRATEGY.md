@@ -1,9 +1,11 @@
 # Research Strategy
 
 **Project**: Protein–RNA Binding Prediction
-**Last updated**: 2026-07-11
-**Current best model**: V2 CNN on `generalized_v3a` — test AUROC=**0.813** AUPRC=**0.713** (epoch 24, single seed, VM)
+**Last updated**: 2026-09-01
+**Current best in-distribution model**: V4 concat_bi on `generalized_v3a` — test AUROC=**0.829 ± 0.009** AUPRC=**0.732 ± 0.011** (3 seeds, P100)
+**V2 anchor on v3a**: test AUROC=**0.813** AUPRC=**0.713** (single seed)
 **Phase 2 baseline (v2 data)**: test AUROC=0.690 AUPRC=0.580 (169 proteins)
+**Cross-protocol transfer (k=4 LR, in-vitro)**: mean AUROC **0.791** vs within **0.974** — see `results/phase3b_summary.json`
 **Benchmark target**: ZHMolGraph — AUROC=0.798 AUPRC=0.820 (hard split, unseen proteins AND RNAs).
 **Note on comparability**: our protein-aware-only test is NOT equivalent to ZHMolGraph's hard split.
 

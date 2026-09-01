@@ -1,0 +1,143 @@
+protein_key	protocol_a	protocol_b	jaccard_top_kmers	jaccard_core5	spearman_shared_kmers	n_shared_kmers	n_kmers_a	n_kmers_b	domain_class	domain_architecture
+BOLL	htr_selex	rbns	0.0	0.0		0	2	3	unknown	
+CELF1	htr_selex	rbns	0.0	0.0		0	2	4	unknown	
+DAZ3	htr_selex	rbns	0.0	0.0		0	1	4	unknown	
+DAZAP1	htr_selex	rbns	0.0	0.0		0	4	3	RRM	RRM;RRM
+DAZAP1	htr_selex	rnacompete_eukarya	0.0	0.05263157894736842		0	4	4	RRM	RRM;RRM
+DAZAP1	rbns	rnacompete_eukarya	0.0	0.0		0	3	4	RRM	RRM;RRM
+ELAVL1	htr_selex	rnacompete_eukarya	0.2	0.16666666666666666		1	2	4	RRM	RRM;RRM;RRM
+ELAVL4	htr_selex	rbns	0.0	0.09090909090909091		0	2	3	unknown	
+ESRP1	htr_selex	rbns	0.0	0.0		0	1	4	RRM	RRM;RRM
+ESRP1	htr_selex	rnacompete_rbpzoo	0.0	0.0		0	1	3	RRM	RRM;RRM
+ESRP1	rbns	rnacompete_rbpzoo	0.0	0.15384615384615385		0	4	3	RRM	RRM;RRM
+HNRNPA0	htr_selex	rbns	0.0	0.0		0	1	5	RRM	RRM;RRM
+HNRNPA0	htr_selex	rnacompete_rbpzoo	0.0	0.0		0	1	3	RRM	RRM;RRM
+HNRNPA0	rbns	rnacompete_rbpzoo	0.0	0.0		0	5	3	RRM	RRM;RRM
+HNRNPA1	htr_selex	rnacompete_eukarya	0.0	0.16666666666666666		0	2	5	RRM	RRM;RRM
+HNRNPA1L2	htr_selex	rbns	0.0	0.0		0	1	3	RRM	RRM;RRM
+HNRNPA1L2	htr_selex	rnacompete_eukarya	0.0	0.2222222222222222		0	1	4	RRM	RRM;RRM
+HNRNPA1L2	rbns	rnacompete_eukarya	0.0	0.0		0	3	4	RRM	RRM;RRM
+HNRNPC	htr_selex	rbns	0.0	0.0		0	2	2	RRM	RRM
+HNRNPC	htr_selex	rnacompete_eukarya	0.0	0.0		0	2	4	RRM	RRM
+HNRNPC	rbns	rnacompete_eukarya	0.2	0.4		1	2	4	RRM	RRM
+HNRNPCL1	htr_selex	rbns	0.0	0.125		0	4	3	RRM	RRM
+HNRNPCL1	htr_selex	rnacompete_eukarya	0.125	0.2222222222222222		1	4	5	RRM	RRM
+HNRNPCL1	rbns	rnacompete_eukarya	0.14285714285714285	0.3333333333333333		1	3	5	RRM	RRM
+HNRNPL	htr_selex	rbns	0.0	0.0		0	2	5	RRM	RRM;RRM;RRM;RRM
+HNRNPL	htr_selex	rnacompete_eukarya	0.25	0.3		1	2	3	RRM	RRM;RRM;RRM;RRM
+HNRNPL	rbns	rnacompete_eukarya	0.0	0.0		0	5	3	RRM	RRM;RRM;RRM;RRM
+HNRPLL	htr_selex	rnacompete_eukarya	0.0	0.0		0	2	4	unknown	
+IGF2BP1	htr_selex	rbns	0.0	0.0		0	4	4	unknown	
+KHDRBS1	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	3	KH	KH
+KHDRBS2	htr_selex	rbns	0.0	0.0		0	3	4	KH	KH
+KHDRBS2	htr_selex	rnacompete_eukarya	0.0	0.07692307692307693		0	3	5	KH	KH
+KHDRBS2	rbns	rnacompete_eukarya	0.0	0.14285714285714285		0	4	5	KH	KH
+KHDRBS3	htr_selex	rbns	0.0	0.0		0	2	5	KH	KH
+KHDRBS3	htr_selex	rnacompete_eukarya	0.0	0.0		0	2	4	KH	KH
+KHDRBS3	rbns	rnacompete_eukarya	0.0	0.16666666666666666		0	5	4	KH	KH
+MEX3C	htr_selex	rnacompete_rbpzoo	0.0	0.0		0	3	4	KH	KH
+MSI1	htr_selex	rbns	0.0	0.0		0	1	3	RRM	RRM;RRM
+MSI1	htr_selex	rnacompete_eukarya	0.0	0.2857142857142857		0	1	2	RRM	RRM;RRM
+MSI1	rbns	rnacompete_eukarya	0.25	0.3333333333333333		1	3	2	RRM	RRM;RRM
+PABPC5	htr_selex	rnacompete_eukarya	0.0	0.0		0	3	4	RRM	RRM;RRM;RRM;RRM
+PCBP1	htr_selex	rbns	0.0	0.0		0	1	4	KH	KH;KH;KH
+PCBP1	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	5	KH	KH;KH;KH
+PCBP1	rbns	rnacompete_eukarya	0.0	0.047619047619047616		0	4	5	KH	KH;KH;KH
+PUM1	htr_selex	rbns	0.0	0.25		0	2	3	unknown	
+QKI	htr_selex	rnacompete_eukarya	0.0	0.1111111111111111		0	1	4	KH	KH
+RALY	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	4	RRM	RRM
+RBFOX1	htr_selex	rnacompete_eukarya	0.0	0.3333333333333333		0	2	2	unknown	
+RBFOX3	htr_selex	rbns	0.0	0.2		0	2	4	unknown	
+RBM14	htr_selex	rnacompete_rbpzoo	0.0	0.0		0	2	5	RRM	RRM;RRM
+RBM24	htr_selex	rbns	0.0	0.2857142857142857		0	1	4	RRM	RRM
+RBM24	htr_selex	rnacompete_eukarya	0.0	0.2857142857142857		0	1	4	RRM	RRM
+RBM24	htr_selex	rnacompete_rbpzoo	0.0	0.3333333333333333		0	1	4	RRM	RRM
+RBM24	rbns	rnacompete_eukarya	0.0	0.2727272727272727		0	4	4	RRM	RRM
+RBM24	rbns	rnacompete_rbpzoo	0.0	0.18181818181818182		0	4	4	RRM	RRM
+RBM24	rnacompete_eukarya	rnacompete_rbpzoo	0.3333333333333333	0.625		2	4	4	RRM	RRM
+RBM28	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	2	RRM	RRM;RRM;RRM;RRM
+RBM28	htr_selex	rnacompete_rbpzoo	0.0	0.0		0	1	3	RRM	RRM;RRM;RRM;RRM
+RBM28	rnacompete_eukarya	rnacompete_rbpzoo	0.0	0.0		0	2	3	RRM	RRM;RRM;RRM;RRM
+RBM38	htr_selex	rnacompete_eukarya	0.2	0.42857142857142855		1	3	3	RRM	RRM
+RBM38	htr_selex	rnacompete_rbpzoo	0.0	0.2222222222222222		0	3	4	RRM	RRM
+RBM38	rnacompete_eukarya	rnacompete_rbpzoo	0.0	0.18181818181818182		0	3	4	RRM	RRM
+RBM4	htr_selex	rbns	0.0	0.25		0	1	3	multi	RRM;RRM;CCHC
+RBM4	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	3	multi	RRM;RRM;CCHC
+RBM4	rbns	rnacompete_eukarya	0.2	0.4444444444444444		1	3	3	multi	RRM;RRM;CCHC
+RBM42	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	3	RRM	RRM
+RBM46	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	4	RRM	RRM;RRM;RRM
+RBM4B	htr_selex	rbns	0.0	0.0		0	3	3	unknown	
+RBM6	htr_selex	rbns	0.0	0.0		0	1	3	RRM	RRM;RRM
+RBM6	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	4	RRM	RRM;RRM
+RBM6	rbns	rnacompete_eukarya	0.0	0.0		0	3	4	RRM	RRM;RRM
+RBMS1	htr_selex	rnacompete_eukarya	0.0	0.0		0	3	5	RRM	RRM;RRM
+RBMS2	htr_selex	rbns	0.0	0.0		0	1	5	unknown	
+RBMS3	htr_selex	rbns	0.0	0.0		0	1	5	RRM	RRM;RRM
+RBMS3	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	5	RRM	RRM;RRM
+RBMS3	rbns	rnacompete_eukarya	0.1111111111111111	0.13333333333333333		1	5	5	RRM	RRM;RRM
+RBPMS2	htr_selex	rnacompete_rbpzoo	0.6666666666666666	0.5714285714285714		2	2	3	RRM	RRM
+RC3H1	htr_selex	rbns	0.0	0.0		0	3	3	unknown	
+RNPC3	htr_selex	rnacompete_rbpzoo	0.0	0.0		0	4	4	RRM	RRM;RRM
+SART3	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	3	RRM	RRM;RRM
+SART3	htr_selex	rnacompete_rbpzoo	0.0	0.0		0	1	4	RRM	RRM;RRM
+SART3	rnacompete_eukarya	rnacompete_rbpzoo	0.0	0.0		0	3	4	RRM	RRM;RRM
+SNRNP70	htr_selex	rnacompete_eukarya	0.0	0.0		0	2	3	RRM	RRM
+SNRPA	htr_selex	rbns	0.0	0.0		0	1	4	RRM	RRM;RRM
+SNRPA	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	3	RRM	RRM;RRM
+SNRPA	rbns	rnacompete_eukarya	0.0	0.18181818181818182		0	4	3	RRM	RRM;RRM
+SNRPB2	htr_selex	rbns	0.0	0.0		0	4	4	RRM	RRM;RRM
+SNRPB2	htr_selex	rnacompete_rbpzoo	0.0	0.0		0	4	2	RRM	RRM;RRM
+SNRPB2	rbns	rnacompete_rbpzoo	0.0	0.3333333333333333		0	4	2	RRM	RRM;RRM
+TARDBP	htr_selex	rbns	0.0	0.0		0	1	5	RRM	RRM;RRM
+TARDBP	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	3	RRM	RRM;RRM
+TARDBP	htr_selex	rnacompete_rbpzoo	0.0	0.0		0	1	3	RRM	RRM;RRM
+TARDBP	rbns	rnacompete_eukarya	0.0	0.13333333333333333		0	5	3	RRM	RRM;RRM
+TARDBP	rbns	rnacompete_rbpzoo	0.0	0.0		0	5	3	RRM	RRM;RRM
+TARDBP	rnacompete_eukarya	rnacompete_rbpzoo	0.2	0.2727272727272727		1	3	3	RRM	RRM;RRM
+THUMPD1	htr_selex	rbns	0.0	0.0		0	4	4	unknown	
+YBX1	htr_selex	rnacompete_eukarya	0.0	0.0		0	1	4	CSD	CSD
+YBX2	htr_selex	rbns	0.0	0.0		0	2	4	CSD	CSD
+YBX2	htr_selex	rnacompete_eukarya	0.0	0.0		0	2	3	CSD	CSD
+YBX2	rbns	rnacompete_eukarya	0.0	0.125		0	4	3	CSD	CSD
+ZC3H10	htr_selex	rnacompete_eukarya	0.0	0.09090909090909091		0	1	5	CCCH	CCCH;CCCH;CCCH
+ZCRB1	htr_selex	rbns	0.0	0.0		0	2	3	multi	RRM;CCHC
+ZCRB1	htr_selex	rnacompete_eukarya	0.0	0.0		0	2	4	multi	RRM;CCHC
+ZCRB1	rbns	rnacompete_eukarya	0.0	0.23076923076923078		0	3	4	multi	RRM;CCHC
+ZFP36	htr_selex	rbns	1.0	1.0		1	1	1	unknown	
+ZRANB2	htr_selex	rbns	0.0	0.2222222222222222		0	1	4	unknown	
+A1CF	rbns	rnacompete_eukarya	0.0	0.16666666666666666		0	4	3	RRM	RRM;RRM;RRM
+CNOT4	rbns	rnacompete_eukarya	0.0	0.07142857142857142		0	5	2	RRM	RRM
+CPEB1	rbns	rnacompete_rbpzoo	0.16666666666666666	0.5		1	4	3	RRM	RRM;RRM
+FUBP1	rbns	rnacompete_rbpzoo	0.0	0.0		0	3	5	KH	KH;KH;KH;KH
+FUS	rbns	rnacompete_eukarya	0.0	0.0		0	3	4	RRM	RRM
+HNRNPA2B1	rbns	rnacompete_eukarya	0.0	0.07142857142857142		0	4	5	RRM	RRM;RRM
+HNRNPH2	rbns	rnacompete_eukarya	0.0	0.0		0	4	2	RRM	RRM;RRM;RRM
+HNRNPK	rbns	rnacompete_eukarya	0.0	0.0		0	4	3	KH	KH;KH;KH
+IGF2BP2	rbns	rnacompete_eukarya	0.0	0.16666666666666666		0	5	5	multi	RRM;RRM;KH;KH;KH;KH
+IGF2BP3	rbns	rnacompete_eukarya	0.0	0.0		0	4	5	multi	RRM;RRM;KH;KH;KH;KH
+MBNL1	rbns	rnacompete_eukarya	0.0	0.0625		0	4	5	CCCH	CCCH;CCCH;CCCH;CCCH
+PABPC3	rbns	rnacompete_eukarya	0.0	0.25		0	5	4	RRM	RRM;RRM;RRM;RRM
+PCBP2	rbns	rnacompete_eukarya	0.0	0.0		0	4	4	KH	KH;KH;KH
+PRR3	rbns	rnacompete_rbpzoo	0.0	0.23076923076923078		0	3	3	CCCH	CCCH
+PUF60	rbns	rnacompete_rbpzoo	0.16666666666666666	0.375		1	2	5	RRM	RRM;RRM;RRM
+RBFOX2	rbns	rnacompete_rbpzoo	0.0	0.4444444444444444		0	3	4	RRM	RRM
+RBM3	rbns	rnacompete_eukarya	0.0	0.07142857142857142		0	3	4	RRM	RRM
+RBM41	rbns	rnacompete_eukarya	0.0	0.09090909090909091		0	2	3	RRM	RRM
+RBM45	rbns	rnacompete_eukarya	0.0	0.0		0	1	3	RRM	RRM;RRM;RRM
+RBM45	rbns	rnacompete_rbpzoo	0.0	0.0		0	1	4	RRM	RRM;RRM;RRM
+RBM45	rnacompete_eukarya	rnacompete_rbpzoo	0.16666666666666666	0.3076923076923077		1	3	4	RRM	RRM;RRM;RRM
+RBM47	rbns	rnacompete_eukarya	0.0	0.0625		0	4	4	RRM	RRM;RRM;RRM
+RBM47	rbns	rnacompete_rbpzoo	0.0	0.0625		0	4	3	RRM	RRM;RRM;RRM
+RBM47	rnacompete_eukarya	rnacompete_rbpzoo	0.4	0.6363636363636364		2	4	3	RRM	RRM;RRM;RRM
+RBM5	rbns	rnacompete_eukarya	0.0	0.0		0	3	5	multi	RRM;RanBP;RRM
+SF1	rbns	rnacompete_eukarya	0.0	0.07692307692307693		0	3	4	KH	KH
+SFPQ	rbns	rnacompete_eukarya	0.0	0.0		0	5	2	RRM	RRM;RRM
+SRSF2	rbns	rnacompete_eukarya	0.0	0.0		0	4	4	RRM	RRM
+SRSF9	rbns	rnacompete_eukarya	0.0	0.10526315789473684		0	4	5	RRM	RRM;RRM
+TIA1	rbns	rnacompete_eukarya	0.0	0.5		0	5	3	RRM	RRM;RRM;RRM
+TIA1	rbns	rnacompete_rbpzoo	0.0	0.4		0	5	4	RRM	RRM;RRM;RRM
+TIA1	rnacompete_eukarya	rnacompete_rbpzoo	0.4	0.5555555555555556		2	3	4	RRM	RRM;RRM;RRM
+TRA2B	rbns	rnacompete_rbpzoo	0.0	0.0		0	4	5	RRM	RRM
+FMR1	rnacompete_eukarya	rnacompete_rbpzoo	0.0	0.0		0	4	2	KH	KH;KH
+PABPC4	rnacompete_eukarya	rnacompete_rbpzoo	0.4	0.42857142857142855		2	4	3	RRM	RRM;RRM;RRM;RRM
+SUP12	rnacompete_eukarya	rnacompete_rbpzoo	0.3333333333333333	0.625		2	4	4	RRM	RRM

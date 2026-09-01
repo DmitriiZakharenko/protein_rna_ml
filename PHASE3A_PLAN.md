@@ -153,17 +153,16 @@ While Phase 3A runs, gather these (priority order):
 
 ## 7. Experiment Queue After Phase 3A
 
-| ID | Experiment | Depends on |
-|----|------------|------------|
+| ID | Experiment | Status |
+|----|------------|--------|
 | 3A-1 | V2 on `generalized_v3a` | **Done** — test AUROC 0.813 |
-| 3B-0 | V4 `concat` ablation on v2 | Optional sanity check |
-| 3B-1 | V4 `concat_bi` on v3a | **Done** — test AUROC **0.829**; external curated **0.737** (V2 **0.763**) |
-| 3A-EXT | External re-eval stratified | **Done** — `results/phase3b_summary.json` |
-| 3A-2 | Multi-seed variance | **Next** — GPU, 3 seeds (`scripts/18`) |
+| 3B-1 | V4 `concat_bi` on v3a + multi-seed | **Done** — test AUROC **0.829 ± 0.009** |
+| 3A-EXT | Literature external (V2 vs V4) | **Done** — V2 better OOD; see `phase3b_summary.json` |
+| 3B-CP | Cross-protocol in-vitro (scripts 33–36) | **Done** — transfer mean AUROC 0.791 |
+| 3B-DOM | Domain-conditioned V2 (`scripts/38`) | **Next** |
 | 3A-3 | RNAcompete re-eval on v3a ckpt | **Cancelled** — not zero-shot after v3a |
-| 3B-2 | Hard negatives mix | New script |
-| 3C-1 | CNN embedding → XGBoost stack | 3A-1 checkpoint |
-| 3C-2 | Multi-task affinity regression | RBNS R_max + RNAcompete intensity |
+| 3B-2 | Hard negatives mix | Deferred |
+| 3C-1 | CNN embedding → XGBoost stack | Deferred |
 
 ---
 
