@@ -1,6 +1,6 @@
-# Domain-aware phase — after Week-1 cross-protocol
+# Domain-aware phase — after cross-protocol (Week 1 complete)
 
-**Status**: Active  
+**Status**: **Next** (run `scripts/38` on VM)  
 **Headline experiment**: clean V2 baseline vs **domain-class conditioning**  
 **Deferred**: Table S1 construct-replace ablation (on v3a most matches are already
 RNAcompete constructs → full vs construct is nearly a no-op)

@@ -1,7 +1,7 @@
 # Cross-Assay Strategy — Protocol Comparison → Domain-Aware Models
 
-**Status**: Active (Week 1 = cross-protocol; next = domain-aware)  
-**Last updated**: 2026-07-20  
+**Status**: Week 1 complete (in-vitro cross-protocol, 2026-09-01); **next** = domain-aware (`scripts/38`)  
+**Last updated**: 2026-09-01  
 **Repo**: stay in `protein_rna_ml` (do not fork a new project)  
 **Related**: `STRATEGY.md`, `RESEARCH_ROADMAP.md`, `DATA_SOURCES_AND_DOWNLOADS.md`,
 `scripts/24–27b`, `scripts/33–36`, `scripts/40`

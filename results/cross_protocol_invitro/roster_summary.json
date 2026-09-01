@@ -1,0 +1,46 @@
+{
+  "n_roster_proteins": 84,
+  "min_protocols": 2,
+  "proteins_per_protocol": {
+    "htr_selex": 93,
+    "rbns": 96,
+    "rnacompete_eukarya": 200,
+    "rnacompete_rbpzoo": 174
+  },
+  "source_notes": {
+    "htr_selex": "/vol/space/protein_rna_ml/results/rna_only_per_protein_honest/htr_selex_per_protein_metrics.tsv",
+    "rbns": "/vol/space/protein_rna_ml/results/rna_only_per_protein_honest/rbns_per_protein_metrics.tsv",
+    "rnacompete_eukarya": "/vol/space/protein_rna_ml/results/rna_only_per_protein_honest/rnacompete_eukarya_per_protein_metrics.tsv",
+    "rnacompete_rbpzoo": "/vol/space/protein_rna_ml/results/rna_only_per_protein_honest/rnacompete_rbpzoo_per_protein_metrics.tsv"
+  },
+  "combo_counts": {
+    "rbns|rnacompete_eukarya": 18,
+    "htr_selex|rbns|rnacompete_eukarya": 15,
+    "htr_selex|rnacompete_eukarya": 14,
+    "htr_selex|rbns": 13,
+    "rbns|rnacompete_rbpzoo": 6,
+    "htr_selex|rnacompete_rbpzoo": 4,
+    "htr_selex|rbns|rnacompete_rbpzoo": 3,
+    "htr_selex|rnacompete_eukarya|rnacompete_rbpzoo": 3,
+    "rbns|rnacompete_eukarya|rnacompete_rbpzoo": 3,
+    "rnacompete_eukarya|rnacompete_rbpzoo": 3,
+    "htr_selex|rbns|rnacompete_eukarya|rnacompete_rbpzoo": 2
+  },
+  "domain_annotation_fraction": 0.8214285714285714,
+  "domain_ambiguous_architecture_count": 3,
+  "n_match_ambiguity_rows": 15,
+  "matching_policy": {
+    "within_protocol_synonym_merge": false,
+    "construct_auto_merge_for_classifier": false,
+    "representative_required": true,
+    "notes": "Classifiers must use name_in_<protocol> exact native string only."
+  },
+  "domain_class_counts": {
+    "RRM": 48,
+    "unknown": 15,
+    "KH": 11,
+    "multi": 5,
+    "CCCH": 3,
+    "CSD": 2
+  }
+}
