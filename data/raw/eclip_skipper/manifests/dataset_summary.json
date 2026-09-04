@@ -1,0 +1,39 @@
+{
+  "source": "Dropbox (Yeo/Skipper eCLIP benchmark) + Figshare 21206009",
+  "n_eclip_experiments_in_info": 264,
+  "n_info_rows": 1056,
+  "rna_length_variants": {
+    "varlen_ext20_median_nt": 102,
+    "fixlen_101_nt": 101,
+    "fixlen_151_nt": 151,
+    "fixlen_201_nt": 201
+  },
+  "recommended_primary_benchmark": "fixlen_151 (matches RPIembeddor2 / Jose thesis 151 nt)",
+  "n_proteins_domain_annot": 185,
+  "n_proteins_with_domain_intervals": 149,
+  "n_fixlen_151_fasta_files_extracted": 528,
+  "archives": {
+    "dropbox": [
+      "eclip_various_pos_neg_sets.hg38.tar.xz",
+      "new_neg_pos_renamed.tar.xz",
+      "new_neg_from_rep12_pos.tar.xz",
+      "rmsk.no_unknown.hg38.sorted.bed.xz",
+      "ENCODE_finemapped_windows.HepG2.tar"
+    ],
+    "figshare": "archives/figshare/ (Skipper ENCODE processed outputs, ~1.3GB)"
+  },
+  "manifests_tracked_in_git": [
+    "manifests/eclip_various_pos_neg_sets.hg38.info.tsv",
+    "manifests/encode_eclip_rbp_id_best_acc_seq.added_domain_annot.tsv",
+    "manifests/encode_eclip_rbp_id_best_acc_seq.tsv",
+    "manifests/encode3_manifest_H.csv",
+    "manifests/encode3_manifest_K.csv",
+    "manifests/encode3_eclip_enrichment.reference.tsv",
+    "manifests/encode3_class_assignment.reference.tsv",
+    "manifests/encode3_feature_summary.reference.tsv"
+  ],
+  "domain_annot_columns": {
+    "hit_pos": "InterPro:START-END intervals on protein_sequence (1-based)",
+    "symbol": "gene symbol for join to eclip_id prefix"
+  }
+}
