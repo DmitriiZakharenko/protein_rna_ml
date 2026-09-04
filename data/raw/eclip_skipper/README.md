@@ -114,6 +114,20 @@ python scripts/06_train_generalized_v2.py \\
   --out_dir results/skipper_eclip/rna_disjoint_v2_train
 ```
 
+### 42 — Jose hard negatives (cross-protein positives as negatives)
+
+Comparable to thesis eCLIP2 protein-disjoint (~0.72 AUROC with RPIembeddor).
+
+```bash
+python scripts/42_build_skipper_eclip_cross_protein_neg.py --write_splits
+
+python scripts/06_train_generalized_v2.py \\
+  --data_dir data/benchmarks/skipper_eclip/jose_cross_protein_neg \\
+  --rna_max 151 --prot_max 700 \\
+  --model_dir models/saved/skipper_eclip_v2_jose_hard \\
+  --out_dir results/skipper_eclip/jose_cross_protein_neg_v2_train
+```
+
 ### 41d — diagnostics (GC baseline, RNA-unseen subset, GC-matched neg)
 
 ```bash

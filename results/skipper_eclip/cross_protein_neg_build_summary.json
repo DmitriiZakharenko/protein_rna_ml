@@ -1,0 +1,70 @@
+{
+  "script": "42_build_skipper_eclip_cross_protein_neg.py",
+  "description": "Jose thesis negatives: other proteins' eCLIP positives as negatives",
+  "reference": "Thesis_Final_Jose \u2014 \u00a75.2.1 cross-protein positive negatives",
+  "fasta_dir": "/Users/zahalae/Desktop/protein_rna_ml/data/raw/eclip_skipper/extracted/fixlen_151_fasta",
+  "max_pos_per_experiment": 200,
+  "seed": 42,
+  "positive_collection": {
+    "n_pos_fasta_files": 264,
+    "n_skipped": 0,
+    "n_invalid_rna": 0,
+    "n_invalid_protein": 0,
+    "n_pos_rows": 50506,
+    "n_proteins": 173
+  },
+  "pair_build": {
+    "n_proteins": 173,
+    "n_proteins_skipped": 0,
+    "n_neg_sampled": 50506,
+    "neg_sampling": "match_pos_count"
+  },
+  "dataset": {
+    "split": "all",
+    "n_rows": 101012,
+    "n_pos": 50506,
+    "n_neg": 50506,
+    "n_proteins": 173,
+    "n_unique_rnas": 49752,
+    "gc_frac_pos_mean": 0.5277,
+    "gc_frac_neg_mean": 0.528
+  },
+  "outputs": {
+    "pairs_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/fixlen_151_cross_protein_neg_all.tsv",
+    "split_dir": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/jose_cross_protein_neg"
+  },
+  "split_command": "python scripts/41b_split_skipper_eclip_jose_style.py --pairs_tsv data/benchmarks/skipper_eclip/fixlen_151_cross_protein_neg_all.tsv --out_dir data/benchmarks/skipper_eclip/jose_cross_protein_neg --summary_json results/skipper_eclip/jose_cross_protein_neg_split_summary.json",
+  "train_command": "python scripts/06_train_generalized_v2.py --data_dir data/benchmarks/skipper_eclip/jose_cross_protein_neg --rna_max 151 --prot_max 700 --model_dir models/saved/skipper_eclip_v2_jose_hard --out_dir results/skipper_eclip/jose_cross_protein_neg_v2_train",
+  "splits": {
+    "train": {
+      "split": "train",
+      "n_rows": 78088,
+      "n_pos": 39044,
+      "n_neg": 39044,
+      "n_proteins": 130,
+      "n_unique_rnas": 44659,
+      "gc_frac_pos_mean": 0.5262,
+      "gc_frac_neg_mean": 0.5281
+    },
+    "val": {
+      "split": "val",
+      "n_rows": 10590,
+      "n_pos": 5295,
+      "n_neg": 5295,
+      "n_proteins": 19,
+      "n_unique_rnas": 9761,
+      "gc_frac_pos_mean": 0.517,
+      "gc_frac_neg_mean": 0.528
+    },
+    "test": {
+      "split": "test",
+      "n_rows": 12334,
+      "n_pos": 6167,
+      "n_neg": 6167,
+      "n_proteins": 24,
+      "n_unique_rnas": 11243,
+      "gc_frac_pos_mean": 0.5466,
+      "gc_frac_neg_mean": 0.5273
+    }
+  }
+}
