@@ -69,6 +69,25 @@ Full Skipper ENCODE3 panel: `reproducible_enriched_windows`, `background_windows
 `extracted/fixlen_151_fasta/` — 528 FASTA files (pos + neg per experiment) unpacked from
 `eclip_various_pos_neg_sets.hg38.tar.xz` for fast iteration without full tar extract.
 
+## Build benchmark TSV (script 41)
+
+```bash
+python scripts/41_build_skipper_eclip_benchmark.py \\
+  --max_per_class_per_experiment 200 \\
+  --train_tsv data/sanitized/generalized_v3a/train.tsv
+```
+
+Outputs (gitignored large TSVs): `data/benchmarks/skipper_eclip/`  
+Summary: `results/skipper_eclip/build_summary.json`
+
+Evaluate V2 on protein-disjoint holdout (`rna_max=151`):
+
+```bash
+python scripts/11_evaluate_external.py \\
+  --benchmark_tsv data/benchmarks/skipper_eclip/fixlen_151_protein_disjoint_v3a.tsv \\
+  --v2_dir models/saved/generalized_v2 --rna_max 151 --prot_max 700
+```
+
 ## Unpack commands
 
 ```bash
