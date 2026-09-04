@@ -1,0 +1,64 @@
+{
+  "script": "41c_split_skipper_eclip_rna_disjoint.py",
+  "mode": "protein_and_rna",
+  "description": "Protein-disjoint + no test/val RNA seen in train",
+  "pairs_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/fixlen_151_all.tsv",
+  "seed": 42,
+  "train_frac": 0.75,
+  "val_frac": 0.11,
+  "splits": {
+    "train": {
+      "split": "train",
+      "n_rows": 78088,
+      "n_pos": 39044,
+      "n_neg": 39044,
+      "n_proteins": 130,
+      "n_unique_rnas": 76965,
+      "n_experiments": 203,
+      "proteins_both_classes": 130
+    },
+    "val": {
+      "split": "val",
+      "n_rows": 10295,
+      "n_pos": 5188,
+      "n_neg": 5107,
+      "n_proteins": 19,
+      "n_unique_rnas": 10278,
+      "n_experiments": 28,
+      "proteins_both_classes": 19
+    },
+    "test": {
+      "split": "test",
+      "n_rows": 11970,
+      "n_pos": 6017,
+      "n_neg": 5953,
+      "n_proteins": 24,
+      "n_unique_rnas": 11939,
+      "n_experiments": 33,
+      "proteins_both_classes": 24
+    }
+  },
+  "rna_leakage": {
+    "val_vs_train": {
+      "n_train_unique_rnas": 76965,
+      "n_eval_unique_rnas": 10278,
+      "n_shared_rnas": 0,
+      "pct_eval_rows_with_train_rna": 0.0
+    },
+    "test_vs_train": {
+      "n_train_unique_rnas": 76965,
+      "n_eval_unique_rnas": 11939,
+      "n_shared_rnas": 0,
+      "pct_eval_rows_with_train_rna": 0.0
+    }
+  },
+  "outputs": {
+    "data_dir": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/protein_and_rna",
+    "train_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/protein_and_rna/train.tsv",
+    "val_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/protein_and_rna/val.tsv",
+    "test_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/protein_and_rna/test.tsv",
+    "split_map": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/protein_and_rna/protein_split_map.tsv"
+  },
+  "train_command": "python scripts/06_train_generalized_v2.py --data_dir data/benchmarks/skipper_eclip/protein_and_rna --rna_max 151 --prot_max 700 --model_dir models/saved/skipper_eclip_v2_rna151_protein_and_rna --out_dir results/skipper_eclip/protein_and_rna_v2_train",
+  "diagnostics_command": "python scripts/41d_eval_eclip_diagnostics.py --train_tsv data/benchmarks/skipper_eclip/protein_and_rna/train.tsv --test_tsv data/benchmarks/skipper_eclip/protein_and_rna/test.tsv --checkpoint models/saved/skipper_eclip_v2_rna151_protein_and_rna/best_model.pt --out_dir results/skipper_eclip/protein_and_rna_diagnostics"
+}

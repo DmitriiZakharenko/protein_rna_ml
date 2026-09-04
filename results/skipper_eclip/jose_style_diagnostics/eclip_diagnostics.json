@@ -1,0 +1,89 @@
+{
+  "script": "41d_eval_eclip_diagnostics.py",
+  "train_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/jose_style/train.tsv",
+  "test_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/jose_style/test.tsv",
+  "checkpoint": null,
+  "n_test": 12334,
+  "rna_leakage": {
+    "n_test_rows": 12334,
+    "n_test_rows_rna_in_train": 364,
+    "pct_test_rows_rna_in_train": 2.95,
+    "n_unique_test_rnas": 12295,
+    "n_unique_test_rnas_in_train": 356
+  },
+  "composition_baselines": {
+    "gc_fraction": {
+      "name": "gc_fraction",
+      "aggregate": {
+        "n": 12334,
+        "n_pos": 6167,
+        "n_neg": 6167,
+        "auroc": 0.7444,
+        "auprc": 0.7674
+      },
+      "gc_pos_mean": 54.9,
+      "gc_neg_mean": 43.4,
+      "per_protein_summary": {
+        "n_proteins": 24,
+        "median_auroc": 0.7748,
+        "median_auprc": 0.7829,
+        "min_auroc": 0.1099
+      }
+    },
+    "au_fraction": {
+      "name": "au_fraction",
+      "aggregate": {
+        "n": 12334,
+        "n_pos": 6167,
+        "n_neg": 6167,
+        "auroc": 0.2556,
+        "auprc": 0.3721
+      },
+      "gc_pos_mean": 54.9,
+      "gc_neg_mean": 43.4,
+      "per_protein_summary": {
+        "n_proteins": 24,
+        "median_auroc": 0.2252,
+        "median_auprc": 0.3579,
+        "min_auroc": 0.0407
+      }
+    },
+    "gc_matched_gc_fraction": {
+      "name": "gc_matched_gc_fraction",
+      "aggregate": {
+        "n": 12334,
+        "n_pos": 6167,
+        "n_neg": 6167,
+        "auroc": 0.7444,
+        "auprc": 0.7674
+      },
+      "gc_pos_mean": 54.9,
+      "gc_neg_mean": 43.4,
+      "per_protein_summary": {
+        "n_proteins": 24,
+        "median_auroc": 0.7748,
+        "median_auprc": 0.7829,
+        "min_auroc": 0.1099
+      }
+    },
+    "gc_matched_au_fraction": {
+      "name": "gc_matched_au_fraction",
+      "aggregate": {
+        "n": 12334,
+        "n_pos": 6167,
+        "n_neg": 6167,
+        "auroc": 0.2556,
+        "auprc": 0.3721
+      },
+      "gc_pos_mean": 54.9,
+      "gc_neg_mean": 43.4,
+      "per_protein_summary": {
+        "n_proteins": 24,
+        "median_auroc": 0.2252,
+        "median_auprc": 0.3579,
+        "min_auroc": 0.0407
+      }
+    }
+  },
+  "subsets": {}
+}

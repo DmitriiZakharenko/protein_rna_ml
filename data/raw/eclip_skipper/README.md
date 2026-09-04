@@ -69,7 +69,7 @@ Full Skipper ENCODE3 panel: `reproducible_enriched_windows`, `background_windows
 `extracted/fixlen_151_fasta/` — 528 FASTA files (pos + neg per experiment) unpacked from
 `eclip_various_pos_neg_sets.hg38.tar.xz` for fast iteration without full tar extract.
 
-## Scripts 41 / 41b
+## Scripts 41 / 41b / 41c / 41d
 
 ### 41 — pair TSV + cross-assay holdout (in vitro train → eCLIP test)
 
@@ -97,6 +97,40 @@ python scripts/06_train_generalized_v2.py \\
 
 Outputs: `data/benchmarks/skipper_eclip/jose_style/{train,val,test}.tsv`  
 Summaries: `results/skipper_eclip/build_summary.json`, `jose_style_split_summary.json`
+
+### 41c — RNA-disjoint / protein+RNA splits (unseen RNA eval)
+
+```bash
+# RNA unseen in test (proteins may repeat across splits)
+python scripts/41c_split_skipper_eclip_rna_disjoint.py --mode rna
+
+# Protein-disjoint + drop test RNAs seen in train
+python scripts/41c_split_skipper_eclip_rna_disjoint.py --mode protein_and_rna
+
+python scripts/06_train_generalized_v2.py \\
+  --data_dir data/benchmarks/skipper_eclip/rna_disjoint \\
+  --rna_max 151 --prot_max 700 \\
+  --model_dir models/saved/skipper_eclip_v2_rna151_rna_disjoint \\
+  --out_dir results/skipper_eclip/rna_disjoint_v2_train
+```
+
+### 41d — diagnostics (GC baseline, RNA-unseen subset, GC-matched neg)
+
+```bash
+# No GPU — composition baselines only
+python scripts/41d_eval_eclip_diagnostics.py \\
+  --train_tsv data/benchmarks/skipper_eclip/jose_style/train.tsv \\
+  --test_tsv data/benchmarks/skipper_eclip/jose_style/test.tsv \\
+  --out_dir results/skipper_eclip/jose_style_diagnostics
+
+# With trained Jose-style checkpoint
+python scripts/41d_eval_eclip_diagnostics.py \\
+  --train_tsv data/benchmarks/skipper_eclip/jose_style/train.tsv \\
+  --test_tsv data/benchmarks/skipper_eclip/jose_style/test.tsv \\
+  --checkpoint models/saved/skipper_eclip_v2_rna151/best_model.pt \\
+  --rna_max 151 --prot_max 700 \\
+  --out_dir results/skipper_eclip/jose_style_diagnostics
+```
 
 ## Unpack commands
 
