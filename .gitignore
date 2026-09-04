@@ -9,6 +9,8 @@ data/splits/*/test.tsv
 data/embeddings/
 data/benchmarks/
 data/eclip/
+data/raw/eclip_skipper/archives/
+data/raw/eclip_skipper/extracted/
 data/external/*
 !data/external/.gitkeep
 !data/external/external_benchmark_expanded.tsv
