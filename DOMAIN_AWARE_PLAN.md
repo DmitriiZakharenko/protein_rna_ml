@@ -1,7 +1,7 @@
 # Domain-aware phase — after cross-protocol (Week 1 complete)
 
-**Status**: **Next** (run `scripts/38` on VM)  
-**Headline experiment**: clean V2 baseline vs **domain-class conditioning**  
+**Status**: **Complete** (2026-09-04, VM `pleasedimpala-8f147`)  
+**Headline experiment**: clean V2 baseline vs **domain-class conditioning** — **null result**  
 **Deferred**: Table S1 construct-replace ablation (on v3a most matches are already
 RNAcompete constructs → full vs construct is nearly a no-op)
 
@@ -61,6 +61,29 @@ Checkpoints: `models/saved/domain_v2_{mode}/best_model.pt`
 2. Domain-conditioned ≥ baseline on global and/or per-protein median AUROC.
 3. Shuffle control ≤ domain-conditioned (otherwise capacity/leak, not domains).
 4. Report per-`domain_class` median AUROC.
+
+## Results (seed 42, known-domains-only cohort)
+
+| Mode | Test AUROC | Test AUPRC | pp-median | best_epoch |
+|------|------------|------------|-----------|------------|
+| baseline | 0.8470 | 0.7473 | 0.8594 | 17 |
+| domain_conditioned | 0.8418 | 0.7447 | 0.8468 | 17 |
+| domain_shuffle | **0.8549** | **0.7528** | **0.8851** | 13 |
+
+Per-protein median AUROC by `domain_class`:
+
+| domain_class | baseline | domain_conditioned | domain_shuffle |
+|--------------|----------|--------------------|----------------|
+| CCCH | 0.704 | 0.680 | **0.768** |
+| KH | 0.887 | **0.898** | 0.883 |
+| RRM | 0.884 | 0.865 | **0.898** |
+| multi | 0.737 | 0.683 | **0.804** |
+
+**Verdict**: criteria 1 ✅, 2 ❌, 3 ❌. Coarse Table S1 `domain_class` does **not** improve
+V2 on protein-disjoint v3a test. Shuffle ≥ baseline suggests extra head capacity, not biological
+domain signal. Largest conditioned losses vs baseline: CCCH (−0.024) and multi (−0.054).
+
+JSON: `results/domain_aware/v2_domain_cond/{mode}/v2_domain_results.json` (key `test_metrics`, not `test`).
 
 ## Later (not this run)
 

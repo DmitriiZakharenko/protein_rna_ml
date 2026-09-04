@@ -131,8 +131,8 @@
     "KH": 54,
     "multi": 19,
     "CCCH": 12,
-    "CSD": 4,
     "PUM": 4,
+    "CSD": 4,
     "SAM": 2,
     "S1": 1
   },
@@ -144,12 +144,12 @@
       "KH": 54,
       "multi": 32,
       "CCCH": 14,
-      "ZF": 4,
-      "CSD": 4,
       "PUM": 4,
+      "CSD": 4,
+      "ZF": 4,
       "SAM": 2,
-      "THUMP": 1,
-      "S1": 1
+      "S1": 1,
+      "THUMP": 1
     },
     "label_source_counts": {
       "alignment_qc": 437,
@@ -172,6 +172,6 @@
       "other"
     ]
   },
-  "table_s1": "/Users/zahalae/Desktop/protein_rna_ml/data/raw/rbpzoo/TableS1.xlsx",
-  "data_dir": "/Users/zahalae/Desktop/protein_rna_ml/data/sanitized/generalized_v3a"
+  "table_s1": "/vol/space/protein_rna_ml/data/raw/rbpzoo/TableS1.xlsx",
+  "data_dir": "/vol/space/protein_rna_ml/data/sanitized/generalized_v3a"
 }
