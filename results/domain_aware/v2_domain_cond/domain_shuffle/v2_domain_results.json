@@ -1,0 +1,639 @@
+{
+  "mode": "domain_shuffle",
+  "data_dir": "/vol/space/protein_rna_ml/data/sanitized/generalized_v3a",
+  "seed": 42,
+  "rna_max": 60,
+  "prot_max": 700,
+  "known_domains_only": true,
+  "domain_emb_dim": 32,
+  "domain_vocab": [
+    "unknown",
+    "RRM",
+    "KH",
+    "multi",
+    "CCCH",
+    "CSD",
+    "PUM",
+    "ZF",
+    "THUMP",
+    "SAM",
+    "S1",
+    "other"
+  ],
+  "domain_label_summary": {
+    "n_variants": 619,
+    "domain_class_counts": {
+      "RRM": 349,
+      "KH": 54,
+      "multi": 32,
+      "CCCH": 14,
+      "CSD": 4,
+      "ZF": 4,
+      "PUM": 4,
+      "SAM": 2,
+      "S1": 1,
+      "THUMP": 1
+    },
+    "label_source_counts": {
+      "alignment_qc": 437,
+      "unknown": 154,
+      "domains_tsv": 28
+    },
+    "n_unknown": 154,
+    "vocab": [
+      "unknown",
+      "RRM",
+      "KH",
+      "multi",
+      "CCCH",
+      "CSD",
+      "PUM",
+      "ZF",
+      "THUMP",
+      "SAM",
+      "S1",
+      "other"
+    ],
+    "known_domains_only": true,
+    "n_variants_kept": 465,
+    "n_unknown_dropped": 154
+  },
+  "n_train": 1580222,
+  "n_val": 223643,
+  "n_test": 230196,
+  "device": "cuda",
+  "n_params": 1109505,
+  "best_val_auroc": 0.8477146146895104,
+  "best_val_auprc": 0.7324677848096411,
+  "best_epoch": 13,
+  "test_metrics": {
+    "auroc": 0.8549334830758955,
+    "auprc": 0.7528014665996527
+  },
+  "per_protein_summary": {
+    "n": 53,
+    "median": 0.8850705036489125,
+    "min": 0.380667,
+    "by_domain_class_median": {
+      "CCCH": 0.7683252782998953,
+      "KH": 0.8827479631744686,
+      "RRM": 0.898119,
+      "multi": 0.8039371423421956
+    }
+  },
+  "per_protein": [
+    {
+      "protein": "ASD-1",
+      "protein_key": "ASD1",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9790468729445351,
+      "n": 4853
+    },
+    {
+      "protein": "CBG00421",
+      "protein_key": "CBG00421",
+      "domain_class": "multi",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.8878391382373554,
+      "n": 4309
+    },
+    {
+      "protein": "CBG03563",
+      "protein_key": "CBG03563",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.97218083038831,
+      "n": 5837
+    },
+    {
+      "protein": "DAZAP1",
+      "protein_key": "DAZAP1",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.834146,
+      "n": 3000
+    },
+    {
+      "protein": "DAZAP1",
+      "protein_key": "DAZAP1",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.794124,
+      "n": 3000
+    },
+    {
+      "protein": "DAZAP1",
+      "protein_key": "DAZAP1",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.7995350623930323,
+      "n": 4468
+    },
+    {
+      "protein": "ENOX1",
+      "protein_key": "ENOX1",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.7097421166562421,
+      "n": 4237
+    },
+    {
+      "protein": "ENSMODG00000011903",
+      "protein_key": "ENSMODG00000011903",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.6508809640446362,
+      "n": 3202
+    },
+    {
+      "protein": "ESRP1-construct3",
+      "protein_key": "ESRP1",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.9347890000000001,
+      "n": 3000
+    },
+    {
+      "protein": "ETR-1",
+      "protein_key": "ETR1",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9491560282615199,
+      "n": 4687
+    },
+    {
+      "protein": "FXR2",
+      "protein_key": "FXR2",
+      "domain_class": "KH",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9136481020179629,
+      "n": 4109
+    },
+    {
+      "protein": "HNRNPA0",
+      "protein_key": "HNRNPA0",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.898119,
+      "n": 3000
+    },
+    {
+      "protein": "HNRNPA0",
+      "protein_key": "HNRNPA0",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.9626740000000001,
+      "n": 3000
+    },
+    {
+      "protein": "IGF2BP1",
+      "protein_key": "IGF2BP1",
+      "domain_class": "multi",
+      "dataset": "selex_rbns",
+      "auroc": 0.44091949999999996,
+      "n": 3000
+    },
+    {
+      "protein": "IGF2BP1",
+      "protein_key": "IGF2BP1",
+      "domain_class": "multi",
+      "dataset": "selex_rbns",
+      "auroc": 0.6623317500000001,
+      "n": 3000
+    },
+    {
+      "protein": "IGF2BP2",
+      "protein_key": "IGF2BP2",
+      "domain_class": "multi",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9015356315634616,
+      "n": 4098
+    },
+    {
+      "protein": "IGF2BP2",
+      "protein_key": "IGF2BP2",
+      "domain_class": "multi",
+      "dataset": "selex_rbns",
+      "auroc": 0.8990565000000001,
+      "n": 3000
+    },
+    {
+      "protein": "IGF2BP3",
+      "protein_key": "IGF2BP3",
+      "domain_class": "multi",
+      "dataset": "selex_rbns",
+      "auroc": 0.7492772770807611,
+      "n": 6952
+    },
+    {
+      "protein": "KHDRBS3",
+      "protein_key": "KHDRBS3",
+      "domain_class": "KH",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9732846144480138,
+      "n": 4882
+    },
+    {
+      "protein": "KHDRBS3",
+      "protein_key": "KHDRBS3",
+      "domain_class": "KH",
+      "dataset": "selex_rbns",
+      "auroc": 0.972405,
+      "n": 3000
+    },
+    {
+      "protein": "KHDRBS3",
+      "protein_key": "KHDRBS3",
+      "domain_class": "KH",
+      "dataset": "selex_rbns",
+      "auroc": 0.8461759999999998,
+      "n": 3000
+    },
+    {
+      "protein": "LARK",
+      "protein_key": "LARK",
+      "domain_class": "multi",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.7070916164645678,
+      "n": 5338
+    },
+    {
+      "protein": "LARK",
+      "protein_key": "LARK",
+      "domain_class": "multi",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.8585970076036301,
+      "n": 3948
+    },
+    {
+      "protein": "LmjF.24.1570",
+      "protein_key": "LMJF241570",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.6174286840894028,
+      "n": 5099
+    },
+    {
+      "protein": "LmjF.25.0500",
+      "protein_key": "LMJF250500",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9120383761910977,
+      "n": 5155
+    },
+    {
+      "protein": "MSI",
+      "protein_key": "MSI",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9108548356418406,
+      "n": 4109
+    },
+    {
+      "protein": "MSI",
+      "protein_key": "MSI",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.8355685426660363,
+      "n": 3339
+    },
+    {
+      "protein": "MSI",
+      "protein_key": "MSI",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.8850705036489125,
+      "n": 2281
+    },
+    {
+      "protein": "PABP",
+      "protein_key": "PABP",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.997829390219465,
+      "n": 5603
+    },
+    {
+      "protein": "PCBP1",
+      "protein_key": "PCBP1",
+      "domain_class": "KH",
+      "dataset": "selex_rbns",
+      "auroc": 0.8518478243309742,
+      "n": 16614
+    },
+    {
+      "protein": "PK00840.1",
+      "protein_key": "PK008401",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9730967374670296,
+      "n": 3614
+    },
+    {
+      "protein": "PK03611.1",
+      "protein_key": "PK036111",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.8868115805763734,
+      "n": 4336
+    },
+    {
+      "protein": "PRR3",
+      "protein_key": "PRR3",
+      "domain_class": "CCCH",
+      "dataset": "selex_rbns",
+      "auroc": 0.7492398263700488,
+      "n": 2843
+    },
+    {
+      "protein": "PRR3",
+      "protein_key": "PRR3",
+      "domain_class": "CCCH",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.7874107302297417,
+      "n": 4541
+    },
+    {
+      "protein": "PUB1",
+      "protein_key": "PUB1",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9620300186165297,
+      "n": 3273
+    },
+    {
+      "protein": "PUF60",
+      "protein_key": "PUF60",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.991656,
+      "n": 3000
+    },
+    {
+      "protein": "PUF60",
+      "protein_key": "PUF60",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9894325941794587,
+      "n": 3959
+    },
+    {
+      "protein": "RBM28",
+      "protein_key": "RBM28",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9078064081512357,
+      "n": 3319
+    },
+    {
+      "protein": "RBM28",
+      "protein_key": "RBM28",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.7389420000000001,
+      "n": 3000
+    },
+    {
+      "protein": "RBM6",
+      "protein_key": "RBM6",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.5959846441751707,
+      "n": 3151
+    },
+    {
+      "protein": "RBM6",
+      "protein_key": "RBM6",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.5786294999999999,
+      "n": 3000
+    },
+    {
+      "protein": "RBM6",
+      "protein_key": "RBM6",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.4364755,
+      "n": 3000
+    },
+    {
+      "protein": "SF2",
+      "protein_key": "SF2",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.9817603416266314,
+      "n": 6819
+    },
+    {
+      "protein": "SM",
+      "protein_key": "SM",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.8780567664578461,
+      "n": 5377
+    },
+    {
+      "protein": "SNRNP70",
+      "protein_key": "SNRNP70",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_eukarya",
+      "auroc": 0.7788438463567744,
+      "n": 4958
+    },
+    {
+      "protein": "SNRNP70",
+      "protein_key": "SNRNP70",
+      "domain_class": "RRM",
+      "dataset": "selex_rbns",
+      "auroc": 0.380667,
+      "n": 3000
+    },
+    {
+      "protein": "Smp_024140",
+      "protein_key": "SMP024140",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9665093698817488,
+      "n": 2453
+    },
+    {
+      "protein": "cwf2",
+      "protein_key": "CWF2",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.6262731485065987,
+      "n": 4563
+    },
+    {
+      "protein": "hnrnpa0b",
+      "protein_key": "HNRNPA0B",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9711073966338154,
+      "n": 4367
+    },
+    {
+      "protein": "mex3c",
+      "protein_key": "MEX3C",
+      "domain_class": "KH",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.759182304656465,
+      "n": 9020
+    },
+    {
+      "protein": "rnp-3",
+      "protein_key": "RNP3",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9938715785849543,
+      "n": 4974
+    },
+    {
+      "protein": "sart3",
+      "protein_key": "SART3",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.8542401144768569,
+      "n": 5955
+    },
+    {
+      "protein": "srsf3",
+      "protein_key": "SRSF3",
+      "domain_class": "RRM",
+      "dataset": "rnacompete_rbpzoo",
+      "auroc": 0.9706542356454946,
+      "n": 4554
+    }
+  ],
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6799,
+      "val_auroc": 0.794,
+      "val_auprc": 0.6415
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5308,
+      "val_auroc": 0.8183,
+      "val_auprc": 0.6823
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4892,
+      "val_auroc": 0.8181,
+      "val_auprc": 0.6871
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4652,
+      "val_auroc": 0.8306,
+      "val_auprc": 0.6971
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4484,
+      "val_auroc": 0.8384,
+      "val_auprc": 0.7153
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.4362,
+      "val_auroc": 0.84,
+      "val_auprc": 0.7147
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.4257,
+      "val_auroc": 0.8413,
+      "val_auprc": 0.7163
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.4182,
+      "val_auroc": 0.846,
+      "val_auprc": 0.7195
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.4117,
+      "val_auroc": 0.8391,
+      "val_auprc": 0.7199
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.406,
+      "val_auroc": 0.8376,
+      "val_auprc": 0.7164
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.4008,
+      "val_auroc": 0.8449,
+      "val_auprc": 0.7186
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.3966,
+      "val_auroc": 0.8426,
+      "val_auprc": 0.7161
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.3932,
+      "val_auroc": 0.8477,
+      "val_auprc": 0.7325
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.3889,
+      "val_auroc": 0.8467,
+      "val_auprc": 0.725
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.3861,
+      "val_auroc": 0.8498,
+      "val_auprc": 0.7307
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.3839,
+      "val_auroc": 0.8462,
+      "val_auprc": 0.7311
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.3806,
+      "val_auroc": 0.8505,
+      "val_auprc": 0.7315
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.3786,
+      "val_auroc": 0.8436,
+      "val_auprc": 0.7196
+    },
+    {
+      "epoch": 19,
+      "train_loss": 0.3761,
+      "val_auroc": 0.8495,
+      "val_auprc": 0.7313
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.3742,
+      "val_auroc": 0.847,
+      "val_auprc": 0.7236
+    },
+    {
+      "epoch": 21,
+      "train_loss": 0.3713,
+      "val_auroc": 0.8467,
+      "val_auprc": 0.7272
+    }
+  ],
+  "checkpoint": "/vol/space/protein_rna_ml/models/saved/domain_v2_domain_shuffle/best_model.pt"
+}

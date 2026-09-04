@@ -1,6 +1,6 @@
 # Phase 3B — status and VM commands
 
-**Last updated**: 2026-09-01  
+**Last updated**: 2026-09-04  
 **Full metrics**: `results/phase3b_summary.json`
 
 ---
@@ -13,8 +13,9 @@
 | V4 multi-seed (42, 0, 1) | test AUROC **0.829 ± 0.009**, AUPRC **0.732 ± 0.011** |
 | External V4 curated | AUROC 0.737 (V2 **0.763**) |
 | **Cross-protocol in-vitro** (scripts 33–36) | within mean AUROC **0.974**; transfer **0.791** (284 rows) |
+| **Domain-conditioned V2** (script 38) | shuffle **0.855** > baseline **0.847** > conditioned **0.842** (null) |
 
-**Headline**: V4 beats V2 on v3a test; V2 better OOD; cross-assay k-mer LR transfers with ~0.18 AUROC drop vs within-protocol.
+**Headline**: V4 beats V2 on v3a test; V2 better OOD; cross-assay k-mer LR transfers with ~0.18 AUROC drop; coarse `domain_class` does not help V2.
 
 ### Cross-protocol outputs (VM: `pleasedimpala`)
 
@@ -54,16 +55,8 @@ Then on Mac: `git add results/cross_protocol_invitro/ figures/cross_protocol_*.p
 
 ---
 
-## Next on VM — domain-conditioned V2 (Step 6)
+## Phase 3B complete
 
-See `DOMAIN_AWARE_PLAN.md` / `scripts/38_train_domain_conditioned_v2.py`:
+Domain-conditioned V2 finished on VM. See `DOMAIN_AWARE_PLAN.md` and `results/phase3b_summary.json` → `domain_aware_v2`.
 
-```bash
-cd /vol/space/protein_rna_ml
-source /vol/space/miniconda3/bin/activate prna
-
-# Example — adjust config paths as needed
-python scripts/38_train_domain_conditioned_v2.py --mode baseline
-python scripts/38_train_domain_conditioned_v2.py --mode domain_conditioned
-python scripts/38_train_domain_conditioned_v2.py --mode domain_shuffle
-```
+**Optional next**: V4 `--no-source-emb` OOD ablation; RPIembeddor2 eCLIP protein-disjoint eval.

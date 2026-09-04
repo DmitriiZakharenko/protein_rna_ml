@@ -1,8 +1,8 @@
 {
   "phase": "3B",
-  "status": "IN_PROGRESS",
-  "generated": "2026-09-01",
-  "description": "V4 in-distribution gain vs V2; cross-protocol in-vitro k-mer LR transfer complete; domain models next",
+  "status": "COMPLETE",
+  "generated": "2026-09-04",
+  "description": "V4 in-distribution gain vs V2; cross-protocol transfer; domain-conditioned V2 null result on coarse domain_class",
 
   "v4_concat_bi_v3a_single_run": {
     "checkpoint": "models/saved/generalized_v4_phase3a/best_model.pt",
@@ -141,15 +141,56 @@
     "summary_json": "results/cross_protocol_invitro/classifier_summary.json"
   },
 
+  "domain_aware_v2": {
+    "date": "2026-09-04",
+    "vm": "pleasedimpala-8f147",
+    "script": "scripts/38_train_domain_conditioned_v2.py",
+    "data": "data/sanitized/generalized_v3a",
+    "filter": "known_domains_only (465/619 variants kept)",
+    "seed": 42,
+    "prot_max": 700,
+    "modes": {
+      "baseline": {
+        "test_auroc": 0.8470,
+        "test_auprc": 0.7473,
+        "per_protein_median_auroc": 0.8594,
+        "best_epoch": 17,
+        "by_domain_class_median": {"CCCH": 0.704, "KH": 0.887, "RRM": 0.884, "multi": 0.737}
+      },
+      "domain_conditioned": {
+        "test_auroc": 0.8418,
+        "test_auprc": 0.7447,
+        "per_protein_median_auroc": 0.8468,
+        "best_epoch": 17,
+        "by_domain_class_median": {"CCCH": 0.680, "KH": 0.898, "RRM": 0.865, "multi": 0.683}
+      },
+      "domain_shuffle": {
+        "test_auroc": 0.8549,
+        "test_auprc": 0.7528,
+        "per_protein_median_auroc": 0.8851,
+        "best_epoch": 13,
+        "by_domain_class_median": {"CCCH": 0.768, "KH": 0.883, "RRM": 0.898, "multi": 0.804}
+      }
+    },
+    "success_criteria_met": {
+      "baseline_near_phase3a": true,
+      "conditioned_ge_baseline": false,
+      "shuffle_le_conditioned": false
+    },
+    "interpretation": "Null result: coarse domain_class embedding does not help; shuffle beats both arms (extra capacity, not biology).",
+    "outputs_dir": "results/domain_aware/v2_domain_cond/"
+  },
+
   "headline_metrics": {
     "primary": "v3a test AUROC 0.829 ± 0.009 (V4, 3 seeds) vs 0.813 (V2, 1 seed)",
     "ood_curated": "literature external AUROC 0.737 (V4) vs 0.763 (V2) — V2 still better OOD",
-    "cross_protocol_transfer": "k=4 LR mean transfer AUROC 0.791 vs within 0.974 (4 in-vitro assays, 284 protein×pair evaluations)"
+    "cross_protocol_transfer": "k=4 LR mean transfer AUROC 0.791 vs within 0.974 (4 in-vitro assays, 284 protein×pair evaluations)",
+    "domain_aware": "domain_shuffle 0.855 > baseline 0.847 > domain_conditioned 0.842 — no gain from coarse domain labels"
   },
 
   "next_steps": [
-    "Domain-conditioned V2 (scripts/38: baseline, domain_conditioned, domain_shuffle)",
+    "Rsync domain_aware JSON/TSV from VM to Mac for git (skip checkpoints)",
     "Optional: V4 without --use_source_emb OOD ablation",
-    "Rsync full cross_protocol_invitro TSVs + figures from VM to Mac for git"
+    "RPIembeddor2: train v3a → protein-disjoint eCLIP eval; port V4 bilinear head"
   ]
 }

@@ -492,6 +492,27 @@ RNA sequence overlap ≈ 0 for SELEX/RBNS/RNAcompete cross-pairs; ~23% for Eukar
 - Transfer works without shared top k-mers across assays
 
 **Outputs**: `results/cross_protocol_invitro/`; figures `figures/cross_protocol_*.png`  
-**Summary**: `results/phase3b_summary.json` → `cross_protocol_invitro`  
-**Next**: domain-conditioned V2 (`scripts/38`)
+**Summary**: `results/phase3b_summary.json` → `cross_protocol_invitro`
+
+---
+
+## 2026-09-04 — Phase 3B: Domain-conditioned V2 (script 38)
+
+**VM**: pleasedimpala-8f147  
+**Data**: `generalized_v3a`, `known_domains_only` (465 variants; CCCH/KH/RRM/multi)  
+**Model**: V2 RNABindingCNN + optional `domain_class` embedding in head  
+**Seed**: 42, `prot_max=700`
+
+| Mode | Test AUROC | Test AUPRC | pp-median | best_epoch |
+|------|------------|------------|-----------|------------|
+| baseline | 0.8470 | 0.7473 | 0.8594 | 17 |
+| domain_conditioned | 0.8418 | 0.7447 | 0.8468 | 17 |
+| domain_shuffle | **0.8549** | **0.7528** | **0.8851** | 13 |
+
+Per-protein median by domain: CCCH and multi improve under shuffle; KH best under conditioned; RRM best under shuffle.
+
+**Conclusion**: Coarse Table S1 `domain_class` is not a useful inductive bias for V2 on protein-disjoint v3a. Shuffle beating baseline indicates extra head parameters, not biological domain information. Phase 3B domain track closed as null.
+
+**Outputs**: `results/domain_aware/v2_domain_cond/{mode}/v2_domain_results.json`  
+**Summary**: `results/phase3b_summary.json` → `domain_aware_v2`
 

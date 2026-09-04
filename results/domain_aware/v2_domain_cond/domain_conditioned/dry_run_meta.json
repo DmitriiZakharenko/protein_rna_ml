@@ -1,0 +1,63 @@
+{
+  "mode": "domain_conditioned",
+  "data_dir": "/Users/zahalae/Desktop/protein_rna_ml/data/sanitized/generalized_v3a",
+  "seed": 42,
+  "rna_max": 60,
+  "prot_max": 700,
+  "domain_emb_dim": 32,
+  "domain_vocab": [
+    "unknown",
+    "RRM",
+    "KH",
+    "multi",
+    "CCCH",
+    "CSD",
+    "PUM",
+    "ZF",
+    "THUMP",
+    "SAM",
+    "S1",
+    "other"
+  ],
+  "domain_label_summary": {
+    "n_variants": 619,
+    "domain_class_counts": {
+      "RRM": 349,
+      "unknown": 154,
+      "KH": 54,
+      "multi": 32,
+      "CCCH": 14,
+      "ZF": 4,
+      "CSD": 4,
+      "PUM": 4,
+      "SAM": 2,
+      "THUMP": 1,
+      "S1": 1
+    },
+    "label_source_counts": {
+      "alignment_qc": 437,
+      "unknown": 154,
+      "domains_tsv": 28
+    },
+    "n_unknown": 154,
+    "vocab": [
+      "unknown",
+      "RRM",
+      "KH",
+      "multi",
+      "CCCH",
+      "CSD",
+      "PUM",
+      "ZF",
+      "THUMP",
+      "SAM",
+      "S1",
+      "other"
+    ]
+  },
+  "n_train": 2037593,
+  "n_val": 299131,
+  "n_test": 322275,
+  "device": "cpu",
+  "n_params": 1109505
+}

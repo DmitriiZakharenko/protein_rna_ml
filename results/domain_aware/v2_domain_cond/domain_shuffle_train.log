@@ -1,0 +1,41 @@
+Reusing QC /vol/space/protein_rna_ml/results/domain_aware/v2_domain_cond/construct_alignment_qc.tsv
+  known_domains_only: kept 465 variants (dropped 154 unknown)
+Shuffled domain labels (seed=59)
+
+  Device: cuda
+  mode=domain_shuffle  seed=42  prot_max=700
+  domain labels: {'RRM': 349, 'KH': 54, 'multi': 32, 'CCCH': 14, 'CSD': 4, 'ZF': 4, 'PUM': 4, 'SAM': 2, 'S1': 1, 'THUMP': 1}
+  Train: 1,580,222  Val: 223,643  Test: 230,196
+  Model parameters: 1,109,505
+
+=== Training (domain_shuffle) max 60 epochs, early stop on val AUPRC, patience=8 ===
+      1    0.6799     0.7940     0.6415  603.7s  ★
+      2    0.5308     0.8183     0.6823  599.4s  ★
+      3    0.4892     0.8181     0.6871  600.3s  ★
+      4    0.4652     0.8306     0.6971  599.0s  ★
+      5    0.4484     0.8384     0.7153  599.2s  ★
+      6    0.4362     0.8400     0.7147  599.9s  
+      7    0.4257     0.8413     0.7163  599.5s  ★
+      8    0.4182     0.8460     0.7195  599.2s  ★
+      9    0.4117     0.8391     0.7199  600.5s  ★
+     10    0.4060     0.8376     0.7164  600.6s  
+     11    0.4008     0.8449     0.7186  599.9s  
+     12    0.3966     0.8426     0.7161  599.7s  
+     13    0.3932     0.8477     0.7325  599.2s  ★
+     14    0.3889     0.8467     0.7250  600.3s  
+     15    0.3861     0.8498     0.7307  599.6s  
+     16    0.3839     0.8462     0.7311  600.3s  
+     17    0.3806     0.8505     0.7315  599.3s  
+     18    0.3786     0.8436     0.7196  599.2s  
+     19    0.3761     0.8495     0.7313  600.1s  
+     20    0.3742     0.8470     0.7236  599.7s  
+/vol/space/protein_rna_ml/scripts/38_train_domain_conditioned_v2.py:585: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  ckpt = torch.load(model_dir / "best_model.pt", map_location=device)
+     21    0.3713     0.8467     0.7272  599.1s  
+
+  Early stopping at epoch 21
+
+=== Test === AUROC=0.8549  AUPRC=0.7528
+
+✅ Wrote /vol/space/protein_rna_ml/results/domain_aware/v2_domain_cond/domain_shuffle/v2_domain_results.json
+   Per-protein median=0.8850705036489125  by domain={'CCCH': 0.7683252782998953, 'KH': 0.8827479631744686, 'RRM': 0.898119, 'multi': 0.8039371423421956}

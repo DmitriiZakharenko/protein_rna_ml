@@ -6,12 +6,12 @@
     "KH": 54,
     "multi": 32,
     "CCCH": 14,
-    "ZF": 4,
-    "CSD": 4,
     "PUM": 4,
+    "CSD": 4,
+    "ZF": 4,
     "SAM": 2,
-    "THUMP": 1,
-    "S1": 1
+    "S1": 1,
+    "THUMP": 1
   },
   "label_source_counts": {
     "alignment_qc": 437,
