@@ -1,0 +1,41 @@
+{
+  "script": "41_build_skipper_eclip_benchmark.py",
+  "fasta_dir": "data/raw/eclip_skipper/extracted/fixlen_151_fasta",
+  "domain_annot": "data/raw/eclip_skipper/manifests/encode_eclip_rbp_id_best_acc_seq.added_domain_annot.tsv",
+  "train_tsv": "data/sanitized/generalized_v3a/train.tsv",
+  "max_per_class_per_experiment": 200,
+  "seed": 42,
+  "rna_length_mode": "fixlen_151",
+  "build": {
+    "n_fasta_files": 528,
+    "n_files_skipped_parse": 0,
+    "n_missing_roster_symbol": 0,
+    "n_invalid_rna": 0,
+    "n_invalid_protein": 0,
+    "n_rows": 101012,
+    "missing_roster_symbols": [],
+    "n_pos": 50506,
+    "n_neg": 50506,
+    "n_proteins": 173,
+    "n_experiments": 264
+  },
+  "all": {
+    "n_rows": 101012,
+    "n_pos": 50506,
+    "n_neg": 50506,
+    "n_proteins": 173,
+    "n_experiments": 264,
+    "n_gene_key_in_train": 26028
+  },
+  "protein_disjoint_v3a": {
+    "n_rows": 74984,
+    "n_pos": 37492,
+    "n_neg": 37492,
+    "n_proteins": 130,
+    "n_experiments": 197
+  },
+  "outputs": {
+    "all_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/fixlen_151_all.tsv",
+    "disjoint_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/fixlen_151_protein_disjoint_v3a.tsv"
+  }
+}
