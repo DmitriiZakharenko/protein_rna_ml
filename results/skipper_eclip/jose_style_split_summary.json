@@ -1,0 +1,51 @@
+{
+  "script": "41b_split_skipper_eclip_jose_style.py",
+  "description": "Protein-disjoint split within Skipper eCLIP (Jose / RPIembeddor style)",
+  "pairs_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/fixlen_151_all.tsv",
+  "seed": 42,
+  "train_frac": 0.75,
+  "val_frac": 0.11,
+  "length_mode": "fixlen_151",
+  "n_eligible_proteins": 173,
+  "splits": {
+    "train": {
+      "split": "train",
+      "n_rows": 78088,
+      "n_pos": 39044,
+      "n_neg": 39044,
+      "n_proteins": 130,
+      "n_experiments": 203,
+      "proteins_both_classes": 130
+    },
+    "val": {
+      "split": "val",
+      "n_rows": 10590,
+      "n_pos": 5295,
+      "n_neg": 5295,
+      "n_proteins": 19,
+      "n_experiments": 28,
+      "proteins_both_classes": 19
+    },
+    "test": {
+      "split": "test",
+      "n_rows": 12334,
+      "n_pos": 6167,
+      "n_neg": 6167,
+      "n_proteins": 24,
+      "n_experiments": 33,
+      "proteins_both_classes": 24
+    }
+  },
+  "v3a_train_overlap": {
+    "train_split_proteins_in_v3a": 34,
+    "test_split_proteins_in_v3a": 5
+  },
+  "outputs": {
+    "data_dir": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/jose_style",
+    "train_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/jose_style/train.tsv",
+    "val_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/jose_style/val.tsv",
+    "test_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/jose_style/test.tsv",
+    "protein_split_map": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/jose_style/protein_split_map.tsv"
+  },
+  "train_command": "python scripts/06_train_generalized_v2.py --data_dir data/benchmarks/skipper_eclip/jose_style --rna_max 151 --prot_max 700 --model_dir models/saved/skipper_eclip_v2_rna151 --out_dir results/skipper_eclip/jose_style_v2_train"
+}

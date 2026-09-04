@@ -69,24 +69,34 @@ Full Skipper ENCODE3 panel: `reproducible_enriched_windows`, `background_windows
 `extracted/fixlen_151_fasta/` — 528 FASTA files (pos + neg per experiment) unpacked from
 `eclip_various_pos_neg_sets.hg38.tar.xz` for fast iteration without full tar extract.
 
-## Build benchmark TSV (script 41)
+## Scripts 41 / 41b
+
+### 41 — pair TSV + cross-assay holdout (in vitro train → eCLIP test)
 
 ```bash
 python scripts/41_build_skipper_eclip_benchmark.py \\
   --max_per_class_per_experiment 200 \\
   --train_tsv data/sanitized/generalized_v3a/train.tsv
-```
 
-Outputs (gitignored large TSVs): `data/benchmarks/skipper_eclip/`  
-Summary: `results/skipper_eclip/build_summary.json`
-
-Evaluate V2 on protein-disjoint holdout (`rna_max=151`):
-
-```bash
 python scripts/11_evaluate_external.py \\
   --benchmark_tsv data/benchmarks/skipper_eclip/fixlen_151_protein_disjoint_v3a.tsv \\
   --v2_dir models/saved/generalized_v2 --rna_max 151 --prot_max 700
 ```
+
+### 41b — Jose-style split (train eCLIP → test eCLIP, protein-disjoint)
+
+```bash
+python scripts/41b_split_skipper_eclip_jose_style.py
+
+python scripts/06_train_generalized_v2.py \\
+  --data_dir data/benchmarks/skipper_eclip/jose_style \\
+  --rna_max 151 --prot_max 700 \\
+  --model_dir models/saved/skipper_eclip_v2_rna151 \\
+  --out_dir results/skipper_eclip/jose_style_v2_train
+```
+
+Outputs: `data/benchmarks/skipper_eclip/jose_style/{train,val,test}.tsv`  
+Summaries: `results/skipper_eclip/build_summary.json`, `jose_style_split_summary.json`
 
 ## Unpack commands
 
