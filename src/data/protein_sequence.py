@@ -70,7 +70,7 @@ def sanitize_protein_sequence(
 
 
 def validate_protein_sequence(seq: str, *, strict: bool = True) -> tuple[bool, str]:
-    """Return (is_valid, reason)."""
+    """Return (is_valid, reason). reason is a status string, NOT the sequence."""
     if not seq:
         return False, "empty"
     allowed = STANDARD_AA if strict else (STANDARD_AA | EXTENDED_AA)

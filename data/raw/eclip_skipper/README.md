@@ -51,7 +51,7 @@ Full Skipper ENCODE3 panel: `reproducible_enriched_windows`, `background_windows
 |-------------|----------------|-------|
 | `varlen_ext20` | median ~102 nt | variable, max 300 |
 | `fixlen_101` | 101 nt | |
-| **`fixlen_151`** | **151 nt** | **recommended** — matches RPIembeddor2 / Jose eval |
+| **`fixlen_151`** | **151 nt** | **recommended** — matches RPIembeddor2-style 151 nt eval |
 | `fixlen_201` | 201 nt | |
 
 264 eCLIP experiments × 4 modes = 1056 rows in `info.tsv`.
@@ -83,20 +83,20 @@ python scripts/11_evaluate_external.py \\
   --v2_dir models/saved/generalized_v2 --rna_max 151 --prot_max 700
 ```
 
-### 41b — Jose-style split (train eCLIP → test eCLIP, protein-disjoint)
+### 41b — protein-disjoint split (train eCLIP → test eCLIP, protein-disjoint)
 
 ```bash
-python scripts/41b_split_skipper_eclip_jose_style.py
+python scripts/41b_split_skipper_eclip_protein_disjoint.py
 
 python scripts/06_train_generalized_v2.py \\
-  --data_dir data/benchmarks/skipper_eclip/jose_style \\
+  --data_dir data/benchmarks/skipper_eclip/protein_disjoint \\
   --rna_max 151 --prot_max 700 \\
   --model_dir models/saved/skipper_eclip_v2_rna151 \\
-  --out_dir results/skipper_eclip/jose_style_v2_train
+  --out_dir results/skipper_eclip/protein_disjoint_v2_train
 ```
 
-Outputs: `data/benchmarks/skipper_eclip/jose_style/{train,val,test}.tsv`  
-Summaries: `results/skipper_eclip/build_summary.json`, `jose_style_split_summary.json`
+Outputs: `data/benchmarks/skipper_eclip/protein_disjoint/{train,val,test}.tsv`  
+Summaries: `results/skipper_eclip/build_summary.json`, `protein_disjoint_split_summary.json`
 
 ### 41c — RNA-disjoint / protein+RNA splits (unseen RNA eval)
 
@@ -114,7 +114,7 @@ python scripts/06_train_generalized_v2.py \\
   --out_dir results/skipper_eclip/rna_disjoint_v2_train
 ```
 
-### 42 — Jose hard negatives (cross-protein positives as negatives)
+### 42 — Cross-protein hard negatives (other proteins' positives as negatives)
 
 Comparable to thesis eCLIP2 protein-disjoint (~0.72 AUROC with RPIembeddor).
 
@@ -122,10 +122,10 @@ Comparable to thesis eCLIP2 protein-disjoint (~0.72 AUROC with RPIembeddor).
 python scripts/42_build_skipper_eclip_cross_protein_neg.py --write_splits
 
 python scripts/06_train_generalized_v2.py \\
-  --data_dir data/benchmarks/skipper_eclip/jose_cross_protein_neg \\
+  --data_dir data/benchmarks/skipper_eclip/cross_protein_neg \\
   --rna_max 151 --prot_max 700 \\
-  --model_dir models/saved/skipper_eclip_v2_jose_hard \\
-  --out_dir results/skipper_eclip/jose_cross_protein_neg_v2_train
+  --model_dir models/saved/skipper_eclip_v2_cross_protein_neg \\
+  --out_dir results/skipper_eclip/cross_protein_neg_v2_train
 ```
 
 ### 41d — diagnostics (GC baseline, RNA-unseen subset, GC-matched neg)
@@ -133,17 +133,17 @@ python scripts/06_train_generalized_v2.py \\
 ```bash
 # No GPU — composition baselines only
 python scripts/41d_eval_eclip_diagnostics.py \\
-  --train_tsv data/benchmarks/skipper_eclip/jose_style/train.tsv \\
-  --test_tsv data/benchmarks/skipper_eclip/jose_style/test.tsv \\
-  --out_dir results/skipper_eclip/jose_style_diagnostics
+  --train_tsv data/benchmarks/skipper_eclip/protein_disjoint/train.tsv \\
+  --test_tsv data/benchmarks/skipper_eclip/protein_disjoint/test.tsv \\
+  --out_dir results/skipper_eclip/protein_disjoint_diagnostics
 
-# With trained Jose-style checkpoint
+# With trained protein-disjoint checkpoint
 python scripts/41d_eval_eclip_diagnostics.py \\
-  --train_tsv data/benchmarks/skipper_eclip/jose_style/train.tsv \\
-  --test_tsv data/benchmarks/skipper_eclip/jose_style/test.tsv \\
+  --train_tsv data/benchmarks/skipper_eclip/protein_disjoint/train.tsv \\
+  --test_tsv data/benchmarks/skipper_eclip/protein_disjoint/test.tsv \\
   --checkpoint models/saved/skipper_eclip_v2_rna151/best_model.pt \\
   --rna_max 151 --prot_max 700 \\
-  --out_dir results/skipper_eclip/jose_style_diagnostics
+  --out_dir results/skipper_eclip/protein_disjoint_diagnostics
 ```
 
 ## Unpack commands

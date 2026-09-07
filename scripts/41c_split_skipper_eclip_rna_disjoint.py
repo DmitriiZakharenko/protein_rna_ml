@@ -29,8 +29,8 @@ Typical workflow
 
   python scripts/41d_eval_eclip_diagnostics.py \\
     --checkpoint models/saved/skipper_eclip_v2_rna151/best_model.pt \\
-    --train_tsv data/benchmarks/skipper_eclip/jose_style/train.tsv \\
-    --test_tsv data/benchmarks/skipper_eclip/jose_style/test.tsv
+    --train_tsv data/benchmarks/skipper_eclip/protein_disjoint/train.tsv \\
+    --test_tsv data/benchmarks/skipper_eclip/protein_disjoint/test.tsv
 """
 
 from __future__ import annotations

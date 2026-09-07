@@ -11,29 +11,29 @@ Reports:
   - RNA-seen subset (leakage check)
   - GC-matched negatives: subsample negs per protein to match pos GC
 
-Works on the Jose-style protein-disjoint model without retraining (post-hoc),
+Works on the protein-disjoint protein-disjoint model without retraining (post-hoc),
 or on any train/test TSV pair after a new split (41c).
 
 Usage
 -----
   # Composition + subsets only (no GPU)
   python scripts/41d_eval_eclip_diagnostics.py \\
-    --train_tsv data/benchmarks/skipper_eclip/jose_style/train.tsv \\
-    --test_tsv data/benchmarks/skipper_eclip/jose_style/test.tsv \\
-    --out_dir results/skipper_eclip/jose_style_diagnostics
+    --train_tsv data/benchmarks/skipper_eclip/protein_disjoint/train.tsv \\
+    --test_tsv data/benchmarks/skipper_eclip/protein_disjoint/test.tsv \\
+    --out_dir results/skipper_eclip/protein_disjoint_diagnostics
 
   # Include V2 CNN scores
   python scripts/41d_eval_eclip_diagnostics.py \\
-    --train_tsv data/benchmarks/skipper_eclip/jose_style/train.tsv \\
-    --test_tsv data/benchmarks/skipper_eclip/jose_style/test.tsv \\
+    --train_tsv data/benchmarks/skipper_eclip/protein_disjoint/train.tsv \\
+    --test_tsv data/benchmarks/skipper_eclip/protein_disjoint/test.tsv \\
     --checkpoint models/saved/skipper_eclip_v2_rna151/best_model.pt \\
     --rna_max 151 --prot_max 700 \\
-    --out_dir results/skipper_eclip/jose_style_diagnostics
+    --out_dir results/skipper_eclip/protein_disjoint_diagnostics
 
   # Reuse pre-scored pairs (skip inference)
   python scripts/41d_eval_eclip_diagnostics.py \\
     --train_tsv ... --test_tsv ... \\
-    --scored_tsv results/skipper_eclip/jose_style_v2_train/external_pairs_scored.tsv \\
+    --scored_tsv results/skipper_eclip/protein_disjoint_v2_train/external_pairs_scored.tsv \\
     --prob_col prob_v2
 """
 
