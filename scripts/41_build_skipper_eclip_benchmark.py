@@ -130,6 +130,21 @@ def subsample_records(
     return rng.sample(records, max_n)
 
 
+def assert_protein_sequences_ok(df: pd.DataFrame, *, context: str) -> None:
+    """Fail loudly if sequences were replaced by validate()'s reason string."""
+    n_prot = int(df["protein_name"].nunique())
+    n_seq = int(df["protein_sequence"].nunique())
+    lens = df.groupby("protein_name")["protein_sequence"].first().str.len()
+    bad_ok = int((df["protein_sequence"].astype(str) == "ok").sum())
+    if bad_ok or n_seq < 2 or float(lens.min()) < 10:
+        raise SystemExit(
+            f"Protein sequence QC failed ({context}): "
+            f"n_proteins={n_prot} n_unique_seq={n_seq} "
+            f"min_len={int(lens.min())} rows_eq_ok={bad_ok}. "
+            "Likely validate_protein_sequence reason was stored as the sequence."
+        )
+
+
 def build_pairs(
     fasta_dir: Path,
     roster: pd.DataFrame,
@@ -165,11 +180,13 @@ def build_pairs(
 
         prot_row = roster.loc[meta.symbol]
         prot_seq_raw = str(prot_row["protein_sequence"])
-        ok_prot, prot_seq = validate_protein_sequence(prot_seq_raw)
+        # sanitize → sequence; validate → (ok, reason) — do not unpack reason as seq
+        prot_seq, _ = sanitize_protein_sequence(prot_seq_raw)
+        ok_prot, reason = validate_protein_sequence(prot_seq)
         if not ok_prot:
-            prot_seq = sanitize_protein_sequence(prot_seq_raw)
-            ok_prot, prot_seq = validate_protein_sequence(prot_seq)
-        if not ok_prot:
+            stats["n_invalid_protein"] += 1
+            continue
+        if len(prot_seq) < 10:
             stats["n_invalid_protein"] += 1
             continue
 
@@ -354,6 +371,7 @@ def main() -> None:
     )
     if df.empty:
         raise SystemExit("No rows built — check FASTA paths and roster join")
+    assert_protein_sequences_ok(df, context="skipper eCLIP build")
 
     train_index = None
     if args.train_tsv:

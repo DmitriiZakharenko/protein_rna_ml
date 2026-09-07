@@ -51,7 +51,7 @@ Full Skipper ENCODE3 panel: `reproducible_enriched_windows`, `background_windows
 |-------------|----------------|-------|
 | `varlen_ext20` | median ~102 nt | variable, max 300 |
 | `fixlen_101` | 101 nt | |
-| **`fixlen_151`** | **151 nt** | **recommended** — matches RPIembeddor2 eval |
+| **`fixlen_151`** | **151 nt** | **recommended** — matches RPIembeddor2-style 151 nt eval |
 | `fixlen_201` | 201 nt | |
 
 264 eCLIP experiments × 4 modes = 1056 rows in `info.tsv`.
@@ -114,7 +114,7 @@ python scripts/06_train_generalized_v2.py \\
   --out_dir results/skipper_eclip/rna_disjoint_v2_train
 ```
 
-### 42 — Cross-protein hard negatives (cross-protein positives as negatives)
+### 42 — Cross-protein hard negatives (other proteins' positives as negatives)
 
 Comparable to thesis eCLIP2 protein-disjoint (~0.72 AUROC with RPIembeddor).
 
@@ -124,7 +124,7 @@ python scripts/42_build_skipper_eclip_cross_protein_neg.py --write_splits
 python scripts/06_train_generalized_v2.py \\
   --data_dir data/benchmarks/skipper_eclip/cross_protein_neg \\
   --rna_max 151 --prot_max 700 \\
-  --model_dir models/saved/skipper_eclip_v2_cross_protein_hard \\
+  --model_dir models/saved/skipper_eclip_v2_cross_protein_neg \\
   --out_dir results/skipper_eclip/cross_protein_neg_v2_train
 ```
 

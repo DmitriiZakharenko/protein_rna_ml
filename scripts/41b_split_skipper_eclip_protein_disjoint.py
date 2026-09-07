@@ -8,7 +8,7 @@ Unlike script 41's ``protein_disjoint_v3a`` export (train in vitro → test eCLI
 this holds out eCLIP proteins for test while training on other eCLIP proteins
 from the same assay and window length (fixlen_151).
 
-Typical workflow (replicate RPIembeddor comparison with V2 CNN):
+Typical workflow (replicate RPIembeddor-style protein-disjoint comparison with V2 CNN):
 
   # 1) Build pair TSV (if not done)
   python scripts/41_build_skipper_eclip_benchmark.py
@@ -158,7 +158,7 @@ def annotate_v3a_overlap(
 
 def main() -> None:
     ap = argparse.ArgumentParser(
-        description="protein-disjoint protein-disjoint eCLIP train/val/test splits"
+        description="Protein-disjoint eCLIP train/val/test splits"
     )
     ap.add_argument(
         "--pairs_tsv",
@@ -241,7 +241,7 @@ def main() -> None:
 
     summary = {
         "script": "41b_split_skipper_eclip_protein_disjoint.py",
-        "description": "Protein-disjoint split within Skipper eCLIP (RPIembeddor style)",
+        "description": "Protein-disjoint split within Skipper eCLIP (RPIembeddor-style protein-disjoint style)",
         "pairs_tsv": str(resolve(args.pairs_tsv)) if args.pairs_tsv else None,
         "seed": args.seed,
         "train_frac": args.train_frac,

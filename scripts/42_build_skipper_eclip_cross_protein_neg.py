@@ -6,7 +6,7 @@ Build protein-disjoint eCLIP pairs: negatives = **positive peaks from other prot
 
 Replaces Skipper ``rand_neg`` windows with cross-protein positives so the model
 must learn protein-specific binding rather than generic eCLIP pos vs random background
-(cross-protein positive negatives protocol).
+(see RPIembeddor eCLIP2 protein-disjoint ~0.72 AUROC).
 
 Workflow
 --------
@@ -20,7 +20,7 @@ Workflow
   python scripts/06_train_generalized_v2.py \\
     --data_dir data/benchmarks/skipper_eclip/cross_protein_neg \\
     --rna_max 151 --prot_max 700 \\
-    --model_dir models/saved/skipper_eclip_v2_cross_protein_hard \\
+    --model_dir models/saved/skipper_eclip_v2_cross_protein_neg \\
     --out_dir results/skipper_eclip/cross_protein_neg_v2_train
 
 Compare to rand_neg protein-disjoint (~0.89 pp-median) vs thesis protein-disjoint (~0.72).
@@ -97,11 +97,10 @@ def collect_positives(
         stats["n_pos_fasta_files"] += 1
         prot_row = roster.loc[meta.symbol]
         prot_seq_raw = str(prot_row["protein_sequence"])
-        ok_prot, prot_seq = mod.validate_protein_sequence(prot_seq_raw)
-        if not ok_prot:
-            prot_seq = mod.sanitize_protein_sequence(prot_seq_raw)
-            ok_prot, prot_seq = mod.validate_protein_sequence(prot_seq)
-        if not ok_prot:
+        # sanitize → sequence; validate → (ok, reason) — do not unpack reason as seq
+        prot_seq, _ = mod.sanitize_protein_sequence(prot_seq_raw)
+        ok_prot, reason = mod.validate_protein_sequence(prot_seq)
+        if not ok_prot or len(prot_seq) < 10:
             stats["n_invalid_protein"] += 1
             continue
 
@@ -227,7 +226,7 @@ def build_cross_protein_pairs(
 def to_train_schema(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
     out["dataset"] = "eclip_skipper"
-    out["dataset_source"] = "eclip_skipper_cross_protein_hard"
+    out["dataset_source"] = "eclip_skipper_cross_protein_neg"
     cols = [c for c in TRAIN_COLUMNS if c in out.columns]
     extra = [c for c in out.columns if c not in cols]
     return out[cols + extra]
@@ -314,6 +313,7 @@ def main() -> None:
     )
     if pos_df.empty:
         raise SystemExit("No positive rows collected")
+    mod.assert_protein_sequences_ok(pos_df, context="cross-protein-neg positives")
 
     print(
         f"  Positives: {len(pos_df):,} rows  "
@@ -335,7 +335,7 @@ def main() -> None:
 
     summary = {
         "script": "42_build_skipper_eclip_cross_protein_neg.py",
-        "description": "Cross-protein negatives: other proteins' eCLIP positives as negatives",
+        "description": "other proteins' eCLIP positives as negatives",
         "reference": "cross-protein positive negatives protocol",
         "fasta_dir": str(fasta_dir),
         "max_pos_per_experiment": args.max_pos_per_experiment,
@@ -354,7 +354,7 @@ def main() -> None:
             "python scripts/06_train_generalized_v2.py "
             f"--data_dir {args.split_dir} "
             "--rna_max 151 --prot_max 700 "
-            "--model_dir models/saved/skipper_eclip_v2_cross_protein_hard "
+            "--model_dir models/saved/skipper_eclip_v2_cross_protein_neg "
             "--out_dir results/skipper_eclip/cross_protein_neg_v2_train"
         ),
     }
