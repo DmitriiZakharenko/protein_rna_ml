@@ -100,7 +100,7 @@ def gc_frac(seq: str) -> float:
     return (s.count("G") + s.count("C")) / max(len(s), 1)
 
 
-def load_split(split_dir: Path) -> dict[str, pd.DataFrame]:
+def load_split(split_dir: Path, max_train_rows: int = 0, seed: int = 42) -> dict[str, pd.DataFrame]:
     out = {}
     for name in ("train", "test"):
         path = split_dir / f"{name}.tsv"
@@ -111,6 +111,8 @@ def load_split(split_dir: Path) -> dict[str, pd.DataFrame]:
         out[name] = df
     out["test"]["gc"] = out["test"]["rna_sequence"].map(gc_frac)
     out["test"]["rna_in_train"] = out["test"]["rna_sequence"].isin(set(out["train"]["rna_sequence"]))
+    if max_train_rows and len(out["train"]) > max_train_rows:  # only for the k-mer baseline
+        out["train"] = out["train"].sample(max_train_rows, random_state=seed)
     return out
 
 
@@ -299,6 +301,9 @@ def parse_model_spec(spec: str) -> dict:
 # ── main ─────────────────────────────────────────────────────────────────────
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--bench_dir", default=str(BENCH_DIR.relative_to(ROOT)),
+                    help="Directory containing the split directories (default: eCLIP benchmarks)")
+    ap.add_argument("--max_train_rows", type=int, default=0, help="Subsample train for the k-mer baseline")
     ap.add_argument("--splits", nargs="+", default=["cross_protein_neg", "protein_and_rna", "protein_disjoint"],
                     help="Split directory names under data/benchmarks/skipper_eclip/")
     ap.add_argument("--model", action="append", default=[], help="name,type=v2|v4,path=...,rna_max=,prot_max=,splits=a|b")
@@ -335,9 +340,9 @@ def main() -> None:
     summary: dict = {"script": "51_eclip_eval_suite.py", "seed": args.seed, "splits": {}}
 
     for split in args.splits:
-        sdir = BENCH_DIR / split
+        sdir = resolve(args.bench_dir) / split
         print(f"\n=== split: {split} ===")
-        data = load_split(sdir)
+        data = load_split(sdir, args.max_train_rows, args.seed)
         train, test = data["train"], data["test"].copy()
         if args.max_test_rows and len(test) > args.max_test_rows:
             test = test.sample(args.max_test_rows, random_state=args.seed).reset_index(drop=True)
