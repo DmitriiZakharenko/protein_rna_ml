@@ -10,6 +10,7 @@
 #
 # Overrides:
 #   PYTHON (interpreter with torch/sklearn; default: python, else python3)
+#   TRAIN_SPLITS (default: "protein_and_rna cross_protein_neg")
 #   V3A_TRAIN_TSV, V2_V3A_CKPT, V4_V3A_CKPT, EPOCHS, BATCH
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -20,6 +21,7 @@ V3A_TRAIN_TSV="${V3A_TRAIN_TSV:-data/sanitized/generalized_v3a/train.tsv}"
 [ -f "$V3A_TRAIN_TSV" ] || V3A_TRAIN_TSV="data/generalized_v3a/train.tsv"
 V2_V3A_CKPT="${V2_V3A_CKPT:-models/saved/generalized_v2/best_model.pt}"
 V4_V3A_CKPT="${V4_V3A_CKPT:-models/saved/generalized_v4_phase3a/best_model.pt}"
+TRAIN_SPLITS="${TRAIN_SPLITS:-protein_and_rna cross_protein_neg}"
 EPOCHS="${EPOCHS:-40}"
 BATCH="${BATCH:-256}"
 BENCH=data/benchmarks/skipper_eclip
@@ -43,7 +45,7 @@ if has baselines; then
 fi
 
 if has train; then
-  for split in cross_protein_neg protein_and_rna; do
+  for split in $TRAIN_SPLITS; do
     echo "### train V2 on $split"
     "$PYTHON" scripts/06_train_generalized_v2.py \
       --data_dir "$BENCH/$split" --rna_max 151 --prot_max 700 \
