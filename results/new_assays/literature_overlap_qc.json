@@ -1,0 +1,142 @@
+{
+  "literature_curated": {
+    "xlsx": "data/external/dataset without affinities.xlsx",
+    "usable_pairs": 159,
+    "n_proteins": 96
+  },
+  "train_v3a": {
+    "path": "data/sanitized/generalized_v3a/train.tsv",
+    "n_rows": 2037593,
+    "n_distinct_protein_names": 393
+  },
+  "new_assays": {
+    "hughes_invivo_pulldown": {
+      "file": "data/sanitized/new_assays/hughes_invivo_pulldown.tsv",
+      "n_rows": 216588,
+      "n_distinct_protein_names": 23,
+      "n_protein_names_in_v3a_train": 11,
+      "protein_names_in_v3a_train": [
+        "CPEB4",
+        "ELAVL1",
+        "FMR1",
+        "FUS",
+        "HNRNPA1",
+        "HNRNPA2B1",
+        "MBNL1",
+        "QKI",
+        "SHEP",
+        "TARDBP",
+        "TIA1"
+      ],
+      "n_rows_with_both_sequences": 63501,
+      "protein_names_also_in_literature_curated": [
+        "ELAVL1",
+        "RBM4",
+        "TARDBP"
+      ],
+      "n_protein_names_in_literature_curated": 3,
+      "n_rows_exact_pair_in_literature_curated": 0,
+      "train_v3a_leakage_on_rows_with_seq": {
+        "exact_pair_in_train": 0,
+        "protein_name_in_train": 63501,
+        "protein_sequence_in_train": 63501,
+        "rna_in_train_positives": 0,
+        "fraction_exact_pair_in_train": 0.0
+      },
+      "binding_label_counts": {
+        "1": 117875,
+        "0": 98713
+      }
+    },
+    "prbab_affinity": {
+      "file": "data/sanitized/new_assays/prbab_affinity.tsv",
+      "n_rows": 218,
+      "n_distinct_protein_names": 146,
+      "n_protein_names_in_v3a_train": 3,
+      "protein_names_in_v3a_train": [
+        "HNRNPC",
+        "SLBP",
+        "SUP12"
+      ],
+      "n_rows_with_both_sequences": 217,
+      "protein_names_also_in_literature_curated": [
+        "HNRNPC",
+        "SLBP"
+      ],
+      "n_protein_names_in_literature_curated": 2,
+      "n_rows_exact_pair_in_literature_curated": 0,
+      "train_v3a_leakage_on_rows_with_seq": {
+        "exact_pair_in_train": 0,
+        "protein_name_in_train": 2,
+        "protein_sequence_in_train": 0,
+        "rna_in_train_positives": 0,
+        "fraction_exact_pair_in_train": 0.0
+      },
+      "n_distinct_pdb_ids": 146,
+      "binding_label_counts": {
+        "1": 177,
+        "0": 41
+      }
+    },
+    "pronab_prapred_affinity": {
+      "file": "data/sanitized/new_assays/pronab_prapred_affinity.tsv",
+      "n_rows": 217,
+      "n_distinct_protein_names": 217,
+      "n_protein_names_in_v3a_train": 0,
+      "protein_names_in_v3a_train": [],
+      "n_rows_with_both_sequences": 217,
+      "protein_names_also_in_literature_curated": [],
+      "n_protein_names_in_literature_curated": 0,
+      "n_rows_exact_pair_in_literature_curated": 0,
+      "train_v3a_leakage_on_rows_with_seq": {
+        "exact_pair_in_train": 0,
+        "protein_name_in_train": 0,
+        "protein_sequence_in_train": 0,
+        "rna_in_train_positives": 0,
+        "fraction_exact_pair_in_train": 0.0
+      },
+      "n_distinct_pdb_ids": 217,
+      "binding_label_counts": {
+        "1": 217
+      }
+    },
+    "utexas_aptamer_rna": {
+      "file": "data/sanitized/new_assays/utexas_aptamer_rna.tsv",
+      "n_rows": 583,
+      "n_distinct_protein_names": 231,
+      "n_protein_names_in_v3a_train": 0,
+      "protein_names_in_v3a_train": [],
+      "n_rows_with_both_sequences": 0,
+      "protein_names_also_in_literature_curated": [],
+      "n_protein_names_in_literature_curated": 0,
+      "n_rows_exact_pair_in_literature_curated": 0,
+      "train_v3a_leakage_on_rows_with_seq": {
+        "exact_pair_in_train": 0,
+        "protein_name_in_train": 0,
+        "protein_sequence_in_train": 0,
+        "rna_in_train_positives": 0,
+        "fraction_exact_pair_in_train": null
+      },
+      "binding_label_counts": {
+        "1": 583
+      }
+    }
+  },
+  "prbab_pronab_pdb_overlap": {
+    "n_prbab_pdb": 146,
+    "n_pronab_pdb": 217,
+    "n_shared_pdb": 110
+  },
+  "dataset_with_affinities": {
+    "file": "data/external/dataset with affinities.xlsx",
+    "n_rows": 140,
+    "n_distinct_proteins": 35,
+    "overlap_hughes_protein_names": [],
+    "n_proteins_also_in_hughes": 0,
+    "proteins_also_in_hughes": []
+  },
+  "external_benchmark_expanded": {
+    "n_expanded_pairs": 535,
+    "n_in_literature_curated_pairs": 154
+  }
+}
