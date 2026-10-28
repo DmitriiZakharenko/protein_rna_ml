@@ -11,7 +11,15 @@
 # Overrides: MAX_POS, EPOCHS, V2_SEEDS, PYTHON
 set -uo pipefail
 cd "$(dirname "$0")/.."
-PYTHON="${PYTHON:-$(command -v python || command -v python3)}"
+PYTHON="${PYTHON:-}"
+for cand in "$PYTHON" "$(command -v python || true)" /vol/space/miniconda3/envs/prna/bin/python; do
+  if [ -n "$cand" ] && "$cand" -c "import torch, sklearn, pandas" >/dev/null 2>&1; then PYTHON="$cand"; break; fi
+done
+if ! "${PYTHON:-/nonexistent}" -c "import torch, sklearn, pandas" >/dev/null 2>&1; then
+  echo "No Python with torch/sklearn/pandas found. Activate the environment or set PYTHON=/path/to/python." >&2
+  exit 1
+fi
+echo "Using PYTHON=$PYTHON"
 EPOCHS="${EPOCHS:-60}"
 V2_SEEDS="${V2_SEEDS:-0 1}"
 TRAIN_D=data/generalized_v3a; [ -f "$TRAIN_D/train.tsv" ] || TRAIN_D=data/sanitized/generalized_v3a
