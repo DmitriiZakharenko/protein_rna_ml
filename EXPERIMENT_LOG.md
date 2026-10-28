@@ -516,3 +516,53 @@ Per-protein median by domain: CCCH and multi improve under shuffle; KH best unde
 **Outputs**: `results/domain_aware/v2_domain_cond/{mode}/v2_domain_results.json`  
 **Summary**: `results/phase3b_summary.json` → `domain_aware_v2`
 
+
+---
+
+## 2026-10-28 — Skipper eCLIP audit and in vitro interaction probe (scripts 41–53)
+
+**VM**: pleasedimpala-8f147. **Data**: Skipper eCLIP `fixlen_151` rebuilt with real protein sequences
+(earlier local TSVs carried `protein_sequence == "ok"` — build scripts now abort on that).
+Evaluation: `scripts/51_eclip_eval_suite.py` (protein-bootstrap CIs, GC-matched subset with caliper,
+protein-shuffle control).
+
+### Composition baselines (no protein input), test AUROC
+
+| Split | GC | RNA k-mer LR (k≤4) | k-mer LR, GC-matched |
+|---|---|---|---|
+| `protein_disjoint` / `protein_and_rna` (genomic negatives) | 0.745 | 0.808 | 0.680 |
+| `cross_protein_neg` (other proteins' positives) | 0.544 | 0.435 | 0.441 |
+
+Per-protein k-mer LR with grouped CV (seen proteins, script 52): median 0.833 on genomic negatives,
+**0.737** on `cross_protein_neg` → protein-specific RNA signal exists when the protein is known.
+
+### Models on eCLIP (GC-matched AUROC unless stated; `prot_dep` = AUROC drop with shuffled proteins)
+
+| Model | `protein_and_rna` | `cross_protein_neg` |
+|---|---|---|
+| V2 trained on eCLIP | full 0.858, GC-matched 0.772, prot_dep 0.003 | test 0.485 (loss stuck at ln 2) |
+| V2 fine-tuned from v3a | full 0.834, GC-matched 0.711, prot_dep 0.013 | full 0.557, GC-matched 0.527, per-protein median 0.50 |
+| V2 v3a zero-shot | 0.56–0.60 (full 0.70–0.72) | 0.528 (CI includes 0.5) |
+| V4 v3a zero-shot | 0.52–0.54 (full 0.59–0.64) | 0.50–0.51 |
+
+`cross_protein_neg` diagnostics (V2 same proteins in train/test 0.498; V2 lr 1e-4 0.502; V4 bilinear 0.484)
+all failed. Conclusion: with composition-neutral negatives no tested model extracts protein-specific eCLIP
+signal; the in vivo benchmark with genomic negatives measures "peak-likeness" (RNA-only 0.81).
+
+### In vitro interaction probe (script 53, v3a test, ~55 proteins, ~80k pairs)
+
+Negatives = the same RNA paired with another test protein of the same assay source (RNA marginals identical;
+GC and k-mer LR give 0.500).
+
+| Model | AUROC [95% CI, protein bootstrap] | prot_dep | pp-median |
+|---|---|---|---|
+| V2 (v3a) | 0.704 [0.66, 0.75] | 0.20 | 0.715 |
+| V4 concat_bi (v3a) | 0.763 [0.71, 0.81] | 0.26 | 0.741 |
+
+In the standard v3a test, shuffling proteins drops AUROC by 0.21 (V2) / 0.29 (V4).
+**In vitro models learn protein×RNA interaction for unseen proteins; eCLIP transfer does not appear.**
+Caveats: single seed, one 60k sample, name-level (not MMseqs) protein novelty on eCLIP.
+
+### Decisions
+- eCLIP track closed as an audit/negative-transfer result; headline benchmark becomes the cross-protein-negative probe.
+- Next: multi-seed V2/V4 on the probe, MMseqs2 audit, Phase 3C (affinity).
