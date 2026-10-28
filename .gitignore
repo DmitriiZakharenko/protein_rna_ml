@@ -58,3 +58,22 @@ __pycache__/
 # R
 .Rhistory
 .RData
+
+# Local-only reference material, notes and drafts (keep on disk, do not publish)
+data/raw/eclip_skipper/references/
+MEETING_UPDATE_*.html
+PAPERS_TRACKER.*
+tmp/
+
+# Large raw/derived data (reproduce via scripts)
+data/raw/geo_prim/
+data/raw/new_assays/
+data/raw/prim_seqtools/
+data/sanitized/
+
+# Skipper eCLIP scratch, caches and bulk BED exports
+results/skipper_eclip/_figshare_tmp/
+results/skipper_eclip/cache/
+results/skipper_eclip/bed6/
+results/skipper_eclip/bed10/
+results/skipper_eclip/*.log

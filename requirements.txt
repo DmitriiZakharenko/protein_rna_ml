@@ -30,6 +30,7 @@ tqdm>=4.66.0
 
 # External dataset parsing (required by scripts/11_evaluate_external.py)
 openpyxl>=3.1.0
+xlrd>=2.0.1
 
 # Notebook support
 jupyter>=1.0.0
