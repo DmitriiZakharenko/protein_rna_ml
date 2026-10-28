@@ -60,6 +60,7 @@ import importlib.util as _ilu
 
 _spec = _ilu.spec_from_file_location("evaluate_external_11", _eval_path)
 _eval11 = _ilu.module_from_spec(_spec)
+sys.modules[_spec.name] = _eval11
 _spec.loader.exec_module(_eval11)
 score_pair = _eval11.score_pair
 
@@ -119,28 +120,32 @@ def per_protein_summary(df: pd.DataFrame, score_col: str, label_col: str = "bind
     }
 
 
-def gc_matched_subset(df: pd.DataFrame, seed: int = 42) -> pd.DataFrame:
-    """Per protein: pair each positive with the closest-GC unused negative."""
+def gc_matched_subset(df: pd.DataFrame, seed: int = 42, caliper: float = 0.02) -> pd.DataFrame:
+    """Per protein: pair each positive with the closest-GC unused negative.
+
+    Pairs further apart than ``caliper`` (absolute GC fraction) are dropped.
+    Without the caliper a balanced protein keeps every negative and the subset
+    is identical to the input.
+    """
     rng = np.random.default_rng(seed)
     parts: list[pd.DataFrame] = []
     for _, g in df.groupby("protein_name"):
         pos = g[g["binding_label"] == 1].sample(frac=1.0, random_state=int(rng.integers(0, 2**31 - 1)))
-        neg = g[g["binding_label"] == 0].copy()
+        neg = g[g["binding_label"] == 0]
         if len(pos) == 0 or len(neg) == 0:
             continue
-        picked_neg_idx: list = []
-        for _, prow in pos.iterrows():
-            if neg.empty:
-                break
-            neg["gc_dist"] = (neg["gc"] - prow["gc"]).abs()
-            best_idx = neg["gc_dist"].idxmin()
-            picked_neg_idx.append(best_idx)
-            neg = neg.drop(index=best_idx)
-        if not picked_neg_idx:
-            continue
-        neg_pick = g.loc[picked_neg_idx]
-        n = min(len(pos), len(neg_pick))
-        parts.append(pd.concat([pos.iloc[:n], neg_pick.iloc[:n]], ignore_index=True))
+        neg_gc = neg["gc"].values
+        free = np.ones(len(neg), dtype=bool)
+        pos_rows, neg_rows = [], []
+        for pi, pgc in zip(pos.index, pos["gc"].values):
+            dist = np.where(free, np.abs(neg_gc - pgc), np.inf)
+            j = int(np.argmin(dist))
+            if dist[j] <= caliper:
+                free[j] = False
+                pos_rows.append(pi)
+                neg_rows.append(neg.index[j])
+        if pos_rows:
+            parts.append(pd.concat([g.loc[pos_rows], g.loc[neg_rows]], ignore_index=True))
     if not parts:
         return df.iloc[0:0].copy()
     return pd.concat(parts, ignore_index=True)

@@ -71,6 +71,7 @@ def _load_build41():
     path = ROOT / "scripts" / "41_build_skipper_eclip_benchmark.py"
     spec = importlib.util.spec_from_file_location("build_skipper_41", path)
     mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
     return mod
 

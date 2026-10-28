@@ -42,6 +42,7 @@ def _load_script11():
     path = os.path.join(ROOT, "scripts", "11_evaluate_external.py")
     spec = importlib.util.spec_from_file_location("evaluate_external_11", path)
     mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
     return mod
 

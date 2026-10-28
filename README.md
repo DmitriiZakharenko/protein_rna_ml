@@ -21,7 +21,8 @@ Output: binding probability ∈ [0, 1]
 | Phase 3B — V4 bilinear on v3a | **Complete** | Test AUROC **0.829 ± 0.009** (3 seeds); +0.016 vs V2 in-distribution |
 | Phase 3B — Literature external | **Complete** | Curated AUROC **0.763** (V2) vs **0.737** (V4) — V2 better OOD |
 | Cross-protocol in-vitro | **Complete** | k=4 LR transfer mean AUROC **0.791** vs within **0.974** (84 matched RBPs) |
-| Domain-aware V2 | **Next** | `scripts/38` — baseline / domain-conditioned / shuffle |
+| Domain-aware V2 | **Closed (null)** | `scripts/38`: `domain_shuffle` (0.855) ≥ baseline (0.847) ≥ conditioned (0.842) — coarse `domain_class` is not a useful bias |
+| Skipper eCLIP benchmark (41–51) | **Audit in progress** | Random-negative splits are composition-solvable: GC alone AUROC 0.745, RNA-only k-mer LR 0.81 (0.68 GC-matched). Only `cross_protein_neg` is protein-specific — see [Skipper eCLIP](#skipper-eclip-benchmark-audit) |
 | RNAcompete `rnacompete_all` zero-shot | **Historical only** | Valid for **V2 + `generalized_v2` only** — panels are **in v3a training** |
 
 <details>
@@ -35,6 +36,9 @@ Output: binding probability ∈ [0, 1]
 | [`CROSS_ASSAY_PLAN.md`](CROSS_ASSAY_PLAN.md) | Cross-protocol → domain strategy |
 | [`DATA_SOURCES_AND_DOWNLOADS.md`](DATA_SOURCES_AND_DOWNLOADS.md) | Sibling-repo paths & integrity checks |
 | [`DATA.md`](DATA.md) | Provenance, leakage, negatives |
+| [`DATA_QUALITY_DATASETS.md`](DATA_QUALITY_DATASETS.md) | Dataset hunt: tiers, new assays, acquisition order |
+| [`DATA_CLIP_PRIM_INVENTORY.md`](DATA_CLIP_PRIM_INVENTORY.md) | CLIP review + PRIM-seq/HuRPA inventory |
+| [`data/raw/eclip_skipper/README.md`](data/raw/eclip_skipper/README.md) | Skipper eCLIP layout and scripts 41–50 |
 | [`METHODS.md`](METHODS.md) | Splits, metrics, references |
 | [`STRATEGY.md`](STRATEGY.md) | Lessons learned, what not to repeat |
 | [`strategy_dashboard.html`](strategy_dashboard.html) | Architecture & queue (HTML) |
@@ -202,7 +206,37 @@ python scripts/35_cross_protocol_motif_concordance.py --config configs/cross_pro
 python scripts/36_visualize_cross_protocol.py --config configs/cross_protocol_invitro.yaml
 ```
 
-**Next in this track**: domain-conditioned V2 (`scripts/38`) — see [`DOMAIN_AWARE_PLAN.md`](DOMAIN_AWARE_PLAN.md).
+**Domain track**: domain-conditioned V2 (`scripts/38`) gave a null result (see [`DOMAIN_AWARE_PLAN.md`](DOMAIN_AWARE_PLAN.md)).
+
+---
+
+## Skipper eCLIP Benchmark Audit
+
+Skipper eCLIP windows (`fixlen_151`, 173 proteins, 264 experiments; Boyle et al. 2023) provide an in vivo, long-RNA benchmark. Scripts 41–50 build and split it; script 51 evaluates it.
+
+| Split (`data/benchmarks/skipper_eclip/`) | Negatives | Protein-disjoint | Purpose |
+|---|---|---|---|
+| `protein_disjoint` | genomic non-peak windows | yes | peak vs background |
+| `protein_and_rna` | genomic non-peak windows | yes, and no test RNA in train | leakage-free variant |
+| `cross_protein_neg` | other proteins' positives (GC-matched) | yes | protein-specific signal |
+
+Baselines on the rebuilt data (test sets, composition only — no protein input):
+
+| Split | GC fraction | RNA k-mer LR (k≤4) | k-mer LR, GC-matched |
+|---|---|---|---|
+| `protein_disjoint` | 0.744 | 0.808 | 0.680 |
+| `protein_and_rna` | 0.746 | 0.808 | 0.680 |
+| `cross_protein_neg` | 0.544 | 0.435 | 0.441 |
+
+Takeaways: with genomic-background negatives a protein-agnostic RNA model already reaches AUROC ≈ 0.81, so that benchmark measures "is this a CLIP-peak-like region", not RBP specificity. A neural model must beat these baselines on the GC-matched subset and lose AUROC when protein sequences are shuffled (`protein_dependence_dAUROC` in script 51 output) before in vivo transfer can be claimed.
+
+> **Data fix**: eCLIP TSVs built before the "validate reason" fix carry `protein_sequence == "ok"`. Scripts 41/41b/41c/42 now abort on such data and script 51 refuses to score it — rebuild with `scripts/run_eclip_step1.sh`.
+
+```bash
+# rebuild splits, baselines, in-domain V2 training, evaluation suite (VM)
+bash scripts/run_eclip_step1.sh
+# or a subset of stages: STAGES="baselines" bash scripts/run_eclip_step1.sh
+```
 
 ---
 
@@ -320,7 +354,11 @@ protein_rna_ml/
 │   ├── 31–32     External benchmark build + Phase 3A figures
 │   ├── 33–36     Cross-protocol roster, classifiers, motifs, figures
 │   ├── 37–38     Domain annotation + domain-conditioned V2
-│   └── 40        Protein sequence sanitization QC
+│   ├── 40        Protein sequence sanitization QC
+│   ├── 41–41d, 42, 51  Skipper eCLIP build, splits, diagnostics, evaluation suite
+│   ├── 42b–44    New assays: download/normalize, sequence enrichment, overlap QC
+│   ├── 45–50     CLIPper/Skipper enrichment + motif QC, BED exports
+│   └── run_eclip_step1.sh  eCLIP rebuild + baselines + training + evaluation
 │
 ├── src/          data loaders, models (V2 CNN, V4 interaction)
 ├── results/
@@ -353,6 +391,7 @@ python scripts/04_build_generalized_dataset.py
 python scripts/06_train_generalized_v2.py --data_dir data/generalized_v2 --epochs 50
 
 # Phase 3A: build v3a + train V2 (data not in git — see PHASE3A_PLAN.md)
+# NB: scripts 41/51 read `data/sanitized/generalized_v3a/`; older docs use `data/generalized_v3a/`
 # Phase 3B: V4 + cross-protocol (see sections above)
 
 # Regenerate committed figures from JSON
