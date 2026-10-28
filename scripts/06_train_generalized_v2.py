@@ -77,6 +77,8 @@ def main():
                         help="DataLoader worker processes. Default: 0 on macOS "
                              "(avoids frequent multiprocessing freezes), 2 elsewhere.")
     parser.add_argument("--lr",         type=float, default=5e-4)
+    parser.add_argument("--init_checkpoint", default=None,
+                        help="Initialise weights from a V2 checkpoint (fine-tuning, e.g. v3a -> eCLIP)")
     parser.add_argument("--dropout",    type=float, default=0.3)
     parser.add_argument("--patience",   type=int,   default=8)
     parser.add_argument("--seed",       type=int,   default=42,
@@ -148,6 +150,10 @@ def main():
         prot_filters=[128, 256, 256], prot_kernels=[11, 7, 5],
         head_dims=[256, 64], dropout=args.dropout,
     ).to(device)
+    if args.init_checkpoint:
+        init = torch.load(args.init_checkpoint, map_location=device, weights_only=False)
+        model.load_state_dict(init["model_state"])
+        print(f"  Initialised from {args.init_checkpoint}", flush=True)
 
     n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"  Model parameters: {n_params:,}")
