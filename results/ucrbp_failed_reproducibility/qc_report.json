@@ -1,0 +1,24 @@
+{
+  "source_paper": "Ray & Laverty et al. 2023 Sci Rep 13:5238",
+  "source_table": "http://datah.ccbr.utoronto.ca/ucRBP/S1.RNAcompete_Experiment_Info.xlsx",
+  "definition": "S1 Experiment Category=ucRBP genes NOT in Fig.2 23 sequence-specific successes",
+  "paper_panel_claimed": 492,
+  "s1_ucrbp_unique_genes": 485,
+  "s1_ucrbp_full_length_unique_genes": 485,
+  "fig2_success_n": 23,
+  "failed_exported_n": 469,
+  "failed_all_valid_strict_20aa": true,
+  "failed_all_lengths_match_paper": true,
+  "failed_with_trailing_stop_stripped": 399,
+  "failed_other_sanitize": 399,
+  "success_23_present_in_s1": 23,
+  "success_all_valid_strict": true,
+  "success_all_lengths_match_paper": true,
+  "notes": [
+    "Paper text: 492 ucRBPs assayed; S1 has 485 unique GeneName in category ucRBP (7 short of 492 \u2014 possible naming/version differences).",
+    "Fig.2 lists 23 successes; ILF2 is Fail in S1 Manual Call but included in Fig.2 \u2014 kept in success set per Fig.2.",
+    "CNBP/NHP2L1/NUDT21/etc. are Control Protein in S1, not ucRBP category; excluded from failed via Fig.2 whitelist.",
+    "Trailing * stop codons stripped; C11orf31 had internal * (selenocysteine-like) also removed by strict sanitize.",
+    "Previous export from rnacompete_ucrbp.tsv incorrectly included domain-test orthologs and a few Manual-Pass genes not in Fig.2."
+  ]
+}

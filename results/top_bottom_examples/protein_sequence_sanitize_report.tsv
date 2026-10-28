@@ -1,0 +1,29 @@
+experiment_id	protein_name	source	raw_length	clean_length	warnings
+RNCMPT00051	RBM38	RNAcompete_Eukarya	104	89	RNAcompete_Eukarya:RNCMPT00051:RBM38: removed_embedded_digits;RNAcompete_Eukarya:RNCMPT00051:RBM38: length_changed_104_to_89
+RNCMPT00475	UBA2B	RNAcompete_RBPZoo	268	267	RNAcompete_RBPZoo:RNCMPT00475:UBA2B: removed_non_amino_acid_characters;RNAcompete_RBPZoo:RNCMPT00475:UBA2B: length_changed_268_to_267
+RNCMPT00478	PK01594.1	RNAcompete_RBPZoo	260	259	RNAcompete_RBPZoo:RNCMPT00478:PK01594.1: removed_non_amino_acid_characters;RNAcompete_RBPZoo:RNCMPT00478:PK01594.1: length_changed_260_to_259
+RNCMPT00784	CG4806	RNAcompete_RBPZoo	249	248	RNAcompete_RBPZoo:RNCMPT00784:CG4806: removed_non_amino_acid_characters;RNAcompete_RBPZoo:RNCMPT00784:CG4806: length_changed_249_to_248
+RNCMPT00969	IFIT2	RNAcompete_ucRBP23	246	245	RNAcompete_ucRBP23:RNCMPT00969:IFIT2: removed_non_amino_acid_characters;RNAcompete_ucRBP23:RNCMPT00969:IFIT2: length_changed_246_to_245
+RNCMPT01071	NHP2L1	RNAcompete_ucRBP23	133	132	RNAcompete_ucRBP23:RNCMPT01071:NHP2L1: stripped_trailing_stop_codon
+RNCMPT01301	NHP2L1	RNAcompete_ucRBP23	133	132	RNAcompete_ucRBP23:RNCMPT01301:NHP2L1: stripped_trailing_stop_codon
+RNCMPT01084	RPL11	RNAcompete_ucRBP23	179	178	RNAcompete_ucRBP23:RNCMPT01084:RPL11: stripped_trailing_stop_codon
+RNCMPT01296	RPL11	RNAcompete_ucRBP23	179	178	RNAcompete_ucRBP23:RNCMPT01296:RPL11: stripped_trailing_stop_codon
+RNCMPT01095	RPS15A	RNAcompete_ucRBP23	131	130	RNAcompete_ucRBP23:RNCMPT01095:RPS15A: stripped_trailing_stop_codon
+RNCMPT01411	RPS15A	RNAcompete_ucRBP23	131	130	RNAcompete_ucRBP23:RNCMPT01411:RPS15A: stripped_trailing_stop_codon
+RNCMPT01114	RPL30	RNAcompete_ucRBP23	116	115	RNAcompete_ucRBP23:RNCMPT01114:RPL30: stripped_trailing_stop_codon
+RNCMPT01277	RPL30	RNAcompete_ucRBP23	116	115	RNAcompete_ucRBP23:RNCMPT01277:RPL30: stripped_trailing_stop_codon
+RNCMPT01135	NUDT16L1	RNAcompete_ucRBP23	212	211	RNAcompete_ucRBP23:RNCMPT01135:NUDT16L1: stripped_trailing_stop_codon
+RNCMPT01334	NUDT16L1	RNAcompete_ucRBP23	212	211	RNAcompete_ucRBP23:RNCMPT01334:NUDT16L1: stripped_trailing_stop_codon
+RNCMPT01140	LSM6	RNAcompete_ucRBP23	81	80	RNAcompete_ucRBP23:RNCMPT01140:LSM6: stripped_trailing_stop_codon
+RNCMPT01376	LSM6	RNAcompete_ucRBP23	81	80	RNAcompete_ucRBP23:RNCMPT01376:LSM6: stripped_trailing_stop_codon
+RNCMPT01143	RPS12	RNAcompete_ucRBP23	133	132	RNAcompete_ucRBP23:RNCMPT01143:RPS12: stripped_trailing_stop_codon
+RNCMPT01363	RPS12	RNAcompete_ucRBP23	133	132	RNAcompete_ucRBP23:RNCMPT01363:RPS12: stripped_trailing_stop_codon
+RNCMPT01155	RPL22	RNAcompete_ucRBP23	129	128	RNAcompete_ucRBP23:RNCMPT01155:RPL22: stripped_trailing_stop_codon
+RNCMPT01297	RPL22	RNAcompete_ucRBP23	129	128	RNAcompete_ucRBP23:RNCMPT01297:RPL22: stripped_trailing_stop_codon
+RNCMPT01219	RPL5	RNAcompete_ucRBP23	298	297	RNAcompete_ucRBP23:RNCMPT01219:RPL5: stripped_trailing_stop_codon
+RNCMPT01299	RPP25	RNAcompete_ucRBP23	200	199	RNAcompete_ucRBP23:RNCMPT01299:RPP25: stripped_trailing_stop_codon
+RNCMPT01441	RPP25	RNAcompete_ucRBP23	200	199	RNAcompete_ucRBP23:RNCMPT01441:RPP25: stripped_trailing_stop_codon
+RNCMPT01740	RPS2	RNAcompete_ucRBP23	294	293	RNAcompete_ucRBP23:RNCMPT01740:RPS2: stripped_trailing_stop_codon
+RNCMPT01854	HARS2	RNAcompete_ucRBP23	507	506	RNAcompete_ucRBP23:RNCMPT01854:HARS2: stripped_trailing_stop_codon
+ERX2523413	HEXIM1	HTR-SELEX	360	359	HTR-SELEX:ERX2523413:HEXIM1: stripped_trailing_stop_codon
+ERX2523417	HEXIM2	HTR-SELEX	287	286	HTR-SELEX:ERX2523417:HEXIM2: stripped_trailing_stop_codon

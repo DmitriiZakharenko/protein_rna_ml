@@ -1,0 +1,16 @@
+{
+  "failed_total": 469,
+  "hard_negatives_no_signal": 422,
+  "soft_weak_unreproducible_signal": 47,
+  "soft_definition": "ucRBP full-length gene had replicate and/or classifier/manual Pass/Check but is NOT in Fig.2 23",
+  "paper_63_note": "Paper: 63 showed initial specificity signs and were replicated; our proxy yields 56 replicated FL ucRBP genes (12 of Fig.2 present in ucRBP category).",
+  "constructs_unique": 105,
+  "constructs_by_test_type": {
+    "Domain test": 76,
+    "Truncation test": 13,
+    "Ortholog test": 9,
+    "Control Protein": 7
+  },
+  "constructs_pass": 25,
+  "constructs_fail": 80
+}

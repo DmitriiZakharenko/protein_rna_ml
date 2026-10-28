@@ -1,0 +1,1427 @@
+{
+  "stats": {
+    "fasta_entries": 674,
+    "rnacompete_entries": 485,
+    "expected_rnacompete": 485,
+    "fail": 0,
+    "warn": 176,
+    "info": 26,
+    "pass": true
+  },
+  "issues": [
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00720",
+      "protein_name": "LmjF.29.0680",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00434",
+      "protein_name": "CPEB1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00509",
+      "protein_name": "grld-1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00466",
+      "protein_name": "PK05405.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00758",
+      "protein_name": "ENSMODG00000011903",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00739",
+      "protein_name": "BATDEDRAFT_13807",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00469",
+      "protein_name": "K07H8.9",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00475",
+      "protein_name": "UBA2B",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00425",
+      "protein_name": "SNRPB2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00799",
+      "protein_name": "U2B''",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01660",
+      "protein_name": "U2B''",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00694",
+      "protein_name": "estExt_fgenesh1_pg.C_Chr_03.00010087",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00684",
+      "protein_name": "hnrnpa0",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00776",
+      "protein_name": "TBPH",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00352",
+      "protein_name": "rsp-2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00372",
+      "protein_name": "PK23842.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00347",
+      "protein_name": "Y59A8B.10",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00773",
+      "protein_name": "Tb11.01.5690",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00511",
+      "protein_name": "pabpc4",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00474",
+      "protein_name": "fmr1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00833",
+      "protein_name": "Tb927.6.4960",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00478",
+      "protein_name": "PK01594.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00500",
+      "protein_name": "Smp_006320",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00350",
+      "protein_name": "ENSMGAG00000016128",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00351",
+      "protein_name": "DDB_G0286331",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00417",
+      "protein_name": "Smp_036270",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00743",
+      "protein_name": "DDX53",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00510",
+      "protein_name": "rnp-3",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00382",
+      "protein_name": "SCL30",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00615",
+      "protein_name": "LmjF.17.0550",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00329",
+      "protein_name": "RS31A",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00837",
+      "protein_name": "Tb927.5.810",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00501",
+      "protein_name": "Smp_024140",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00713",
+      "protein_name": "LmjF.29.1350",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00691",
+      "protein_name": "LmjF.34.4560",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00505",
+      "protein_name": "PF14_0151",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00790",
+      "protein_name": "PK07890.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00821",
+      "protein_name": "T07F10.3",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00413",
+      "protein_name": "mei2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00667",
+      "protein_name": "LmjF.27.2100",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00470",
+      "protein_name": "rbm-28",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00715",
+      "protein_name": "LmjF.30.2180",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00813",
+      "protein_name": "TRNAU1AP",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00707",
+      "protein_name": "ENSMODG00000011916",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00514",
+      "protein_name": "rbm14",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00819",
+      "protein_name": "RBM34",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00323",
+      "protein_name": "CBG13971",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00628",
+      "protein_name": "PRR3",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00414",
+      "protein_name": "nrd1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01680",
+      "protein_name": "srsf3",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00503",
+      "protein_name": "rsp-3",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00467",
+      "protein_name": "B0280.17",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00419",
+      "protein_name": "SRSF3",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00784",
+      "protein_name": "CG4806",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00399",
+      "protein_name": "DDB_G0270634",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00464",
+      "protein_name": "PK20770.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00507",
+      "protein_name": "snrpB2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00822",
+      "protein_name": "FUBP1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00421",
+      "protein_name": "NEMVEDRAFT_v1g214798",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00681",
+      "protein_name": "e_gw1.13.00.297.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00345",
+      "protein_name": "PK15181.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00677",
+      "protein_name": "hnrnpa0a",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00368",
+      "protein_name": "PK15111.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00392",
+      "protein_name": "PK14112.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00343",
+      "protein_name": "PK22404.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00683",
+      "protein_name": "tardbpl",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00311",
+      "protein_name": "spo5",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00818",
+      "protein_name": "RBFOX2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00482",
+      "protein_name": "PGTG_09691",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00834",
+      "protein_name": "Tb927.7.2140",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01677",
+      "protein_name": "RBM24",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00346",
+      "protein_name": "PK04894.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01672",
+      "protein_name": "TIA1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00763",
+      "protein_name": "LmjF.30.1110",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01687",
+      "protein_name": "RBM38",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00789",
+      "protein_name": "PK00353.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00830",
+      "protein_name": "PK21151.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00630",
+      "protein_name": "RNPC3",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00364",
+      "protein_name": "PK26404.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00349",
+      "protein_name": "PK27686.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00423",
+      "protein_name": "Y57G11C.36",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00301",
+      "protein_name": "rnp-2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00422",
+      "protein_name": "CBG05471",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01673",
+      "protein_name": "khdrbs1b",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00801",
+      "protein_name": "rsp-1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00431",
+      "protein_name": "PK27602.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00793",
+      "protein_name": "PFI0820c",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00340",
+      "protein_name": "hnrnpa0l",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00751",
+      "protein_name": "Tb927.7.320",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00687",
+      "protein_name": "LmjF.18.0190",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01671",
+      "protein_name": "ENSTNIG00000011257",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00698",
+      "protein_name": "CG1316",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00787",
+      "protein_name": "Imp",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00831",
+      "protein_name": "PK21303.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00325",
+      "protein_name": "csx1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01674",
+      "protein_name": "tia1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00754",
+      "protein_name": "NCU00556",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00476",
+      "protein_name": "PGTG_00837",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01667",
+      "protein_name": "hnrnpa0b",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00637",
+      "protein_name": "qkr58E-2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00862",
+      "protein_name": "PK05280.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01685",
+      "protein_name": "PUB1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00808",
+      "protein_name": "ESRP1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01679",
+      "protein_name": "hnrpkl",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00727",
+      "protein_name": "mex3c",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00623",
+      "protein_name": "TVAG_371220",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00401",
+      "protein_name": "MBNL2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00725",
+      "protein_name": "SCHCODRAFT_35516",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00760",
+      "protein_name": "ENSGALG00000014089",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00465",
+      "protein_name": "PK23097.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00344",
+      "protein_name": "CBG15837",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00461",
+      "protein_name": "PK00840.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00717",
+      "protein_name": "LmjF.33.1450",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00814",
+      "protein_name": "ELAVL2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00342",
+      "protein_name": "PK27672.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00471",
+      "protein_name": "pab-1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00416",
+      "protein_name": "sup-12",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00838",
+      "protein_name": "CG4887",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00732",
+      "protein_name": "Tb10.389.1650",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00723",
+      "protein_name": "SCHCODRAFT_72118",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00513",
+      "protein_name": "CG15440",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00432",
+      "protein_name": "cwf2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00761",
+      "protein_name": "LmjF.24.1570",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01669",
+      "protein_name": "tra2b",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00380",
+      "protein_name": "PFI1175c",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00370",
+      "protein_name": "PK23225.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01664",
+      "protein_name": "tardbp",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00341",
+      "protein_name": "CBG04067",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00689",
+      "protein_name": "LmjF.25.0500",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00757",
+      "protein_name": "RBPMS2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00718",
+      "protein_name": "NEMVEDRAFT_v1g141408",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00792",
+      "protein_name": "PK21582.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00835",
+      "protein_name": "NCU04254",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00394",
+      "protein_name": "RBM47",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00418",
+      "protein_name": "u2af2b",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT01670",
+      "protein_name": "u2af2b",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00678",
+      "protein_name": "SCHCODRAFT_80278",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00768",
+      "protein_name": "NCU00707",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00462",
+      "protein_name": "PK00513.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00794",
+      "protein_name": "cpb-2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00688",
+      "protein_name": "LmjF.25.0080",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00820",
+      "protein_name": "PUF60",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00695",
+      "protein_name": "Tb11.01.3940",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00788",
+      "protein_name": "heph",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00331",
+      "protein_name": "CBG14639",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00396",
+      "protein_name": "Smp_032060",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00692",
+      "protein_name": "LmjF.36.5420",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00774",
+      "protein_name": "sart3",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00685",
+      "protein_name": "PK27183.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00324",
+      "protein_name": "Y69A2AR.32",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00712",
+      "protein_name": "LmjF.29.1340",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00762",
+      "protein_name": "LmjF.29.1370",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00716",
+      "protein_name": "LmjF.32.2810",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00791",
+      "protein_name": "PK20656.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00800",
+      "protein_name": "PFE0865c",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00741",
+      "protein_name": "PK10695.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00816",
+      "protein_name": "tdp-1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00433",
+      "protein_name": "CBG03563",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00840",
+      "protein_name": "CBG00421",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00866",
+      "protein_name": "SCHCODRAFT_104251",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00326",
+      "protein_name": "PK03611.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00460",
+      "protein_name": "PK16782.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00360",
+      "protein_name": "PK20300.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00714",
+      "protein_name": "LmjF.29.1360",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00403",
+      "protein_name": "PK11774.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00306",
+      "protein_name": "PTBP2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00430",
+      "protein_name": "PK25912.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00735",
+      "protein_name": "Tb927.3.3960",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00676",
+      "protein_name": "NCU09742",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00508",
+      "protein_name": "pabpc1A",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00412",
+      "protein_name": "nop12",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00366",
+      "protein_name": "PK13173.1",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00468",
+      "protein_name": "C44B7.2",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00828",
+      "protein_name": "ENSXETG00000023721",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00805",
+      "protein_name": "RBM45",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "WARN",
+      "check": "no_metadata",
+      "experiment_id": "RNCMPT00749",
+      "protein_name": "Tb11.03.0550",
+      "detail": "not in RNAcompete_RBPZoo experiments.tsv"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "A1CF",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "ARET",
+      "detail": "3 hyb_ids, 3 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "CNOT4",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "FMR1",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "HNRNPL",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "HRB27C",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "LARK",
+      "detail": "3 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "MSI",
+      "detail": "3 hyb_ids, 3 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "MSI1",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "PUM",
+      "detail": "6 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "RBM38",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "RBM5",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "KHDRBS1",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "SHEP",
+      "detail": "3 hyb_ids, 3 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "TIA1",
+      "detail": "3 hyb_ids, 3 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "HRB98DE",
+      "detail": "3 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "SRSF1",
+      "detail": "6 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "RBM24",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "RBM45",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "NUDT21",
+      "detail": "5 hyb_ids, 3 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "ZRANB2",
+      "detail": "6 hyb_ids, 3 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "PEG10",
+      "detail": "6 hyb_ids, 3 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "u2af2b",
+      "detail": "2 hyb_ids, 2 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "IFIT2",
+      "detail": "5 hyb_ids, 3 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "SERBP1",
+      "detail": "5 hyb_ids, 3 distinct sequences"
+    },
+    {
+      "level": "INFO",
+      "check": "multi_construct",
+      "experiment_id": "",
+      "protein_name": "CNBP",
+      "detail": "8 hyb_ids, 4 distinct sequences"
+    }
+  ]
+}
