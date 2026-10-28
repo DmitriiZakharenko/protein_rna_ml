@@ -1,0 +1,13 @@
+{
+  "description": "ENCODE narrowPeak signalValue (CLIPper IDR peaks) vs Skipper enrichment_l2or_mean on overlapping windows",
+  "n_experiments": 264,
+  "n_with_clipper_peaks": 206,
+  "n_with_spearman": 202,
+  "spearman_per_experiment": {
+    "median": 0.5023794065520479,
+    "mean": 0.5009719993869446,
+    "pct_gt_0.5": 0.5148514851485149
+  },
+  "pooled_overlap_windows": 71504,
+  "pooled_spearman": 0.5115171495114741
+}

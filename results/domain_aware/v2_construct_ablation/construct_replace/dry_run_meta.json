@@ -1,0 +1,24 @@
+{
+  "mode": "construct_replace",
+  "data_dir": "/Users/zahalae/Desktop/protein_rna_ml/data/sanitized/generalized_v3a",
+  "table_s1": "/Users/zahalae/Desktop/protein_rna_ml/data/raw/rbpzoo/TableS1.xlsx",
+  "seed": 42,
+  "rna_max": 60,
+  "prot_max": 700,
+  "eligible_only": true,
+  "eligible_from_mode": null,
+  "allow_unaligned_replace": false,
+  "status_counts": {
+    "construct_replace:exact": 338,
+    "fallback_no_s1": 182,
+    "fallback_unaligned": 49,
+    "construct_replace:construct_in_train": 37,
+    "construct_replace:train_in_construct": 13
+  },
+  "n_train": 1360547,
+  "n_val": 198675,
+  "n_test": 203353,
+  "n_train_proteins": 264,
+  "n_train_variants": 300,
+  "device": "cpu"
+}

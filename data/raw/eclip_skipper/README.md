@@ -114,9 +114,38 @@ python scripts/06_train_generalized_v2.py \\
   --out_dir results/skipper_eclip/rna_disjoint_v2_train
 ```
 
+### 45–49 — Enrichment BED6 + CLIPper QC
+
+| Script | Role |
+|--------|------|
+| `45_skipper_enrichment_homer_qc.py` | Figshare `enrichment_l2or` vs Dropbox BED col5; HOMER motif vs col5 |
+| `46_skipper_bed6_enrichment_export_and_plot.py` | Export Skipper BED6; col5 vs l2or figure |
+| `47_clipper_encode_vs_skipper_enrichment.py` | ENCODE CLIPper IDR `signalValue` vs Skipper l2or |
+| `48_clipper_motif_vs_enrichment.py` | CLIPper vs motif on fixlen_151 windows (overlap) |
+| **`49_clipper_peak_motif_pipeline.py`** | **CLIPper peak-centric: 75 nt summit BED6 (col5 = signalValue), Ensembl seq, motif QC** |
+
+```bash
+# Full CLIPper export + peak-level motif correlation
+python scripts/49_clipper_peak_motif_pipeline.py --export-skipper-bed6
+
+# Summaries: results/skipper_eclip/clipper_peak_pipeline_summary.json
+# BED6: results/skipper_eclip/bed6/clipper_idr_75nt/*.bed6
+#       results/skipper_eclip/bed6/skipper_figshare_l2or/*.bed6
+```
+
+### 50 — Skipper REW → BED10 (CLIPper-style)
+
+```bash
+python scripts/50_export_skipper_rew_bed10.py
+# → results/skipper_eclip/bed10/skipper_rew/{SYMBOL}_{CELL}_Skipper_REW.bed
+# → results/skipper_eclip/bed10/skipper_rew_bed10.zip
+```
+
+Columns: **5** = `enrichment_l2or_mean`; **7** = same (signalValue); **8** = `-log10(p_min)`; **9** = `-log10(q_min)`; **10** = `-1`.
+
 ### 42 — Cross-protein hard negatives (other proteins' positives as negatives)
 
-Comparable to thesis eCLIP2 protein-disjoint (~0.72 AUROC with RPIembeddor).
+Compare against published eCLIP protein-disjoint baselines (~0.72 AUROC).
 
 ```bash
 python scripts/42_build_skipper_eclip_cross_protein_neg.py --write_splits

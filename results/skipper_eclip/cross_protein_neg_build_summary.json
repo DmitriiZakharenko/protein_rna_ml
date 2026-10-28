@@ -1,6 +1,6 @@
 {
   "script": "42_build_skipper_eclip_cross_protein_neg.py",
-  "description": "Cross-protein negatives: other proteins' eCLIP positives as negatives",
+  "description": "other proteins' eCLIP positives as negatives",
   "reference": "cross-protein positive negatives protocol",
   "fasta_dir": "/Users/zahalae/Desktop/protein_rna_ml/data/raw/eclip_skipper/extracted/fixlen_151_fasta",
   "max_pos_per_experiment": 200,
@@ -34,7 +34,7 @@
     "split_dir": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/cross_protein_neg"
   },
   "split_command": "python scripts/41b_split_skipper_eclip_protein_disjoint.py --pairs_tsv data/benchmarks/skipper_eclip/fixlen_151_cross_protein_neg_all.tsv --out_dir data/benchmarks/skipper_eclip/cross_protein_neg --summary_json results/skipper_eclip/cross_protein_neg_split_summary.json",
-  "train_command": "python scripts/06_train_generalized_v2.py --data_dir data/benchmarks/skipper_eclip/cross_protein_neg --rna_max 151 --prot_max 700 --model_dir models/saved/skipper_eclip_v2_cross_protein_hard --out_dir results/skipper_eclip/cross_protein_neg_v2_train",
+  "train_command": "python scripts/06_train_generalized_v2.py --data_dir data/benchmarks/skipper_eclip/cross_protein_neg --rna_max 151 --prot_max 700 --model_dir models/saved/skipper_eclip_v2_cross_protein_neg --out_dir results/skipper_eclip/cross_protein_neg_v2_train",
   "splits": {
     "train": {
       "split": "train",

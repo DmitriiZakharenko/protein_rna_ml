@@ -1,0 +1,5 @@
+{
+  "superseded_by": "results/skipper_eclip/enrichment_homer_motif_qc.json",
+  "script": "scripts/45_skipper_enrichment_homer_qc.py",
+  "bed_col5_rand_neg": "results/skipper_eclip/bed_col5_score_summary.json"
+}

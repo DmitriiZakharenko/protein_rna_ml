@@ -1,0 +1,33 @@
+{
+  "n_experiments_fixlen_151": 264,
+  "enrichment_l2or_vs_bed_col5": {
+    "n_with_figshare_overlap": 208,
+    "median_frac_windows_matched": 0.7979149421022085,
+    "spearman_col5_vs_enrichment_l2or_mean": {
+      "n": 202,
+      "median": 0.5469942951422577,
+      "mean": 0.5411625865320161,
+      "pct_gt_0.3": 0.9356435643564357,
+      "pct_gt_0.5": 0.6336633663366337
+    },
+    "note": "Join: genomic overlap fixlen_151 BED vs Figshare reproducible_enriched_windows; compare BED col5 to max overlapping enrichment_l2or_mean. Figshare TSV column 'score' is zero; use enrichment_l2or_*."
+  },
+  "homer_motif1_pwm_vs_col5": {
+    "n_experiments_with_homer": 209,
+    "spearman_col5_vs_pwm_logscore": {
+      "n": 209,
+      "median": 0.031458954060294975,
+      "mean": 0.045304143930165554,
+      "pct_gt_0.3": 0.03349282296650718,
+      "pct_gt_0.5": 0.004784688995215311
+    }
+  },
+  "figshare_load_errors": [
+    "TBRG4_HepG2: missing enrichment_l2or_mean in columns: ['chr', 'start', 'end', 'name', 'score', 'strand', 'gc', 'gc_bin']..."
+  ],
+  "n_figshare_load_errors": 1,
+  "paths": {
+    "panel_l2or": "results/skipper_eclip/enrichment_l2or_col5_panel.tsv",
+    "panel_homer": "results/skipper_eclip/homer_pwm_motif_panel.tsv"
+  }
+}

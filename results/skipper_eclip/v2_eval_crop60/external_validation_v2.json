@@ -1,0 +1,1077 @@
+{
+  "dataset": "data/benchmarks/skipper_eclip/fixlen_151_protein_disjoint_v3a.tsv",
+  "n_pairs": 74984,
+  "n_pos": 37492,
+  "n_neg": 37492,
+  "n_proteins": 130,
+  "n_single_class_proteins": 0,
+  "pos_rate": 0.5,
+  "random_auprc_baseline": 0.5,
+  "rna_len_stats": {
+    "min": 151,
+    "median": 151,
+    "max": 151,
+    "pct_long": 1.0
+  },
+  "sliding_window": {
+    "rna_max": 60,
+    "step": 30
+  },
+  "integrity_warnings": [
+    "WINDOW-MAX INFLATION: 74984/74984 RNAs (100%) exceed 60 nt and are scored as max over sliding windows. Max-pool scoring systematically assigns higher probabilities to longer RNAs, independently of actual binding. This inflates AUPRC when positives tend to be longer. Do NOT compare these numbers to SELEX/RBNS results without stratifying by RNA length."
+  ],
+  "integrity_blocks": [],
+  "v2_cnn": {
+    "auroc": 0.6960801230397838,
+    "auprc": 0.6896601580963522,
+    "auprc_gain_over_random": 0.1897
+  },
+  "per_protein_v2": [
+    {
+      "protein": "AATF",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7579,
+      "auprc": 0.7837,
+      "note": ""
+    },
+    {
+      "protein": "ADAR",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6427,
+      "auprc": 0.5981,
+      "note": ""
+    },
+    {
+      "protein": "ADAT1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6956,
+      "auprc": 0.7254,
+      "note": ""
+    },
+    {
+      "protein": "AGGF1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7686,
+      "auprc": 0.7513,
+      "note": ""
+    },
+    {
+      "protein": "AGO2",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6153,
+      "auprc": 0.6189,
+      "note": ""
+    },
+    {
+      "protein": "AKAP1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6545,
+      "auprc": 0.6328,
+      "note": ""
+    },
+    {
+      "protein": "APEX1",
+      "n_pos": 300,
+      "n_neg": 300,
+      "auroc": 0.7384,
+      "auprc": 0.7191,
+      "note": ""
+    },
+    {
+      "protein": "APOBEC3C",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6792,
+      "auprc": 0.6894,
+      "note": ""
+    },
+    {
+      "protein": "AQR",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.685,
+      "auprc": 0.6549,
+      "note": ""
+    },
+    {
+      "protein": "BCCIP",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8286,
+      "auprc": 0.7988,
+      "note": ""
+    },
+    {
+      "protein": "BCLAF1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.4395,
+      "auprc": 0.4546,
+      "note": ""
+    },
+    {
+      "protein": "BUD13",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6987,
+      "auprc": 0.6657,
+      "note": ""
+    },
+    {
+      "protein": "CACTIN",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7286,
+      "auprc": 0.7172,
+      "note": ""
+    },
+    {
+      "protein": "CDC40",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7752,
+      "auprc": 0.7711,
+      "note": ""
+    },
+    {
+      "protein": "CPSF6",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.5213,
+      "auprc": 0.559,
+      "note": ""
+    },
+    {
+      "protein": "DDX1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7568,
+      "auprc": 0.6977,
+      "note": ""
+    },
+    {
+      "protein": "DDX24",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6744,
+      "auprc": 0.6439,
+      "note": ""
+    },
+    {
+      "protein": "DDX3X",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.8465,
+      "auprc": 0.8201,
+      "note": ""
+    },
+    {
+      "protein": "DDX42",
+      "n_pos": 96,
+      "n_neg": 96,
+      "auroc": 0.8199,
+      "auprc": 0.7838,
+      "note": ""
+    },
+    {
+      "protein": "DDX43",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6622,
+      "auprc": 0.613,
+      "note": ""
+    },
+    {
+      "protein": "DDX47",
+      "n_pos": 175,
+      "n_neg": 175,
+      "auroc": 0.7775,
+      "auprc": 0.7031,
+      "note": ""
+    },
+    {
+      "protein": "DDX51",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8818,
+      "auprc": 0.8515,
+      "note": ""
+    },
+    {
+      "protein": "DDX52",
+      "n_pos": 321,
+      "n_neg": 321,
+      "auroc": 0.7385,
+      "auprc": 0.7373,
+      "note": ""
+    },
+    {
+      "protein": "DDX55",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6413,
+      "auprc": 0.6217,
+      "note": ""
+    },
+    {
+      "protein": "DDX59",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8097,
+      "auprc": 0.788,
+      "note": ""
+    },
+    {
+      "protein": "DDX6",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7165,
+      "auprc": 0.7232,
+      "note": ""
+    },
+    {
+      "protein": "DEK",
+      "n_pos": 289,
+      "n_neg": 289,
+      "auroc": 0.6291,
+      "auprc": 0.6327,
+      "note": ""
+    },
+    {
+      "protein": "DGCR8",
+      "n_pos": 585,
+      "n_neg": 585,
+      "auroc": 0.7769,
+      "auprc": 0.7404,
+      "note": ""
+    },
+    {
+      "protein": "DHX30",
+      "n_pos": 287,
+      "n_neg": 287,
+      "auroc": 0.717,
+      "auprc": 0.6967,
+      "note": ""
+    },
+    {
+      "protein": "DKC1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7292,
+      "auprc": 0.8013,
+      "note": ""
+    },
+    {
+      "protein": "DROSHA",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.8057,
+      "auprc": 0.7725,
+      "note": ""
+    },
+    {
+      "protein": "EED",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6088,
+      "auprc": 0.5866,
+      "note": ""
+    },
+    {
+      "protein": "EEF2",
+      "n_pos": 85,
+      "n_neg": 85,
+      "auroc": 0.7662,
+      "auprc": 0.7573,
+      "note": ""
+    },
+    {
+      "protein": "EFTUD2",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7556,
+      "auprc": 0.7261,
+      "note": ""
+    },
+    {
+      "protein": "EIF3A",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8331,
+      "auprc": 0.8055,
+      "note": ""
+    },
+    {
+      "protein": "EIF3D",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6996,
+      "auprc": 0.6906,
+      "note": ""
+    },
+    {
+      "protein": "EIF3G",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8453,
+      "auprc": 0.8328,
+      "note": ""
+    },
+    {
+      "protein": "EIF3H",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.671,
+      "auprc": 0.6609,
+      "note": ""
+    },
+    {
+      "protein": "EIF4E",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.9135,
+      "auprc": 0.9036,
+      "note": ""
+    },
+    {
+      "protein": "ELAC2",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.915,
+      "auprc": 0.9225,
+      "note": ""
+    },
+    {
+      "protein": "EXOSC10",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7087,
+      "auprc": 0.6814,
+      "note": ""
+    },
+    {
+      "protein": "EXOSC5",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7072,
+      "auprc": 0.7073,
+      "note": ""
+    },
+    {
+      "protein": "FAM120A",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7425,
+      "auprc": 0.7542,
+      "note": ""
+    },
+    {
+      "protein": "FASTKD2",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.8421,
+      "auprc": 0.8339,
+      "note": ""
+    },
+    {
+      "protein": "FKBP4",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8178,
+      "auprc": 0.7522,
+      "note": ""
+    },
+    {
+      "protein": "FTO",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.8331,
+      "auprc": 0.8032,
+      "note": ""
+    },
+    {
+      "protein": "FXR2",
+      "n_pos": 800,
+      "n_neg": 800,
+      "auroc": 0.678,
+      "auprc": 0.6632,
+      "note": ""
+    },
+    {
+      "protein": "G3BP1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6453,
+      "auprc": 0.59,
+      "note": ""
+    },
+    {
+      "protein": "GARS",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7851,
+      "auprc": 0.7859,
+      "note": ""
+    },
+    {
+      "protein": "GEMIN5",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8538,
+      "auprc": 0.7985,
+      "note": ""
+    },
+    {
+      "protein": "GPKOW",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.5399,
+      "auprc": 0.5469,
+      "note": ""
+    },
+    {
+      "protein": "GRSF1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8341,
+      "auprc": 0.7761,
+      "note": ""
+    },
+    {
+      "protein": "GRWD1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6215,
+      "auprc": 0.5998,
+      "note": ""
+    },
+    {
+      "protein": "GTF2F1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.9024,
+      "auprc": 0.8708,
+      "note": ""
+    },
+    {
+      "protein": "HLTF",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.5576,
+      "auprc": 0.5302,
+      "note": ""
+    },
+    {
+      "protein": "HNRNPM",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6775,
+      "auprc": 0.6483,
+      "note": ""
+    },
+    {
+      "protein": "HNRNPU",
+      "n_pos": 378,
+      "n_neg": 378,
+      "auroc": 0.7272,
+      "auprc": 0.7093,
+      "note": ""
+    },
+    {
+      "protein": "HNRNPUL1",
+      "n_pos": 344,
+      "n_neg": 344,
+      "auroc": 0.6791,
+      "auprc": 0.6581,
+      "note": ""
+    },
+    {
+      "protein": "IGF2BP2",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6387,
+      "auprc": 0.6337,
+      "note": ""
+    },
+    {
+      "protein": "IGF2BP3",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.631,
+      "auprc": 0.6197,
+      "note": ""
+    },
+    {
+      "protein": "ILF3",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6706,
+      "auprc": 0.6587,
+      "note": ""
+    },
+    {
+      "protein": "KHSRP",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.4296,
+      "auprc": 0.4721,
+      "note": ""
+    },
+    {
+      "protein": "LARP4",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6495,
+      "auprc": 0.6191,
+      "note": ""
+    },
+    {
+      "protein": "LARP7",
+      "n_pos": 293,
+      "n_neg": 293,
+      "auroc": 0.6527,
+      "auprc": 0.6179,
+      "note": ""
+    },
+    {
+      "protein": "LSM11",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6921,
+      "auprc": 0.6644,
+      "note": ""
+    },
+    {
+      "protein": "METAP2",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7075,
+      "auprc": 0.6404,
+      "note": ""
+    },
+    {
+      "protein": "METTL1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.5002,
+      "auprc": 0.5252,
+      "note": ""
+    },
+    {
+      "protein": "MFAP1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6421,
+      "auprc": 0.6223,
+      "note": ""
+    },
+    {
+      "protein": "MORC2",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8282,
+      "auprc": 0.8093,
+      "note": ""
+    },
+    {
+      "protein": "MTPAP",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6832,
+      "auprc": 0.66,
+      "note": ""
+    },
+    {
+      "protein": "NCBP2",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.9117,
+      "auprc": 0.9023,
+      "note": ""
+    },
+    {
+      "protein": "NIP7",
+      "n_pos": 180,
+      "n_neg": 180,
+      "auroc": 0.5587,
+      "auprc": 0.5702,
+      "note": ""
+    },
+    {
+      "protein": "NIPBL",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.5894,
+      "auprc": 0.577,
+      "note": ""
+    },
+    {
+      "protein": "NKRF",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.8733,
+      "auprc": 0.8538,
+      "note": ""
+    },
+    {
+      "protein": "NOL12",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7409,
+      "auprc": 0.7126,
+      "note": ""
+    },
+    {
+      "protein": "NOLC1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.5592,
+      "auprc": 0.5357,
+      "note": ""
+    },
+    {
+      "protein": "NONO",
+      "n_pos": 600,
+      "n_neg": 600,
+      "auroc": 0.8345,
+      "auprc": 0.8189,
+      "note": ""
+    },
+    {
+      "protein": "NPM1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.5712,
+      "auprc": 0.5514,
+      "note": ""
+    },
+    {
+      "protein": "NSUN2",
+      "n_pos": 284,
+      "n_neg": 284,
+      "auroc": 0.7493,
+      "auprc": 0.7243,
+      "note": ""
+    },
+    {
+      "protein": "NSUN4",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6646,
+      "auprc": 0.6574,
+      "note": ""
+    },
+    {
+      "protein": "PARP1",
+      "n_pos": 97,
+      "n_neg": 97,
+      "auroc": 0.8353,
+      "auprc": 0.8595,
+      "note": ""
+    },
+    {
+      "protein": "PCBP1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7793,
+      "auprc": 0.7511,
+      "note": ""
+    },
+    {
+      "protein": "PHF6",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7667,
+      "auprc": 0.732,
+      "note": ""
+    },
+    {
+      "protein": "PPIG",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7218,
+      "auprc": 0.7104,
+      "note": ""
+    },
+    {
+      "protein": "PPIL4",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.5887,
+      "auprc": 0.5766,
+      "note": ""
+    },
+    {
+      "protein": "PRP16",
+      "n_pos": 138,
+      "n_neg": 138,
+      "auroc": 0.7093,
+      "auprc": 0.6941,
+      "note": ""
+    },
+    {
+      "protein": "PRPF39",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.8947,
+      "auprc": 0.8826,
+      "note": ""
+    },
+    {
+      "protein": "PRPF4",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.9014,
+      "auprc": 0.8588,
+      "note": ""
+    },
+    {
+      "protein": "PRPF8",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.681,
+      "auprc": 0.6711,
+      "note": ""
+    },
+    {
+      "protein": "PTBP1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.729,
+      "auprc": 0.718,
+      "note": ""
+    },
+    {
+      "protein": "PUM2",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.3692,
+      "auprc": 0.4196,
+      "note": ""
+    },
+    {
+      "protein": "RBM15",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7635,
+      "auprc": 0.7161,
+      "note": ""
+    },
+    {
+      "protein": "RBM22",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6371,
+      "auprc": 0.6469,
+      "note": ""
+    },
+    {
+      "protein": "RNF187",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.4822,
+      "auprc": 0.4847,
+      "note": ""
+    },
+    {
+      "protein": "RPS3",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7292,
+      "auprc": 0.7007,
+      "note": ""
+    },
+    {
+      "protein": "RPS6",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7807,
+      "auprc": 0.747,
+      "note": ""
+    },
+    {
+      "protein": "RYBP",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.5129,
+      "auprc": 0.5345,
+      "note": ""
+    },
+    {
+      "protein": "SAFB",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6006,
+      "auprc": 0.5831,
+      "note": ""
+    },
+    {
+      "protein": "SDAD1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6852,
+      "auprc": 0.6413,
+      "note": ""
+    },
+    {
+      "protein": "SF3A1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6811,
+      "auprc": 0.6846,
+      "note": ""
+    },
+    {
+      "protein": "SF3A3",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6845,
+      "auprc": 0.6307,
+      "note": ""
+    },
+    {
+      "protein": "SLTM",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.8047,
+      "auprc": 0.7428,
+      "note": ""
+    },
+    {
+      "protein": "SMNDC1",
+      "n_pos": 345,
+      "n_neg": 345,
+      "auroc": 0.6695,
+      "auprc": 0.643,
+      "note": ""
+    },
+    {
+      "protein": "SND1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6376,
+      "auprc": 0.6006,
+      "note": ""
+    },
+    {
+      "protein": "SNRNP200",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7234,
+      "auprc": 0.685,
+      "note": ""
+    },
+    {
+      "protein": "SNRPA1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.5337,
+      "auprc": 0.555,
+      "note": ""
+    },
+    {
+      "protein": "SNRPC",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.663,
+      "auprc": 0.6417,
+      "note": ""
+    },
+    {
+      "protein": "SNRPD3",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.5559,
+      "auprc": 0.5559,
+      "note": ""
+    },
+    {
+      "protein": "SSB",
+      "n_pos": 92,
+      "n_neg": 92,
+      "auroc": 0.6478,
+      "auprc": 0.6665,
+      "note": ""
+    },
+    {
+      "protein": "STAU2",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7402,
+      "auprc": 0.719,
+      "note": ""
+    },
+    {
+      "protein": "SUB1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.5367,
+      "auprc": 0.5327,
+      "note": ""
+    },
+    {
+      "protein": "SUGP2",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.6033,
+      "auprc": 0.5691,
+      "note": ""
+    },
+    {
+      "protein": "SUPV3L1",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7627,
+      "auprc": 0.6928,
+      "note": ""
+    },
+    {
+      "protein": "TAF15",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.7103,
+      "auprc": 0.6773,
+      "note": ""
+    },
+    {
+      "protein": "TBRG4",
+      "n_pos": 238,
+      "n_neg": 238,
+      "auroc": 0.7049,
+      "auprc": 0.7032,
+      "note": ""
+    },
+    {
+      "protein": "TIAL1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.535,
+      "auprc": 0.5712,
+      "note": ""
+    },
+    {
+      "protein": "TRA2A",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6537,
+      "auprc": 0.6435,
+      "note": ""
+    },
+    {
+      "protein": "TROVE2",
+      "n_pos": 310,
+      "n_neg": 310,
+      "auroc": 0.591,
+      "auprc": 0.5993,
+      "note": ""
+    },
+    {
+      "protein": "U2AF1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6473,
+      "auprc": 0.6076,
+      "note": ""
+    },
+    {
+      "protein": "UCHL5",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6431,
+      "auprc": 0.6297,
+      "note": ""
+    },
+    {
+      "protein": "UPF1",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6055,
+      "auprc": 0.5853,
+      "note": ""
+    },
+    {
+      "protein": "UTP18",
+      "n_pos": 99,
+      "n_neg": 99,
+      "auroc": 0.6281,
+      "auprc": 0.6755,
+      "note": ""
+    },
+    {
+      "protein": "WDR43",
+      "n_pos": 271,
+      "n_neg": 271,
+      "auroc": 0.7116,
+      "auprc": 0.7025,
+      "note": ""
+    },
+    {
+      "protein": "WRN",
+      "n_pos": 85,
+      "n_neg": 85,
+      "auroc": 0.7084,
+      "auprc": 0.7193,
+      "note": ""
+    },
+    {
+      "protein": "XPO5",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7735,
+      "auprc": 0.7539,
+      "note": ""
+    },
+    {
+      "protein": "YBX3",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6374,
+      "auprc": 0.5918,
+      "note": ""
+    },
+    {
+      "protein": "YWHAG",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.7259,
+      "auprc": 0.68,
+      "note": ""
+    },
+    {
+      "protein": "ZC3H11A",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.5016,
+      "auprc": 0.515,
+      "note": ""
+    },
+    {
+      "protein": "ZNF622",
+      "n_pos": 200,
+      "n_neg": 200,
+      "auroc": 0.608,
+      "auprc": 0.5975,
+      "note": ""
+    },
+    {
+      "protein": "ZNF800",
+      "n_pos": 400,
+      "n_neg": 400,
+      "auroc": 0.6208,
+      "auprc": 0.5918,
+      "note": ""
+    }
+  ],
+  "per_protein_summary_v2": {
+    "n_proteins_scored": 130,
+    "n_proteins_total": 130,
+    "median_auroc": 0.6971,
+    "median_auprc": 0.6786
+  }
+}

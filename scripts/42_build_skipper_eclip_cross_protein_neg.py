@@ -23,7 +23,7 @@ Workflow
     --model_dir models/saved/skipper_eclip_v2_cross_protein_neg \\
     --out_dir results/skipper_eclip/cross_protein_neg_v2_train
 
-Compare to rand_neg protein-disjoint (~0.89 pp-median) vs thesis protein-disjoint (~0.72).
+Compare to rand_neg protein-disjoint (~0.89 pp-median) vs published protein-disjoint baselines.
 """
 
 from __future__ import annotations

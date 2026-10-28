@@ -8,7 +8,7 @@
     "fixlen_151_nt": 151,
     "fixlen_201_nt": 201
   },
-  "recommended_primary_benchmark": "fixlen_151 (matches RPIembeddor2 151 nt)",
+  "recommended_primary_benchmark": "fixlen_151 (matches RPIembeddor2-style 151 nt eval)",
   "n_proteins_domain_annot": 185,
   "n_proteins_with_domain_intervals": 149,
   "n_fixlen_151_fasta_files_extracted": 528,

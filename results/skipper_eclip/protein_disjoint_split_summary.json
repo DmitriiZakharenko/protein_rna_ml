@@ -1,6 +1,6 @@
 {
   "script": "41b_split_skipper_eclip_protein_disjoint.py",
-  "description": "Protein-disjoint split within Skipper eCLIP (RPIembeddor style)",
+  "description": "Protein-disjoint split within Skipper eCLIP (RPIembeddor-style protein-disjoint style)",
   "pairs_tsv": "/Users/zahalae/Desktop/protein_rna_ml/data/benchmarks/skipper_eclip/fixlen_151_all.tsv",
   "seed": 42,
   "train_frac": 0.75,

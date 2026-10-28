@@ -1,0 +1,27 @@
+{
+  "workflow": "CLIPper IDR peaks -> 75nt summit-centered BED6 (col5=signalValue) -> Ensembl RNA -> HOMER motif1 PWM",
+  "window_bp": 75,
+  "n_encode_experiments": 264,
+  "n_with_bed6_and_motif_qc": 204,
+  "n_clipper_bed6_files": 206,
+  "spearman_signalValue_vs_motif_per_experiment": {
+    "median": 0.04422015910955937,
+    "mean": 0.04047944871795868,
+    "pct_gt_0.3": 0.024509803921568627
+  },
+  "pooled_peaks_sequenced": 16133,
+  "pooled_spearman": 0.021971179260223815,
+  "motif_pwm_mean_top_vs_bottom_quartile_signal": {
+    "mean_top_q": 2.118836889769482,
+    "mean_bottom_q": 1.7756435551499186
+  },
+  "paths": {
+    "clipper_bed6_dir": "results/skipper_eclip/bed6/clipper_idr_75nt",
+    "skipper_bed6_dir": null,
+    "panel_tsv": "results/skipper_eclip/clipper_peak_75nt_motif_panel.tsv"
+  },
+  "prior_analyses": {
+    "fixlen_151_bed_col5_vs_l2or": "results/skipper_eclip/enrichment_homer_motif_qc.json",
+    "clipper_vs_skipper_l2or": "results/skipper_eclip/clipper_vs_skipper_summary.json"
+  }
+}

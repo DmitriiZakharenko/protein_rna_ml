@@ -1,0 +1,20 @@
+{
+  "unit": "fixlen_151 positive windows with CLIPper IDR overlap + HOMER motif1 PWM",
+  "note": "CLIPper signal = max overlapping IDR narrowPeak signalValue on each 151nt window",
+  "n_experiments": 206,
+  "clipper_signal_vs_motif_pwm": {
+    "n": 206,
+    "median": 0.03208464148838697,
+    "mean": 0.047086931304172776
+  },
+  "bed_col5_vs_motif_pwm": {
+    "n": 206,
+    "median": 0.0320391760291585,
+    "mean": 0.04700649049908251
+  },
+  "clipper_signal_vs_bed_col5": {
+    "n": 206,
+    "median": 0.9999999999999999,
+    "mean": 0.9996492891724813
+  }
+}

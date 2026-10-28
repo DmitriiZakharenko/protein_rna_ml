@@ -1,0 +1,16 @@
+{
+  "source_tar": "data/raw/eclip_skipper/archives/dropbox/eclip_various_pos_neg_sets.hg38.tar.xz",
+  "length_mode": "fixlen_151",
+  "n_experiments_listed": 264,
+  "n_experiments_loaded": 264,
+  "n_missing_bed": 0,
+  "n_windows_pos": 736347,
+  "n_windows_neg": 736347,
+  "pos_col5_mean": 4.1634,
+  "pos_col5_median": 4.0081,
+  "neg_col5_mean": 0.0,
+  "neg_col5_median": 0.0,
+  "neg_col5_gt0": 0,
+  "auroc_pos_vs_rand_neg_by_col5": 1.0,
+  "note": "AUROC=1 is trivial: Skipper rand_neg BED column 5 is always 0; col5 does not separate pos from neg in this benchmark. Use positives-only analyses or non-zero negative schemes (e.g. flanks with scores) for enrichment calibration."
+}
