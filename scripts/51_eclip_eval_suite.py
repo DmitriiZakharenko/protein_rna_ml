@@ -393,6 +393,8 @@ def main() -> None:
                 for name in subsets:
                     a, b = table[col][name].get("auroc"), table[shuf_col][name].get("auroc")
                     table[col][name]["protein_dependence_dAUROC"] = None if a is None or b is None else round(a - b, 4)
+                    pa, pb = table[col][name].get("pp_median_auroc"), table[shuf_col][name].get("pp_median_auroc")
+                    table[col][name]["protein_dependence_pp_median_dAUROC"] = None if pa is None or pb is None else round(pa - pb, 4)
 
         summary["splits"][split] = {
             "n_train": int(len(train)),
