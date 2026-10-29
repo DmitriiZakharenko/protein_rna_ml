@@ -566,7 +566,8 @@ Caveats: single seed, one 60k sample, name-level (not MMseqs) protein novelty on
 ### Decisions
 - eCLIP track closed as an audit/negative-transfer result; headline benchmark becomes the cross-protein-negative probe.
 - Multi-seed probe done (see above): V4 > V2 confirmed.
-- Next: MMseqs2 audit, Phase 3C (affinity).
+- MMseqs2 audit done (see below): probe signal is homology-driven.
+- Next: cluster-based test split (≤30% identity), Phase 3C (affinity).
 
 ### Multi-seed in vitro probe (3 seeds each, 2026-10-29)
 
@@ -580,3 +581,28 @@ Caveats: single seed, one 60k sample, name-level (not MMseqs) protein novelty on
 Paired V4 − V2 AUROC per seed [0, 1, 42]: +0.061, +0.085, +0.058 (mean +0.068). V4 wins in every seed and is far
 more stable. On the standard v3a test the V2/V4 gap is only ~0.016, so the bilinear layer helps specifically in
 learning protein×RNA interaction. Caveat: n=3 seeds, one probe sample, no MMseqs audit yet.
+
+### MMseqs2 homology audit of the probe (script 55, 2026-10-29)
+
+Best local identity of each v3a test protein (55) to any v3a train protein (393): no hit 6, 30–50% 15, 50–70% 14,
+70–90% 13, ≥90% 7 (median 0.60; 62% ≥50%). Several test proteins are identical to train ones (e.g. ESRP1-construct3 vs
+ESRP1, IGF2BP1, MEX3D-construct3), so the name-level split leaks. eCLIP `protein_and_rna` test (24 proteins): no hit 16,
+≥90% 5.
+
+Probe AUROC by identity bin (mean of 3 seeds, `__full`):
+
+| Bin (proteins) | V2 | V4 |
+|---|---|---|
+| no hit (6) | 0.475 | 0.525 |
+| 30–50% (15) | 0.613 | 0.699 |
+| 50–70% (14) | 0.667 | 0.695 |
+| 70–90% (13) | 0.789 | 0.884 |
+| ≥90% (7) | 0.850 | 0.874 |
+| <50% (21) | 0.561 | 0.639 |
+| all (55) | 0.686 | 0.758 |
+
+AUROC rises monotonically with identity. On proteins with no detectable homolog both models are at chance
+(V2 0.48, V4 0.52); partial transfer exists at 30–50% (V4 0.70 vs V2 0.61, V4 > V2 in every bin except noise at ≥90%).
+**Conclusion:** the "unseen protein" claim must be restated as homology-based transfer; headline AUROC 0.75 is inflated
+by close homologs. Caveats: only 6 no-hit proteins, no per-bin CI yet. Next: cluster-based split at ≤30% identity.
+

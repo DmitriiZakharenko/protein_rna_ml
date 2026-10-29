@@ -22,7 +22,7 @@ Output: binding probability ∈ [0, 1]
 | Phase 3B — Literature external | **Complete** | Curated AUROC **0.763** (V2) vs **0.737** (V4) — V2 better OOD |
 | Cross-protocol in-vitro | **Complete** | k=4 LR transfer mean AUROC **0.791** vs within **0.974** (84 matched RBPs) |
 | Domain-aware V2 | **Closed (null)** | `scripts/38`: `domain_shuffle` (0.855) ≥ baseline (0.847) ≥ conditioned (0.842) — coarse `domain_class` is not a useful bias |
-| Skipper eCLIP benchmark (41–53) | **Closed (negative transfer)** | Genomic-negative splits are composition-solvable (RNA-only k-mer LR 0.81); on `cross_protein_neg` no model beats chance within protein. In vitro probe (3 seeds): V2 0.686 ± 0.015, V4 0.754 ± 0.001 — see [Skipper eCLIP](#skipper-eclip-benchmark-audit) |
+| Skipper eCLIP benchmark (41–53) | **Closed (negative transfer)** | Genomic-negative splits are composition-solvable (RNA-only k-mer LR 0.81); on `cross_protein_neg` no model beats chance within protein. In vitro probe (3 seeds): V2 0.686 ± 0.015, V4 0.754 ± 0.001, but homology-driven (no-hit proteins: ≈0.5) — see [Skipper eCLIP](#skipper-eclip-benchmark-audit) |
 | RNAcompete `rnacompete_all` zero-shot | **Historical only** | Valid for **V2 + `generalized_v2` only** — panels are **in v3a training** |
 
 <details>
@@ -228,7 +228,7 @@ Baselines on the rebuilt data (test sets, composition only — no protein input)
 | `protein_and_rna` | 0.746 | 0.808 | 0.680 |
 | `cross_protein_neg` | 0.544 | 0.435 | 0.441 |
 
-Takeaways: with genomic-background negatives a protein-agnostic RNA model already reaches AUROC ≈ 0.81 (0.68 GC-matched), so that benchmark measures "is this a CLIP-peak-like region", not RBP specificity. With composition-neutral `cross_protein_neg` negatives no tested model (V2/V4 trained from scratch, V2 fine-tuned from v3a, v3a zero-shot) separates positives from negatives above chance inside a protein (GC-matched AUROC 0.50–0.53), although per-protein k-mer LR on seen proteins reaches a median 0.74. In vitro, by contrast, the same models learn protein×RNA interaction for unseen proteins (`scripts/53` probe, 3 seeds: V2 0.686 ± 0.015, V4 0.754 ± 0.001 AUROC with identical RNA marginals; V4 > V2 in every seed, +0.068 on average; protein shuffling costs 0.18–0.25 AUROC). Full tables: [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) (2026-10-28).
+Takeaways: with genomic-background negatives a protein-agnostic RNA model already reaches AUROC ≈ 0.81 (0.68 GC-matched), so that benchmark measures "is this a CLIP-peak-like region", not RBP specificity. With composition-neutral `cross_protein_neg` negatives no tested model (V2/V4 trained from scratch, V2 fine-tuned from v3a, v3a zero-shot) separates positives from negatives above chance inside a protein (GC-matched AUROC 0.50–0.53), although per-protein k-mer LR on seen proteins reaches a median 0.74. In vitro, by contrast, the same models transfer to test proteins in proportion to their sequence similarity to training proteins (MMseqs2 audit: AUROC 0.84–0.87 at ≥90% identity, 0.61–0.70 at 30–50%, ≈0.5 with no detectable homolog; `scripts/53` probe, 3 seeds: V2 0.686 ± 0.015, V4 0.754 ± 0.001 AUROC with identical RNA marginals; V4 > V2 in every seed, +0.068 on average; protein shuffling costs 0.18–0.25 AUROC). Full tables: [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) (2026-10-28).
 
 > **Data fix**: eCLIP TSVs built before the "validate reason" fix carry `protein_sequence == "ok"`. Scripts 41/41b/41c/42 now abort on such data and script 51 refuses to score it — rebuild with `scripts/run_eclip_step1.sh`.
 
