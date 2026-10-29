@@ -791,3 +791,21 @@ In these benchmarks a single molecule explains most of the signal: protein-only 
 vs both 0.91 (RPI488, only 25 distinct RNAs), RNA-only 0.83 vs both 0.87 (RPI2241). Hard-split numbers of 0.7–0.8 reported
 by newer methods are therefore compatible with learning molecule-level priors. Caveat: our loader keeps de-duplicated
 unique pairs (RPI369: 447 of 738 lines), a single RF without tuning, no PDB-redundancy removal.
+
+### Recent related work found by search (2026-10-29; abstracts/snippets and the NPBIP full text only, not independently verified)
+
+- **NPBIP (2026, PMC13341135)**: SimBind (Pfam/HMMER nucleic-acid-binding-domain alignment + softmax-weighted mean over the top
+  m=14 similar training RBPs' predictions) + NucProNet (ESM-2 mean-pooled protein tower, dilated-conv + transformer
+  RNA tower, cosine bilinear head), outputs z-scored and summed. RNAcompete, 88 held-out test experiments (split by RBP,
+  no identity filter): NPBIP r = 0.414, NucProNet 0.394, SimBind (similarity only) 0.367, JPLE 0.321, k-mer upper bound
+  0.46; performance vs maximum training similarity: r = 0.63. This independently supports our two findings (similarity-
+  only transfer rivals deep models; performance tracks homology) and our planned hybrid kNN + neural design. It
+  evaluates on RNAcompete intensities (Pearson), not cross-protein-negative classification.
+- **"Generalizable deep-learning-based mRNA-protein interaction prediction strongly depends on protein diversity"
+  (J. Cheminformatics 2026)**: per the search snippet, high reported scores reflect RBP overlap between train and test,
+  drop sharply on unseen RBPs, protein-language-model encodings do not fix it; releases an RBP-aware benchmark. Full text
+  not accessible (cookie redirect) — read before citing.
+- ZeRPI (Methods 2025; GNN, zero-shot RNA–protein interactions, contrastive loss), RBPsuite 2.0 (BMC Biol. 2025), IRIS
+  (bioRxiv 2025; biophysical affinity + motif discovery), RMDNet (2025), RBPSignal (bioRxiv 2025): not yet read.
+- PaRPI data/code: Zenodo 10.5281/zenodo.14878562 (dataset.7z 499 MB, BERT_Model.7z 319 MB), GitHub ljquanlab/PaRPI;
+  downloaded to `data/external/parpi/` (git-ignored).
