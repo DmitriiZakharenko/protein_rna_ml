@@ -1,0 +1,70 @@
+{
+  "name": "v3a_v2s42_SEEN_realbg",
+  "n_proteins": 55,
+  "models": {
+    "v2_s42": {
+      "motif_spearman_shuffled_protein_mean": 0.13916288820675754
+    }
+  },
+  "motif_summary": {
+    "v2_s42": {
+      "spearman": 0.259,
+      "top20": 0.1473,
+      "top1_in_true_top20": 0.2364
+    }
+  },
+  "mutagenesis_summary": [
+    {
+      "model": "v2_s42",
+      "condition": "domain_all",
+      "n_prot": 20,
+      "drop": 0.3927,
+      "d_auroc": -0.0432
+    },
+    {
+      "model": "v2_s42",
+      "condition": "domain_contact",
+      "n_prot": 20,
+      "drop": 0.258,
+      "d_auroc": -0.0291
+    },
+    {
+      "model": "v2_s42",
+      "condition": "domain_random",
+      "n_prot": 20,
+      "drop": 0.1924,
+      "d_auroc": -0.0133
+    },
+    {
+      "model": "v2_s42",
+      "condition": "outside_contact",
+      "n_prot": 20,
+      "drop": 0.309,
+      "d_auroc": -0.0206
+    },
+    {
+      "model": "v2_s42",
+      "condition": "outside_segment",
+      "n_prot": 20,
+      "drop": 0.2594,
+      "d_auroc": -0.015
+    }
+  ],
+  "mutagenesis_tests": {
+    "v2_s42: domain_contact > outside_contact": {
+      "n": 20,
+      "frac_larger": 0.35,
+      "wilcoxon_p": 0.16495704650878906
+    },
+    "v2_s42: domain_contact > domain_random": {
+      "n": 20,
+      "frac_larger": 0.65,
+      "wilcoxon_p": 0.14290618896484375
+    },
+    "v2_s42: domain_all > outside_segment": {
+      "n": 20,
+      "frac_larger": 0.5,
+      "wilcoxon_p": 0.5458755493164062
+    }
+  }
+}

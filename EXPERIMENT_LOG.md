@@ -907,3 +907,40 @@ validation set — the best epoch (up to 199, early stopping) is chosen by test 
 model selection; (b) the protein input is one constant ESM-2 vector per dataset, so within a dataset the protein carries
 no per-sample information and in the pooled cell-line model acts as a dataset identifier. Neither point was verified by a
 run and the paper text (separate validation split) may differ from the released code.
+
+### Our models on the PaRPI HeLa data (script 64, 2026-10-30; 17 datasets, one seed)
+
+Same random stratified 80/20 split per dataset as the PaRPI code, but with a separate validation split (10% of train) for epoch
+selection. Median test AUROC over the 17 datasets; published values (authors' numbers for the same datasets) for reference.
+
+| Model | median AUROC |
+|---|---|
+| ours: RNA-only CNN per dataset (one-hot, no protein, no structure) | 0.888 |
+| ours: RNA + in vivo icSHAPE CNN per dataset (no protein) | 0.898 |
+| ours: pooled V2 (RNA one-hot + protein one-hot, all 17 datasets) | 0.881 |
+| ours: pooled V2, protein sequences permuted across datasets at test | 0.874 |
+| ours: pooled V2, cross-RBP negatives (positives of the other 16 RBPs) | 0.644 |
+| published DeepBind / iDeep | 0.842 / 0.878 |
+| published PrismNet / HDRNet (sequence + icSHAPE, no protein) | 0.911 / 0.930 |
+| published PaRPI | **0.934** |
+
+Reading: a plain protein-free CNN (0.888) already beats the published DeepBind (0.842) and matches iDeep (0.878); icSHAPE
+adds +0.010 in our hands (published PrismNet − DeepBind is +0.07, so the published baselines look under-tuned); the full PaRPI
+remains 0.035–0.045 AUROC above our best protein-free model. Our pooled model with protein is not better than the
+protein-free CNNs, and shuffling the protein changes it by only 0.007, i.e. it behaves as a dataset identifier rather than a
+protein-aware interaction model; it drops to 0.644 once negatives are other RBPs' peaks. Caveats: HeLa only, one seed,
+different random split than the authors' (their test-set epoch selection not replicated), PaRPI not re-run.
+
+### Motif recovery / mutagenesis with real-RNA contexts and the seen-protein control (script 61, V2 seed 42, v3a)
+
+| | Spearman, held-out proteins (55) | Spearman, training proteins (55) |
+|---|---|---|
+| V2 predicted motif (real contexts) | 0.221 | 0.259 |
+| V2 with shuffled protein | 0.126 | 0.139 |
+| protein-agnostic prior / nearest-protein motif | 0.171 / 0.446 | – |
+
+Alanine mutagenesis, training proteins (20 with a domain): domain-contact residues drop the logit more than outside-contact
+residues in 35% of proteins (p = 0.17) and more than random in-domain residues in 65% (p = 0.14); held-out proteins: 48% (p = 0.24)
+and 52% (p = 0.84). The positive control (seen proteins) is not clearly better than held-out proteins, so for V2 the in silico
+tests are inconclusive-to-negative even in the most favourable case: V2 (global-max-pool CNN, one-hot protein) shows no
+domain-specific mechanism. These tests stay as gates for the next models (a model must pass on seen proteins first).

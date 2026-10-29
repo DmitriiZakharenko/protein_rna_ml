@@ -1,0 +1,12 @@
+{
+  "rna_cnn": 0.8882,
+  "rna_shape_cnn": 0.8982,
+  "pooled_v2": 0.8813,
+  "pooled_v2_shuffled_protein": 0.8744,
+  "pooled_cross_rbp": 0.644,
+  "PaRPI": 0.9336,
+  "HDRNet": 0.9296,
+  "Prismnet": 0.9106,
+  "deepbind": 0.8423,
+  "iDeep": 0.8782
+}
