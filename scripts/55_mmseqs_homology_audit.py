@@ -65,20 +65,7 @@ def auroc(y, s) -> float | None:
     return None if len(np.unique(y)) < 2 else float(roc_auc_score(y, s))
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--name", required=True)
-    ap.add_argument("--test_tsv", required=True)
-    ap.add_argument("--train_tsv", default="data/generalized_v3a/train.tsv")
-    ap.add_argument("--scores", default=None, help="scripts/51 scores_*.tsv.gz to stratify by identity bin")
-    ap.add_argument("--out_dir", default="results/homology_audit")
-    ap.add_argument("--sensitivity", default="7.5")
-    ap.add_argument("--min_cov", type=float, default=0.0, help="query coverage filter (0 = none)")
-    ap.add_argument("--threads", type=int, default=4)
-    args = ap.parse_args()
-
-    out = resolve(args.out_dir)
-    out.mkdir(parents=True, exist_ok=True)
+def run_mmseqs(args, out: Path):
     train = unique_proteins(resolve(args.train_tsv))
     test = unique_proteins(resolve(args.test_tsv))
     print(f"train proteins {len(train)}, test proteins {len(test)}")
@@ -107,8 +94,34 @@ def main() -> None:
         else:
             rows.append((name, 0.0, "", 0.0, np.nan))
     tab = pd.DataFrame(rows, columns=["protein_name", "best_identity", "best_train_hit", "qcov", "evalue"])
+    return tab, train
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--name", required=True)
+    ap.add_argument("--test_tsv", required=True)
+    ap.add_argument("--train_tsv", default="data/generalized_v3a/train.tsv")
+    ap.add_argument("--scores", default=None, help="scripts/51 scores_*.tsv.gz to stratify by identity bin")
+    ap.add_argument("--out_dir", default="results/homology_audit")
+    ap.add_argument("--sensitivity", default="7.5")
+    ap.add_argument("--min_cov", type=float, default=0.0, help="query coverage filter (0 = none)")
+    ap.add_argument("--threads", type=int, default=4)
+    ap.add_argument("--identity_tsv", default=None,
+                    help="reuse a previous <name>_protein_identity.tsv instead of running MMseqs2")
+    args = ap.parse_args()
+
+    out = resolve(args.out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    if args.identity_tsv:
+        tab = pd.read_csv(resolve(args.identity_tsv), sep="\t")
+        train = {}
+        print(f"reusing identities for {len(tab)} test proteins")
+    else:
+        tab, train = run_mmseqs(args, out)
     tab["identity_bin"] = tab.best_identity.map(bin_of)
-    tab.to_csv(out / f"{args.name}_protein_identity.tsv", sep="\t", index=False)
+    if not args.identity_tsv:
+        tab.to_csv(out / f"{args.name}_protein_identity.tsv", sep="\t", index=False)
 
     order = [b[2] for b in BINS]
     counts = tab.identity_bin.value_counts().reindex(order, fill_value=0)
@@ -143,8 +156,9 @@ def main() -> None:
                 f"{strat[k][c]:>9.3f}" if strat[k][c] is not None else f"{'n/a':>9}" for c in model_cols))
         summary["stratified_auroc"] = strat
 
-    (out / f"{args.name}_summary.json").write_text(json.dumps(summary, indent=2))
-    print(f"\nwrote {out}/{args.name}_summary.json")
+    fn = f"{args.name}_stratified.json" if args.identity_tsv else f"{args.name}_summary.json"
+    (out / fn).write_text(json.dumps(summary, indent=2))
+    print(f"\nwrote {out / fn}")
 
 
 if __name__ == "__main__":
