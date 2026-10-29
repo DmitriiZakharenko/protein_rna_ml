@@ -618,3 +618,12 @@ by close homologs. Caveats: only 6 no-hit proteins, no per-bin CI yet. Next: clu
 - Skipper Figshare enrichment/HOMER data (scripts 46–49): CLIPper signal vs HOMER motif PWM has Spearman median 0.03–0.04
   (only 2.5% of experiments > 0.3), so enrichment is not a clean specificity target; kept as a secondary in vivo
   within-protein ranking test after k-mer/PWM baselines.
+
+### Pfam family labels for v3a proteins (script 56, 2026-10-29)
+
+`hmmscan` against Pfam-A (E < 1e-3) on all 448 v3a proteins mapped to RNA-binding families. Agreement with curated
+`domain_class` on train proteins: RRM 51/56, KH 9/11, CCCH 3/3, CSD 2/2, PUF 1/1 (misses go to `other`; none are
+mislabelled across families). Probe test set (55 proteins): RRM 33, KH 5, multi 5, CCCH 2, CSD 1, La 1, PUF 1, CCHC 1,
+other 6; train (393): RRM 279, other 45, KH 37, CCCH 17, multi 9. The test set is RRM-dominated, so non-RRM families have
+very few proteins (n ≤ 5) and per-family AUROCs are indicative only.
+Outputs: `results/homology_audit/v3a_pfam_hits.tsv`, `v3a_pfam_family.tsv`, `v3a_test_domain_family.tsv`.

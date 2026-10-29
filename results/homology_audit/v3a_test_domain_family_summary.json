@@ -1,0 +1,97 @@
+{
+  "n_test": 55,
+  "family_counts": {
+    "RRM": 33,
+    "other": 6,
+    "KH": 5,
+    "multi": 5,
+    "CCCH": 2,
+    "CSD": 1,
+    "La": 1,
+    "PUF": 1,
+    "CCHC": 1
+  },
+  "train_family_counts": {
+    "RRM": 279,
+    "other": 45,
+    "KH": 37,
+    "CCCH": 17,
+    "multi": 9,
+    "CSD": 3,
+    "PUF": 1,
+    "C2H2": 1,
+    "S1": 1
+  },
+  "validation_crosstab": {
+    "CCCH": {
+      "CCCH": 3,
+      "CSD": 0,
+      "KH": 0,
+      "PUM": 0,
+      "RRM": 0,
+      "THUMP": 0,
+      "ZF": 0,
+      "multi": 2
+    },
+    "CSD": {
+      "CCCH": 0,
+      "CSD": 2,
+      "KH": 0,
+      "PUM": 0,
+      "RRM": 0,
+      "THUMP": 0,
+      "ZF": 0,
+      "multi": 0
+    },
+    "KH": {
+      "CCCH": 0,
+      "CSD": 0,
+      "KH": 9,
+      "PUM": 0,
+      "RRM": 0,
+      "THUMP": 0,
+      "ZF": 0,
+      "multi": 1
+    },
+    "PUF": {
+      "CCCH": 0,
+      "CSD": 0,
+      "KH": 0,
+      "PUM": 1,
+      "RRM": 0,
+      "THUMP": 0,
+      "ZF": 0,
+      "multi": 0
+    },
+    "RRM": {
+      "CCCH": 0,
+      "CSD": 0,
+      "KH": 0,
+      "PUM": 0,
+      "RRM": 51,
+      "THUMP": 0,
+      "ZF": 0,
+      "multi": 3
+    },
+    "multi": {
+      "CCCH": 0,
+      "CSD": 0,
+      "KH": 0,
+      "PUM": 0,
+      "RRM": 0,
+      "THUMP": 0,
+      "ZF": 0,
+      "multi": 2
+    },
+    "other": {
+      "CCCH": 0,
+      "CSD": 0,
+      "KH": 2,
+      "PUM": 0,
+      "RRM": 5,
+      "THUMP": 1,
+      "ZF": 1,
+      "multi": 0
+    }
+  }
+}
