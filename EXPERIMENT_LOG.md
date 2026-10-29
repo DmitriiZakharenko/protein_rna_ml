@@ -825,3 +825,29 @@ unique pairs (RPI369: 447 of 738 lines), a single RF without tuning, no PDB-redu
 The high RNA overlap (~70%) comes from assays reusing the same probe sets across proteins, not from protein leakage; it
 is why the standard test is partly solvable from RNA alone (RNA-prior 0.59–0.61) and why the cross-protein probe, where
 RNA marginals are identical by construction, is the primary metric. Sequential plan: `NEXT_STEPS.md`.
+
+### Motif recovery and in silico mutagenesis, V2 seed 42 on v3a (script 61, 2026-10-29; first run, code validation)
+
+Model: `models/saved/generalized_v2/best_model.pt` (V2, v3a). 55 test proteins; true motif = 5-mer log-enrichment of the
+protein's test positives vs negatives; predicted motif = mean logit of each 5-mer inserted into 20 random 40-nt
+backgrounds.
+
+| Scorer (mean over proteins) | Spearman | top-20 overlap |
+|---|---|---|
+| V2 predicted motif | 0.209 | 0.11 |
+| V2 with shuffled protein sequences (control) | 0.109 | – |
+| protein-agnostic prior (mean over training proteins) | 0.171 | 0.089 |
+| nearest training protein's motif | **0.446** | 0.426 |
+
+By identity bin (V2 / prior / nearest-protein Spearman): <30%: 0.05 / 0.13 / –; 30–50%: 0.12 / 0.15 / 0.17; 50–70%:
+0.23 / 0.14 / 0.51; 70–90%: 0.36 / 0.28 / 0.63; ≥90%: 0.21 / 0.09 / 0.58.
+
+Alanine mutagenesis (21 proteins with a Pfam RRM/KH/CCCH domain; mean drop of the logit on positives): whole domain
+0.109 vs a same-length outside segment 0.148; F/Y/W/K/R inside the domain 0.056 vs the same number outside the domain
+0.188 vs random residues inside the domain 0.092. Domain-contact residues drop the score more than outside controls in
+48% of proteins (Wilcoxon p = 0.39), more than random in-domain residues in 52% (p = 0.54).
+
+Reading: V2's recovered motifs are barely better than a protein-agnostic motif and much worse than the nearest
+protein's, and the model is not more sensitive to the RNA-binding domain than to the rest of the sequence. This fails the
+Phase 2 gate for V2 (single seed, v3a, synthetic random backgrounds, global-pooling CNN; not yet run for V4 or on v3b).
+Next: V2/V4 seeds on v3b via `scripts/run_v3b_mechanistic.sh`.
