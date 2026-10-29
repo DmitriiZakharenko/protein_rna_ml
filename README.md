@@ -33,6 +33,7 @@ Output: binding probability ∈ [0, 1]
 | [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) | Chronological run record |
 | [`PHASE3B_STATUS.md`](PHASE3B_STATUS.md) | Latest VM commands & sync steps |
 | [`PHASE3A_PLAN.md`](PHASE3A_PLAN.md) | v3a dataset build (complete) |
+| [`NEXT_STEPS.md`](NEXT_STEPS.md) | Sequenced plan: integrity checks → baselines → motif/mutation tests → new models |
 | [`CROSS_ASSAY_PLAN.md`](CROSS_ASSAY_PLAN.md) | Cross-protocol → domain strategy |
 | [`DATA_SOURCES_AND_DOWNLOADS.md`](DATA_SOURCES_AND_DOWNLOADS.md) | Sibling-repo paths & integrity checks |
 | [`DATA.md`](DATA.md) | Provenance, leakage, negatives |

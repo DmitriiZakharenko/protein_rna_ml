@@ -1,0 +1,64 @@
+{
+  "data_dir": "data/generalized_v3a",
+  "splits": {
+    "train": {
+      "rows": 2037593,
+      "proteins": 393,
+      "pos_frac": 0.3098,
+      "single_class_proteins": 0,
+      "sources": {
+        "rnacompete_eukarya": 814874,
+        "rnacompete_rbpzoo": 610196,
+        "selex_rbns": 463380,
+        "rnacompete_ucrbp": 122781,
+        "eclip": 26362
+      },
+      "duplicate_pairs": 1129,
+      "conflicting_labels": 0
+    },
+    "val": {
+      "rows": 299131,
+      "proteins": 49,
+      "pos_frac": 0.2918,
+      "single_class_proteins": 0,
+      "sources": {
+        "rnacompete_eukarya": 116182,
+        "selex_rbns": 70600,
+        "rnacompete_rbpzoo": 66870,
+        "rnacompete_ucrbp": 45479
+      },
+      "duplicate_pairs": 0,
+      "conflicting_labels": 0
+    },
+    "test": {
+      "rows": 322275,
+      "proteins": 55,
+      "pos_frac": 0.306,
+      "single_class_proteins": 0,
+      "sources": {
+        "rnacompete_eukarya": 107854,
+        "selex_rbns": 98662,
+        "rnacompete_rbpzoo": 79211,
+        "rnacompete_ucrbp": 36548
+      },
+      "duplicate_pairs": 0,
+      "conflicting_labels": 0
+    }
+  },
+  "overlap": {
+    "val": {
+      "protein_names_in_train": 2,
+      "protein_sequences_in_train": 5,
+      "pct_rows_rna_in_train": 76.79,
+      "pct_rows_rna_positive_in_train": 56.04,
+      "pct_rows_exact_pair_in_train": 0.14
+    },
+    "test": {
+      "protein_names_in_train": 1,
+      "protein_sequences_in_train": 1,
+      "pct_rows_rna_in_train": 69.42,
+      "pct_rows_rna_positive_in_train": 50.31,
+      "pct_rows_exact_pair_in_train": 0.0
+    }
+  }
+}

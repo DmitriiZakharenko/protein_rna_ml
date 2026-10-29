@@ -809,3 +809,19 @@ unique pairs (RPI369: 447 of 738 lines), a single RF without tuning, no PDB-redu
   (bioRxiv 2025; biophysical affinity + motif discovery), RMDNet (2025), RBPSignal (bioRxiv 2025): not yet read.
 - PaRPI data/code: Zenodo 10.5281/zenodo.14878562 (dataset.7z 499 MB, BERT_Model.7z 319 MB), GitHub ljquanlab/PaRPI;
   downloaded to `data/external/parpi/` (git-ignored).
+
+### Split integrity audit (script 62, 2026-10-29)
+
+| Check | v3a | v3b |
+|---|---|---|
+| Test/val protein names in train | 1 test, 2 val | 0 |
+| Test/val protein sequences identical to train | 1 test, 5 val | 0 |
+| Rows with the exact pair in train | test 0%, val 0.14% | 0% |
+| Test rows whose RNA occurs in train | 69.4% | 73.3% |
+| Test rows whose RNA is a positive in train (any protein) | 50.3% | 51.8% |
+| Duplicate pairs (train) / conflicting labels | 1129 / 0 | 1567 / 0 |
+| Positive fraction train/val/test | 0.310 / 0.292 / 0.306 | 0.305 / 0.309 / 0.318 |
+
+The high RNA overlap (~70%) comes from assays reusing the same probe sets across proteins, not from protein leakage; it
+is why the standard test is partly solvable from RNA alone (RNA-prior 0.59–0.61) and why the cross-protein probe, where
+RNA marginals are identical by construction, is the primary metric. Sequential plan: `NEXT_STEPS.md`.
