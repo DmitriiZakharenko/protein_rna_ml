@@ -1,0 +1,98 @@
+{
+  "RPI369": {
+    "n": 447,
+    "n_pos": 299,
+    "n_proteins": 280,
+    "n_rna": 229,
+    "random 5-fold": {
+      "rna_only": 0.854,
+      "protein_only": 0.964,
+      "both": 0.974,
+      "label_prior": 0.937
+    },
+    "protein-disjoint": {
+      "rna_only": 0.857,
+      "protein_only": 0.909,
+      "both": 0.932,
+      "label_prior": 0.82
+    },
+    "RNA-disjoint": {
+      "rna_only": 0.585,
+      "protein_only": 0.949,
+      "both": 0.948,
+      "label_prior": 0.846
+    }
+  },
+  "RPI488": {
+    "n": 486,
+    "n_pos": 241,
+    "n_proteins": 247,
+    "n_rna": 25,
+    "random 5-fold": {
+      "rna_only": 0.909,
+      "protein_only": 0.422,
+      "both": 0.906,
+      "label_prior": 0.503
+    },
+    "protein-disjoint": {
+      "rna_only": 0.902,
+      "protein_only": 0.58,
+      "both": 0.904,
+      "label_prior": 0.902
+    },
+    "RNA-disjoint": {
+      "rna_only": 0.893,
+      "protein_only": 0.438,
+      "both": 0.888,
+      "label_prior": 0.383
+    }
+  },
+  "RPI1446": {
+    "n": 2684,
+    "n_pos": 1446,
+    "n_proteins": 635,
+    "n_rna": 99,
+    "random 5-fold": {
+      "rna_only": 0.794,
+      "protein_only": 0.609,
+      "both": 0.922,
+      "label_prior": 0.594
+    },
+    "protein-disjoint": {
+      "rna_only": 0.794,
+      "protein_only": 0.507,
+      "both": 0.844,
+      "label_prior": 0.792
+    },
+    "RNA-disjoint": {
+      "rna_only": 0.5,
+      "protein_only": 0.611,
+      "both": 0.828,
+      "label_prior": 0.589
+    }
+  },
+  "RPI2241": {
+    "n": 2884,
+    "n_pos": 1984,
+    "n_proteins": 923,
+    "n_rna": 416,
+    "random 5-fold": {
+      "rna_only": 0.831,
+      "protein_only": 0.594,
+      "both": 0.874,
+      "label_prior": 0.595
+    },
+    "protein-disjoint": {
+      "rna_only": 0.832,
+      "protein_only": 0.556,
+      "both": 0.847,
+      "label_prior": 0.82
+    },
+    "RNA-disjoint": {
+      "rna_only": 0.753,
+      "protein_only": 0.599,
+      "both": 0.83,
+      "label_prior": 0.568
+    }
+  }
+}

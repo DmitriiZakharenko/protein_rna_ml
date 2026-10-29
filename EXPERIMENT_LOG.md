@@ -768,3 +768,26 @@ by one); the script was fixed and v3a/v3b were re-run.
   evaluation, nearest-protein and RNA-only baselines in every bin, and an in vivo vs in vitro transfer test.
 - Missing comparisons to add on the probe/v3b: RPISeq-style (k-mer composition + RF), frozen RNA-FM/ESM-2 embeddings +
   MLP (ZHMolGraph/BioLLMNet-style).
+
+### Shortcut audit of the classic RPI benchmarks (script 60, 2026-10-29)
+
+RPISeq-style Random Forest (RNA 4-mer + protein 3-mer in a 7-class alphabet) on the benchmark files in
+`data/external/rpi_ggcn`, plus single-molecule controls (AUROC; unique protein–RNA pairs after de-duplication):
+
+| Dataset (pairs / proteins / RNAs) | Folds | RNA only | Protein only | Both | Per-protein label prior |
+|---|---|---|---|---|---|
+| RPI369 (447 / 280 / 229) | random 5-fold | 0.854 | **0.964** | 0.974 | 0.937 |
+| | protein-disjoint | 0.857 | 0.909 | 0.932 | 0.820 |
+| | RNA-disjoint | 0.585 | 0.949 | 0.948 | 0.846 |
+| RPI488 (486 / 247 / 25) | random 5-fold | **0.909** | 0.422 | 0.906 | 0.503 |
+| | protein-disjoint | 0.902 | 0.580 | 0.904 | 0.902 |
+| RPI1446 (2684 / 635 / 99) | random 5-fold | 0.794 | 0.609 | 0.922 | 0.594 |
+| | protein-disjoint | 0.794 | 0.507 | 0.844 | 0.792 |
+| RPI2241 (2884 / 923 / 416) | random 5-fold | 0.831 | 0.594 | 0.874 | 0.595 |
+| | protein-disjoint | 0.832 | 0.556 | 0.847 | 0.820 |
+| | RNA-disjoint | 0.753 | 0.599 | 0.830 | 0.568 |
+
+In these benchmarks a single molecule explains most of the signal: protein-only 0.96 vs both 0.97 (RPI369), RNA-only 0.91
+vs both 0.91 (RPI488, only 25 distinct RNAs), RNA-only 0.83 vs both 0.87 (RPI2241). Hard-split numbers of 0.7–0.8 reported
+by newer methods are therefore compatible with learning molecule-level priors. Caveat: our loader keeps de-duplicated
+unique pairs (RPI369: 447 of 738 lines), a single RF without tuning, no PDB-redundancy removal.
