@@ -851,3 +851,30 @@ Reading: V2's recovered motifs are barely better than a protein-agnostic motif a
 protein's, and the model is not more sensitive to the RNA-binding domain than to the rest of the sequence. This fails the
 Phase 2 gate for V2 (single seed, v3a, synthetic random backgrounds, global-pooling CNN; not yet run for V4 or on v3b).
 Next: V2/V4 seeds on v3b via `scripts/run_v3b_mechanistic.sh`.
+
+### PaRPI data: RNA-only controls (script 63, 2026-10-29)
+
+Data: Zenodo 10.5281/zenodo.14878562 (`clip_data/<RBP>_<cell>.tsv`, 261 datasets, 5000 top-peak positives + 10000 random
+transcriptome-window negatives, 101 nt). Model: k-mer logistic regression (k = 1..4 frequencies), no protein, per dataset,
+80/20 random split exactly as in the PaRPI code. We did **not** run PaRPI itself and did not reproduce its metrics.
+
+| Scenario | median AUROC | mean | n |
+|---|---|---|---|
+| RNA-only k-mer LR, original random split | **0.739** | 0.751 | 261 |
+| RNA-only, held-out transcripts | 0.741 | 0.753 | 261 |
+| RNA-only, negatives = other RBPs' positives in the same cell line | 0.674 | 0.680 | 260 |
+| GC content alone (AUROC < 0.5: positives are GC-poorer) | 0.397 | 0.402 | 261 |
+
+PaRPI reports median AUC 0.90 (80%-RNA-identity-filtered split) and an average 1.6% gain over HDRNet. A protein-free linear
+k-mer model already reaches 0.74 and transcript holdout does not change it, so no transcript-level leakage for this
+model class; composition explains most of the signal above 0.5 under random transcriptome negatives. This is not a
+like-for-like control: the proper RNA-only comparator is a per-dataset sequence CNN (DeepBind/iDeep-type, which the PaRPI
+paper itself lists as baselines), so the gap between 0.74 and 0.90 is not attributable to the protein. The window-only
+cross-RBP task (0.67) shows that RNA sequence alone partly identifies the binder.
+
+### Positive control for script 61 (V2 seed 42, v3a, uniform-random insertion contexts)
+
+Seen (training) proteins: motif Spearman 0.247 (shuffled-protein 0.075) versus 0.209 (0.109) on held-out proteins; i.e.
+the test has little sensitivity even for proteins the model was trained on. Uniform-random backgrounds are far from the
+training distribution (fixed SELEX/RNAcompete flanks), so the first motif/mutagenesis numbers above should not be read as
+evidence about the model. Script 61 now defaults to real-RNA contexts (`--bg real`); re-run below.

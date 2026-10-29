@@ -1,0 +1,54 @@
+{
+  "random": {
+    "median": 0.7386836581709146,
+    "mean": 0.7514091794285763,
+    "n": 261
+  },
+  "transcript": {
+    "median": 0.7407944491722732,
+    "mean": 0.7533189088981321,
+    "n": 261
+  },
+  "cross_rbp": {
+    "median": 0.6737657713805312,
+    "mean": 0.679871807602631,
+    "n": 260
+  },
+  "gc": {
+    "median": 0.397431,
+    "mean": 0.4015648362139332,
+    "n": 261
+  },
+  "by_cell": {
+    "H9": {
+      "random": 0.848,
+      "transcript": 0.86,
+      "cross_rbp": NaN
+    },
+    "HEK293": {
+      "random": 0.762,
+      "transcript": 0.763,
+      "cross_rbp": 0.68
+    },
+    "HEK293T": {
+      "random": 0.762,
+      "transcript": 0.748,
+      "cross_rbp": 0.675
+    },
+    "Hela": {
+      "random": 0.861,
+      "transcript": 0.873,
+      "cross_rbp": 0.733
+    },
+    "HepG2": {
+      "random": 0.711,
+      "transcript": 0.705,
+      "cross_rbp": 0.658
+    },
+    "K562": {
+      "random": 0.743,
+      "transcript": 0.749,
+      "cross_rbp": 0.672
+    }
+  }
+}

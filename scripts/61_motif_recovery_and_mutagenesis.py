@@ -115,7 +115,7 @@ def domain_positions_from_hmmscan(prots: dict[str, str]) -> pd.DataFrame:
     fam = load_mod("fam56", "56_domain_family_audit.py")
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
-        (td / "q.fa").write_text("".join(f">{k}\n{v}\n" for k, v in prots.items()))
+        (td / "q.fa").write_text("".join(f">{k}\n{''.join(c if c.isalpha() else 'X' for c in v.upper())}\n" for k, v in prots.items() if len(v) >= 10))
         subprocess.run(["hmmscan", "--cpu", "4", "-E", "1e-3", "--domE", "1e-3", "--domtblout", str(td / "d.tbl"),
                         str(resolve(fam.PFAM_HMM)), str(td / "q.fa")], check=True, stdout=subprocess.DEVNULL)
         rows = []
@@ -138,8 +138,9 @@ def main() -> None:
     ap.add_argument("--train_tsv", default=None, help="enables the nearest-protein motif baseline")
     ap.add_argument("--identity_tsv", default=None)
     ap.add_argument("--domain_positions", default=None, help="TSV from this script (computed with hmmscan if absent)")
+    ap.add_argument("--bg", choices=["real", "random"], default="real", help="insertion contexts: real RNAs or uniform random")
     ap.add_argument("--bg_len", type=int, default=40)
-    ap.add_argument("--n_ctx", type=int, default=20)
+    ap.add_argument("--n_ctx", type=int, default=40)
     ap.add_argument("--min_rows", type=int, default=300, help="min test rows per protein")
     ap.add_argument("--n_mut_rows", type=int, default=200, help="positives per protein for mutagenesis")
     ap.add_argument("--max_proteins", type=int, default=0)
@@ -184,11 +185,17 @@ def main() -> None:
     ident = pd.read_csv(resolve(args.identity_tsv), sep="\t").set_index("protein_name") if args.identity_tsv else None
 
     # ---------- predicted motifs
-    bg = ["".join(rng.choice(list("ACGU"), args.bg_len)) for _ in range(args.n_ctx)]
+    if args.bg == "real":
+        # in-distribution contexts: real RNAs of the data set (keeps library flanks / length distribution)
+        pool = test.rna_sequence.drop_duplicates()
+        pool = pool[(pool.str.len() >= 20) & (pool.str.len() <= 60)].str.upper().str.replace("T", "U")
+        bg = pool.sample(args.n_ctx, random_state=args.seed).tolist()
+    else:
+        bg = ["".join(rng.choice(list("ACGU"), args.bg_len)) for _ in range(args.n_ctx)]
     probes, owners = [], []
     for i, km in enumerate(KMERS):
         for b in bg:
-            pos = int(rng.integers(0, args.bg_len - K + 1))
+            pos = int(rng.integers(0, len(b) - K + 1))
             probes.append(b[:pos] + km + b[pos + K:])
             owners.append(i)
     owners = np.array(owners)
