@@ -662,3 +662,27 @@ Per-family n is small (non-RRM ≤ 5 proteins). Next: RRM-only by identity bin (
 Within the best-represented family, identity still matters (≥70% identity: 0.85–0.92; 30–70%: 0.67–0.75), but
 remote RRM homologs (30–50%) still transfer (V4 0.75, V2 0.67). Family representation and sequence similarity are both
 drivers; no RRM test protein lacks a homolog, so true novelty within RRM cannot be tested with this set.
+
+### Family inventory of candidate extra sources (script 57, 2026-10-29)
+
+Pfam families and MMseqs2 novelty (identity to v3a train < 30%) for protein sequences in `data/sanitized/new_assays`
+(unique sequences: PRBAB 133, ProNAB 171, Hughes in vivo 8; HuRPA is proteome-wide gene pairs, UTexas aptamers have no
+protein, both skipped).
+
+| Family | PRBAB (novel <30%) | ProNAB (novel) |
+|---|---|---|
+| RRM | 29 (2) | 32 (2) |
+| KH | 6 (1) | 7 (1) |
+| PUF | 7 (3) | 9 (4) |
+| dsRBD | 6 (6) | 7 (6) |
+| DEAD | 3 (3) | 4 (3) |
+| PAZ | 4 (4) | 4 (4) |
+| YTH | 1 (1) | 4 (4) |
+| CCCH / CCHC / C2H2 | 2 / 4 / 2 | 2 / 4 / 2 |
+| other (no RBD Pfam) | 70 (65) | 93 (86) |
+
+The two structure-derived sets (one Kd per complex, heavily overlapping) add only a handful of proteins per family; dsRBD,
+DEAD, PAZ, YTH are absent from v3a train and would be new families, but with 3–6 proteins each. Most "other" entries are
+short peptides/non-RBD constructs. Conclusion: the public sources already on disk do not fix the family imbalance
+(v3a train: RRM 279, KH 37, CCCH 17); they are usable as small eval-only families (dsRBD, DEAD, PAZ, YTH) rather than as
+training data. Output: `results/homology_audit/new_assays_family_inventory.tsv`.

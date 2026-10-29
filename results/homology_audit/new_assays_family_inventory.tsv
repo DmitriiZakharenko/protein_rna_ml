@@ -1,0 +1,327 @@
+key	source	protein_name	pfam_family	best_identity	novel_lt30
+prbab|0	prbab	"spliceosomal U2B""-U2A' protein complex"	other	0.0	True
+prbab|1	prbab	Saccharomyces cerevisiae ASPARTYL-tRNA SYNTHETASE	other	0.0	True
+prbab|2	prbab	Human Nova-2 KH3 k-homology RNA-binding domain 	KH	0.906	False
+prbab|3	prbab	Escherichia coli GLUTAMINYL-TRNA SYNTHETASE	other	0.0	True
+prbab|4	prbab	human HIV - 1 nucleocapsid protein	CCHC	0.666	False
+prbab|5	prbab	Escherichia coli SRP protein C terminal domain	other	0.0	True
+prbab|6	prbab	the ribotoxin restriction	other	0.0	True
+prbab|7	prbab	Simian rotavirus A NSP3 RNA binding domain 	other	0.0	True
+prbab|8	prbab	Host factor for Q beta	other	0.0	True
+prbab|9	prbab	Transcription antiterminator licT	other	0.0	True
+prbab|10	prbab	Ribosomal protein L11	other	0.0	True
+prbab|11	prbab	NF- B (p50)2	other	0.0	True
+prbab|12	prbab	bacteriophage lambda 36-mer N-terminal peptide of theN protein  	other	0.0	True
+prbab|13	prbab	tandem zinc finger (TZF) domain of the protein TIS11d	CCCH	0.914	False
+prbab|14	prbab	Mesocricetus auratus nucleolin RNA binding domain 12	RRM	0.362	False
+prbab|15	prbab	Archaeoglobus fulgidus 50S ribosomal protein L7Ae	other	0.445	False
+prbab|16	prbab	CIRV p19	other	0.0	True
+prbab|17	prbab	Escherichia coli 30S ribosomal protein S8	other	0.0	True
+prbab|18	prbab	human eIF2c1 PAZ domain	PAZ	0.0	True
+prbab|19	prbab	Escherichia coli cysteinyl-tRNA synthetase	other	0.0	True
+prbab|20	prbab	The trp RNA-binding attenuation protein(TRAP)	other	0.0	True
+prbab|21	prbab	elongation factor SelB	other	0.0	True
+prbab|22	prbab	Moloney murine leukemia virus nucleocapsid protein	CCHC	0.441	False
+prbab|23	prbab	Geobacillus stearothermophilus Ribosomal protein L11 	other	0.0	True
+prbab|24	prbab	Archaeoglobus fulgidus piwi protein	Piwi	0.0	True
+prbab|25	prbab	Lupus La protein	multi	0.362	False
+prbab|26	prbab	50S ribosomal protein L1	other	0.0	True
+prbab|27	prbab	Homo sapiens Nova-1 KH1/KH2	KH	0.85	False
+prbab|28	prbab	Flock Horse virus protein B2	other	0.0	True
+prbab|29	prbab	S. cerevisiae Vts1p	other	1.0	False
+prbab|30	prbab	Human Ataxin-2-binding protein 1	RRM	0.963	False
+prbab|31	prbab	Saccharomyces cerevisiae Vts1p 	other	1.0	False
+prbab|32	prbab	Transcription Factor IIIA(TFIIIA)	C2H2	0.0	True
+prbab|33	prbab	Xenopus laevis Ro autoantigen	other	0.0	True
+prbab|34	prbab	cognate RSV nucleocapsid protein (NC)	CCHC	0.529	False
+prbab|35	prbab	RsmE protein   a homodimer of 64 residues	other	0.0	True
+prbab|36	prbab	 the first qRRM of hnRNP F 	RRM	1.0	False
+prbab|37	prbab	 the second qRRM of hnRNP F 	RRM	0.989	False
+prbab|38	prbab	 the third qRRM of hnRNP F 	RRM	1.0	False
+prbab|39	prbab	yeast Saccharomyces cerevisiae a domain of  Prp24	RRM	0.34	False
+prbab|40	prbab	human Tra2beta1 RRM	RRM	1.0	False
+prbab|41	prbab	ADAR2 dsRBM2	dsRBD	0.0	True
+prbab|42	prbab	Adar2 Dsrbm1	dsRBD	0.0	True
+prbab|43	prbab	S. cerevisiae RNase III (Rnt1p) 	dsRBD	0.0	True
+prbab|44	prbab	Serine/arginine-rich splicing factor 2	RRM	0.543	False
+prbab|45	prbab	Protein lin-28 homolog A	CCHC	1.0	False
+prbab|46	prbab	Serine/arginine (SR) 	RRM	1.0	False
+prbab|47	prbab	 cytoplasmic polyadenylation element binding	RRM	1.0	False
+prbab|48	prbab	Just Another Zinc finger protein	C2H2	0.448	False
+prbab|49	prbab	HnRNP C	RRM	1.0	False
+prbab|50	prbab	Escherichia coli SelB mRNA-binding domain	other	0.0	True
+prbab|51	prbab	PP7 bacteriophage coat protein  dimer	other	0.0	True
+prbab|52	prbab	Fab2 protein 	other	0.0	True
+prbab|53	prbab	Human CUG-binding protein 1 RRM3.	RRM	1.0	False
+prbab|54	prbab	Human Transformer2-β	RRM	1.0	False
+prbab|55	prbab	SelB-C	other	0.0	True
+prbab|56	prbab	Thermus thermophilus Ribosomal Protein L1	other	0.0	True
+prbab|57	prbab	mRNA 3'-end-processing protein Rna15	RRM	0.479	False
+prbab|58	prbab	Piwi Protein	PAZ	0.0	True
+prbab|59	prbab	nuclear polyadenylated RNA-binding protein 3	RRM	0.484	False
+prbab|60	prbab	DELETED IN AZOOSPERMIA-LIKE	RRM	0.861	False
+prbab|61	prbab	H26A mutant Cse3	other	0.0	True
+prbab|62	prbab	Human U2AF65  RRM1 AND RRM2 DOMAINS 	RRM	1.0	False
+prbab|63	prbab	Tomato aspermy virus protein 2b	other	0.0	True
+prbab|64	prbab	Human influenza virus A NS1 protein RNA-binding domain 	other	0.0	True
+prbab|65	prbab	Methanocaldococcus jannaschii Trm5	other	0.0	True
+prbab|66	prbab	FL-PSTK	other	0.0	True
+prbab|67	prbab	TR2+HR2	dsRBD	0.0	True
+prbab|68	prbab	Archaeal Dim2-Like Protein	S1	0.269	True
+prbab|69	prbab	Puf4 RNA binding domain 	PUF	0.321	False
+prbab|70	prbab	muscleblins-like protein 1	CCCH	1.0	False
+prbab|71	prbab	 human thrombin	other	0.0	True
+prbab|72	prbab	Human LGP2 C-terminal domain 	other	0.0	True
+prbab|73	prbab	DEAD-box protein DBP5	DEAD	0.272	True
+prbab|74	prbab	Eukaryotic ribonucleases P/MRP protein	other	0.0	True
+prbab|75	prbab	Puf3 RNA binding domain 	PUF	0.457	False
+prbab|76	prbab	Fem-3 mRNA-binding factor 2	PUF	0.285	True
+prbab|77	prbab	Ebola viral protein 35 interferon inhibitory domain  	other	0.0	True
+prbab|78	prbab	E.coli Ffh-M4(C406S)	other	0.0	True
+prbab|79	prbab	Probable ATP-dependent RNA helicase DDX58	other	0.0	True
+prbab|80	prbab	Human Cleavage and polyadenylation specificity factor subunit 5	other	0.0	True
+prbab|81	prbab	DEAD-box RNA helicase	other	0.0	True
+prbab|82	prbab	CUGBP1 RRM1/2	RRM	0.766	False
+prbab|83	prbab	human Hiwi1 PAZ domain	PAZ	0.0	True
+prbab|84	prbab	Cold shock protein cspB	CSD	0.439	False
+prbab|85	prbab	PUMILIO-homology domain from Human PUMILIO1	PUF	1.0	False
+prbab|86	prbab	Aquifex aeolicus NusB 	other	0.0	True
+prbab|87	prbab	GTPase Era	KH	0.0	True
+prbab|88	prbab	Escherichia coli Hfq hexamers 	other	0.0	True
+prbab|89	prbab	mRNA export factor TAP	other	0.0	True
+prbab|90	prbab	Human  hPrp31	other	1.0	False
+prbab|91	prbab	Iron regulatory proteins	other	0.0	True
+prbab|92	prbab	LIN-28	multi	0.929	False
+prbab|93	prbab	Pumilio/fem-3 mRNA binding factor (PUF) protein	PUF	0.25	True
+prbab|94	prbab	Bacillus subtilis YbxF	other	0.0	True
+prbab|95	prbab	"Human RNA helicase
+A (DHX9)"	dsRBD	0.0	True
+prbab|96	prbab	Csy4 endoribonuclease	other	0.0	True
+prbab|97	prbab	Lin28 isoform B	CSD	0.863	False
+prbab|98	prbab	Ighmbp2 helicase	DEAD	0.0	True
+prbab|99	prbab	human KSRP protein	KH	0.75	False
+prbab|100	prbab	human TAR DNA-binding protein 43	RRM	1.0	False
+prbab|101	prbab	CAS6A	other	0.0	True
+prbab|102	prbab	SUP-12	RRM	0.989	False
+prbab|103	prbab	Escherichia coli leucine-tRNA ligase	other	0.0	True
+prbab|104	prbab	Hu antigen R RRM1/2	RRM	1.0	False
+prbab|105	prbab	 Tetrahymena telomerase protein p65	RRM	0.0	True
+prbab|106	prbab	polymerase cofactor VP35	other	0.0	True
+prbab|107	prbab	female germline-specific tumor suppressor GLD - 1	KH	0.58	False
+prbab|108	prbab	SLBP	other	0.0	True
+prbab|109	prbab	ebolavirus VP35	other	0.0	True
+prbab|110	prbab	Lsm	other	0.0	True
+prbab|111	prbab	 MazF 	other	0.0	True
+prbab|112	prbab	f human Dicer ‘platform-PAZ-connector helix’cassette	PAZ	0.0	True
+prbab|113	prbab	telomerase reverse transcriptase	other	0.0	True
+prbab|114	prbab	chloroplast Protein Pentatricopeptide Repeat 10	other	0.0	True
+prbab|115	prbab	 bacillus anthracis ribosomal protein S8 	other	0.264	True
+prbab|116	prbab	human U1 snRNP	RRM	1.0	False
+prbab|117	prbab	Dis3L2	CSD	0.0	True
+prbab|118	prbab	mouse ROQ domain	other	1.0	False
+prbab|119	prbab	2'-5'-Oligoadenylate Synthetase	other	0.0	True
+prbab|120	prbab	RNA-dependent RNA polymerase 	other	0.0	True
+prbab|121	prbab	human Argonaute-2	multi	0.0	True
+prbab|122	prbab	RNA-binding protein with multiple splicing	RRM	1.0	False
+prbab|123	prbab	Retinoic acid Inducible Gene - I	DEAD	0.275	True
+prbab|124	prbab	STAR	KH	0.844	False
+prbab|125	prbab	LbaCas13a	other	0.0	True
+prbab|126	prbab	La-related protein 1 (LARP1)	other	0.0	True
+prbab|127	prbab	 RRM2 	RRM	1.0	False
+prbab|128	prbab	 RNA-BINDING PROTEIN HFQ	other	0.0	True
+prbab|129	prbab	 human Argonaute (hAgo)	multi	0.0	True
+prbab|130	prbab	 Protein APUM23 	PUF	0.0	True
+prbab|131	prbab	RlmCD	other	0.0	True
+prbab|132	prbab	Mmi1 YTH	YTH	0.0	True
+prbab|133	prbab	Ku70/80	other	0.219	True
+prbab|134	prbab	SepCysE-SepCysS	other	0.0	True
+prbab|135	prbab	EL86	dsRBD	0.0	True
+prbab|136	prbab	dSNF	other	0.0	True
+prbab|137	prbab	hLarp7	RRM	0.0	True
+prbab|138	prbab	Hfq72 	other	0.0	True
+prbab|139	prbab	U6 snRNP	RRM	0.329	False
+prbab|140	prbab	PUF-9R	PUF	0.762	False
+prbab|141	prbab	TBP6.7	RRM	0.877	False
+prbab|142	prbab	CUG-binding protein 2 RRM3	RRM	0.967	False
+pronab|0	pronab	1asy	other	0.0	True
+pronab|1	pronab	1dfu	other	0.0	True
+pronab|2	pronab	1ec6	KH	0.906	False
+pronab|3	pronab	1f6u	CCHC	0.666	False
+pronab|4	pronab	1feu	other	0.0	True
+pronab|5	pronab	1jbr	other	0.0	True
+pronab|6	pronab	1k1g	KH	0.463	False
+pronab|7	pronab	1k8w	other	0.0	True
+pronab|8	pronab	1knz	other	0.0	True
+pronab|9	pronab	1kq2	other	0.0	True
+pronab|10	pronab	1l1c	other	0.0	True
+pronab|11	pronab	1m8w	PUF	1.0	False
+pronab|12	pronab	1mms	other	0.0	True
+pronab|13	pronab	1n32	other	0.0	True
+pronab|14	pronab	1n77	other	0.0	True
+pronab|15	pronab	1ooa	other	0.0	True
+pronab|16	pronab	1qfq	other	0.0	True
+pronab|17	pronab	1rkj	RRM	0.362	False
+pronab|18	pronab	1rpu	other	0.0	True
+pronab|19	pronab	1s03	other	0.0	True
+pronab|20	pronab	1t0k	other	0.0	True
+pronab|21	pronab	1ttt	other	0.0	True
+pronab|22	pronab	1u0b	other	0.0	True
+pronab|23	pronab	1u63	other	0.0	True
+pronab|24	pronab	1u6p	CCHC	0.441	False
+pronab|25	pronab	1utd	other	0.0	True
+pronab|26	pronab	1y69	other	0.0	True
+pronab|27	pronab	1ytu	Piwi	0.0	True
+pronab|28	pronab	1yty	multi	0.362	False
+pronab|29	pronab	1yvp	other	0.0	True
+pronab|30	pronab	1zdi	other	0.0	True
+pronab|31	pronab	2az0	other	0.0	True
+pronab|32	pronab	2b63	other	0.0	True
+pronab|33	pronab	2b6g	other	1.0	False
+pronab|34	pronab	2c4r	S1	0.0	True
+pronab|35	pronab	2e9t	other	0.0	True
+pronab|36	pronab	2err	RRM	0.963	False
+pronab|37	pronab	2f8k	other	1.0	False
+pronab|38	pronab	2g4b	RRM	0.894	False
+pronab|39	pronab	2hgh	C2H2	0.0	True
+pronab|40	pronab	2ihx	CCHC	0.529	False
+pronab|41	pronab	2jpp	other	0.0	True
+pronab|42	pronab	2kfy	RRM	1.0	False
+pronab|43	pronab	2kg0	RRM	0.989	False
+pronab|44	pronab	2kg1	RRM	1.0	False
+pronab|45	pronab	2kh9	RRM	0.34	False
+pronab|46	pronab	2kxn	RRM	1.0	False
+pronab|47	pronab	2l2k	dsRBD	0.0	True
+pronab|48	pronab	2l3c	dsRBD	0.0	True
+pronab|49	pronab	2l41	RRM	0.484	False
+pronab|50	pronab	2lbs	dsRBD	0.0	True
+pronab|51	pronab	2leb	RRM	0.543	False
+pronab|52	pronab	2li8	CCHC	1.0	False
+pronab|53	pronab	2m8d	RRM	1.0	False
+pronab|54	pronab	2mb0	RRM	0.818	False
+pronab|55	pronab	2mjh	KH	0.669	False
+pronab|56	pronab	2mki	RRM	1.0	False
+pronab|57	pronab	2mkk	RRM	0.474	False
+pronab|58	pronab	2mkn	C2H2	0.448	False
+pronab|59	pronab	2mxy	RRM	1.0	False
+pronab|60	pronab	2n82	RRM	0.963	False
+pronab|61	pronab	2pjp	other	0.0	True
+pronab|62	pronab	2qux	other	0.0	True
+pronab|63	pronab	2r8s	other	0.0	True
+pronab|64	pronab	2rqc	RRM	1.0	False
+pronab|65	pronab	2rra	RRM	1.0	False
+pronab|66	pronab	2ru3	RRM	1.0	False
+pronab|67	pronab	2vpl	other	0.0	True
+pronab|68	pronab	2x1a	RRM	0.479	False
+pronab|69	pronab	2xb2	DEAD	0.306	False
+pronab|70	pronab	2xc7	other	0.0	True
+pronab|71	pronab	2xfm	PAZ	0.0	True
+pronab|72	pronab	2xgj	DEAD	0.0	True
+pronab|73	pronab	2xnr	RRM	0.484	False
+pronab|74	pronab	2xzl	DEAD	0.0	True
+pronab|75	pronab	2y8w	other	0.0	True
+pronab|76	pronab	2yh1	RRM	1.0	False
+pronab|77	pronab	2zi0	other	0.0	True
+pronab|78	pronab	2zko	other	0.0	True
+pronab|79	pronab	2zzn	other	0.0	True
+pronab|80	pronab	3adb	other	0.0	True
+pronab|81	pronab	3adl	dsRBD	0.0	True
+pronab|82	pronab	3aev	S1	0.269	True
+pronab|83	pronab	3am1	other	0.0	True
+pronab|84	pronab	3bsb	PUF	1.0	False
+pronab|85	pronab	3bx2	PUF	0.321	False
+pronab|86	pronab	3d2s	CCCH	1.0	False
+pronab|87	pronab	3dd2	other	0.0	True
+pronab|88	pronab	3eqt	other	0.0	True
+pronab|89	pronab	3gib	other	0.0	True
+pronab|90	pronab	3gpq	other	0.0	True
+pronab|91	pronab	3hjw	other	0.0	True
+pronab|92	pronab	3i5x	DEAD	0.282	True
+pronab|93	pronab	3iab	other	0.0	True
+pronab|94	pronab	3k49	PUF	0.457	False
+pronab|95	pronab	3k5q	PUF	0.285	True
+pronab|96	pronab	3l25	other	0.0	True
+pronab|97	pronab	3lqx	other	0.0	True
+pronab|98	pronab	3mdg	other	0.0	True
+pronab|99	pronab	3moj	other	0.0	True
+pronab|100	pronab	3ncu	other	0.0	True
+pronab|101	pronab	3nmr	RRM	0.766	False
+pronab|102	pronab	3nnh	RRM	1.0	False
+pronab|103	pronab	3o3i	PAZ	0.0	True
+pronab|104	pronab	3o6e	PAZ	0.0	True
+pronab|105	pronab	3q0q	PUF	0.9	False
+pronab|106	pronab	3qg9	PUF	0.285	True
+pronab|107	pronab	3r2c	other	0.0	True
+pronab|108	pronab	3r9w	KH	0.0	True
+pronab|109	pronab	3rer	other	0.0	True
+pronab|110	pronab	3rw6	other	0.0	True
+pronab|111	pronab	3siu	other	1.0	False
+pronab|112	pronab	3sn2	other	0.0	True
+pronab|113	pronab	3u4m	other	0.0	True
+pronab|114	pronab	3v11	other	0.0	True
+pronab|115	pronab	3v71	PUF	0.25	True
+pronab|116	pronab	3v7e	other	0.0	True
+pronab|117	pronab	3vyx	dsRBD	0.0	True
+pronab|118	pronab	3vyy	dsRBD	0.0	True
+pronab|119	pronab	3wbm	other	0.0	True
+pronab|120	pronab	3zla	other	0.0	True
+pronab|121	pronab	4al5	other	0.0	True
+pronab|122	pronab	4b8t	KH	0.75	False
+pronab|123	pronab	4bs2	RRM	1.0	False
+pronab|124	pronab	4bw0	other	0.413	False
+pronab|125	pronab	4c7o	other	0.0	True
+pronab|126	pronab	4c8z	other	0.0	True
+pronab|127	pronab	4c9d	other	0.0	True
+pronab|128	pronab	4cio	RRM	0.989	False
+pronab|129	pronab	4cqn	other	0.0	True
+pronab|130	pronab	4csf	other	0.0	True
+pronab|131	pronab	4ed5	RRM	1.0	False
+pronab|132	pronab	4erd	RRM	0.0	True
+pronab|133	pronab	4g0a	other	0.0	True
+pronab|134	pronab	4i67	other	0.0	True
+pronab|135	pronab	4j1g	other	0.0	True
+pronab|136	pronab	4jvh	KH	0.825	False
+pronab|137	pronab	4jxx	other	0.0	True
+pronab|138	pronab	4kji	other	0.0	True
+pronab|139	pronab	4lg2	other	0.0	True
+pronab|140	pronab	4lj0	CCCH	0.44	False
+pronab|141	pronab	4m7a	other	0.0	True
+pronab|142	pronab	4mdx	other	0.0	True
+pronab|143	pronab	4ngb	PAZ	0.0	True
+pronab|144	pronab	4nl3	other	0.0	True
+pronab|145	pronab	4o26	other	0.0	True
+pronab|146	pronab	4oe1	other	0.0	True
+pronab|147	pronab	4oog	other	0.0	True
+pronab|148	pronab	4pdb	other	0.264	True
+pronab|149	pronab	4pmw	CSD	0.0	True
+pronab|150	pronab	4qi2	other	1.0	False
+pronab|151	pronab	4qqb	RRM	1.0	False
+pronab|152	pronab	4r3i	YTH	0.0	True
+pronab|153	pronab	4rcj	YTH	0.0	True
+pronab|154	pronab	4rwn	other	0.0	True
+pronab|155	pronab	4tux	other	1.0	False
+pronab|156	pronab	4u8t	YTH	0.0	True
+pronab|157	pronab	4yvi	other	0.0	True
+pronab|158	pronab	4z31	other	1.0	False
+pronab|159	pronab	4z4c	multi	0.0	True
+pronab|160	pronab	4z7l	other	0.0	True
+pronab|161	pronab	5det	RRM	1.0	False
+pronab|162	pronab	5dno	YTH	0.0	True
+pronab|163	pronab	5dv7	dsRBD	0.55	False
+pronab|164	pronab	5elr	KH	0.844	False
+pronab|165	pronab	5mpl	RRM	1.0	False
+pronab|166	pronab	5v7c	other	0.0	True
+pronab|167	pronab	5w1i	other	0.0	True
+pronab|168	pronab	5wzh	PUF	0.0	True
+pronab|169	pronab	5x6b	other	0.0	True
+pronab|170	pronab	5xj2	other	0.0	True
+pronab|171	pronab	5y58	other	0.219	True
+pronab|172	pronab	6d12	RRM	0.0	True
+pronab|173	pronab	6f4g	other	0.0	True
+hughes_invivo|0	hughes_invivo	CPEB4	RRM	1.0	False
+hughes_invivo|1	hughes_invivo	ELAVL1	RRM	1.0	False
+hughes_invivo|2	hughes_invivo	FMR1	KH	1.0	False
+hughes_invivo|3	hughes_invivo	FUS	RRM	1.0	False
+hughes_invivo|4	hughes_invivo	QKI	KH	1.0	False
+hughes_invivo|5	hughes_invivo	SHEP	RRM	1.0	False
+hughes_invivo|6	hughes_invivo	TARDBP	RRM	1.0	False
+hughes_invivo|7	hughes_invivo	TIA1	RRM	1.0	False
