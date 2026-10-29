@@ -686,3 +686,28 @@ DEAD, PAZ, YTH are absent from v3a train and would be new families, but with 3�
 short peptides/non-RBD constructs. Conclusion: the public sources already on disk do not fix the family imbalance
 (v3a train: RRM 279, KH 37, CCCH 17); they are usable as small eval-only families (dsRBD, DEAD, PAZ, YTH) rather than as
 training data. Output: `results/homology_audit/new_assays_family_inventory.tsv`.
+
+### v3b cluster split (script 58, 2026-10-29)
+
+Protein clusters from an all-vs-all MMseqs2 search with single linkage: link if identity >= 40% at >= 50% coverage, or
+identity >= 70% at >= 10% coverage (close paralogs sharing a short domain, e.g. PABP). Attempts: greedy `easy-cluster`
+(30%/50% cov) left PABPC1/pabpc4 (94% identity over 40% of the sequence) and CELF1/CELF1-construct2 on different sides;
+single linkage at 30% identity chains all RRM proteins into one cluster of 400+ proteins, so 40% is the strictest usable
+threshold. Result: 160 clusters (largest 220, RRM, kept in train), stratified by Pfam family, seed 42:
+train 375 proteins / 2.06M rows, val 55 / 0.28M, test 64 / 0.32M (RRM 43, KH 8, CCCH 3, other 10).
+
+Leakage check of the built test set (script 55 vs v3b train):
+
+| Best identity to train | v3a test (55) | v3b test (64) |
+|---|---|---|
+| no hit / <30% | 6 / 0 | 6 / 3 |
+| 30–50% | 15 | 53 |
+| 50–70% | 14 | 2 |
+| 70–90% | 13 | 0 |
+| ≥90% | 7 | 0 |
+
+Share with identity ≥50%: 62% → 3% (the two remaining hits cover only 7–14% of the query). Domain-level similarity at
+30–50% remains for most test proteins and is unavoidable inside RRM. v3b = same pairs as v3a, re-split by protein; map in
+`results/v3b/protein_split_map.tsv`, dataset written by `scripts/58 build` to `data/generalized_v3b/` (git-ignored).
+Next: train V2/V4 (3 seeds) on v3b, standard test + cross-protein probe.
+

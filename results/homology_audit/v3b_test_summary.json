@@ -1,0 +1,16 @@
+{
+  "name": "v3b_test",
+  "n_test_proteins": 64,
+  "n_train_proteins": 375,
+  "identity_bin_counts": {
+    "no_hit": 6,
+    "<30%": 3,
+    "30-50%": 53,
+    "50-70%": 2,
+    "70-90%": 0,
+    ">=90%": 0
+  },
+  "median_best_identity": 0.383,
+  "frac_ge_30": 0.859,
+  "frac_ge_50": 0.031
+}

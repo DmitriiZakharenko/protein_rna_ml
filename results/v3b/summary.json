@@ -1,0 +1,97 @@
+{
+  "tag": "v3b",
+  "min_id": 0.4,
+  "cov": 0.5,
+  "n_proteins": 494,
+  "n_clusters": 160,
+  "largest_cluster": 220,
+  "singleton_clusters": 122,
+  "by_split": {
+    "test": {
+      "n_prot": 64,
+      "n_rows": 321027
+    },
+    "train": {
+      "n_prot": 375,
+      "n_rows": 2061515
+    },
+    "val": {
+      "n_prot": 55,
+      "n_rows": 276457
+    }
+  },
+  "family_by_split": {
+    "C2H2": {
+      "test": 0,
+      "train": 1,
+      "val": 0
+    },
+    "CCCH": {
+      "test": 3,
+      "train": 12,
+      "val": 4
+    },
+    "CCHC": {
+      "test": 0,
+      "train": 1,
+      "val": 0
+    },
+    "CSD": {
+      "test": 0,
+      "train": 4,
+      "val": 0
+    },
+    "KH": {
+      "test": 8,
+      "train": 31,
+      "val": 2
+    },
+    "La": {
+      "test": 0,
+      "train": 1,
+      "val": 0
+    },
+    "PUF": {
+      "test": 0,
+      "train": 2,
+      "val": 0
+    },
+    "RRM": {
+      "test": 43,
+      "train": 233,
+      "val": 36
+    },
+    "S1": {
+      "test": 0,
+      "train": 1,
+      "val": 0
+    },
+    "multi": {
+      "test": 0,
+      "train": 12,
+      "val": 2
+    },
+    "other": {
+      "test": 10,
+      "train": 77,
+      "val": 11
+    }
+  },
+  "v3a_vs_v3b_split_proteins": {
+    "test": {
+      "test": 8,
+      "train": 43,
+      "val": 3
+    },
+    "train": {
+      "test": 52,
+      "train": 294,
+      "val": 47
+    },
+    "val": {
+      "test": 4,
+      "train": 38,
+      "val": 5
+    }
+  }
+}
