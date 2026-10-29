@@ -606,3 +606,15 @@ AUROC rises monotonically with identity. On proteins with no detectable homolog 
 **Conclusion:** the "unseen protein" claim must be restated as homology-based transfer; headline AUROC 0.75 is inflated
 by close homologs. Caveats: only 6 no-hit proteins, no per-bin CI yet. Next: cluster-based split at ≤30% identity.
 
+
+### Domain annotation coverage for the v3a test proteins (2026-10-29, in progress)
+
+- Curated labels (`data/domains/protein_domains.tsv`, 84 proteins) match only 15 of 55 probe test proteins by name; the
+  Skipper InterPro manifest (`encode_eclip_rbp_id_best_acc_seq.added_domain_annot.tsv`, 185 human eCLIP RBPs) adds 5 more
+  (20/55 total). Most uncovered test proteins are non-human orthologs (CBG*, LmjF*, Tb_*, Smp_*, PK*).
+- A regex heuristic (RNP1/RNP2, KH, CCCH) was tried and rejected: RRM recall 0.4–0.75 with 10–20% false positives against
+  curated labels. Domain families are therefore assigned with Pfam-A + `hmmscan` (script 56); Pfam is downloaded to
+  `data/external/pfam/` (git-ignored).
+- Skipper Figshare enrichment/HOMER data (scripts 46–49): CLIPper signal vs HOMER motif PWM has Spearman median 0.03–0.04
+  (only 2.5% of experiments > 0.3), so enrichment is not a clean specificity target; kept as a secondary in vivo
+  within-protein ranking test after k-mer/PWM baselines.
