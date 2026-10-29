@@ -147,6 +147,23 @@ def main() -> None:
             print(f"{fam:<9}{fam_res[fam]['n_proteins']:>7}{len(sub):>9}  " + "  ".join(
                 f"{r[c]:>7.3f}" if r[c] is not None else f"{'n/a':>7}" for c in cols) + f"   {v2:.3f}   {v4:.3f}")
         summary["family_auroc"] = fam_res
+
+        # Within-family identity strata (RRM only has enough proteins)
+        sc = sc.merge(tab[["protein_name", "identity_bin"]], on="protein_name")
+        rrm = sc[sc.family == "RRM"]
+        print("\nRRM only, by identity bin:")
+        print(f"{'bin':<9}{'n_prot':>7}{'n_rows':>9}   v2mean  v4mean")
+        rrm_res = {}
+        for b in ["no_hit", "30-50%", "50-70%", "70-90%", ">=90%"]:
+            sub = rrm[rrm.identity_bin == b]
+            if sub.empty:
+                continue
+            r = {c: auroc(sub.binding_label, sub[c]) for c in cols}
+            v2 = float(np.nanmean([v for c, v in r.items() if c.startswith("v2") and v is not None]))
+            v4 = float(np.nanmean([v for c, v in r.items() if c.startswith("v4") and v is not None]))
+            rrm_res[b] = {"n_proteins": int(sub.protein_name.nunique()), "n_rows": int(len(sub)), "v2_mean": v2, "v4_mean": v4}
+            print(f"{b:<9}{rrm_res[b]['n_proteins']:>7}{len(sub):>9}   {v2:.3f}   {v4:.3f}")
+        summary["rrm_by_identity_bin"] = rrm_res
     (out / "v3a_test_domain_family_summary.json").write_text(json.dumps(summary, indent=2, default=float))
 
 

@@ -627,3 +627,25 @@ mislabelled across families). Probe test set (55 proteins): RRM 33, KH 5, multi 
 other 6; train (393): RRM 279, other 45, KH 37, CCCH 17, multi 9. The test set is RRM-dominated, so non-RRM families have
 very few proteins (n ≤ 5) and per-family AUROCs are indicative only.
 Outputs: `results/homology_audit/v3a_pfam_hits.tsv`, `v3a_pfam_family.tsv`, `v3a_test_domain_family.tsv`.
+
+### Probe AUROC by Pfam family (3 seeds, `__full`, 2026-10-29)
+
+| Family (proteins) | V2 | V4 |
+|---|---|---|
+| RRM (33) | 0.761 | 0.815 |
+| KH (5) | 0.731 | 0.813 |
+| CSD (1) | 0.754 | 0.838 |
+| PUF (1) | 0.778 | 0.842 |
+| multi (5) | 0.601 | 0.668 |
+| other (6) | 0.482 | 0.536 |
+| CCCH (2) | 0.366 | 0.343 |
+| CCHC (1) | 0.446 | 0.501 |
+| La (1) | 0.638 | 0.546 |
+| all (55) | 0.686 | 0.754 |
+
+Families well represented in training (RRM 279 train proteins, KH 37) transfer (V4 0.81); families with few training
+proteins or without a recognised RNA-binding Pfam domain (other, CCCH, CCHC, La) are at or below chance (CCCH < 0.5 with
+V2 0.37 and V4 0.34, n = 2 proteins, i.e. anti-predictive, possibly a protein-specific artefact). Confound: every
+no-hit protein (6) falls in other/La/CCHC, and no RRM protein is a no-hit (RRM identity bins 30–50%: 9, 50–70%: 11,
+70–90%: 8, ≥90%: 5), so "sequence novelty" and "family unseen" are largely the same axis in this test set.
+Per-family n is small (non-RRM ≤ 5 proteins). Next: RRM-only by identity bin (script 56 now prints it).
