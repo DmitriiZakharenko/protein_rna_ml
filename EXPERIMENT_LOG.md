@@ -711,3 +711,25 @@ Share with identity ≥50%: 62% → 3% (the two remaining hits cover only 7–14
 `results/v3b/protein_split_map.tsv`, dataset written by `scripts/58 build` to `data/generalized_v3b/` (git-ignored).
 Next: train V2/V4 (3 seeds) on v3b, standard test + cross-protein probe.
 
+
+### Nearest-protein baseline on v3a (script 59, 2026-10-29)
+
+For each training protein an RNA-only model (k-mer LR, or naive-Bayes 4-mer log-odds = PWM) is fitted on its own pairs;
+a test pair is scored by the models of the most similar training proteins (MMseqs2 identity weights). No protein signal
+other than sequence similarity. Protein-bootstrap 95% CI in brackets; neural numbers are 3-seed means.
+
+| Scorer | v3a standard test | v3a cross-protein probe | probe pp-median |
+|---|---|---|---|
+| RNA prior (mean over all train proteins) | 0.606 | 0.500 | 0.547 |
+| nearest protein, k-mer LR (nn1) | 0.779 [0.72, 0.83] | 0.724 [0.66, 0.77] | 0.831 |
+| top-3 neighbours, k-mer LR (nn3) | 0.788 [0.74, 0.83] | **0.746 [0.70, 0.79]** | 0.831 |
+| top-5 neighbours, k-mer LR (nn5) | 0.791 [0.74, 0.84] | 0.740 [0.69, 0.80] | 0.817 |
+| nearest protein, PWM (nn1) | 0.772 | 0.714 | 0.820 |
+| V2 (3 seeds) | ~0.81 | 0.686 ± 0.015 | 0.696 |
+| V4 concat_bi (3 seeds) | ~0.81 | 0.754 ± 0.001 | 0.759 |
+
+By identity bin (probe, nn1 k-mer LR): no hit 0.45, <30% 0.71, 30–50% 0.76, 50–70% 0.84, 70–90% 0.85 (V4 in script-55
+bins: 0.53, –, 0.70, 0.70, 0.88). **A homology-only baseline with no protein model matches V4 and beats V2 on the
+cross-protein probe, and has a much higher per-protein median AUROC (0.83 vs 0.76).** The neural models therefore have
+not yet been shown to learn anything beyond homology transfer. Caveat: bin definitions differ slightly (script 59 uses
+the best-bits hit, script 55 the best identity), pooled-AUROC CIs overlap; v3b results follow.
