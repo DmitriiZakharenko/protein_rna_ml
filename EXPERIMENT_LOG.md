@@ -878,3 +878,32 @@ Seen (training) proteins: motif Spearman 0.247 (shuffled-protein 0.075) versus 0
 the test has little sensitivity even for proteins the model was trained on. Uniform-random backgrounds are far from the
 training distribution (fixed SELEX/RNAcompete flanks), so the first motif/mutagenesis numbers above should not be read as
 evidence about the model. Script 61 now defaults to real-RNA contexts (`--bg real`); re-run below.
+
+### PaRPI published per-dataset results vs our RNA-only control (2026-10-29)
+
+Source: PaRPI Supplementary Data 1 (Fig. 2a–c, per-dataset AUC for 261 datasets) joined with our protein-free k-mer LR
+(script 63) on the same datasets; the PaRPI/HDRNet/PrismNet/… numbers are the authors' published values, not re-run.
+PaRPI itself was **not run** (needs dgl + ViennaRNA + ESM-2 + RNA-BERT and ~30 GB of memory-mapped embeddings per cell
+line; local disk 13 GB free, DGL fails to import on this Mac, no conda network on the VM).
+
+| Method (feature class) | median AUC | Spearman with our k-mer LR |
+|---|---|---|
+| DeepBind (sequence, per dataset) | 0.726 | 0.90 |
+| **our k-mer LR (sequence, no protein, linear)** | **0.739** | 1 |
+| GraphProt (sequence + structure kernel) | 0.768 | 0.93 |
+| iDeep (sequence CNN + DBN) | 0.786 | 0.91 |
+| PrismNet (sequence + in vivo icSHAPE, per RBP, no protein) | 0.854 | 0.82 |
+| HDRNet (PrismNet + RNA-BERT, no protein) | 0.895 | 0.74 |
+| PaRPI (ESM-2 + RNA-BERT + icSHAPE + RNAplfold graph + cross-attention) | 0.915 | 0.64 |
+
+Mean gaps: PaRPI − HDRNet = 0.017; HDRNet − our k-mer LR = 0.137. Reading: (i) sequence-only per-dataset models, including
+our linear baseline, sit at 0.73–0.79; (ii) the step to 0.85–0.90 is made by protein-free models that add in vivo icSHAPE
+structure (PrismNet, HDRNet); (iii) the protein-aware part (PaRPI over HDRNet) adds about 0.02 AUC. In the PaRPI ablation
+(17 HeLa datasets; full 0.9378) replacing ESM-2 by a one-hot protein encoding (PaRPIPO) gives 0.9182, removing icSHAPE
+0.9129, one-hot instead of RNA-BERT 0.9195; no ablation removes protein information completely.
+
+Code reading (utils/train_loop.py, main.py as released; not executed): (a) the 20% held-out split also serves as the
+validation set — the best epoch (up to 199, early stopping) is chosen by test AUC and that AUC is reported, i.e. test-set
+model selection; (b) the protein input is one constant ESM-2 vector per dataset, so within a dataset the protein carries
+no per-sample information and in the pooled cell-line model acts as a dataset identifier. Neither point was verified by a
+run and the paper text (separate validation split) may differ from the released code.
