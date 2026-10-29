@@ -728,8 +728,24 @@ other than sequence similarity. Protein-bootstrap 95% CI in brackets; neural num
 | V2 (3 seeds) | ~0.81 | 0.686 ± 0.015 | 0.696 |
 | V4 concat_bi (3 seeds) | ~0.81 | 0.754 ± 0.001 | 0.759 |
 
-By identity bin (probe, nn1 k-mer LR): no hit 0.45, <30% 0.71, 30–50% 0.76, 50–70% 0.84, 70–90% 0.85 (V4 in script-55
-bins: 0.53, –, 0.70, 0.70, 0.88). **A homology-only baseline with no protein model matches V4 and beats V2 on the
+By identity bin (v3a probe, nn1 k-mer LR vs V4 from script 55): <30% (incl. no hit) 0.45 vs 0.53; 30–50% 0.71 vs 0.70;
+50–70% 0.76 vs 0.70; 70–90% 0.84 vs 0.88; ≥90% 0.85 vs 0.87 (kNN column corrected: an earlier draft of script 59 shifted
+the bin labels by one).
+**A homology-only baseline with no protein model matches V4 and beats V2 on the
 cross-protein probe, and has a much higher per-protein median AUROC (0.83 vs 0.76).** The neural models therefore have
 not yet been shown to learn anything beyond homology transfer. Caveat: bin definitions differ slightly (script 59 uses
 the best-bits hit, script 55 the best identity), pooled-AUROC CIs overlap; v3b results follow.
+
+### Nearest-protein baseline on v3b (script 59, 2026-10-29)
+
+| Scorer | v3b standard test (64 proteins) | v3b cross-protein probe (63 proteins) | probe pp-median |
+|---|---|---|---|
+| RNA prior (mean over train proteins) | 0.591 | 0.500 | 0.493 |
+| nearest protein, k-mer LR (nn1) | **0.676 [0.61, 0.74]** | **0.627 [0.57, 0.68]** | 0.703 |
+| top-3 / top-5, k-mer LR | 0.644 / 0.636 | 0.607 / 0.592 | 0.666 / 0.652 |
+| nearest protein, PWM (nn1) | 0.675 | 0.625 | 0.706 |
+
+On the cluster split (most test proteins are 30–50% identical to their nearest training protein, 24 below 30%) the
+homology-only baseline drops from 0.79/0.75 (v3a) to 0.68/0.63; these are the numbers the V2/V4 models trained on v3b
+must beat (pipeline `scripts/run_v3b_overnight.sh`). The bin columns printed by the first run were mislabelled (shifted
+by one); the script was fixed and v3a/v3b were re-run.

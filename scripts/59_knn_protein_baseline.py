@@ -40,7 +40,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 
 ROOT = Path(__file__).resolve().parents[1]
-BINS = [(0.0, "no_hit"), (0.30, "<30%"), (0.50, "30-50%"), (0.70, "50-70%"), (0.90, "70-90%"), (1.01, ">=90%")]
+BINS = [(0.0, "<30%"), (0.30, "30-50%"), (0.50, "50-70%"), (0.70, "70-90%"), (0.90, ">=90%")]  # lower edges; <30% includes no hit
 LUT = np.full(256, 4, dtype=np.uint8)
 for i, c in enumerate("ACGU"):
     LUT[ord(c)] = i
@@ -209,7 +209,7 @@ def main() -> None:
             res["overall"][sc] = {"auroc": a, "ci": ci, "pp_median": pp_median(df, sc)}
             print(f"{sc:<10}{a:>8.4f}  {str(ci):<24}{res['overall'][sc]['pp_median']:>10.4f}")
         edges = [b[0] for b in BINS]
-        df["bin"] = pd.cut(df.best_identity, bins=edges + [2.0], labels=[b[1] for b in BINS], right=False, include_lowest=True)
+        df["bin"] = pd.cut(df.best_identity, bins=edges + [1.01], labels=[b[1] for b in BINS], right=False, include_lowest=True)
         print(f"\n{'bin':<9}{'n_prot':>7}{'n_rows':>9}" + "".join(f"{s:>9}" for s in ("mean_lr", "nn1_lr", "nn5_lr", "nn1_pwm")))
         for b, sub in df.groupby("bin", observed=True):
             r = {s: auroc(sub.binding_label, sub[s]) for s in scorers}
