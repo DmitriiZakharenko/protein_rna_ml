@@ -1,0 +1,25 @@
+protein_name	best_identity	best_train_hit	qcov	evalue	identity_bin
+AKAP8L	1.0	AKAP8L	1.0	0.0	>=90%
+CDC40	0.0		0.0		no_hit
+DDX1	0.264	DDX53	0.462	7.662000000000001e-30	<30%
+DDX42	0.361	DDX53	0.471	1.302e-81	30-50%
+DEK	0.0		0.0		no_hit
+DROSHA	0.0		0.0		no_hit
+EED	0.0		0.0		no_hit
+EEF2	0.0		0.0		no_hit
+EIF3H	0.0		0.0		no_hit
+EXOSC10	0.0		0.0		no_hit
+FAM120A	0.0		0.0		no_hit
+G3BP1	0.685	G3BP2	0.309	4.3729999999999995e-54	50-70%
+GTF2F1	0.0		0.0		no_hit
+KHDRBS1	1.0	KHDRBS1	0.321	1.003e-88	>=90%
+NPM1	0.0		0.0		no_hit
+PARP1	0.0		0.0		no_hit
+PRPF4	0.0		0.0		no_hit
+PUM1	1.0	PUM1	1.0	0.0	>=90%
+SNRNP200	0.0		0.0		no_hit
+SNRPD3	0.0		0.0		no_hit
+SRSF1	1.0	SRSF1	0.815	1.175e-136	>=90%
+SRSF5	1.0	SRSF5	0.787	6.304e-129	>=90%
+UPF1	0.0		0.0		no_hit
+XPO5	0.0		0.0		no_hit

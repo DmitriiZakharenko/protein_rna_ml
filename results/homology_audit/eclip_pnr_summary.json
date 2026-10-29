@@ -1,0 +1,16 @@
+{
+  "name": "eclip_pnr",
+  "n_test_proteins": 24,
+  "n_train_proteins": 393,
+  "identity_bin_counts": {
+    "no_hit": 16,
+    "<30%": 1,
+    "30-50%": 1,
+    "50-70%": 1,
+    "70-90%": 0,
+    ">=90%": 5
+  },
+  "median_best_identity": 0.0,
+  "frac_ge_30": 0.292,
+  "frac_ge_50": 0.25
+}
