@@ -749,3 +749,22 @@ On the cluster split (most test proteins are 30–50% identical to their nearest
 homology-only baseline drops from 0.79/0.75 (v3a) to 0.68/0.63; these are the numbers the V2/V4 models trained on v3b
 must beat (pipeline `scripts/run_v3b_overnight.sh`). The bin columns printed by the first run were mislabelled (shifted
 by one); the script was fixed and v3a/v3b were re-run.
+
+### Literature comparison notes (2026-10-29; from the README reference table and the PaRPI full text, PMC12485180)
+
+- Classical RPI predictors (RPISeq, RPI-Pred, IPMiner, RPI-SAN, RPITER, RPI-SE, NPI-GNN, Graph-RPI, SeqMG-RPI, BioLLMNet)
+  solve molecule-level lncRNA/ncRNA–protein pairing on small benchmarks (RPI369/488/1807/2241, NPInter) with random or
+  network-derived negatives under random-pair CV; reported AUC 0.92–0.99 are not comparable to our binding-specificity task.
+  The only hard-split numbers (unknown RNA and protein, ZHMolGraph 2025 comparison): ZHMolGraph 0.798, RPITER 0.727,
+  IPMiner 0.664, NPI-GNN ~0.51 AUROC. None of them reports homology-stratified results or an RNA-only / nearest-protein
+  baseline.
+- PaRPI (Commun. Biol. 2025; closest to our setting): 261 eCLIP/CLIP datasets (172 RBPs), ESM-2 protein embeddings +
+  BERT/icSHAPE/RNAplfold RNA graph + cross-attention. Negatives are random transcriptome windows (1:2), exactly the
+  genomic-background type we showed to be composition-solvable (RNA-only k-mer LR 0.81 on Skipper eCLIP); no RNA-only
+  baseline is reported. Headline median AUC 0.90 on a within-protein, 80%-RNA-identity-filtered split. "Unseen RBPs" =
+  4 proteins (<30% identity), positives only, accuracy 0.67 (not an AUC); homology is assessed only in 3 similarity bins.
+  Median baselines compared: HDRNet, PrismNet, DeepBind, GraphProt, iDeep.
+- Our distinguishing elements: composition-neutral cross-protein negatives, identity/family-stratified and cluster-split
+  evaluation, nearest-protein and RNA-only baselines in every bin, and an in vivo vs in vitro transfer test.
+- Missing comparisons to add on the probe/v3b: RPISeq-style (k-mer composition + RF), frozen RNA-FM/ESM-2 embeddings +
+  MLP (ZHMolGraph/BioLLMNet-style).
