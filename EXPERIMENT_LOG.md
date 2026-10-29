@@ -649,3 +649,16 @@ V2 0.37 and V4 0.34, n = 2 proteins, i.e. anti-predictive, possibly a protein-sp
 no-hit protein (6) falls in other/La/CCHC, and no RRM protein is a no-hit (RRM identity bins 30–50%: 9, 50–70%: 11,
 70–90%: 8, ≥90%: 5), so "sequence novelty" and "family unseen" are largely the same axis in this test set.
 Per-family n is small (non-RRM ≤ 5 proteins). Next: RRM-only by identity bin (script 56 now prints it).
+
+### RRM-only probe AUROC by identity bin (3 seeds, 2026-10-29)
+
+| Bin (RRM proteins) | V2 | V4 |
+|---|---|---|
+| 30–50% (9) | 0.669 | 0.753 |
+| 50–70% (11) | 0.670 | 0.714 |
+| 70–90% (8) | 0.848 | 0.905 |
+| ≥90% (5) | 0.896 | 0.921 |
+
+Within the best-represented family, identity still matters (≥70% identity: 0.85–0.92; 30–70%: 0.67–0.75), but
+remote RRM homologs (30–50%) still transfer (V4 0.75, V2 0.67). Family representation and sequence similarity are both
+drivers; no RRM test protein lacks a homolog, so true novelty within RRM cannot be tested with this set.
