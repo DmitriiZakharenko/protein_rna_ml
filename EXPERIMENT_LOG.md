@@ -565,4 +565,18 @@ Caveats: single seed, one 60k sample, name-level (not MMseqs) protein novelty on
 
 ### Decisions
 - eCLIP track closed as an audit/negative-transfer result; headline benchmark becomes the cross-protein-negative probe.
-- Next: multi-seed V2/V4 on the probe, MMseqs2 audit, Phase 3C (affinity).
+- Multi-seed probe done (see above): V4 > V2 confirmed.
+- Next: MMseqs2 audit, Phase 3C (affinity).
+
+### Multi-seed in vitro probe (3 seeds each, 2026-10-29)
+
+`scripts/54_aggregate_probe.py` on `results/overnight/probe_final` (same probe set; V2 seeds 42/0/1, V4 seeds 42/0/1).
+
+| Model | AUROC | AUPRC | pp-median AUROC | prot_dep |
+|---|---|---|---|---|
+| V2 (3 seeds) | 0.686 ± 0.015 | 0.684 ± 0.010 | 0.696 ± 0.019 | 0.184 ± 0.016 |
+| V4 concat_bi (3 seeds) | 0.754 ± 0.001 | 0.750 ± 0.001 | 0.759 ± 0.003 | 0.251 ± 0.002 |
+
+Paired V4 − V2 AUROC per seed [0, 1, 42]: +0.061, +0.085, +0.058 (mean +0.068). V4 wins in every seed and is far
+more stable. On the standard v3a test the V2/V4 gap is only ~0.016, so the bilinear layer helps specifically in
+learning protein×RNA interaction. Caveat: n=3 seeds, one probe sample, no MMseqs audit yet.
