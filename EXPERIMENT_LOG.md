@@ -1100,3 +1100,14 @@ pyrimidine/U-rich/GA-rich preferences); worst below chance: TAF15, SAFB2, SF3B4,
 transfers to in vitro with about +0.09 over the prior) but far from the seen-protein ceiling 0.95, and the agreement depends on the
 protein and on the in vitro assay. Caveat: k-mer frequency features only, no neural network; the in vitro -> eCLIP direction (neural, cross-protein)
 remains negative (see Skipper audit).
+
+### v3b diagnostics of the frozen ESM-2 / RNA-FM bilinear head (script 67 flags; partial, VM run in progress)
+**Positive control (seen training proteins, 5% held-out RNAs removed from training, cross-protein probe on them):** AUROC 0.827
+(cross-protein-negative training) and 0.828 (ordinary labels). The same models give 0.54-0.55 on the v3b probe (unseen clusters).
+So the pipeline learns protein-specific RNA preferences well for known proteins; the failure is transfer to unseen homology clusters,
+not under-training or an evaluation bug.
+
+**Learning curve over the fraction of training clusters** (bilinear head, cross-protein negatives, probe AUROC):
+25% 0.521 (seed 0), 50% 0.541 (seed 0), 75% 0.549 (seed 42) / 0.538 (seed 0), 100% 0.570 (seed 42, earlier run).
+Slowly increasing with the number of clusters (+0.05 from 25% to 100%) but noisy (two seeds, differences ~0.01-0.02) and far from the
+nearest-protein baseline 0.627; the seed-42 runs for 25% and 50% produced no output (to be checked).
