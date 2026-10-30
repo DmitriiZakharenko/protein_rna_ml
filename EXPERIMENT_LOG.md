@@ -1111,3 +1111,21 @@ not under-training or an evaluation bug.
 25% 0.521 (seed 0), 50% 0.541 (seed 0), 75% 0.549 (seed 42) / 0.538 (seed 0), 100% 0.570 (seed 42, earlier run).
 Slowly increasing with the number of clusters (+0.05 from 25% to 100%) but noisy (two seeds, differences ~0.01-0.02) and far from the
 nearest-protein baseline 0.627; the seed-42 runs for 25% and 50% produced no output (to be checked).
+
+### v3b: three seeds of the frozen-embedding heads, hyper-parameter sweep and cluster learning curve (VM, 2026-10-30; seeds 42 / 0 / 1)
+Mean ± sd over seeds; probe AUROC (standard-test AUROC in brackets):
+
+| head | probe | standard |
+|---|---|---|
+| RNA only | 0.500 ± 0.000 | 0.651 ± 0.001 |
+| protein only | 0.504 ± 0.004 | 0.507 ± 0.001 |
+| concat | 0.528 ± 0.006 | 0.618 ± 0.009 |
+| bilinear, ordinary labels | 0.531 ± 0.026 | 0.623 ± 0.032 |
+| bilinear, cross-protein negatives | 0.559 ± 0.009 | 0.531 ± 0.015 |
+
+Best epochs are 1-5 (early overfitting). Shuffled-protein probe 0.47-0.51 for all.
+Hyper-parameter sweep (bilinear + cross-protein negatives, seed 42, probe AUROC; default lr 1e-3, hidden 256, dropout 0.3, wd 1e-2 = 0.570):
+lr 3e-4 0.544, lr 3e-3 0.557, hidden 128 0.539, hidden 512 0.549, dropout 0.1 0.529, dropout 0.5 0.556 (weight-decay variants pending): no setting beats the
+default; differences are within the seed spread (0.01-0.02).
+Learning curve (fraction of training clusters; probe AUROC, seeds 42 / 0): 25% 0.535 / 0.521, 50% 0.554 / 0.541, 75% 0.549 / 0.537, 100% 0.570 / 0.553 / 0.554 (3 seeds):
+means 0.528, 0.548, 0.543, 0.559 - +0.03 over a fourfold increase of clusters, not approaching nn1 (0.627).
