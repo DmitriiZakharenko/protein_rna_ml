@@ -984,3 +984,16 @@ V4 seed 0 and the mechanistic tests (script 61) pending; CIs by identity bin / f
   and seed 1 were not run. All v3b neural numbers therefore rest on seed 42 only.
 - Script 65 (cross-protein-negative V4) running: epoch 1 val-probe AUROC 0.513, ~381 s/epoch.
 - RNA-FM original weights URL returns 403; switched script 66 to HuggingFace multimolecule/rnafm.
+
+### v3b: V4 with cross-protein-negative training (script 65, seed 42) – negative
+Per-epoch loss fell from 1.36 to 0.77 while the validation cross-protein probe stayed at 0.49-0.52 (best 0.522 at epoch 2,
+early stop at epoch 10): the one-hot V4 memorises training (protein, RNA) pairs instead of learning a transferable
+interaction; composition-neutral negatives alone do not rescue generalisation to new clusters. Gate (nn1 probe 0.627) not met.
+Next: frozen ESM-2 / RNA-FM embeddings (scripts 66-67), then hybrid nearest-protein + residual.
+
+### Attribution maps (script 68) – tool built, smoke-tested
+IG / in-silico mutagenesis / window deletion on RNA, IG on protein over the Pfam domain track, plus quantitative domain
+enrichment with length-matched random windows, a residue-shuffled-protein control and an optional known-motif check.
+Smoke test on an old checkpoint (generalized_v2, 3 proteins, 5 RNAs): the three RNA methods disagree (zeroing a window is
+off-distribution), the domain enrichment is ~1 (0.92-1.05) and not clearly above the shuffled-protein control; no claims from this.
+Needs a model that passes the probe gate, then seen-protein positive controls (RBFOX2 GCAUG, HNRNPC U-tracts).
