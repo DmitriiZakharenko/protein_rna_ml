@@ -177,13 +177,15 @@ def main() -> None:
         model.train()
         tot = 0.0
         if args.train_mode == "xneg":
-            sample = pos.sample(args.steps_per_epoch * args.batch // 2, random_state=int(rng.integers(1 << 30))).reset_index(drop=True)
+            n_s = args.steps_per_epoch * args.batch // 2
+            sample = pos.sample(n_s, replace=n_s > len(pos), random_state=int(rng.integers(1 << 30))).reset_index(drop=True)
             keep, partners = t65.draw_negatives(sample, pos_set, by_src, rng)
             sample, partners = sample.loc[keep].reset_index(drop=True), np.array(partners)
             half = args.batch // 2
             n_steps = len(sample) // half
         else:
-            sample = train.sample(args.steps_per_epoch * args.batch, random_state=int(rng.integers(1 << 30))).reset_index(drop=True)
+            n_s = args.steps_per_epoch * args.batch
+            sample = train.sample(n_s, replace=n_s > len(train), random_state=int(rng.integers(1 << 30))).reset_index(drop=True)
             n_steps = args.steps_per_epoch
         for s in range(n_steps):
             if args.train_mode == "xneg":

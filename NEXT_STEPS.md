@@ -106,3 +106,20 @@ Rule: any new source is first an evaluation-only set, split by cluster, before i
 ## Frozen-embedding baselines (Phase 1, from the RPIEmbeddor comparison)
 Mean-pooled ESM-2 + RNA-FM -> logreg/MLP, then token-level cross-attention, trained on v3b and evaluated on the v3b
 probe with the nearest-protein gate (nn1 0.627). Report by identity bin and Pfam family.
+
+## Publication structure: two parts (decision)
+**Part A - audit and benchmark (new proteins).** Standard protein-RNA benchmarks overstate generalisation because of homology and RNA composition.
+Evidence in hand: homology-stratified audit, cluster split v3b, nearest-protein and RNA-only baselines, composition-neutral cross-protein probe,
+seen-protein positive control (0.83) vs unseen clusters (0.53-0.63), frozen-embedding heads, hybrid/stacking, motif-profile regression.
+Remaining: confidence-interval table (script 69), second seeds, report assembly, optional Track C pilot.
+
+**Part B - known RBPs: binding prediction, variant effects and disease.** Per-protein in vivo models already work (PaRPI data: protein-free CNN
+0.888 HeLa); no cross-protein transfer needed. Steps with gates:
+- B0 gap to the published PaRPI numbers: recompute our CNN with the authors' test-based epoch selection to see how much of the gap is protocol (HeLa 0.035-0.045, HEK293 ~0.08).
+- B1 label quality: replicate concordance, continuous enrichment target (log2 over control) instead of binary peaks; protocol covariate (eCLIP vs PAR-CLIP/iCLIP).
+- B2 features: RNAplfold accessibility, icSHAPE where available, transcript region (CDS/UTR/intron) with region-matched negatives, positional k-mers (reverse transfer showed that 1-4-mer frequencies miss e.g. PUM1), sliding windows for long RNAs.
+- B3 variant effect: in silico mutagenesis delta score (alt vs ref) per RBP; benchmark against k-mer/PWM delta-LLR and published variant tools; validation sets to verify and download:
+  allele-specific binding / RBP-QTL, UTR and splicing MPRAs, ClinVar pathogenic vs benign non-coding variants near splice sites and in UTRs. Gate: beats PWM delta-LLR with CI on at least one independent set.
+- B4 disease link: curated RBP-disease gene sets, ClinVar/gnomAD constraint enrichment of predicted RBP-disrupting variants. No clinical claims; report as enrichment with controls.
+- B5 protein-side variants (RBP domain missense, e.g. ALS-linked) only after a model passes the attribution gates of Part A.
+Reverse transfer (script 74) supports Part B: eCLIP-trained models score the same protein's in vitro rows at 0.67 vs prior 0.58 (ceiling 0.95).
