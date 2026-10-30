@@ -1095,7 +1095,7 @@ k-mer LR (k=1..4 frequencies) trained only on the eCLIP/CLIP data of a protein (
 
 Paired difference to the prior: +0.091 [0.028, 0.159] (genomic) and +0.092 [0.016, 0.163] (cross-RBP). By assay: RNAcompete Eukarya (24 proteins)
 0.73-0.75, SELEX/RBNS (21) 0.58-0.59 (prior 0.57). Best: PTBP1 0.97, ELAVL1 0.96, TRA2A 0.94, HNRNPA1 0.93, TIA1 0.93, PCBP2 0.90 (strong
-pyrimidine/U-rich/GA-rich preferences); worst below chance: TAF15, SAFB2, SF3B4, PUM1 (0.37; the UGUAHAUA 8-mer is invisible to
+pyrimidine/U-rich/GA-rich preferences); lowest five (all < 0.4): TAF15, HNRNPF, SAFB2, SF3B4, PUM1 (0.37; the UGUAHAUA 8-mer is invisible to
 1-4-mer frequencies). Reading: in vivo and in vitro specificities of the same protein are partly concordant (a model trained on eCLIP
 transfers to in vitro with about +0.09 over the prior) but far from the seen-protein ceiling 0.95, and the agreement depends on the
 protein and on the in vitro assay. Caveat: k-mer frequency features only, no neural network; the in vitro -> eCLIP direction (neural, cross-protein)
