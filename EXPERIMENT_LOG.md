@@ -1140,3 +1140,19 @@ Median test AUROC over datasets (published numbers: authors', Supplementary Data
 Our CNN is better than DeepBind on 98% of the datasets and better than iDeep on 58%. Gap PaRPI minus our CNN + icSHAPE (medians per cell line):
 HeLa 0.035, HEK293T 0.027, HEK293 0.076, HepG2 0.082, K562 0.065; all datasets 0.073 (our CNN without icSHAPE: 0.124). Our CNN + icSHAPE reaches or exceeds
 PaRPI on 1% of the datasets. Not yet measured: how much of the gap is due to test-based epoch selection in the published code (planned B0).
+
+### Motif logos and saliency maps of V2 for proteins seen in training (script 75; V2 `generalized_v2`, trained on the SELEX/RBNS dataset version 2; protein sequences cut to 300 residues)
+Measured 5-mer enrichment (positives vs negatives) vs the model's mean logit for the 5-mer inserted into real RNA contexts, and one saliency map per protein
+(in-silico mutations, sliding-window deletion, integrated gradients on RNA and protein, Pfam domains). Figures in `results/mechanistic/figures/`, included in `reports/draft_report.html`.
+
+| protein | Spearman predicted vs measured 5-mer profile | share of residues in Pfam RNA-binding domain | share of |IG| inside the domain |
+|---|---|---|---|
+| RBFOX2 | 0.48 | 0.71 | 0.86 |
+| HNRNPC | 0.28 | 0.22 | 0.36 |
+| PCBP2 | 0.33 | 0.54 | 0.70 |
+| TIA1 | 0.10 | 0.78 | 0.85 |
+
+Reading: the model's top 5-mer for RBFOX2 is the measured GCAUG (Spearman 0.48); for HNRNPC the model scores U-rich 5-mers and the saliency map highlights the U-tract
+(mutating those U lowers the logit most); TIA1 is poorly recovered (0.10). Domain shares of |IG| are 0.86 vs 0.71 (RBFOX2) and 0.36 vs 0.22 (HNRNPC): above the
+residue share, but based on one RNA per protein for the map and without a shuffled-protein control in this script. Illustration only; these proteins were in the training data.
+Fix: overlapping Pfam hits were double counted in the first run (TIA1 'coverage 1.90'); the share now uses the union of domain residues.

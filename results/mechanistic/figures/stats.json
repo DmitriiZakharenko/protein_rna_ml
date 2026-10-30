@@ -1,0 +1,127 @@
+{
+  "model": {
+    "name": "v2",
+    "rna_max": 60,
+    "prot_max": 300,
+    "type": "v2",
+    "path": "models/saved/generalized_v2/best_model.pt"
+  },
+  "proteins": {
+    "RBFOX2": {
+      "spearman_pred_vs_true": 0.4805855136083348,
+      "n_rows": 5827,
+      "rna": "UGCCCACAUGCAUGCACCAU",
+      "logit": 7.000156402587891,
+      "domains": [
+        [
+          25,
+          91
+        ]
+      ],
+      "ig_share_in_domain": 0.8584598302841187,
+      "domain_fraction": 0.7052631578947368
+    },
+    "HNRNPC": {
+      "spearman_pred_vs_true": 0.2781952257314281,
+      "n_rows": 11996,
+      "rna": "CGUUGAGUGGGGUUUUGUUUUUAUUUUUUAUGGGAGGGAG",
+      "logit": 5.666723251342773,
+      "domains": [
+        [
+          18,
+          80
+        ]
+      ],
+      "ig_share_in_domain": 0.3559633195400238,
+      "domain_fraction": 0.2150170648464164
+    },
+    "PCBP2": {
+      "spearman_pred_vs_true": 0.32571590324616834,
+      "n_rows": 3000,
+      "rna": "AUACGCUUAUCCCCCUACCA",
+      "logit": 4.193601608276367,
+      "domains": [
+        [
+          15,
+          76
+        ],
+        [
+          99,
+          162
+        ],
+        [
+          290,
+          352
+        ],
+        [
+          16,
+          49
+        ],
+        [
+          81,
+          132
+        ],
+        [
+          298,
+          323
+        ],
+        [
+          14,
+          39
+        ],
+        [
+          285,
+          316
+        ],
+        [
+          24,
+          49
+        ],
+        [
+          297,
+          323
+        ],
+        [
+          298,
+          348
+        ]
+      ],
+      "ig_share_in_domain": 0.7018678784370422,
+      "domain_fraction": 0.5366666666666666
+    },
+    "TIA1": {
+      "spearman_pred_vs_true": 0.10029329223105467,
+      "n_rows": 3000,
+      "rna": "UUAUUUUAUUUUUAUUAUUU",
+      "logit": 6.8929829597473145,
+      "domains": [
+        [
+          9,
+          77
+        ],
+        [
+          108,
+          178
+        ],
+        [
+          9,
+          33
+        ],
+        [
+          107,
+          154
+        ],
+        [
+          7,
+          78
+        ],
+        [
+          7,
+          70
+        ]
+      ],
+      "ig_share_in_domain": 0.8506910800933838,
+      "domain_fraction": 0.782608695652174
+    }
+  }
+}
