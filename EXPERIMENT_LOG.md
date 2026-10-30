@@ -1036,3 +1036,15 @@ Script 71 `--mode hybrid` (head trained jointly with z_nn weight, cross-protein 
 the head fitted the training proteins: the usual stacking failure (the combiner must be fitted on data the head has not seen).
 nn_only on the same pipeline: probe 0.6265, standard 0.6755. Next: `--mode stack` - frozen head (script 67, probe 0.570), weights of
 z_nn and head fitted by logistic regression on the val cross-protein probe (held-out clusters), evaluated on test/probe.
+
+### v3b: held-out stacking of nearest protein + frozen head (script 71 --mode stack, seed 42) – no gain
+Logistic stacker fitted on the val cross-protein probe: weights z_nn 0.137, head 0.012, intercept 0.188.
+
+| scorer | probe AUROC (pp-median) | standard test AUROC (pp-median) |
+|---|---|---|
+| nn only | 0.6265 (0.703) | 0.6755 (0.784) |
+| frozen bilinear head only | 0.5701 (0.583) | 0.5479 (0.526) |
+| stack nn + head | 0.6301 (0.706) | 0.6759 (0.769) |
+
+The head adds +0.004 on the probe and nothing on the standard test: nothing learned from frozen ESM-2 / RNA-FM embeddings on top
+of homology transfer at the cluster split. Single seed, 55 val proteins for the stacker.
