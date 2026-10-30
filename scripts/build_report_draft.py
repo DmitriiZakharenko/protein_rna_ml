@@ -2,7 +2,7 @@
 """
 build_report_draft.py
 ---------------------
-Builds reports/draft_report.html: a sequential report (A data and baselines, B does the evaluation measure interaction, C transfer to new
+Builds reports/results.html: a sequential report (A data and baselines, B does the evaluation measure interaction, C transfer to new
 proteins, D attempts to improve and controls, E in vivo data, F affinity). Every block is question -> test -> result -> verdict.
 
 Numbers come from result files where they exist locally (results/knn_baseline, v3b_report, v3b_affinity, reverse_transfer, parpi_audit,
@@ -229,18 +229,26 @@ def fig_xproto():
     names = ["HTR-SELEX", "RBNS", "RNAcompete\nEukarya", "RNAcompete\nRBPZoo"]
     M = np.array([[0.950, 0.804, 0.783, 0.734], [0.703, 0.993, 0.766, 0.771], [0.832, 0.936, 0.992, 0.953], [0.872, 0.961, 0.987, 0.985]])
     n = np.array([[54, 33, 34, 12], [33, 60, 38, 14], [34, 38, 58, 11], [12, 14, 11, 24]])
-    f, ax = plt.subplots(figsize=(7.4, 5.6))
-    im = ax.imshow(M, vmin=0.5, vmax=1.0, cmap="YlGnBu")
+    from matplotlib.colors import ListedColormap
+    cmap = ListedColormap(plt.cm.YlGnBu(np.linspace(0.04, 0.5, 256)))
+    f, ax = plt.subplots(figsize=(8.6, 6.4))
+    im = ax.imshow(M, vmin=0.6, vmax=1.0, cmap=cmap)
     for i in range(4):
         for j in range(4):
-            ax.text(j, i, f"{M[i, j]:.2f}\n(n={n[i, j]})", ha="center", va="center", fontsize=11, color="white" if M[i, j] > 0.88 else "black")
+            ax.text(j, i, f"{M[i, j]:.2f}", ha="center", va="center", fontsize=17, fontweight="bold" if i == j else "normal")
+            ax.text(j, i + 0.3, f"n={n[i, j]}", ha="center", va="center", fontsize=10.5, color="#444444")
     ax.set_xticks(range(4))
-    ax.set_xticklabels(names)
+    ax.set_xticklabels(names, fontsize=12)
     ax.set_yticks(range(4))
-    ax.set_yticklabels(names)
-    ax.set_xlabel("tested on this assay")
-    ax.set_ylabel("trained on this assay")
-    f.colorbar(im, ax=ax, label="median AUROC over proteins", fraction=0.04)
+    ax.set_yticklabels(names, fontsize=12)
+    ax.xaxis.tick_top()
+    ax.xaxis.set_label_position("top")
+    ax.set_xlabel("tested on this assay", fontsize=13)
+    ax.set_ylabel("trained on this assay", fontsize=13)
+    for k in range(5):
+        ax.axhline(k - 0.5, color="white", lw=2)
+        ax.axvline(k - 0.5, color="white", lw=2)
+    f.colorbar(im, ax=ax, label="median AUROC over proteins", fraction=0.04, pad=0.03)
     return svg(f)
 
 
@@ -362,17 +370,7 @@ def terms_section() -> str:
             ("Frozen-embedding head", "Small network on fixed vectors from pretrained models ESM-2 (protein) and RNA-FM (RNA). Variants: RNA only, protein only, concatenation, bilinear."),
             ("Nearest-protein baseline (nn1)", "No protein model: an RNA-only model (logistic regression on k-mer frequencies) is fitted per training protein; a test pair is scored with the model of the training protein most similar in sequence to the test protein."),
             ("RNA prior", "Mean of the RNA-only models of all training proteins; ignores the test protein."),
-            ("Seed", "Random initialisation of training; several seeds show the run-to-run spread."),
-        ]),
-        ("Metrics", [
-            ("AUROC", "Probability that a random positive is scored above a random negative: 0.5 = chance, 1.0 = perfect."),
-            ("95% interval", "Bracket after a value: resampling of proteins with replacement (protein-level bootstrap)."),
-            ("Spearman", "Rank correlation of two lists (1 = same ranking, 0 = unrelated)."),
-        ]),
-        ("Biology", [
-            ("Pfam, RRM, KH", "Pfam: database of protein domain families; RRM and KH: the two most common RNA-binding domain families."),
-            ("k-mer, motif", "k-mer: sequence of k nucleotides. Motif: short sequence pattern preferred by a protein (e.g. GCAUG for RBFOX2)."),
-            ("icSHAPE", "Probing of RNA structure inside cells; used as an extra input channel in section 6."),
+            ("Probe", "Short for cross-protein probe."),
         ]),
     ]
     rows = []
@@ -384,6 +382,40 @@ def terms_section() -> str:
             'or do they use only RNA composition and the similarity of the protein to training proteins? All results are measured on in vitro data unless section 6 says otherwise.</p>'
             + figure(fig_design(), "Construction of the two tests and of the two data splits used throughout the report.")
             + '<div class="tw"><table class="gl"><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>' + "".join(rows) + "</tbody></table></div>" + models_section())
+
+
+CONCL = {
+    "Data and splits": "v3b removes close homologs from the test set (share of test proteins >= 50% identical to training: 62% -> 3%); what remains is domain-level similarity at 30-50% identity.",
+    "Baselines": "On the v3b probe only the nearest-protein baseline is above chance (0.627); every baseline without protein information scores 0.500.",
+    "The standard test can be solved": "The standard test overstates the contribution of the protein: the RNA-only head scores 0.651 on it and 0.500 on the probe.",
+    "Classic RPI benchmarks": "On RPI369 and RPI488 one molecule matches the full model (difference 0.01 and 0.00), on RPI2241 it is 0.04 below, on RPI1446 the second molecule adds 0.13.",
+    "A model trained on one assay": "The preferences of a protein measured in one assay predict its RNAs in another assay (median AUROC 0.70-0.99) although the RNA sequences differ; within an assay the level is 0.95-0.99.",
+    "Models trained on in vitro data rank binders": "V2 and V4 rank binders in an independent literature set (AUROC 0.67-0.76); the better in vitro score of V4 does not carry over.",
+    "Transfer to unseen proteins depends": "Probe AUROC depends on sequence identity: 0.52 without a homolog, 0.70 at 30-50%, 0.88 at >= 70%; the nearest-protein baseline follows the same curve.",
+    "V2 and V4 exceed the nearest-protein baseline on the name-level": "V4 is better than V2 in every seed (+0.068 on the probe) but not better than the nearest-protein baseline (0.754 vs 0.746, intervals overlap).",
+    "V2, V4 and frozen-embedding heads exceed": "On v3b every neural model is below the nearest-protein baseline (differences -0.057 to -0.100; intervals exclude 0 except V4, whose upper bound is 0.000); only the stack that contains the baseline reaches it.",
+    "V2 trained on SELEX / RBNS transfers": "A model trained on 169 proteins does not generalise to 715 unseen RNAcompete proteins (median 0.549), and is only modestly better on 27 seen ones (0.629).",
+    "Adding a coarse domain-class label": "A coarse domain-class label does not help V2 (0.842 vs 0.847; shuffled label 0.855).",
+    "The null result on new clusters": "The pipeline learns (0.83 on training proteins with new RNAs, nearest protein reproduced, shuffled protein lowers the score); the null result is specific to unseen clusters.",
+    "Frozen ESM-2": "Frozen language-model embeddings, tuning and combination with the baseline do not improve transfer beyond the nearest-protein baseline (best 0.570 vs 0.627; stack +0.003).",
+    "Training with composition-neutral": "The objective removes the RNA shortcut and gains 0.03 on the probe with frozen embeddings, but not enough to reach the baseline; the one-hot V4 memorises instead.",
+    "Transfer increases with the number": "More training clusters give a small, noisy gain (+0.03 for a fourfold increase), far from the baseline level.",
+    "The RNA motif of a new protein": "Predicting the motif of a new protein from its sequence is not better than using the average motif (0.179 vs 0.155).",
+    "V2 uses the RNA-binding domain": "No evidence that V2 relies on the binding domain: effects of domain-contact residues are not larger than of other residues (p = 0.17-0.24).",
+    "Motif logos and saliency maps": "For proteins seen in training V2 recovers part of the known motif (RBFOX2: top 5-mer GCAUG, Spearman 0.48; HNRNPC: U-rich) and less for TIA1 (0.10); in RBFOX2 and HNRNPC more of the integrated-gradient mass lies in the domain than its share of residues.",
+    "Models trained on in vitro data transfer to eCLIP": "No transfer from in vitro models to eCLIP when negatives are composition-neutral (0.50-0.53).",
+    "In vivo benchmarks with random negatives": "With random negatives most of the signal is RNA composition (0.739 without any protein); the protein input of a pooled model acts as a dataset label.",
+    "A protein-free CNN matches": "A CNN without protein input is at or above DeepBind and iDeep; PaRPI stays 0.073 above our CNN with icSHAPE (medians over 261 datasets).",
+    "The same protein has concordant": "A model trained on a protein's eCLIP data partly predicts its in vitro RNAs (+0.09 over the RNA prior), far below the in vitro own-data level (0.95).",
+    "Homology transfer predicts RNAcompete": "Homology transfer carries intensity information (Spearman 0.29 vs 0.06 for the RNA prior; own-data ceiling 0.56).",
+}
+
+
+def conclusion(q: str) -> str:
+    for k, v in CONCL.items():
+        if q.startswith(k):
+            return f'<p class="concl"><b>Conclusion.</b> {v}</p>'
+    return ""
 
 
 # ----------------------------------------------------------------------------- content
@@ -445,7 +477,7 @@ def build() -> str:
     # ---------------- C
     add(P_X, "A model trained on one assay predicts binding of the same protein in another assay", "Median AUROC 0.70-0.99 across 12 assay pairs (mean 0.79, 284 protein x direction rows).", "S",
         "84 proteins measured in >= 2 assays (HTR-SELEX, RBNS, RNAcompete Eukarya, RNAcompete RBPZoo). Per protein, a k-mer logistic regression (k = 4) is trained on the RNAs of assay A and scored on the RNAs of assay B (scripts 33-36).",
-        figure(fig_xproto(), "Median AUROC over proteins. Diagonal: trained and tested on the same assay (held-out RNAs). Off-diagonal: trained on the row assay, tested on the column assay; n = number of proteins.")
+        figure(fig_xproto(), "Median AUROC over proteins. Bold diagonal: trained and tested on the same assay (held-out RNAs). Off-diagonal: trained on the row assay, tested on the column assay; n = number of proteins.")
         + table(["Measure", "Value"], [("within the same assay (median over proteins)", "HTR-SELEX 0.950, RBNS 0.993, RNAcompete Eukarya 0.992, RNAcompete RBPZoo 0.985"),
                                         ("across assays, mean over 284 protein x direction rows", "0.791; 24 of 284 rows below 0.55"),
                                         ("RNA sequences shared between assays", "about 0 for SELEX / RBNS / RNAcompete; about 23% between the two RNAcompete sets"),
@@ -609,7 +641,7 @@ def build() -> str:
         chip = f'<span class="chip {cls}">{label}</span>' if v else ""
         glance.append(f'<tr><td><a href="#{bid}">{bid}</a></td><td>{html.escape(q)}</td><td>{chip}</td><td>{html.escape(key)}</td></tr>')
         secs.append(f'<section id="{bid}"><h3><span class="qn">{bid}</span> {html.escape(q)} {chip}</h3>'
-                    f'<p class="test"><b>{"Method" if v is None else "Test"}.</b> {html.escape(test)}</p>{body}'
+                    f'<p class="test"><b>{"Method" if v is None else "Test"}.</b> {html.escape(test)}</p>{body}{conclusion(q)}'
                     + (f'<details><summary>Caveats</summary><p>{cav}</p></details>' if cav else "") + "</section>")
 
     findings = [
@@ -631,7 +663,7 @@ h2.part{font-size:24px;margin:56px 0 4px;padding-top:18px;border-top:3px solid v
 .qn{display:inline-block;background:var(--fg);color:var(--bg);border-radius:6px;padding:0 8px;margin-right:6px;font-size:16px}
 .meta{color:var(--mut);margin:0 0 18px;font-size:15px}a{color:var(--link)}
 .box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 22px 12px;margin:18px 0}.box h2{font-size:20px;margin:12px 0 4px}.box li{margin:7px 0}
-.test{margin:6px 0 10px}.plain{margin:10px 0}
+.test{margin:6px 0 10px}.concl{margin:10px 0;padding:8px 14px;border-left:4px solid var(--fg);background:var(--card)}.plain{margin:10px 0}
 .tw{overflow-x:auto;margin:12px 0}table{border-collapse:collapse;width:100%;font-size:15.5px}th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
 th{background:var(--card);font-weight:600}tr.grp td{background:var(--card);font-weight:700;border-top:2px solid var(--line)}table.gl td:first-child{width:24%;white-space:nowrap}tr.part td{background:var(--fg);color:var(--bg);font-weight:600;font-size:16px}
 .note{color:var(--mut);font-size:15px;margin:6px 0 10px}figure{margin:14px 0}figure svg,figure img{max-width:100%;height:auto}svg text{fill:var(--fg)!important}
@@ -642,6 +674,19 @@ details{margin:8px 0;color:var(--mut);font-size:15px}summary{cursor:pointer;font
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
 @media (max-width:760px){.two{grid-template-columns:1fr}body{font-size:16px}}
 """
+    next_rows = [
+        ("N1", "Residue-level interaction model on the RNA-binding domains (domain residues of ESM-2 attend to RNA nucleotides) exceeds the nearest-protein baseline on the v3b probe.", "Train on v3b with domain-cropped ESM-2 residue embeddings; compare with nn1 using paired intervals (script 69).", "probe AUROC > 0.627 with a paired difference interval above 0; otherwise stop"),
+        ("N2", "Retrieval by Pfam-domain similarity (instead of whole-protein identity) plus a trained correction improves the nearest-protein baseline.", "Neighbours by domain-level alignment score; stack with the frozen head; held-out stacking as in H-stack.", "difference to nn1 > +0.02 with interval above 0"),
+        ("N3", "A recognition code derived from protein-RNA structures (PDB contacts: domain residue position -> contacted base) predicts motifs of held-out RRM / KH / PUF proteins.", "Contact table from PDB complexes; predict the 5-mer profile of held-out clusters; compare Spearman with the prior (0.155) and nn1.", "mean Spearman above the upper bound of the prior's interval within 2 weeks; otherwise stop (kill criterion)"),
+        ("N4", "Modular proteins with a known code (PUF; PPR proteins of plants) allow learning a position-specific rule that transfers to new members.", "Collect protein-target pairs; split by cluster; test the position-specific model against nn1.", "probe AUROC above nn1 on held-out members"),
+        ("N5", "More protein families (PRBAB / ProNAB: dsRBD, DEAD, PAZ, YTH; motif databases) raise transfer to new clusters.", "Use new sources first as evaluation-only sets; then add to training and repeat the learning curve.", "slope of the learning curve > 0.05 per doubling of clusters"),
+        ("N6", "Treating cross-protein negatives as unlabelled (PU learning) changes the result, because some negatives may be positives.", "Estimate the share of false negatives from motif similarity of protein pairs; PU-style loss.", "probe AUROC +0.03 over the cross-protein-negative head"),
+        ("N7", "The gap to PaRPI (0.073 median) is partly caused by epoch selection on the test split in the published code.", "Recompute our CNN with test-based epoch selection; compare the gap.", "share of the gap explained"),
+        ("N8", "In vivo training with continuous enrichment targets and positional features (accessibility, transcript region, positional k-mers) improves per-protein eCLIP models.", "Per-protein models on 261 datasets; region-matched negatives; compare with the current CNN.", "median AUROC +0.02 on region-matched negatives"),
+        ("N9", "Predicted binding changes (alternative vs reference sequence) separate disease-associated non-coding variants from benign ones for known proteins.", "In silico mutagenesis delta score; independent sets: allele-specific binding, UTR / splicing MPRAs, ClinVar; compare with a PWM log-likelihood-ratio baseline.", "beats the PWM baseline with an interval on at least one independent set"),
+        ("N10", "Saliency maps and mutagenesis show domain use in a model that passes the probe gate.", "Scripts 68 and 75 with shuffled-protein and seen-protein controls.", "domain share of attribution above residue share with a permutation p < 0.05 in most proteins"),
+        ("N11", "V2 / V4 trained on v3b with three seeds replace the single-seed numbers.", "Seeds 0 and 1 for V2 and V4 on v3b.", "paired difference to nn1 with three-seed intervals"),
+    ]
     open_items = [                  ("Weight-decay variants of the hyper-parameter sweep", "running on the VM"),
                   ("V2 / V4 on v3b: seeds 0 and 1", "not run (V2 seed 0 stopped, V4 not started)"),
                   ("Gap to the published PaRPI numbers with test-based epoch selection (B0)", "planned"),
@@ -650,20 +695,21 @@ details{margin:8px 0;color:var(--mut);font-size:15px}summary{cursor:pointer;font
                   ("Variant effects and disease link (B3-B4), PU-style negatives, structure-derived priors (Track C)", "not started"),
                   ("PaRPI and RPIEmbeddor 2.0 themselves", "not reproduced (code without data / checkpoints); compared via published numbers and our own models")]
     head = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<title>Transfer Audit Draft</title><style>{css}</style></head><body><main>'
+            f'<title>Binding Model Results</title><style>{css}</style></head><body><main>'
             f'<h1>Protein-RNA binding models: what transfers to new proteins</h1>'
-            f'<p class="meta">Draft, {today}, repository commit {commit}. Every number is traceable to EXPERIMENT_LOG.md or a results file; single-seed results are marked. '
-            f'Sections: 1 data and baselines, 2 evaluation design, 3 transfer across assays and to external data, 4 transfer to new proteins, 5 attempts and controls, 6 in vivo data, 7 affinity, 8 not done. M = method, H = hypothesis, I = illustration.</p>'
+            f'<p class="meta">Results of the latest work.</p>'
             f'{terms_section()}<div class="box"><h2>Main results</h2><ol>' + "".join(f"<li>{html.escape(x)}</li>" for x in findings) + "</ol></div>"
             f'{figure(fig_ladder(), "AUROC on different tests as knowledge of the test protein decreases (the tests differ; values are taken from sections 1-5). Dark bars: seen protein or the same protein in another assay; blue: neural models; orange: nearest-protein baseline.")}'
             f'<h2 class="part">Table 1. Hypotheses and outcomes</h2><div class="tw"><table><thead><tr><th>No.</th><th>Statement</th><th>Outcome</th><th>Key number</th></tr></thead><tbody>'
-            + "".join(glance) + "</tbody></table></div>")
-    tail = '<h2 class="part">8. Not done or pending</h2>' + table(["Item", "Status"], open_items)
+            + "".join(glance) + "</tbody></table></div><p class=\"note\">M = method, H = hypothesis, I = illustration.</p>")
+    tail = ('<h2 class="part">8. Not done or pending</h2>' + table(["Item", "Status"], open_items)
+            + '<h2 class="part">9. Next hypotheses and tests</h2>' + table(["No.", "Hypothesis", "Test", "Decision rule"], next_rows,
+                                                                             "Decision rules are set before the experiment; a hypothesis that fails its rule is reported as not supported."))
     return head + "".join(secs) + tail + "</main></body></html>"
 
 
 if __name__ == "__main__":
-    out = ROOT / "reports" / "draft_report.html"
+    out = ROOT / "reports" / "results.html"
     out.parent.mkdir(exist_ok=True)
     out.write_text(build(), encoding="utf-8")
     print(f"wrote {out} ({out.stat().st_size // 1024} KB)")

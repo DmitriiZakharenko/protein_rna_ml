@@ -1143,7 +1143,7 @@ PaRPI on 1% of the datasets. Not yet measured: how much of the gap is due to tes
 
 ### Motif logos and saliency maps of V2 for proteins seen in training (script 75; V2 `generalized_v2`, trained on the SELEX/RBNS dataset version 2; protein sequences cut to 300 residues)
 Measured 5-mer enrichment (positives vs negatives) vs the model's mean logit for the 5-mer inserted into real RNA contexts, and one saliency map per protein
-(in-silico mutations, sliding-window deletion, integrated gradients on RNA and protein, Pfam domains). Figures in `results/mechanistic/figures/`, included in `reports/draft_report.html`.
+(in-silico mutations, sliding-window deletion, integrated gradients on RNA and protein, Pfam domains). Figures in `results/mechanistic/figures/`, included in `reports/results.html`.
 
 | protein | Spearman predicted vs measured 5-mer profile | share of residues in Pfam RNA-binding domain | share of |IG| inside the domain |
 |---|---|---|---|
