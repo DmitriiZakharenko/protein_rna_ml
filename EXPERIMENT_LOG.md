@@ -1003,3 +1003,22 @@ RNA-FM mean-pooled embedding -> MLP, no protein input: standard v3b test AUROC 0
 <30% 0.69, 30-50% 0.64, 50-70% 0.67, no hit 0.81); cross-protein probe 0.500 (pp-median 0.469). Shuffling the protein changes
 nothing (by construction). So a protein-blind model already gets 0.65 on the standard v3b test (above the k-mer LR RNA prior 0.591)
 and exactly chance on the composition-neutral probe: the probe is the only test that requires the protein. Other heads pending.
+
+### v3b: summary of neural models vs nearest-protein baseline (seed 42, single run)
+
+| model | standard test AUROC | cross-protein probe AUROC |
+|---|---|---|
+| nearest protein nn1 (k-mer LR) | 0.676 [0.61, 0.74] | 0.627 [0.57, 0.68] |
+| V2 one-hot CNN | 0.677 (pp-median 0.669) | 0.527 |
+| V4 one-hot bilinear | 0.676 (pp-median 0.678) | 0.559 |
+| V4 + cross-protein negatives (script 65) | – | val probe 0.522 (memorises) |
+| frozen ESM-2 + RNA-FM, protein only | – | 0.507 |
+| frozen ESM-2 + RNA-FM, RNA only | 0.652 | 0.500 |
+| frozen ESM-2 + RNA-FM, concat head | – | 0.528 (shuffled protein 0.488) |
+| frozen ESM-2 + RNA-FM, bilinear head | – | 0.551 (shuffled protein 0.483) |
+| frozen bilinear head + cross-protein negatives | – | val probe ~0.52-0.53 after 3 epochs (running) |
+
+Reading: on the standard v3b test everything including the protein-blind RNA-only head is at 0.65-0.68 (standard test is
+dominated by RNA features); on the composition-neutral probe no neural model reaches the nearest-protein baseline (0.627). The
+only gain from the protein in the frozen-embedding bilinear head is ~0.07 (real 0.551 vs shuffled 0.483). Frozen
+pretrained embeddings do not change the picture on the cluster split. Single seed; per-bin patterns are noisy (few proteins/bin).
