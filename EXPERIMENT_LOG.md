@@ -997,3 +997,9 @@ enrichment with length-matched random windows, a residue-shuffled-protein contro
 Smoke test on an old checkpoint (generalized_v2, 3 proteins, 5 RNAs): the three RNA methods disagree (zeroing a window is
 off-distribution), the domain enrichment is ~1 (0.92-1.05) and not clearly above the shuffled-protein control; no claims from this.
 Needs a model that passes the probe gate, then seen-protein positive controls (RBFOX2 GCAUG, HNRNPC U-tracts).
+
+### v3b frozen-embedding heads (script 67, seed 42) – RNA-only head
+RNA-FM mean-pooled embedding -> MLP, no protein input: standard v3b test AUROC 0.652 (pp-median 0.644; by identity bin
+<30% 0.69, 30-50% 0.64, 50-70% 0.67, no hit 0.81); cross-protein probe 0.500 (pp-median 0.469). Shuffling the protein changes
+nothing (by construction). So a protein-blind model already gets 0.65 on the standard v3b test (above the k-mer LR RNA prior 0.591)
+and exactly chance on the composition-neutral probe: the probe is the only test that requires the protein. Other heads pending.

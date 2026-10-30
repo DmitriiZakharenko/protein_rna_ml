@@ -197,7 +197,9 @@ def main() -> None:
     model.load_state_dict(best_state)
     res = {"args": vars(args), "best_epoch": best_ep, "best_val_probe_auroc": best, "history": hist}
     for name, df in [("test_standard", test), ("probe", probe)]:
-        res[name] = metrics(df, score(model, tab, df), ident)
+        prob = score(model, tab, df)
+        df[["protein_name", "binding_label"]].assign(prob=prob).to_csv(out / f"scores_{name}.tsv.gz", sep="\t", index=False)
+        res[name] = metrics(df, prob, ident)
         res[name + "_shuffled_protein"] = metrics(df, score(model, tab, df, shuffle_protein=True, seed=args.seed), ident)
         print(f"{name}: AUROC {res[name]['auroc']:.4f} pp-median {res[name]['pp_median']:.4f} "
               f"| shuffled protein {res[name + '_shuffled_protein']['auroc']:.4f}")
