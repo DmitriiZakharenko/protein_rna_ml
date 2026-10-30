@@ -961,3 +961,15 @@ Same models on the v3a probe (name-level split): V2 0.686, V4 0.754. Moving to t
 (epoch 17) shows val AUROC ~0.67 and flat. Reading: the in vitro cross-protein transfer of V2/V4 is homology-driven; with
 homologs removed they do not generalise to new families. Caveats: one seed; seeds 0/1 and the standard v3b test still running;
 V4 seed 0 and the mechanistic tests (script 61) pending; CIs by identity bin / family not yet computed.
+
+### RPIEmbeddor 2.0 code release (cloned to data/external/rpiembeddor2, git-ignored) – what it is and what it is not
+
+- Architecture: transformer with cross-attention between *token-level* frozen embeddings of RNA (RNA-FM, LAMAR, RNAElectra)
+  and protein (ESM-2, ESM-C, LC-PLM); baselines (logreg / MLP / CNN) on mean-pooled embeddings; eCLIP2 and RNAInterAct
+  with random / RNA-disjoint / protein-disjoint splits; one-hot ablations; IG/saliency plots.
+- Not included: data, embeddings, checkpoints. Their numbers cannot be reproduced; only their code can be run on our data.
+- Example saliency plot received from the team (one RNA, prob 0.797): in-silico RNA mutations have effects of only ±0.02 and
+  mostly raise the score for C/U substitutions everywhere, IG magnitudes ~1e-3 – consistent with a composition-driven score.
+  One example, so anecdotal; the KH domain (608-681 of ~870 aa, ~8% of the sequence) coinciding with a protein peak needs a
+  quantitative test (attribution mass in annotated domains vs length-matched random windows, many proteins, with controls).
+- VM check: pip works (rna-fm, fair-esm download); conda channels still unreachable. Model weights (ESM-2, RNA-FM) not yet tested.

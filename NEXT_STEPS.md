@@ -93,3 +93,16 @@ Risks: apo/holo differences, non-modular recognition in RRM/KH, non-specific PDB
   v3b and passes the mutagenesis gate.
 - Related work to read in full before writing: NPBIP (2026), "protein diversity" mRNA–protein benchmark (J. Cheminf. 2026),
   PaRPI (2025), ZeRPI (2025), IRIS (2025), RBPsuite 2.0 (2025).
+
+## Data sources to extend coverage (distinct proteins/families matter more than rows)
+Current bottleneck: ~500 proteins, ~160 homology clusters, RRM/KH dominated. Candidates (availability and sizes to be verified):
+- In vitro: PRBAB / ProNAB (eval-only families: dsRBD, DEAD, PAZ, YTH), more RNAcompete/RBNS/HTR-SELEX proteins outside RRM/KH.
+- In vivo: ENCODE eCLIP (done, negative), POSTAR3 / CLIPdb PAR-CLIP/iCLIP/HITS-CLIP for non-RRM RBPs, matched-annotation negatives.
+- Motif resources as weak labels or evaluation: ATtRACT, oRNAment, CISBP-RNA (motifs partly inferred by homology: circular for our test).
+- Structure: PDB protein-RNA complexes (contact tables) for Track C; AlphaFold/RoseTTAFoldNA models as augmentation.
+- Affinity: ProNAB, PRA310, RNAcompete intensities, RBNS enrichment (R-values).
+Rule: any new source is first an evaluation-only set, split by cluster, before it is used for training.
+
+## Frozen-embedding baselines (Phase 1, from the RPIEmbeddor comparison)
+Mean-pooled ESM-2 + RNA-FM -> logreg/MLP, then token-level cross-attention, trained on v3b and evaluated on the v3b
+probe with the nearest-protein gate (nn1 0.627). Report by identity bin and Pfam family.
