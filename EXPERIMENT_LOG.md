@@ -1063,3 +1063,21 @@ reaches Spearman ~0.3 on intensities; for reference NPBIP (2026) reports Pearson
 RNAcompete, a different protocol and metric, so this is only an order-of-magnitude comparison. V2/V4/frozen-head scores on the same
 probes can be added with `--scores name=path` (protein_name, rna_sequence, score); not yet run. Caveat: binary-label LR transferred,
 intensity-trained transfer models not tried.
+
+### v3b: protein sequence -> RNA motif profile regression (script 73; ESM-2 mean embedding; 375 train / 55 val / 64 test proteins)
+Target: per-protein 5-mer log2 enrichment (1024 values). Per-protein Spearman vs the true profile on held-out clusters; probe
+AUROC from scoring RNAs with the predicted profile (mean predicted log-enrichment over the RNA's 5-mers).
+
+| predictor | Spearman median | mean [95% CI] | top-20 overlap | probe AUROC |
+|---|---|---|---|---|
+| prior (mean training profile) | 0.101 | 0.155 [0.070, 0.236] | 0.048 | 0.500 |
+| kNN1 (ESM-2 cosine) | 0.116 | 0.114 [0.037, 0.190] | 0.091 | 0.552 |
+| kNN5 (ESM-2 cosine, weighted) | 0.227 | 0.183 [0.107, 0.262] | 0.089 | 0.541 |
+| ridge on ESM-2 (alpha 1e4 on val) | 0.185 | 0.179 [0.107, 0.249] | 0.080 | 0.509 |
+| oracle: protein's own true profile | – | – | – | 0.902 |
+
+Reading: no predictor is distinguishable from the protein-independent prior in mean Spearman (CIs overlap); ESM-2-embedding
+kNN as a nearest-neighbour proxy (probe 0.54-0.55) is clearly weaker than MMseqs2-identity neighbours (0.627 with k-mer LR). The oracle
+(0.90) shows the 5-mer profile is a sufficient scorer if the profile were known, so the bottleneck is predicting the profile of a
+new protein from sequence alone with 375 training proteins. Ridge on mean-pooled ESM-2 does not do it.
+Not tried: RBD-cropped / residue-level pooling, structure-aware embeddings, larger training sets.
