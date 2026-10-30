@@ -968,10 +968,13 @@ V4 seed 0 and the mechanistic tests (script 61) pending; CIs by identity bin / f
   and protein (ESM-2, ESM-C, LC-PLM); baselines (logreg / MLP / CNN) on mean-pooled embeddings; eCLIP2 and RNAInterAct
   with random / RNA-disjoint / protein-disjoint splits; one-hot ablations; IG/saliency plots.
 - Not included: data, embeddings, checkpoints. Their numbers cannot be reproduced; only their code can be run on our data.
-- Example saliency plot received from the team (one RNA, prob 0.797): in-silico RNA mutations have effects of only ±0.02 and
-  mostly raise the score for C/U substitutions everywhere, IG magnitudes ~1e-3 – consistent with a composition-driven score.
-  One example, so anecdotal; the KH domain (608-681 of ~870 aa, ~8% of the sequence) coinciding with a protein peak needs a
-  quantitative test (attribution mass in annotated domains vs length-matched random windows, many proteins, with controls).
+- Example saliency plot received from the team (one RNA, prob 0.797, four panels: in-silico single-nucleotide mutations,
+  sliding-window deletion, integrated gradients). The panels disagree: single mutations raise the score for C/U substitutions
+  almost everywhere (effects only ~±0.02), the sliding window rewards G/U-rich stretches and penalises C runs, IG magnitudes are
+  ~1e-3 and mostly negative. An earlier reading here ("composition-driven") over-interpreted one example and is withdrawn:
+  the plot shows unstable attributions, not a demonstrated mechanism. The KH domain (608-681 of ~870 aa, ~8% of the sequence)
+  coinciding with a protein peak needs a quantitative test (attribution mass in annotated domains vs length-matched random
+  windows, many proteins, attribution sanity checks with label-randomised model and a known-motif positive control).
 - VM check: pip works (rna-fm, fair-esm download); conda channels still unreachable. Model weights (ESM-2, RNA-FM) not yet tested.
 
 ### VM housekeeping (2026-10-30)
