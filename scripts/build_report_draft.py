@@ -112,10 +112,10 @@ def fig_v3a_v3b():
 
 
 V3B_PROBE = [  # name, probe AUROC, group
-    ("RNA prior / RNA-only head", 0.500, "other"), ("protein-only head (ESM-2)", 0.507, "emb"), ("V2 one-hot (seed 42)", 0.527, "v2"),
-    ("concat head (ESM-2 + RNA-FM)", 0.528, "emb"), ("V4 + cross-protein negatives (val probe, early stop)", 0.522, "v4"),
-    ("bilinear head, ordinary labels", 0.551, "emb"), ("joint hybrid (nn + head)", 0.557, "other"), ("V4 one-hot (seed 42)", 0.559, "v4"),
-    ("bilinear head + cross-protein negatives", 0.570, "emb"), ("nearest protein (nn1, k-mer LR)", 0.627, "nn"),
+    ("RNA prior / RNA-only head (3 seeds)", 0.500, "other"), ("protein-only head (ESM-2), 3-seed mean", 0.504, "emb"), ("V2 one-hot (seed 42)", 0.527, "v2"),
+    ("concat head (ESM-2 + RNA-FM), 3-seed mean", 0.528, "emb"), ("V4 + cross-protein negatives (val probe, early stop)", 0.522, "v4"),
+    ("bilinear head, ordinary labels, 3-seed mean", 0.531, "emb"), ("joint hybrid (nn + head)", 0.557, "other"), ("V4 one-hot (seed 42)", 0.559, "v4"),
+    ("bilinear head + cross-protein negatives, 3-seed mean", 0.559, "emb"), ("nearest protein (nn1, k-mer LR)", 0.627, "nn"),
     ("stack: nn1 + frozen head (weights fitted on val)", 0.630, "other")]
 
 
@@ -137,8 +137,11 @@ def fig_v3b():
 
 def fig_curve():
     f, ax = plt.subplots(figsize=(5.6, 3.3))
-    pts = [(0.25, 0.521), (0.5, 0.541), (0.75, 0.549), (0.75, 0.538), (1.0, 0.570)]
-    ax.scatter([p[0] for p in pts], [p[1] for p in pts], color=C["emb"], zorder=3)
+    pts = [(0.25, 0.535), (0.25, 0.521), (0.5, 0.554), (0.5, 0.541), (0.75, 0.549), (0.75, 0.537), (1.0, 0.570), (1.0, 0.553), (1.0, 0.554)]
+    means = [(0.25, 0.528), (0.5, 0.548), (0.75, 0.543), (1.0, 0.559)]
+    ax.scatter([p[0] for p in pts], [p[1] for p in pts], color=C["emb"], zorder=3, s=14, alpha=0.7, label="single run")
+    ax.plot([m[0] for m in means], [m[1] for m in means], color=C["emb"], lw=1.5, label="mean")
+    ax.legend(frameon=False, fontsize=8, loc="center right")
     ax.axhline(0.827, color=C["v4"], lw=1)
     ax.text(0.26, 0.835, "seen training proteins, new RNAs: 0.827", fontsize=8, color=C["v4"])
     ax.axhline(0.627, color=C["nn"], lw=1)
@@ -153,13 +156,17 @@ def fig_curve():
 
 
 def parpi_table():
-    rows = []
+    rows, allp = [], []
     for cell, fn in (("HeLa", "our_models_Hela.tsv"), ("H9", "our_cnn_H9.tsv"), ("HEK293T", "our_cnn_HEK293T.tsv"), ("HEK293", "our_cnn_HEK293.tsv"),
                      ("HepG2", "our_cnn_HepG2.tsv"), ("K562", "our_cnn_K562.tsv")):
         p = R / "parpi_audit" / fn
         if p.exists():
             d = pd.read_csv(p, sep="\t")
             rows.append((cell, len(d), *(float(d[c].median()) for c in ("rna_cnn", "rna_shape_cnn", "deepbind", "iDeep", "Prismnet", "HDRNet", "PaRPI"))))
+            allp.append(d)
+    if len(allp) == 6:
+        a = pd.concat(allp)
+        rows.append(("all", len(a), *(float(a[c].median()) for c in ("rna_cnn", "rna_shape_cnn", "deepbind", "iDeep", "Prismnet", "HDRNet", "PaRPI"))))
     return rows
 
 
@@ -219,15 +226,15 @@ def build() -> str:
         ("H3", "Neural models beat a nearest-protein baseline (no protein model).", "N", "v3a: nn3 0.746 vs V4 0.754; v3b: nn1 0.627 vs V4 0.559, V2 0.527."),
         ("H4", "A cluster split (<=40% identity) removes homology leakage.", "S", "Share of test proteins >=50% identical: 62% -> 3%; 53 of 64 stay at 30-50% (domain-level similarity)."),
         ("H5", "The standard test is largely solvable from the RNA alone.", "S", "RNA-only head: 0.652 on the standard v3b test, 0.500 on the probe; RNA prior 0.59-0.61."),
-        ("H6", "Frozen ESM-2 / RNA-FM embeddings improve transfer to new clusters.", "N", "Probe 0.507-0.570 for all heads; stacking with nn1 adds +0.004."),
-        ("H7", "Composition-neutral cross-protein negatives in training enable transfer.", "N", "One-hot V4 memorises (loss 1.36 -> 0.77, probe flat); frozen head 0.570 vs 0.551 with ordinary labels."),
+        ("H6", "Frozen ESM-2 / RNA-FM embeddings improve transfer to new clusters.", "N", "Probe 0.50-0.56 (3-seed means) for all heads; stacking with nn1 adds +0.004; hyper-parameter sweep 0.53-0.56 vs default 0.57."),
+        ("H7", "Composition-neutral cross-protein negatives in training enable transfer.", "N", "One-hot V4 memorises (loss 1.36 -> 0.77, probe flat); frozen head 0.559 vs 0.531 with ordinary labels (3-seed means)."),
         ("H8", "A pipeline defect explains the null result on new clusters.", "R", "Seen proteins / new RNAs: 0.827; nn1 reproduced inside the hybrid pipeline (0.6265 vs 0.627); shuffled protein lowers the score."),
         ("H9", "Protein sequence -> RNA motif profile is learnable beyond the prior.", "N", "ESM-2 ridge Spearman 0.179 vs prior 0.155 (CIs overlap); probe 0.509."),
         ("H10", "V2 uses the RNA-binding domain (alanine mutagenesis, motif recovery).", "N", "Domain-contact residues not more important than outside (p = 0.17-0.24); motif Spearman 0.22 vs 0.26 on seen proteins."),
-        ("H11", "The number of training clusters limits transfer.", "P", "Probe 0.52 -> 0.57 from 25% to 100% of clusters; noisy, far from 0.627."),
+        ("H11", "The number of training clusters limits transfer.", "P", "Probe 0.528 -> 0.559 (means) from 25% to 100% of clusters; noisy, far from 0.627."),
         ("H12", "In vitro-trained models transfer to eCLIP.", "N", "Zero-shot 0.50-0.56; cross-protein eCLIP negatives 0.50-0.53 for all models (Skipper audit)."),
         ("H13", "In vivo benchmarks with random negatives measure peak-likeness, not interaction.", "S", "RNA-only k-mer LR median 0.739 on 261 PaRPI datasets; our pooled protein model is a dataset identifier (shuffled protein -0.007)."),
-        ("H14", "A protein-free CNN is competitive with published protein-free baselines.", "P", "Beats DeepBind, ~iDeep; PaRPI is 0.036 (HeLa) to 0.08 (HEK293, HepG2) above our best protein-free model."),
+        ("H14", "A protein-free CNN is competitive with published protein-free baselines.", "P", "Over all 261 datasets: beats DeepBind on 98% of them and iDeep on 58%; PaRPI median is 0.073 above our CNN + icSHAPE."),
         ("H15", "The same protein shows concordant eCLIP and in vitro specificity.", "P", "eCLIP-trained k-mer model scores in vitro rows 0.67 vs prior 0.58 (+0.09); protein dependent; ceiling 0.95."),
         ("H16", "Homology transfer carries affinity information (RNAcompete intensities).", "S", "Spearman 0.29 (nn1) vs 0.06 (prior); own-data ceiling 0.56."),
         ("H17", "Classic RPI benchmarks can be solved by one molecule.", "S", "RPI369 protein-only 0.96 vs both 0.97; RPI488 RNA-only 0.91 vs both 0.91."),
@@ -302,36 +309,40 @@ def build() -> str:
                      "ESM-2 (protein) and RNA-FM (RNA) embeddings with a small trained head transfer to unseen clusters; combined with nn1 they add to it.",
                      "Mean-pooled frozen embeddings, heads rna / protein / concat / bilinear (script 67); joint hybrid and held-out stacking with nn1 (script 71); all seed 42.",
                      fig(fig_v3b(), "Fig. 3. v3b cross-protein probe AUROC of every model tested. Colours: grey = one-hot V2, blue = one-hot V4, green = frozen-embedding heads, orange = nearest protein, pink = other.")
-                     + table(["Scorer", "probe", "standard test", "shuffled-protein probe"], [
-                         ("bilinear head, ordinary labels", "0.551", "0.659", "0.483"), ("bilinear head + cross-protein negatives", "0.570", "0.548", "0.497"),
-                         ("concat head", "0.528", "-", "0.488"), ("nn1 only", "0.6265", "0.6755", "-"), ("frozen head only (held-out stacking run)", "0.570", "0.548", "-"),
-                         ("stack: logistic combination of nn1 and head, weights fitted on val probe", "0.630", "0.676", "-"),
-                         ("joint hybrid (head trained together with nn weight)", "0.557", "0.533", "-")],
-                           "Stacking weights: nn1 0.137, head 0.012. In the joint hybrid the nn weight collapsed from 1.0 to 0.14 while the head memorised the training proteins."),
-                     "N", "Seed 42 only; one head configuration plus a hyper-parameter sweep still running on the VM. Mean pooling over the whole protein dilutes domain signal (RBD-cropped pooling not tested)."))
+                     + table(["Scorer", "probe (mean +/- sd, 3 seeds)", "standard test", "shuffled-protein probe"], [
+                         ("RNA-only head", "0.500 +/- 0.000", "0.651 +/- 0.001", "0.500"), ("protein-only head", "0.504 +/- 0.004", "0.507 +/- 0.001", "0.49-0.53"),
+                         ("concat head", "0.528 +/- 0.006", "0.618 +/- 0.009", "0.47-0.49"), ("bilinear head, ordinary labels", "0.531 +/- 0.027", "0.623 +/- 0.032", "0.48-0.51"),
+                         ("bilinear head + cross-protein negatives", "0.559 +/- 0.010", "0.531 +/- 0.015", "0.48-0.50"),
+                         ("nn1 only (seed-free)", "0.6265", "0.6755", "-"),
+                         ("stack: nn1 + frozen head (seed 42), weights fitted on val probe", "0.630", "0.676", "-"),
+                         ("joint hybrid (head trained together with nn weight, seed 42)", "0.557", "0.533", "-")],
+                           "Stacking weights: nn1 0.137, head 0.012. In the joint hybrid the nn weight collapsed from 1.0 to 0.14 while the head memorised the training proteins. Best epochs of the heads: 1-5 (early overfitting).")
+                     + "<p><b>Hyper-parameter sensitivity</b> (bilinear head + cross-protein negatives, seed 42, probe AUROC; the default is lr 1e-3, hidden 256, dropout 0.3, weight decay 1e-2).</p>"
+                     + table(["Setting", "probe"], [("default", "0.570"), ("lr 3e-4 / 3e-3", "0.544 / 0.557"), ("hidden 128 / 512", "0.539 / 0.549"), ("dropout 0.1 / 0.5", "0.529 / 0.556"),
+                                                   ("weight decay 1e-3 / 1e-1", "pending")], "No setting beats the default; differences are within the spread between seeds (0.01-0.03)."),
+                     "N", "The sweep is small and uses one seed per setting; the default may sit close to a favourable seed (seeds 0 and 1 give 0.553 and 0.554 at the default). Mean pooling over the whole protein dilutes domain signal (RBD-cropped pooling not tested)."))
     S.append(section("h7", "Cross-protein negatives in training",
                      "Training with the same RNA paired with another protein (composition-neutral negatives) forces the model to learn the interaction.",
                      "V4 with this objective (script 65, early stopping on a held-out cross-protein probe of val proteins); frozen bilinear head with the same objective.",
                      "<p>One-hot V4: training loss falls from 1.36 to 0.77 while the validation probe stays at 0.49-0.52 (best 0.522 at epoch 2, early stop at epoch 10): the model memorises training pairs. "
-                     "Frozen head: probe 0.570 with this objective vs 0.551 with ordinary labels.</p>",
+                     "Frozen bilinear head (3 seeds): probe 0.559 +/- 0.010 with this objective vs 0.531 +/- 0.027 with ordinary labels, i.e. +0.03 but still 0.07 below nn1; its standard-test AUROC falls from 0.623 to 0.531 because the objective removes the RNA-composition shortcut.</p>",
                      "N", "One seed, one set of hyper-parameters for the one-hot model."))
     S.append(section("h8", "Is the null result on new clusters a pipeline defect?",
                      "If the pipeline were defective, the same head would also fail on proteins it has seen.",
                      "Positive control: 5% of the training RNAs (all rows containing them) are removed from training; a cross-protein probe is built from them for the seen training proteins. "
                      "Also: nn1 reproduced in the hybrid pipeline; protein-shuffle control.",
-                     fig(fig_curve(), "Fig. 4. Learning curve of the bilinear head with cross-protein negatives over the fraction of training clusters (points: single runs; 100% = seed 42; 25-75% mixed seeds, "
-                                      "seed-42 runs at 25% and 50% failed on a sampling bug, fixed, pending on the VM).")
+                     fig(fig_curve(), "Fig. 4. Learning curve of the bilinear head with cross-protein negatives over the fraction of training clusters (points: single runs, line: mean over seeds).")
                      + table(["Check", "Result"], [
                          ("seen training proteins, new RNAs (ordinary labels / cross-protein negatives)", "0.828 / 0.827"),
-                         ("unseen clusters, same heads", "0.550 / 0.542 (this run); 0.551 / 0.570 (full data)"),
+                         ("unseen clusters, same runs", "0.550 / 0.542 (probe on v3b test)"),
                          ("nn1 recomputed inside the hybrid pipeline", "probe 0.6265, standard 0.6755 (script 59: 0.627 / 0.676)"),
                          ("protein shuffled at test (bilinear heads)", "0.55 -> 0.48, 0.57 -> 0.50")]),
                      "R", "The positive control shows the head can learn protein-specific RNA preferences; it does not prove that no better architecture exists. Hyper-parameter sweep pending."))
     S.append(section("h11", "Number of training clusters",
                      "Transfer to unseen clusters grows with the number of training clusters.", "Bilinear head with cross-protein negatives trained on 25/50/75/100% of the 160 clusters.",
-                     "<p>Probe AUROC 0.521 (25%, seed 0), 0.541 (50%, seed 0), 0.549 / 0.538 (75%, seeds 42 / 0), 0.570 (100%, seed 42): +0.05 over a fourfold increase, differences between seeds 0.01-0.02. "
-                     "Extrapolation to the nn1 level (0.627) cannot be made from these points.</p>", "P",
-                     "Cluster sampling is dominated by the one large cluster (220 RRM proteins), so the fractions are not comparable in protein count; seed-42 runs for 25% and 50% pending."))
+                     "<p>Probe AUROC by fraction of training clusters (seeds 42 / 0; 100%: seeds 42 / 0 / 1): 25% 0.535 / 0.521, 50% 0.554 / 0.541, 75% 0.549 / 0.537, 100% 0.570 / 0.553 / 0.554. "
+                     "Means 0.528, 0.548, 0.543, 0.559: +0.03 over a fourfold increase of clusters, with seed-to-seed differences of 0.01-0.02. The curve does not approach the nn1 level (0.627) and cannot be extrapolated reliably.</p>", "P",
+                     "Cluster sampling is dominated by the one large cluster (220 RRM proteins), so the fractions are not comparable in protein count; two seeds per fraction."))
 
     # H9, H10
     S.append(section("h9", "Protein sequence -> motif profile",
@@ -373,8 +384,8 @@ def build() -> str:
                      fig(fig_parpi(parpi_rows), "Fig. 5. Median test AUROC per cell line. Our models: one seed, validation-based epoch selection. Published models: the authors' numbers for the same datasets.")
                      + table(["Cell line", "datasets", "our CNN", "our CNN + icSHAPE", "DeepBind", "iDeep", "PrismNet", "HDRNet", "PaRPI"],
                              [(r[0], r[1], *(f"{v:.3f}" for v in r[2:])) for r in parpi_rows],
-                             "H9 has a single dataset. K562 (112 datasets) is running and not yet included." if not any(r[0] == "K562" for r in parpi_rows) else ""),
-                     "P", "Gap to PaRPI: HeLa 0.036, HEK293 0.076, HepG2 0.081 (our best protein-free model). Part of it may come from test-based epoch selection in their code; the size of that effect is not measured (planned: B0)."))
+                             "H9 has a single dataset; the last row is the median over all 261 datasets."),
+                     "P", "Gap PaRPI minus our CNN + icSHAPE (median per cell line): HeLa 0.035, HEK293T 0.027, HEK293 0.076, HepG2 0.082, K562 0.065; all datasets 0.073. Part of it may come from test-based epoch selection in the published code; the size of that effect is not measured (planned: B0). One seed."))
 
     # H15
     S.append(section("h15", "Same protein: eCLIP vs in vitro specificity",
@@ -420,9 +431,9 @@ def build() -> str:
                     "Script 69 (protein bootstrap, 300 draws). The same table for V2/V4/frozen heads needs their score files (pending).") + "</section>")
 
     S.append('<section id="status"><h2>Open items and run status</h2>' + table(["Item", "Status"], [
-        ("Seeds 0 and 1 for the frozen heads, hyper-parameter sweep, cluster learning curve (25% / 50% with seed 42)", "running on the VM (script run_v3b_frozen.sh / run_v3b_diagnostics.sh)"),
+        ("Weight-decay variants of the hyper-parameter sweep", "running on the VM"),
+        ("Seeds 0 and 1 for the one-hot V2 / V4 on v3b (only seed 42 exists)", "not run (V2 seed 0 was stopped; V4 seed 0 / seed 1 not started)"),
         ("Table with confidence intervals and paired differences for all v3b scorers (V2, V4, heads, hybrid)", "script 69 ready; needs score files from the VM"),
-        ("PaRPI-type comparison: K562 (112 datasets)", "running locally"),
         ("Gap to published PaRPI numbers: recompute with test-based epoch selection (B0)", "planned"),
         ("eCLIP re-report without proteins >=90% identical to training; per-assay breakdown of V2/V4", "needs VM score files"),
         ("Attribution maps (script 68) and domain-enrichment tests", "tool ready; to be run on a model that passes the probe gate; none does yet"),
@@ -431,9 +442,7 @@ def build() -> str:
 
     nav = '<nav><a href="#summary">Summary</a><a href="#data">Data</a>' + "".join(f'<a href="#{h[0].lower()}">{h[0]}</a>' for h in hyp) + '<a href="#strata">Strata</a><a href="#status">Status</a></nav>'
     css = """
-:root{--bg:#fff;--fg:#1c1f23;--mut:#5b6470;--line:#d9dee4;--card:#f6f8fa;--ok:#0b6e4f;--no:#a4262c;--mid:#8a5a00;--link:#0b57d0}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171a;--fg:#e6e8ea;--mut:#9aa4af;--line:#2c3238;--card:#1b1f23;--ok:#4cc38a;--no:#ff7b72;--mid:#e3b341;--link:#79b8ff}}
-:root[data-theme="dark"]{--bg:#14171a;--fg:#e6e8ea;--mut:#9aa4af;--line:#2c3238;--card:#1b1f23;--ok:#4cc38a;--no:#ff7b72;--mid:#e3b341;--link:#79b8ff}
+:root{color-scheme:light;--bg:#fff;--fg:#1c1f23;--mut:#5b6470;--line:#d9dee4;--card:#f6f8fa;--ok:#0b6e4f;--no:#a4262c;--mid:#8a5a00;--link:#0b57d0}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
 main{max-width:1000px;margin:0 auto;padding:20px 16px 80px}h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:34px 0 8px;border-top:1px solid var(--line);padding-top:16px}
 .meta{color:var(--mut);margin:0 0 14px}a{color:var(--link)}nav{display:flex;flex-wrap:wrap;gap:6px 12px;margin:12px 0 4px;font-size:13px}

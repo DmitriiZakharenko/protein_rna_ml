@@ -1,0 +1,3 @@
+LIN28A_H9 {'rna_cnn': 0.8752, 'rna_shape_cnn': 0.8919}
+
+median AUROC over 1 datasets in H9 {'rna_cnn': 0.8752, 'rna_shape_cnn': 0.8919, 'PaRPI': 0.8979, 'HDRNet': 0.9159, 'Prismnet': 0.8896, 'deepbind': 0.8499, 'iDeep': 0.8694}

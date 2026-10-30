@@ -1120,8 +1120,8 @@ Mean ± sd over seeds; probe AUROC (standard-test AUROC in brackets):
 | RNA only | 0.500 ± 0.000 | 0.651 ± 0.001 |
 | protein only | 0.504 ± 0.004 | 0.507 ± 0.001 |
 | concat | 0.528 ± 0.006 | 0.618 ± 0.009 |
-| bilinear, ordinary labels | 0.531 ± 0.026 | 0.623 ± 0.032 |
-| bilinear, cross-protein negatives | 0.559 ± 0.009 | 0.531 ± 0.015 |
+| bilinear, ordinary labels | 0.531 ± 0.027 | 0.623 ± 0.032 |
+| bilinear, cross-protein negatives | 0.559 ± 0.010 | 0.531 ± 0.015 |
 
 Best epochs are 1-5 (early overfitting). Shuffled-protein probe 0.47-0.51 for all.
 Hyper-parameter sweep (bilinear + cross-protein negatives, seed 42, probe AUROC; default lr 1e-3, hidden 256, dropout 0.3, wd 1e-2 = 0.570):
@@ -1129,3 +1129,14 @@ lr 3e-4 0.544, lr 3e-3 0.557, hidden 128 0.539, hidden 512 0.549, dropout 0.1 0.
 default; differences are within the seed spread (0.01-0.02).
 Learning curve (fraction of training clusters; probe AUROC, seeds 42 / 0): 25% 0.535 / 0.521, 50% 0.554 / 0.541, 75% 0.549 / 0.537, 100% 0.570 / 0.553 / 0.554 (3 seeds):
 means 0.528, 0.548, 0.543, 0.559 - +0.03 over a fourfold increase of clusters, not approaching nn1 (0.627).
+
+### Our protein-free CNNs on all 261 PaRPI datasets (script 64 --skip_pooled; HeLa from the pooled run; one seed, validation-based epoch selection)
+Median test AUROC over datasets (published numbers: authors', Supplementary Data 1):
+
+| | our CNN | our CNN + icSHAPE | DeepBind | iDeep | PrismNet | HDRNet | PaRPI |
+|---|---|---|---|---|---|---|---|
+| all 261 | 0.791 | 0.842 | 0.726 | 0.786 | 0.854 | 0.895 | 0.915 |
+
+Our CNN is better than DeepBind on 98% of the datasets and better than iDeep on 58%. Gap PaRPI minus our CNN + icSHAPE (medians per cell line):
+HeLa 0.035, HEK293T 0.027, HEK293 0.076, HepG2 0.082, K562 0.065; all datasets 0.073 (our CNN without icSHAPE: 0.124). Our CNN + icSHAPE reaches or exceeds
+PaRPI on 1% of the datasets. Not yet measured: how much of the gap is due to test-based epoch selection in the published code (planned B0).

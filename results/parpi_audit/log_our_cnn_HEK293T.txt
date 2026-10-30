@@ -1,0 +1,10 @@
+ATXN2_HEK293T {'rna_cnn': 0.7347, 'rna_shape_cnn': 0.8113}
+DGCR8_HEK293T {'rna_cnn': 0.7846, 'rna_shape_cnn': 0.8106}
+FUS_HEK293T {'rna_cnn': 0.7302, 'rna_shape_cnn': 0.7661}
+HNRNPA1_HEK293T {'rna_cnn': 0.8558, 'rna_shape_cnn': 0.8691}
+HNRNPF_HEK293T {'rna_cnn': 0.819, 'rna_shape_cnn': 0.8334}
+PTBP1_HEK293T {'rna_cnn': 0.9001, 'rna_shape_cnn': 0.9126}
+SRRM4_HEK293T {'rna_cnn': 0.7279, 'rna_shape_cnn': 0.834}
+TARDBP_HEK293T {'rna_cnn': 0.8331, 'rna_shape_cnn': 0.8555}
+
+median AUROC over 8 datasets in HEK293T {'rna_cnn': 0.8018, 'rna_shape_cnn': 0.8337, 'PaRPI': 0.861, 'HDRNet': 0.8866, 'Prismnet': 0.8378, 'deepbind': 0.7257, 'iDeep': 0.8156}
