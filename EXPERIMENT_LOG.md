@@ -1081,3 +1081,22 @@ kNN as a nearest-neighbour proxy (probe 0.54-0.55) is clearly weaker than MMseqs
 (0.90) shows the 5-mer profile is a sufficient scorer if the profile were known, so the bottleneck is predicting the profile of a
 new protein from sequence alone with 375 training proteins. Ridge on mean-pooled ESM-2 does not do it.
 Not tried: RBD-cropped / residue-level pooling, structure-aware embeddings, larger training sets.
+
+### Reverse transfer eCLIP -> in vitro, same protein (script 74; 50 proteins present in PaRPI eCLIP data and v3b in vitro data)
+k-mer LR (k=1..4 frequencies) trained only on the eCLIP/CLIP data of a protein (101-nt windows), scoring that protein's in vitro rows
+(SELEX/RBNS/RNAcompete; eCLIP rows excluded); per-protein AUROC.
+
+| scorer | mean [95% CI over proteins] | median | share of proteins > 0.6 |
+|---|---|---|---|
+| eCLIP model, eCLIP genomic negatives | 0.670 [0.611, 0.723] | 0.695 | 0.72 |
+| eCLIP model, negatives = other RBPs' peaks (composition-neutral) | 0.671 [0.613, 0.726] | 0.677 | 0.64 |
+| protein-independent in vitro RNA prior | 0.579 [0.517, 0.636] | 0.642 | 0.58 |
+| in vitro own data, 5-fold CV (seen-protein ceiling) | 0.947 [0.929, 0.961] | 0.958 | 1.00 |
+
+Paired difference to the prior: +0.091 [0.028, 0.159] (genomic) and +0.092 [0.016, 0.163] (cross-RBP). By assay: RNAcompete Eukarya (24 proteins)
+0.73-0.75, SELEX/RBNS (21) 0.58-0.59 (prior 0.57). Best: PTBP1 0.97, ELAVL1 0.96, TRA2A 0.94, HNRNPA1 0.93, TIA1 0.93, PCBP2 0.90 (strong
+pyrimidine/U-rich/GA-rich preferences); worst below chance: TAF15, SAFB2, SF3B4, PUM1 (0.37; the UGUAHAUA 8-mer is invisible to
+1-4-mer frequencies). Reading: in vivo and in vitro specificities of the same protein are partly concordant (a model trained on eCLIP
+transfers to in vitro with about +0.09 over the prior) but far from the seen-protein ceiling 0.95, and the agreement depends on the
+protein and on the in vitro assay. Caveat: k-mer frequency features only, no neural network; the in vitro -> eCLIP direction (neural, cross-protein)
+remains negative (see Skipper audit).
