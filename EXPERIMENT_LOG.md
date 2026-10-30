@@ -1048,3 +1048,18 @@ Logistic stacker fitted on the val cross-protein probe: weights z_nn 0.137, head
 
 The head adds +0.004 on the probe and nothing on the standard test: nothing learned from frozen ESM-2 / RNA-FM embeddings on top
 of homology transfer at the cluster split. Single seed, 55 val proteins for the stacker.
+
+### Affinity-style test on RNAcompete probe intensities (script 72; v3b test proteins, 52 proteins, ~2000 probes each)
+Per-protein Spearman between score and probe intensity (replicate experiments averaged), then median/mean over proteins.
+
+| scorer | median | mean [95% CI, protein bootstrap] |
+|---|---|---|
+| protein-independent RNA prior (mean of training k-mer LRs) | 0.029 | 0.062 [0.006, 0.115] |
+| nearest training protein (nn1, k-mer LR trained on binary labels) | 0.340 | 0.287 [0.219, 0.352] |
+| own_cv: ridge on the protein's own probes, 5-fold (needs the protein's data) | 0.567 | 0.561 [0.545, 0.576] |
+
+By identity bin the 30-50% bin (46 of 52 proteins) behaves like the whole set (nn1 0.303, own_cv 0.563). Homology transfer alone
+reaches Spearman ~0.3 on intensities; for reference NPBIP (2026) reports Pearson 0.32-0.41 (JPLE, similarity-only, neural, hybrid) on
+RNAcompete, a different protocol and metric, so this is only an order-of-magnitude comparison. V2/V4/frozen-head scores on the same
+probes can be added with `--scores name=path` (protein_name, rna_sequence, score); not yet run. Caveat: binary-label LR transferred,
+intensity-trained transfer models not tried.
