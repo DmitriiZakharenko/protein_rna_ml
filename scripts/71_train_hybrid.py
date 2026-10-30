@@ -11,7 +11,8 @@ proteins the neighbour is taken outside their own cluster so it is as remote as 
 head: bilinear MLP on frozen ESM-2 / RNA-FM embeddings (scripts 66, 67). Trained with composition-neutral cross-protein negatives
 (positive (A, r) vs (B, r) of the same source) and early-stopped on a cross-protein probe from val.
 
---mode nn_only skips training and scores z_nn alone (sanity check against scripts/59: probe nn1 ~0.627).
+--mode stack freezes a head from script 67 and fits logit = w1*z_nn + w2*head + w0 by logistic regression on the val cross-protein
+probe (held-out clusters); --mode nn_only skips training and scores z_nn alone (sanity check against scripts/59: probe nn1 ~0.627).
 
 Usage
 -----
@@ -107,7 +108,9 @@ def main() -> None:
     ap.add_argument("--nn_dir", default="results/hybrid")
     ap.add_argument("--probe_tsv", default="data/benchmarks/v3b_cross_neg/cross_neg_probe/test.tsv")
     ap.add_argument("--identity_tsv", default="results/homology_audit/v3b_test_protein_identity.tsv")
-    ap.add_argument("--mode", choices=["hybrid", "nn_only"], default="hybrid")
+    ap.add_argument("--mode", choices=["hybrid", "nn_only", "stack"], default="hybrid")
+    ap.add_argument("--head_ckpt", default="results/v3b_frozen/bilinear_xneg_s42/head.pt",
+                    help="stack mode: frozen head from script 67; weights of z_nn and head are fitted on the val cross-protein probe")
     ap.add_argument("--epochs", type=int, default=15)
     ap.add_argument("--steps_per_epoch", type=int, default=1500)
     ap.add_argument("--batch", type=int, default=512)
@@ -135,6 +138,40 @@ def main() -> None:
     tab = m67.Tables(resolve(args.emb_dir), device)
     nn_ = NN(tab, k59, resolve(args.nn_dir), device)
     model = Hybrid(m67.Head("bilinear")).to(device)
+
+    if args.mode == "stack":
+        from sklearn.linear_model import LogisticRegression
+        head = m67.Head("bilinear").to(device)
+        head.load_state_dict(torch.load(resolve(args.head_ckpt), map_location=device)["state"])
+        head.eval()
+
+        @torch.no_grad()
+        def feats(df, bs=8192):
+            zs, hs = [], []
+            for i in range(0, len(df), bs):
+                sub = df.iloc[i:i + bs]
+                r, p = tab.get(sub.rna_sequence.values, sub.protein_name.values)
+                z, _ = nn_.z(sub.rna_sequence.values, sub.protein_name.values)
+                zs.append(z.cpu().numpy())
+                hs.append(head(r, p).cpu().numpy())
+            return np.c_[np.concatenate(zs), np.concatenate(hs)]
+
+        val_probe = t65.build_val_probe(val, args.val_pos, args.seed)
+        lr = LogisticRegression(C=1.0).fit(feats(val_probe), val_probe.binding_label.values)
+        w = lr.coef_[0]
+        print(f"stack weights: z_nn {w[0]:.3f}  head {w[1]:.3f}  intercept {lr.intercept_[0]:.3f}")
+        res = {"args": vars(args), "weights": {"z_nn": float(w[0]), "head": float(w[1]), "intercept": float(lr.intercept_[0])}}
+        for name, df in [("test_standard", test), ("probe", probe)]:
+            F_ = feats(df)
+            for tag, prob in (("stack", lr.predict_proba(F_)[:, 1]), ("head_only", 1 / (1 + np.exp(-F_[:, 1]))),
+                              ("nn_only", 1 / (1 + np.exp(-F_[:, 0])))):
+                res[f"{name}_{tag}"] = m67.metrics(df, prob, ident_tab)
+                df[["protein_name", "binding_label"]].assign(prob=prob).to_csv(out / f"scores_{name}_{tag}.tsv.gz", sep="\t", index=False)
+                m_ = res[f"{name}_{tag}"]
+                print(f"{name} {tag}: AUROC {m_['auroc']:.4f} pp-median {m_['pp_median']:.4f}  by bin",
+                      {k: round(v, 3) for k, v in m_["by_bin"].items()})
+        (out / "results.json").write_text(json.dumps(res, indent=2))
+        return
 
     best, best_ep, bad, hist, best_state = -1.0, 0, 0, [], None
     if args.mode == "hybrid":

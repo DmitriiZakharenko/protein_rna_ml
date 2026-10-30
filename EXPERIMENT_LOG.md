@@ -1029,3 +1029,10 @@ pretrained embeddings do not change the picture on the cluster split. Single see
   neural models so far (vs 0.551 with ordinary labels) but still below the nearest-protein gate 0.627.
 - Hybrid pipeline check (script 71 `--mode nn_only`, scores z_nn only, neighbours from script 70): probe 0.6265 (pp-median 0.703),
   standard 0.6755 (pp-median 0.784) - reproduces script 59 (0.627 / 0.676), so tables and row matching are correct.
+
+### v3b: joint hybrid (nearest protein + trained head) – negative; switch to held-out stacking
+Script 71 `--mode hybrid` (head trained jointly with z_nn weight, cross-protein negatives, early stop on val probe): probe 0.557
+(pp-median 0.586), standard test 0.533. During training the weight of the neighbour score collapsed (a 1.0 -> 0.14, c -> -0.33) while
+the head fitted the training proteins: the usual stacking failure (the combiner must be fitted on data the head has not seen).
+nn_only on the same pipeline: probe 0.6265, standard 0.6755. Next: `--mode stack` - frozen head (script 67, probe 0.570), weights of
+z_nn and head fitted by logistic regression on the val cross-protein probe (held-out clusters), evaluated on test/probe.
