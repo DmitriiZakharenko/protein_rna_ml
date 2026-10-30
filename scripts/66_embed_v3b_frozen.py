@@ -65,25 +65,70 @@ def embed_proteins(df: pd.DataFrame, out: Path, device) -> None:
 
 
 def import_multimolecule():
-    """Old torch cannot infer schemas for multimolecule.data custom ops; we only need the model, so stub them out."""
-    try:
-        from multimolecule import RnaFmModel, RnaTokenizer
-        return RnaFmModel, RnaTokenizer
-    except ValueError:
-        import sys
-        for k in [k for k in sys.modules if k.startswith("multimolecule")]:
-            del sys.modules[k]
-        import torch.library as tl
+    """multimolecule imports data/dataloader helpers that need a newer torch than this VM has. We only need the model, so
+    on failure stub out the offending helper packages (danling, torch custom ops) and retry."""
+    import importlib
+    import importlib.abc
+    import importlib.machinery
+    import sys
+    import types
 
-        def passthrough(*a, **k):
-            def deco(fn):
-                for attr in ("register_fake", "register_kernel", "register_autograd", "register_vmap"):
-                    setattr(fn, attr, lambda *x, **y: (lambda g: g))
-                return fn
-            return deco
-        tl.custom_op = passthrough
-        from multimolecule import RnaFmModel, RnaTokenizer
-        return RnaFmModel, RnaTokenizer
+    class _Stub(types.ModuleType):
+        __path__: list = []
+
+        def __getattr__(self, name):
+            if name.startswith("__"):
+                raise AttributeError(name)
+            return type(name, (), {"__init__": lambda self, *a, **k: None})
+
+    class _Finder(importlib.abc.MetaPathFinder, importlib.abc.Loader):
+        def __init__(self, root):
+            self.root = root
+
+        def find_spec(self, name, path, target=None):
+            if name == self.root or name.startswith(self.root + "."):
+                return importlib.machinery.ModuleSpec(name, self, is_package=True)
+
+        def create_module(self, spec):
+            return _Stub(spec.name)
+
+        def exec_module(self, module):
+            pass
+
+    def passthrough(*a, **k):
+        def deco(fn):
+            for attr in ("register_fake", "register_kernel", "register_autograd", "register_vmap"):
+                setattr(fn, attr, lambda *x, **y: (lambda g: g))
+            return fn
+        return deco
+
+    stubbed = set()
+    for _ in range(6):
+        try:
+            from multimolecule import RnaFmModel, RnaTokenizer
+            return RnaFmModel, RnaTokenizer
+        except (ValueError, ImportError) as e:
+            for k in [k for k in sys.modules if k.startswith("multimolecule")]:
+                del sys.modules[k]
+            msg = str(e)
+            if isinstance(e, ValueError) and "infer_schema" in msg or "infer_schema" in repr(e.__traceback__ and e):
+                import torch.library as tl
+                tl.custom_op = passthrough
+                continue
+            root = None
+            for cand in ("danling", "chanfig", "torchdata", "datasets"):
+                if cand in msg and cand not in stubbed:
+                    root = cand
+                    break
+            if root is None:
+                raise
+            stubbed.add(root)
+            for k in [k for k in sys.modules if k == root or k.startswith(root + ".")]:
+                del sys.modules[k]
+            sys.meta_path.insert(0, _Finder(root))
+            print(f"  stubbing {root} to import multimolecule", flush=True)
+    from multimolecule import RnaFmModel, RnaTokenizer
+    return RnaFmModel, RnaTokenizer
 
 
 @torch.no_grad()
