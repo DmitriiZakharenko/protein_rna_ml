@@ -944,3 +944,20 @@ residues in 35% of proteins (p = 0.17) and more than random in-domain residues i
 and 52% (p = 0.84). The positive control (seen proteins) is not clearly better than held-out proteins, so for V2 the in silico
 tests are inconclusive-to-negative even in the most favourable case: V2 (global-max-pool CNN, one-hot protein) shows no
 domain-specific mechanism. These tests stay as gates for the next models (a model must pass on seen proteins first).
+
+### v3b (cluster split) – first neural results, seed 42 (VM, probe after seed 42)
+
+Cross-protein probe AUROC (full / GC-matched / RNA-unseen), v3b test proteins:
+
+| Scorer | full | gc_match | rna_unseen |
+|---|---|---|---|
+| GC baseline / k-mer LR (RNA only) | 0.500 / 0.500 | 0.500 / 0.507 | 0.500 / 0.500 |
+| V2 seed 42 | 0.527 | 0.527 | 0.538 |
+| V4 seed 42 | 0.559 | 0.552 | 0.563 |
+| nearest-protein k-mer LR (nn1, script 59) | 0.627 [0.57, 0.68] | – | – |
+
+Same models on the v3a probe (name-level split): V2 0.686, V4 0.754. Moving to the cluster split removes ~0.16 (V2) and
+~0.19 (V4) AUROC; on v3b both are far below the nearest-protein baseline gate (0.627) and close to chance. V2 seed 0 training
+(epoch 17) shows val AUROC ~0.67 and flat. Reading: the in vitro cross-protein transfer of V2/V4 is homology-driven; with
+homologs removed they do not generalise to new families. Caveats: one seed; seeds 0/1 and the standard v3b test still running;
+V4 seed 0 and the mechanistic tests (script 61) pending; CIs by identity bin / family not yet computed.
