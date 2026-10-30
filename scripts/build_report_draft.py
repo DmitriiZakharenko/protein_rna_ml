@@ -305,32 +305,48 @@ def gallery() -> str:
 
 def terms_section() -> str:
     gl = [
-        ("Task", "Predict whether a protein binds an RNA sequence. Each example is a (protein sequence, RNA sequence) pair with a label: binds = 1, does not bind = 0."),
-        ("Data sources", "In vitro binding experiments on 494 RNA-binding proteins: HTR-SELEX and RBNS (selection of RNAs from random pools, RNAs of 20-40 nt), RNAcompete (fixed RNA probes with measured intensities). "
-                         "In vivo data (section 5): eCLIP / CLIP peaks in cells (101-nt windows)."),
-        ("v3a", "The in vitro dataset (2.66 million pairs) split into train / validation / test by protein name. Related proteins (homologs) of a test protein can be in the training set."),
-        ("v3b", "The same pairs re-split by homology clusters: proteins that are similar in sequence (identity >= 40% over >= 50% of the sequence, MMseqs2) always fall on the same side. "
-                "Test proteins have no close relative in training (160 clusters; 375 / 55 / 64 proteins in train / validation / test)."),
-        ("Standard test", "Test pairs as labelled by the assay. Negatives are other RNAs of the same experiment, so RNA composition alone is informative."),
-        ("Cross-protein probe", "Test built to require the protein: the same RNA is a positive for protein A and a negative for another protein B of the same assay (schematic above). RNA-only models score 0.5."),
-        ("AUROC", "Area under the ROC curve: probability that a random positive is scored above a random negative. 0.5 = chance, 1.0 = perfect. Intervals in brackets are 95% intervals from resampling proteins (protein-level bootstrap)."),
-        ("Spearman", "Rank correlation between two lists of numbers (1 = same ranking, 0 = unrelated)."),
-        ("V2", "Neural network (convolutional, CNN) with one branch for the RNA sequence and one for the protein sequence (both one-hot encoded); the two vectors are concatenated and classified."),
-        ("V4", "Same as V2 but the RNA and protein vectors also pass through a bilinear (multiplicative) layer so that the network can model their interaction."),
-        ("Frozen-embedding head", "Small neural network on top of fixed vectors from large pretrained models: ESM-2 (protein language model) and RNA-FM (RNA language model). Variants: RNA only, protein only, concatenation, bilinear."),
-        ("Nearest-protein baseline (nn1)", "No protein model. For every training protein an RNA-only model (logistic regression on k-mer frequencies) is fitted; a test pair is scored with the RNA model of the training protein whose sequence is most similar to the test protein."),
-        ("RNA prior", "Mean of the RNA-only models of all training proteins; ignores the test protein."),
-        ("Seen / unseen protein", "Seen: the protein was in the training data. Unseen: it was not; in v3b additionally no close relative was."),
-        ("Identity bin", "Best sequence identity of a test protein to any training protein (MMseqs2), grouped into <30% / no hit, 30-50%, 50-70%, 70-90%, >=90%."),
-        ("Pfam, RRM, KH", "Pfam: database of protein domain families. RRM and KH are the most common RNA-binding domain families."),
-        ("Seed", "Random initialisation of training; results over several seeds show the run-to-run spread."),
-        ("PaRPI, eCLIP, icSHAPE", "PaRPI: published method and benchmark of 261 in vivo binding datasets (eCLIP and related CLIP data). eCLIP: protein-RNA crosslinking experiment in cells. icSHAPE: in vivo RNA structure probing."),
+        ("Data", [
+            ("In vitro data", "Binding experiments HTR-SELEX and RBNS (RNAs selected from random pools) and RNAcompete (fixed RNA probes). 494 proteins, 2.66 million (protein, RNA) pairs, label: binds = 1, does not bind = 0."),
+            ("In vivo data", "eCLIP / CLIP: protein-RNA crosslinking in cells, 101-nt windows (section 5). PaRPI: published benchmark of 261 such datasets."),
+            ("v3a", "In vitro data split into train / validation / test by protein name. Relatives (homologs) of a test protein can be in the training set."),
+            ("v3b", "Same data split by homology cluster: proteins with >= 40% sequence identity over >= 50% of their length (MMseqs2) are always on the same side. "
+                    "160 clusters; 375 / 55 / 64 proteins in train / validation / test; test proteins have no close relative in training."),
+            ("Seen / unseen protein", "Seen: in the training data. Unseen: not in it (in v3b also without a close relative)."),
+            ("Identity bin", "Best sequence identity of a test protein to any training protein, grouped: <30% or no hit, 30-50%, 50-70%, 70-90%, >=90%."),
+        ]),
+        ("Tests", [
+            ("Standard test", "Pairs labelled by the assay; negatives are other RNAs of the same experiment, so RNA composition alone is informative."),
+            ("Cross-protein probe", "The same RNA is a positive for protein A and a negative for another protein B of the same assay (schematic above). RNA-only models score 0.5."),
+        ]),
+        ("Models and baselines", [
+            ("V2", "Convolutional network (CNN) with one branch for the RNA and one for the protein sequence (one-hot encoded); the two vectors are concatenated and classified."),
+            ("V4", "V2 plus a bilinear (multiplicative) layer on the RNA and protein vectors, so the network can model their interaction."),
+            ("Frozen-embedding head", "Small network on fixed vectors from pretrained models ESM-2 (protein) and RNA-FM (RNA). Variants: RNA only, protein only, concatenation, bilinear."),
+            ("Nearest-protein baseline (nn1)", "No protein model: an RNA-only model (logistic regression on k-mer frequencies) is fitted per training protein; a test pair is scored with the model of the training protein most similar in sequence to the test protein."),
+            ("RNA prior", "Mean of the RNA-only models of all training proteins; ignores the test protein."),
+            ("Seed", "Random initialisation of training; several seeds show the run-to-run spread."),
+        ]),
+        ("Metrics", [
+            ("AUROC", "Probability that a random positive is scored above a random negative: 0.5 = chance, 1.0 = perfect."),
+            ("95% interval", "Bracket after a value: resampling of proteins with replacement (protein-level bootstrap)."),
+            ("Spearman", "Rank correlation of two lists (1 = same ranking, 0 = unrelated)."),
+        ]),
+        ("Biology", [
+            ("Pfam, RRM, KH", "Pfam: database of protein domain families; RRM and KH: the two most common RNA-binding domain families."),
+            ("k-mer, motif", "k-mer: sequence of k nucleotides. Motif: short sequence pattern preferred by a protein (e.g. GCAUG for RBFOX2)."),
+            ("icSHAPE", "Probing of RNA structure inside cells; used as an extra input channel in section 5."),
+        ]),
     ]
+    rows = []
+    for grp, items in gl:
+        rows.append(f'<tr class="grp"><td colspan="2">{grp}</td></tr>')
+        rows += [f"<tr><td><b>{a}</b></td><td>{b}</td></tr>" for a, b in items]
     return ('<h2 class="part">0. Task, design and terms</h2>'
             '<p class="plain">Question of this report: do models that receive the protein sequence predict RNA binding for proteins that were not used for training, '
-            'or do they use only RNA composition and the similarity of the protein to training proteins? All results below are measured on in vitro data unless section 5 says otherwise.</p>'
+            'or do they use only RNA composition and the similarity of the protein to training proteins? All results are measured on in vitro data unless section 5 says otherwise.</p>'
             + figure(fig_design(), "Construction of the two tests and of the two data splits used throughout the report.")
-            + table(["Term", "Meaning"], [(f"<b>{a}</b>", b) for a, b in gl]))
+            + '<div class="tw"><table class="gl"><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>' + "".join(rows) + "</tbody></table></div>")
+
 
 # ----------------------------------------------------------------------------- content
 def knn(v, e):
@@ -405,8 +421,23 @@ def build() -> str:
     add(P_C, "V2, V4 and frozen-embedding heads exceed the nearest-protein baseline on the cluster split (v3b)", "v3b probe: nn1 0.627, V4 0.559, V2 0.527.", "N",
         "V2 and V4 retrained on v3b (seed 42), frozen-embedding heads (3 seeds), hybrids; all scored on the same probe.",
         figure(fig_forest(), "v3b probe AUROC. Only the nearest protein and the stack that contains it exceed 0.6; neural heads stay at 0.50-0.56.")
-        + table(["Model", "v3b probe", "v3b standard"], [("nearest protein nn1", kc(k3b_p, "nn1_lr"), kc(k3b_s, "nn1_lr")), ("V2 (seed 42)", "0.527", "0.677"), ("V4 (seed 42)", "0.559", "0.676")]),
-        "V2 / V4 on v3b: one seed (seed 0 of V2 was stopped, V4 seeds 0 and 1 not started); no interval for them yet.")
+        + table(["Model", "v3b probe AUROC [95% interval]", "difference to nearest protein [95% interval]", "v3b standard test [95% interval]"], [
+            ("nearest protein nn1", "0.627 [0.566, 0.689]", "-", "0.676 [0.610, 0.754]"),
+            ("RNA prior", "0.500 [0.457, 0.538]", "-0.127 [-0.202, -0.052]", "0.591 [0.546, 0.640]"),
+            ("V2 (seed 42)", "0.527 [0.498, 0.557]", "-0.100 [-0.176, -0.029]", "0.677"),
+            ("V4 (seed 42)", "0.559 [0.527, 0.587]", "-0.068 [-0.147, +0.000]", "0.676"),
+            ("RNA-only head (seed 42)", "0.500 [0.464, 0.537]", "-0.127 [-0.203, -0.047]", "0.652 [0.613, 0.698]"),
+            ("protein-only head (seed 42)", "0.507 [0.478, 0.533]", "-0.120 [-0.197, -0.045]", "0.506 [0.499, 0.519]"),
+            ("concat head (seed 42)", "0.528 [0.485, 0.571]", "-", "0.610 [0.567, 0.666]")],
+                "Intervals: resampling of proteins, the same draws for all models (paired differences). A difference whose interval excludes 0 is a difference between models, not noise in the choice of test proteins. "
+                "Intervals for the bilinear heads, the hybrid and the stack were cut off in the pasted run output.")
+        + table(["Subset of test proteins (number)", "nearest protein", "V2", "V4"], [
+            ("all (63)", "0.627", "0.527", "0.559"), ("identity 30-50% (53)", "0.635", "0.525", "0.564"), ("no hit (5)", "0.628 (= RNA prior)", "0.609", "0.564"),
+            ("family RRM (43)", "0.651", "0.522", "0.556"), ("family KH (8)", "0.585", "0.501", "0.534"), ("family other (9)", "0.549", "0.597", "0.590"),
+            ("assay RNAcompete Eukarya (22)", "0.579", "0.529", "0.561"), ("assay RNAcompete RBPZoo (28)", "0.677", "0.515", "0.557"), ("assay SELEX / RBNS (13)", "0.623", "0.550", "0.557")],
+                "v3b probe AUROC by subset. V2 and V4 are above the nearest protein only in the 9 proteins of the family 'other' (differences +0.048 and +0.041, intervals include 0) and in the 5 proteins without a hit, "
+                "where the nearest-protein score equals the RNA prior; per-subset intervals are wide (3-9 proteins)."),
+        "V2 / V4 on v3b: one seed (seed 0 of V2 was stopped, V4 seeds 0 and 1 not started).")
 
     # ---------------- D
     add(P_D, "The null result on new clusters is caused by a pipeline defect", "Same head on training proteins with new RNAs: 0.83; on new clusters: 0.55.", "R",
@@ -531,7 +562,7 @@ h2.part{font-size:24px;margin:56px 0 4px;padding-top:18px;border-top:3px solid v
 .box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 22px 12px;margin:18px 0}.box h2{font-size:20px;margin:12px 0 4px}.box li{margin:7px 0}
 .test{margin:6px 0 10px}.plain{margin:10px 0}
 .tw{overflow-x:auto;margin:12px 0}table{border-collapse:collapse;width:100%;font-size:15.5px}th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
-th{background:var(--card);font-weight:600}tr.part td{background:var(--fg);color:var(--bg);font-weight:600;font-size:16px}
+th{background:var(--card);font-weight:600}tr.grp td{background:var(--card);font-weight:700;border-top:2px solid var(--line)}table.gl td:first-child{width:24%;white-space:nowrap}tr.part td{background:var(--fg);color:var(--bg);font-weight:600;font-size:16px}
 .note{color:var(--mut);font-size:15px;margin:6px 0 10px}figure{margin:14px 0}figure svg,figure img{max-width:100%;height:auto}svg text{fill:var(--fg)!important}
 svg [style*="stroke: #000000"]{stroke:var(--fg)!important}figcaption{color:var(--mut);font-size:15px;margin-top:4px}
 .chip{font-size:14px;font-weight:600;padding:1px 10px;border-radius:12px;border:1.5px solid currentColor;white-space:nowrap;vertical-align:middle}
@@ -540,7 +571,7 @@ details{margin:8px 0;color:var(--mut);font-size:15px}summary{cursor:pointer;font
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
 @media (max-width:760px){.two{grid-template-columns:1fr}body{font-size:16px}}
 """
-    open_items = [("Table with intervals for every v3b model (V2, V4, heads, hybrid) incl. strata", "script 69 + run_v3b_report.sh on the VM (score files now exist)"),
+    open_items = [("Intervals and subsets for the bilinear heads, hybrid and stack on the v3b probe", "computed on the VM (script 69); columns cut off in the pasted output"),
                   ("Weight-decay variants of the hyper-parameter sweep", "running on the VM"),
                   ("V2 / V4 on v3b: seeds 0 and 1", "not run (V2 seed 0 stopped, V4 not started)"),
                   ("Gap to the published PaRPI numbers with test-based epoch selection (B0)", "planned"),
