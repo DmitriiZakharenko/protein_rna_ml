@@ -686,7 +686,7 @@ details{margin:8px 0;color:var(--mut);font-size:15px}summary{cursor:pointer;font
     ]
     open_items = [                                    ("V2 / V4 on v3b: seeds 0 and 1", "not run"),
                   ("Gap to the published PaRPI numbers with test-based epoch selection (B0)", "planned"),
-                  ("eCLIP re-report without proteins >=90% identical to training; per-assay breakdown of V2 / V4", "needs VM score files"),
+                  ("eCLIP re-report without proteins >=90% identical to training; per-assay breakdown of V2 / V4", "requires score files of V2 / V4 on the eCLIP and in vitro tests"),
                   ("Saliency maps for a model that passes the probe gate", "tools ready (scripts 68, 75); none passes the gate yet"),
                   ("Variant effects and disease link (B3-B4), PU-style negatives, structure-derived priors (Track C)", "not started"),
                   ("PaRPI and RPIEmbeddor 2.0 themselves", "not reproduced (code without data / checkpoints); compared via published numbers and our own models")]
