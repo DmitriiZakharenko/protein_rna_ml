@@ -62,10 +62,10 @@ VERDICT = {"S": ("supported", "ok"), "N": ("not supported", "no"), "P": ("partly
 # ----------------------------------------------------------------------------- figures
 def fig_ladder():
     rows = [("seen protein, own data (standard test)", 0.95, C["own"]), ("seen protein, new RNAs (cross-protein probe)", 0.83, C["own"]),
-            ("homolog >=70% identical (V4, v3a probe)", 0.88, C["v4"]), ("homolog 50-70% (V4, v3a probe)", 0.695, C["v4"]),
+            ("same protein, other assay (k-mer model)", 0.79, C["own"]), ("homolog >=70% identical (V4, v3a probe)", 0.88, C["v4"]), ("homolog 50-70% (V4, v3a probe)", 0.695, C["v4"]),
             ("homolog 30-50% (V4, v3a probe)", 0.699, C["v4"]), ("new cluster, nearest protein (v3b probe)", 0.627, C["nn"]),
             ("new cluster, best neural model (v3b probe)", 0.559, C["v4"]), ("no detectable homolog (V4, v3a probe)", 0.525, C["v4"])]
-    f, ax = plt.subplots(figsize=(9.5, 4.2))
+    f, ax = plt.subplots(figsize=(9.5, 4.6))
     y = np.arange(len(rows))[::-1]
     ax.barh(y, [r[1] for r in rows], color=[r[2] for r in rows])
     for yy, r in zip(y, rows):
@@ -224,6 +224,44 @@ def fig_design():
     f.tight_layout()
     return svg(f)
 
+
+def fig_xproto():
+    names = ["HTR-SELEX", "RBNS", "RNAcompete\nEukarya", "RNAcompete\nRBPZoo"]
+    M = np.array([[0.950, 0.804, 0.783, 0.734], [0.703, 0.993, 0.766, 0.771], [0.832, 0.936, 0.992, 0.953], [0.872, 0.961, 0.987, 0.985]])
+    n = np.array([[54, 33, 34, 12], [33, 60, 38, 14], [34, 38, 58, 11], [12, 14, 11, 24]])
+    f, ax = plt.subplots(figsize=(7.4, 5.6))
+    im = ax.imshow(M, vmin=0.5, vmax=1.0, cmap="YlGnBu")
+    for i in range(4):
+        for j in range(4):
+            ax.text(j, i, f"{M[i, j]:.2f}\n(n={n[i, j]})", ha="center", va="center", fontsize=11, color="white" if M[i, j] > 0.88 else "black")
+    ax.set_xticks(range(4))
+    ax.set_xticklabels(names)
+    ax.set_yticks(range(4))
+    ax.set_yticklabels(names)
+    ax.set_xlabel("tested on this assay")
+    ax.set_ylabel("trained on this assay")
+    f.colorbar(im, ax=ax, label="median AUROC over proteins", fraction=0.04)
+    return svg(f)
+
+
+def models_section() -> str:
+    rows = [
+        ("V2", "RNA <= 60 nt and protein <= 700 aa, one-hot", "Two convolutional branches (3 layers each; filters 128-256-256; kernel sizes 7-5-3 for RNA, 11-7-5 for protein; batch norm, GELU, dropout 0.3), "
+              "global max pooling, concatenation (512 values), classifier 256-64-1", "1.10 M",
+         "Binary cross-entropy with positive-class weight, AdamW, learning rate 5e-4, batch 256, <= 60 epochs, stop on validation AUPRC (patience 8)"),
+        ("V4", "same as V2", "V2 branches plus a bilinear layer: both vectors are projected to 256 values and multiplied element by element; the product and the two branch vectors (768 values) go to a classifier 512-128-32-1",
+         "1.55 M", "As V2; learning rate 3e-4, batch 256-512, patience 10"),
+        ("Frozen-embedding heads", "mean of ESM-2 (650 M parameters, layer 33, <= 1022 aa) and of RNA-FM (layer 12) vectors; both language models are not trained",
+         "Projection of each vector to 256 values (LayerNorm, GELU); head variants: RNA only, protein only, concatenation, bilinear (RNA, protein, RNA x protein); classifier 256-64-1, dropout 0.3",
+         "0.2-0.6 M", "AdamW, learning rate 1e-3, weight decay 1e-2, batch 512, <= 15 epochs of 1500 steps; stop on a cross-protein probe built from validation proteins; ordinary labels or cross-protein negatives"),
+        ("Nearest-protein baseline", "RNA k-mer frequencies (k = 1-4, 340 values) and sequence similarity of proteins", "Logistic regression per training protein; scoring with the model of the most similar training protein", "none (no neural network)", "6000 rows per protein at most"),
+        ("Per-protein model (own data)", "RNA k-mer frequencies", "Logistic regression or random forest per protein", "none", "honest 60/20/20 split by RNA"),
+        ("Per-dataset CNN (PaRPI data)", "RNA 101 nt one-hot, optionally with an icSHAPE channel", "Convolutional network on one dataset, no protein input", "-", "random 80/20 split, 10% of training for epoch selection"),
+    ]
+    return ('<h2 class="part">Models and training</h2>'
+            + table(["Model", "Input", "Architecture", "Parameters", "Training"], [(f"<b>{a}</b>", b, c, d, e) for a, b, c, d, e in rows],
+                    "All V2 / V4 results use 3 seeds on v3a and 1 seed on v3b unless stated; one-hot sequences are cut at 60 nt (RNA) and 700 aa (protein)."))
+
 def parpi_frames():
     out = []
     for cell, fn in (("HeLa", "our_models_Hela.tsv"), ("H9", "our_cnn_H9.tsv"), ("HEK293T", "our_cnn_HEK293T.tsv"), ("HEK293", "our_cnn_HEK293.tsv"),
@@ -307,7 +345,7 @@ def terms_section() -> str:
     gl = [
         ("Data", [
             ("In vitro data", "Binding experiments HTR-SELEX and RBNS (RNAs selected from random pools) and RNAcompete (fixed RNA probes). 494 proteins, 2.66 million (protein, RNA) pairs, label: binds = 1, does not bind = 0."),
-            ("In vivo data", "eCLIP / CLIP: protein-RNA crosslinking in cells, 101-nt windows (section 5). PaRPI: published benchmark of 261 such datasets."),
+            ("In vivo data", "eCLIP / CLIP: protein-RNA crosslinking in cells, 101-nt windows (section 6). PaRPI: published benchmark of 261 such datasets."),
             ("v3a", "In vitro data split into train / validation / test by protein name. Relatives (homologs) of a test protein can be in the training set."),
             ("v3b", "Same data split by homology cluster: proteins with >= 40% sequence identity over >= 50% of their length (MMseqs2) are always on the same side. "
                     "160 clusters; 375 / 55 / 64 proteins in train / validation / test; test proteins have no close relative in training."),
@@ -334,7 +372,7 @@ def terms_section() -> str:
         ("Biology", [
             ("Pfam, RRM, KH", "Pfam: database of protein domain families; RRM and KH: the two most common RNA-binding domain families."),
             ("k-mer, motif", "k-mer: sequence of k nucleotides. Motif: short sequence pattern preferred by a protein (e.g. GCAUG for RBFOX2)."),
-            ("icSHAPE", "Probing of RNA structure inside cells; used as an extra input channel in section 5."),
+            ("icSHAPE", "Probing of RNA structure inside cells; used as an extra input channel in section 6."),
         ]),
     ]
     rows = []
@@ -343,9 +381,9 @@ def terms_section() -> str:
         rows += [f"<tr><td><b>{a}</b></td><td>{b}</td></tr>" for a, b in items]
     return ('<h2 class="part">0. Task, design and terms</h2>'
             '<p class="plain">Question of this report: do models that receive the protein sequence predict RNA binding for proteins that were not used for training, '
-            'or do they use only RNA composition and the similarity of the protein to training proteins? All results are measured on in vitro data unless section 5 says otherwise.</p>'
+            'or do they use only RNA composition and the similarity of the protein to training proteins? All results are measured on in vitro data unless section 6 says otherwise.</p>'
             + figure(fig_design(), "Construction of the two tests and of the two data splits used throughout the report.")
-            + '<div class="tw"><table class="gl"><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>' + "".join(rows) + "</tbody></table></div>")
+            + '<div class="tw"><table class="gl"><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>' + "".join(rows) + "</tbody></table></div>" + models_section())
 
 
 # ----------------------------------------------------------------------------- content
@@ -367,8 +405,8 @@ def build() -> str:
     def add(part, question, key, verdict, test, body, caveat=""):
         blocks.append((part, question, key, verdict, test, body, caveat))
 
-    P_A, P_B, P_C, P_D, P_E, P_F = ("1. Data and baselines", "2. Evaluation design", "3. Transfer to new proteins",
-                                    "4. Attempts to improve transfer; controls", "5. In vivo data (eCLIP, PaRPI)", "6. Affinity")
+    P_A, P_B, P_X, P_C, P_D, P_E, P_F = ("1. Data and baselines", "2. Evaluation design", "3. Transfer across assays and to external data", "4. Transfer to new proteins",
+                                         "5. Attempts to improve transfer; controls", "6. In vivo data (eCLIP, PaRPI)", "7. Affinity")
 
     # ---------------- A
     add(P_A, "Data and splits", "Test proteins >=50% identical to training: 62% (v3a) -> 3% (v3b).", None,
@@ -405,6 +443,21 @@ def build() -> str:
         "Our re-implementation does not reproduce the published numbers (RPI369 random 0.974 vs 0.85 reported); the claim concerns dataset properties only. De-duplicated pairs, untuned forest.")
 
     # ---------------- C
+    add(P_X, "A model trained on one assay predicts binding of the same protein in another assay", "Median AUROC 0.70-0.99 across 12 assay pairs (mean 0.79, 284 protein x direction rows).", "S",
+        "84 proteins measured in >= 2 assays (HTR-SELEX, RBNS, RNAcompete Eukarya, RNAcompete RBPZoo). Per protein, a k-mer logistic regression (k = 4) is trained on the RNAs of assay A and scored on the RNAs of assay B (scripts 33-36).",
+        figure(fig_xproto(), "Median AUROC over proteins. Diagonal: trained and tested on the same assay (held-out RNAs). Off-diagonal: trained on the row assay, tested on the column assay; n = number of proteins.")
+        + table(["Measure", "Value"], [("within the same assay (median over proteins)", "HTR-SELEX 0.950, RBNS 0.993, RNAcompete Eukarya 0.992, RNAcompete RBPZoo 0.985"),
+                                        ("across assays, mean over 284 protein x direction rows", "0.791; 24 of 284 rows below 0.55"),
+                                        ("RNA sequences shared between assays", "about 0 for SELEX / RBNS / RNAcompete; about 23% between the two RNAcompete sets"),
+                                        ("top 7-mers shared across assays (142 protein x assay pairs)", "median Jaccard 0.0; the core 5-mer is shared in 66 of 142")],
+                "Transfer works without shared top 7-mers: the specificity of a protein is partly consistent across assays although the RNA sets differ."),
+        "Same protein in both assays: this is transfer between methods, not to new proteins. RNA-only per-protein models; 84 proteins with >= 2 assays, 82% domain-annotated.")
+    add(P_X, "Models trained on in vitro data rank binders on an independent literature benchmark (long RNAs)", "Curated set (159 pairs): AUROC 0.763 (V2), 0.737 (V4).", "P",
+        "Literature RNA-protein pairs with long RNAs, scored by the maximum over sliding windows (scripts 11, 21b); V2 and V4 trained on v3a (seed 42).",
+        table(["Subset", "V2 AUROC", "V4 AUROC", "V2 AUPRC", "V4 AUPRC"], [("curated (159 pairs)", "0.763", "0.737", "0.915", "0.890"), ("expanded (540 pairs)", "0.688", "0.666", "0.488", "0.341")],
+              "V4, better on the in vitro test (0.829 vs 0.813), is slightly worse on the literature set; the dataset-source embedding of V4 is zero at external inference."),
+        "External set is small and mixed in origin; whether its proteins have relatives in the training data was not audited.")
+
     add(P_C, "Transfer to unseen proteins depends on sequence identity to training proteins", "V4 probe AUROC rises from 0.52 (no hit) to 0.88 (>=70% identity).", "S",
         "Probe AUROC of V2 and V4 (3 seeds each) and of the nearest-protein baseline, by identity bin of the test protein (v3a).",
         figure(fig_bins(), "v3a probe. Every model rises with identity and is at chance without a homolog; the nearest-protein baseline matches V4 from 30% identity on.")
@@ -416,7 +469,8 @@ def build() -> str:
         "3 seeds each; paired V4 - V2 per seed +0.061, +0.085, +0.058 (V4 wins every seed).",
         table(["Scorer", "v3a standard", "v3a probe", "probe, per-protein median"], [
             ("RNA prior", kc(k3a_s, "mean_lr"), kc(k3a_p, "mean_lr"), "0.547"), ("nearest protein nn1", kc(k3a_s, "nn1_lr"), kc(k3a_p, "nn1_lr"), "0.831"),
-            ("nearest protein nn3", kc(k3a_s, "nn3_lr"), kc(k3a_p, "nn3_lr"), "0.831"), ("V2 (3 seeds)", "~0.81", "0.686 +/- 0.015", "0.696"), ("V4 (3 seeds)", "~0.81", "0.754 +/- 0.001", "0.759")]),
+            ("nearest protein nn3", kc(k3a_s, "nn3_lr"), kc(k3a_p, "nn3_lr"), "0.831"), ("V2 (3 seeds)", "0.813", "0.686 +/- 0.015", "0.696"), ("V4 (3 seeds)", "0.829 +/- 0.009", "0.754 +/- 0.001", "0.759")],
+                "On the standard v3a test, per-protein median AUROC is 0.817 (V2) and 0.854 +/- 0.004 (V4): with relatives of the test proteins in training, both models predict binding well."),
         "V4 > V2 is robust; V4 > baseline is not (intervals overlap, baseline per-protein median is higher).")
     add(P_C, "V2, V4 and frozen-embedding heads exceed the nearest-protein baseline on the cluster split (v3b)", "v3b probe: nn1 0.627, V4 0.559, V2 0.527.", "N",
         "V2 and V4 retrained on v3b (seed 42), frozen-embedding heads (3 seeds), hybrids; all scored on the same probe.",
@@ -428,9 +482,13 @@ def build() -> str:
             ("V4 (seed 42)", "0.559 [0.527, 0.587]", "-0.068 [-0.147, +0.000]", "0.676"),
             ("RNA-only head (seed 42)", "0.500 [0.464, 0.537]", "-0.127 [-0.203, -0.047]", "0.652 [0.613, 0.698]"),
             ("protein-only head (seed 42)", "0.507 [0.478, 0.533]", "-0.120 [-0.197, -0.045]", "0.506 [0.499, 0.519]"),
-            ("concat head (seed 42)", "0.528 [0.485, 0.571]", "-", "0.610 [0.567, 0.666]")],
+            ("concat head (seed 42)", "0.528 [0.485, 0.571]", "-0.099 [-0.156, -0.045]", "0.610 [0.567, 0.666]"),
+            ("bilinear head, ordinary labels (seed 42)", "0.551 [0.508, 0.593]", "-0.076 [-0.144, -0.015]", "0.659 [0.618, 0.709]"),
+            ("bilinear head + cross-protein negatives (seed 42)", "0.570 [0.522, 0.622]", "-0.057 [-0.117, -0.001]", "0.548"),
+            ("joint hybrid, nearest protein + head trained together (seed 42)", "0.557 [0.511, 0.604]", "-0.070 [-0.127, -0.022]", "0.533"),
+            ("stack, nearest protein + frozen head, weights fitted on validation (seed 42)", "0.630 [0.567, 0.691]", "+0.003 [-0.000, +0.008]", "0.676")],
                 "Intervals: resampling of proteins, the same draws for all models (paired differences). A difference whose interval excludes 0 is a difference between models, not noise in the choice of test proteins. "
-                "Intervals for the bilinear heads, the hybrid and the stack were cut off in the pasted run output.")
+                "Every neural model is significantly below the nearest protein except the stack, which contains it.")
         + table(["Subset of test proteins (number)", "nearest protein", "V2", "V4"], [
             ("all (63)", "0.627", "0.527", "0.559"), ("identity 30-50% (53)", "0.635", "0.525", "0.564"), ("no hit (5)", "0.628 (= RNA prior)", "0.609", "0.564"),
             ("family RRM (43)", "0.651", "0.522", "0.556"), ("family KH (8)", "0.585", "0.501", "0.534"), ("family other (9)", "0.549", "0.597", "0.590"),
@@ -438,6 +496,18 @@ def build() -> str:
                 "v3b probe AUROC by subset. V2 and V4 are above the nearest protein only in the 9 proteins of the family 'other' (differences +0.048 and +0.041, intervals include 0) and in the 5 proteins without a hit, "
                 "where the nearest-protein score equals the RNA prior; per-subset intervals are wide (3-9 proteins)."),
         "V2 / V4 on v3b: one seed (seed 0 of V2 was stopped, V4 seeds 0 and 1 not started).")
+
+    add(P_C, "V2 trained on SELEX / RBNS transfers to unseen RNAcompete proteins", "Unseen proteins: median AUROC 0.549; seen proteins: 0.629.", "N",
+        "V2 trained on 169 proteins (HTR-SELEX, RBNS) scored on RNAcompete data of 742 proteins from 26 organisms (2 million rows; script 20).",
+        table(["Subset", "AUROC"], [("all rows", "0.571 (AUPRC 0.391 vs 0.316 expected by chance)"), ("per-protein median, all 742 proteins", "0.551"), ("seen in training (27 proteins)", "0.629"),
+                                    ("unseen (715 proteins)", "0.549"), ("human RBP from ucRBP (613 proteins, 1.45 M rows)", "0.554"), ("Saccharomyces cerevisiae / Puccinia graminis", "0.830 / 0.811"),
+                                    ("Arabidopsis thaliana / human RBPZoo + Eukarya", "0.674 / 0.671"), ("proteins with AUROC > 0.9", "TAF15, EWSR1, RBFOX2, ZRANB2, ESRP1 (all except TAF15 are in the training set)")]),
+        "Earliest zero-shot result, before the larger v3a training set; the high values for some organisms rest on few proteins and relatives in the training set were not audited.")
+    add(P_C, "Adding a coarse domain-class label (RRM / KH / CCCH / multi) to V2 improves prediction", "Test AUROC 0.847 (baseline) vs 0.842 (domain label) vs 0.855 (label shuffled).", "N",
+        "V2 with a learned domain-class embedding on 465 proteins of known domain class, protein-disjoint split (script 38).",
+        table(["Mode", "AUROC", "AUPRC", "per-protein median"], [("baseline", "0.8470", "0.7473", "0.8594"), ("domain label", "0.8418", "0.7447", "0.8468"), ("domain label shuffled", "0.8549", "0.7528", "0.8851")],
+              "The shuffled label is best, so the gain from extra head parameters exceeds any domain information."),
+        "One seed. Coarse classes only; per-protein domain annotation with Pfam was not used as a model input.")
 
     # ---------------- D
     add(P_D, "The null result on new clusters is caused by a pipeline defect", "Same head on training proteins with new RNAs: 0.83; on new clusters: 0.55.", "R",
@@ -545,6 +615,7 @@ def build() -> str:
     findings = [
         "On the name-level split (v3a), V4 (CNN with a bilinear protein-RNA layer) reaches AUROC 0.754 on the cross-protein probe. This tracks the sequence identity of the test protein to training proteins "
         "(0.52 without a homolog, 0.88 at >= 70% identity), and the nearest-protein baseline, which contains no protein model, reaches 0.746.",
+        "Within one assay, per-protein models reach AUROC 0.95-0.99. A model trained on one assay scores the same protein's RNAs in another assay at median AUROC 0.70-0.99 (mean 0.79 over 284 protein x assay pairs); on the standard v3a test, where relatives of the test proteins are in training, V4 reaches 0.829.",
         "After removing homologs (v3b), the nearest-protein baseline scores 0.627; V2 / V4 (CNNs trained on one-hot sequences) score 0.527 / 0.559 and heads on frozen ESM-2 + RNA-FM embeddings 0.50-0.56 (3 seeds). "
         "Adding the heads to the baseline raises the score by 0.004.",
         "The same frozen-embedding heads reach 0.83 on proteins seen in training with new RNAs: training works, transfer to unseen homology clusters does not.",
@@ -571,8 +642,7 @@ details{margin:8px 0;color:var(--mut);font-size:15px}summary{cursor:pointer;font
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
 @media (max-width:760px){.two{grid-template-columns:1fr}body{font-size:16px}}
 """
-    open_items = [("Intervals and subsets for the bilinear heads, hybrid and stack on the v3b probe", "computed on the VM (script 69); columns cut off in the pasted output"),
-                  ("Weight-decay variants of the hyper-parameter sweep", "running on the VM"),
+    open_items = [                  ("Weight-decay variants of the hyper-parameter sweep", "running on the VM"),
                   ("V2 / V4 on v3b: seeds 0 and 1", "not run (V2 seed 0 stopped, V4 not started)"),
                   ("Gap to the published PaRPI numbers with test-based epoch selection (B0)", "planned"),
                   ("eCLIP re-report without proteins >=90% identical to training; per-assay breakdown of V2 / V4", "needs VM score files"),
@@ -583,12 +653,12 @@ details{margin:8px 0;color:var(--mut);font-size:15px}summary{cursor:pointer;font
             f'<title>Transfer Audit Draft</title><style>{css}</style></head><body><main>'
             f'<h1>Protein-RNA binding models: what transfers to new proteins</h1>'
             f'<p class="meta">Draft, {today}, repository commit {commit}. Every number is traceable to EXPERIMENT_LOG.md or a results file; single-seed results are marked. '
-            f'Sections: 1 data and baselines, 2 evaluation design, 3 transfer to new proteins, 4 attempts and controls, 5 in vivo data, 6 affinity, 7 not done. M = method, H = hypothesis, I = illustration.</p>'
+            f'Sections: 1 data and baselines, 2 evaluation design, 3 transfer across assays and to external data, 4 transfer to new proteins, 5 attempts and controls, 6 in vivo data, 7 affinity, 8 not done. M = method, H = hypothesis, I = illustration.</p>'
             f'{terms_section()}<div class="box"><h2>Main results</h2><ol>' + "".join(f"<li>{html.escape(x)}</li>" for x in findings) + "</ol></div>"
-            f'{figure(fig_ladder(), "AUROC as the test protein becomes less known. Dark bars: seen proteins; blue: neural models; orange: nearest-protein baseline. Values are taken from sections 1-4.")}'
+            f'{figure(fig_ladder(), "AUROC on different tests as knowledge of the test protein decreases (the tests differ; values are taken from sections 1-5). Dark bars: seen protein or the same protein in another assay; blue: neural models; orange: nearest-protein baseline.")}'
             f'<h2 class="part">Table 1. Hypotheses and outcomes</h2><div class="tw"><table><thead><tr><th>No.</th><th>Statement</th><th>Outcome</th><th>Key number</th></tr></thead><tbody>'
             + "".join(glance) + "</tbody></table></div>")
-    tail = '<h2 class="part">7. Not done or pending</h2>' + table(["Item", "Status"], open_items)
+    tail = '<h2 class="part">8. Not done or pending</h2>' + table(["Item", "Status"], open_items)
     return head + "".join(secs) + tail + "</main></body></html>"
 
 
