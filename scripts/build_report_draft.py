@@ -699,8 +699,7 @@ details{margin:8px 0;color:var(--mut);font-size:15px}summary{cursor:pointer;font
             f'<h2 class="part">Table 1. Hypotheses and outcomes</h2><div class="tw"><table><thead><tr><th>No.</th><th>Statement</th><th>Outcome</th><th>Key number</th></tr></thead><tbody>'
             + "".join(glance) + "</tbody></table></div><p class=\"note\">M = method, H = hypothesis, I = illustration.</p>")
     tail = ('<h2 class="part">8. Not done or pending</h2>' + table(["Item", "Status"], open_items)
-            + '<h2 class="part">9. Next hypotheses and tests</h2>' + table(["No.", "Hypothesis", "Test", "Decision rule"], next_rows,
-                                                                             "Decision rules are set before the experiment; a hypothesis that fails its rule is reported as not supported."))
+            + '<h2 class="part">9. Next hypotheses and tests</h2>' + table(["No.", "Hypothesis", "Test", "Decision rule"], next_rows))
     return head + "".join(secs) + tail + "</main></body></html>"
 
 
