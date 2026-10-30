@@ -109,12 +109,40 @@ def fit(model, fwd, tr, y_tr, va, y_va, device, epochs, lr=1e-3, bs=256, patienc
     return best
 
 
+def run_per_dataset(files, args, device) -> None:
+    rows = []
+    f1 = lambda mod, a: mod(a)  # noqa: E731
+    for f in files:
+        d = pd.read_csv(f, sep="\t", usecols=["Seq", "icshape", "Protein", "label"])
+        y = d.label.to_numpy()
+        tr, te = train_test_split(np.arange(len(d)), test_size=0.2, stratify=y, random_state=args.seed)
+        tr, va = train_test_split(tr, test_size=0.1, stratify=y[tr], random_state=args.seed)
+        x = torch.from_numpy(onehot(d.Seq.tolist(), RNA, L))
+        xs = torch.cat([x, torch.from_numpy(shape_feat(d.icshape.tolist()))], dim=2)
+        r = {"dataset": f.stem}
+        for name, X, ch in (("rna_cnn", x, 4), ("rna_shape_cnn", xs, 6)):
+            m = RnaCnn(ch).to(device)
+            fit(m, f1, [X[tr]], y[tr], [X[va]], y[va], device, args.epochs)
+            r[name] = float(roc_auc_score(y[te], predict(m, f1, [X[te]], device)))
+        rows.append(r)
+        print(f.stem, {k: round(v, 4) for k, v in r.items() if k != "dataset"}, flush=True)
+    df = pd.DataFrame(rows)
+    pub = pd.read_excel(ROOT / "data/external/parpi/SupplementaryData1.xlsx", sheet_name="Figure 2(a-c)", header=1).rename(columns={"model": "dataset"})
+    df = df.merge(pub[["dataset", "PaRPI", "HDRNet", "Prismnet", "deepbind", "iDeep"]], on="dataset", how="left")
+    out = ROOT / "results/parpi_audit"
+    out.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out / f"our_cnn_{args.cell}.tsv", sep="\t", index=False)
+    print("\nmedian AUROC over", len(df), "datasets in", args.cell, df.drop(columns="dataset").median().round(4).to_dict())
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--cell", default="Hela")
     ap.add_argument("--epochs", type=int, default=12)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--max_datasets", type=int, default=0)
+    ap.add_argument("--skip_pooled", action="store_true",
+                    help="only the per-dataset protein-free CNNs, one dataset at a time (large cell lines)")
     args = ap.parse_args()
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -122,6 +150,9 @@ def main() -> None:
     files = sorted((DATA / "clip_data").glob(f"*_{args.cell}.tsv"))
     if args.max_datasets:
         files = files[: args.max_datasets]
+    if args.skip_pooled:
+        run_per_dataset(files, args, device)
+        return
     D = {}
     for f in files:
         d = pd.read_csv(f, sep="\t", usecols=["Seq", "icshape", "Protein", "label"])
