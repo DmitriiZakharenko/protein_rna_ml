@@ -103,7 +103,7 @@ def import_multimolecule():
         return deco
 
     stubbed = set()
-    for _ in range(6):
+    for _ in range(12):
         try:
             from multimolecule import RnaFmModel, RnaTokenizer
             return RnaFmModel, RnaTokenizer
@@ -116,10 +116,13 @@ def import_multimolecule():
                 tl.custom_op = passthrough
                 continue
             root = None
-            for cand in ("danling", "chanfig", "torchdata", "datasets"):
-                if cand in msg and cand not in stubbed:
-                    root = cand
-                    break
+            if isinstance(e, ModuleNotFoundError) and e.name and e.name not in stubbed:
+                root = e.name
+            else:
+                for cand in ("danling", "chanfig", "torchdata", "datasets"):
+                    if cand in msg and cand not in stubbed:
+                        root = cand
+                        break
             if root is None:
                 raise
             stubbed.add(root)
