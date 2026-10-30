@@ -697,7 +697,7 @@ details{margin:8px 0;color:var(--mut);font-size:15px}summary{cursor:pointer;font
     head = (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>Binding Model Results</title><style>{css}</style></head><body><main>'
             f'<h1>Protein-RNA binding models: what transfers to new proteins</h1>'
-            f'<p class="meta">Results of the latest work.</p>'
+            f'<p class="meta">Dmitrii, {datetime.date.today().strftime("%d.%m.%y")}. Results of the latest work.</p>'
             f'{terms_section()}<div class="box"><h2>Main results</h2><ol>' + "".join(f"<li>{html.escape(x)}</li>" for x in findings) + "</ol></div>"
             f'{figure(fig_ladder(), "AUROC on different tests as knowledge of the test protein decreases (the tests differ; values are taken from sections 1-5). Dark bars: seen protein or the same protein in another assay; blue: neural models; orange: nearest-protein baseline.")}'
             f'<h2 class="part">Table 1. Hypotheses and outcomes</h2><div class="tw"><table><thead><tr><th>No.</th><th>Statement</th><th>Outcome</th><th>Key number</th></tr></thead><tbody>'
