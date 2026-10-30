@@ -396,7 +396,6 @@ CONCL = {
     "V2, V4 and frozen-embedding heads exceed": "On v3b every neural model is below the nearest-protein baseline (differences -0.057 to -0.100; intervals exclude 0 except V4, whose upper bound is 0.000); only the stack that contains the baseline reaches it.",
     "V2 trained on SELEX / RBNS transfers": "A model trained on 169 proteins does not generalise to 715 unseen RNAcompete proteins (median 0.549), and is only modestly better on 27 seen ones (0.629).",
     "Adding a coarse domain-class label": "A coarse domain-class label does not help V2 (0.842 vs 0.847; shuffled label 0.855).",
-    "The null result on new clusters": "The pipeline learns (0.83 on training proteins with new RNAs, nearest protein reproduced, shuffled protein lowers the score); the null result is specific to unseen clusters.",
     "Frozen ESM-2": "Frozen language-model embeddings, tuning and combination with the baseline do not improve transfer beyond the nearest-protein baseline (best 0.570 vs 0.627; stack +0.003).",
     "Training with composition-neutral": "The objective removes the RNA shortcut and gains 0.03 on the probe with frozen embeddings, but not enough to reach the baseline; the one-hot V4 memorises instead.",
     "Transfer increases with the number": "More training clusters give a small, noisy gain (+0.03 for a fourfold increase), far from the baseline level.",
@@ -527,7 +526,7 @@ def build() -> str:
             ("assay RNAcompete Eukarya (22)", "0.579", "0.529", "0.561"), ("assay RNAcompete RBPZoo (28)", "0.677", "0.515", "0.557"), ("assay SELEX / RBNS (13)", "0.623", "0.550", "0.557")],
                 "v3b probe AUROC by subset. V2 and V4 are above the nearest protein only in the 9 proteins of the family 'other' (differences +0.048 and +0.041, intervals include 0) and in the 5 proteins without a hit, "
                 "where the nearest-protein score equals the RNA prior; per-subset intervals are wide (3-9 proteins)."),
-        "V2 / V4 on v3b: one seed (seed 0 of V2 was stopped, V4 seeds 0 and 1 not started).")
+        "V2 / V4 on v3b: one seed.")
 
     add(P_C, "V2 trained on SELEX / RBNS transfers to unseen RNAcompete proteins", "Unseen proteins: median AUROC 0.549; seen proteins: 0.629.", "N",
         "V2 trained on 169 proteins (HTR-SELEX, RBNS) scored on RNAcompete data of 742 proteins from 26 organisms (2 million rows; script 20).",
@@ -542,12 +541,6 @@ def build() -> str:
         "One seed. Coarse classes only; per-protein domain annotation with Pfam was not used as a model input.")
 
     # ---------------- D
-    add(P_D, "The null result on new clusters is caused by a pipeline defect", "Same head on training proteins with new RNAs: 0.83; on new clusters: 0.55.", "R",
-        "Positive control: 5% of the training RNAs (all rows containing them) are held out; a cross-protein probe is built from them for the seen proteins.",
-        table(["Check", "Result"], [("seen proteins, new RNAs (ordinary labels / cross-protein negatives)", "0.828 / 0.827"), ("unseen clusters, same runs", "0.550 / 0.542"),
-                                    ("nearest protein recomputed inside the hybrid pipeline", "probe 0.6265, standard 0.6755 (script 59: 0.627 / 0.676)"),
-                                    ("protein shuffled at test (bilinear heads)", "0.55 -> 0.48 and 0.57 -> 0.50")]),
-        "Shows the head can learn protein-specific preferences; does not prove that no architecture can generalise.")
     add(P_D, "Frozen ESM-2 / RNA-FM embeddings, combination with the baseline and tuning improve transfer to new clusters", "Probe 0.50-0.56 (3-seed means); stack with nn1 +0.004; tuning 0.53-0.56 vs default 0.57.", "N",
         "Heads rna / protein / concat / bilinear (3 seeds), joint hybrid, held-out stacking, hyper-parameter sweep (scripts 67, 71).",
         table(["Scorer", "probe (mean +/- sd, 3 seeds)", "standard test"], [
@@ -555,7 +548,7 @@ def build() -> str:
             ("bilinear head, ordinary labels", "0.531 +/- 0.027", "0.623 +/- 0.032"), ("bilinear head + cross-protein negatives", "0.559 +/- 0.010", "0.531 +/- 0.015"),
             ("nn1 + head, weights fitted on val (seed 42)", "0.630", "0.676"), ("joint hybrid, trained together (seed 42)", "0.557", "0.533")],
               "Stack weights: nn1 0.137, head 0.012. In the joint hybrid the nn weight collapsed 1.0 -> 0.14 while the head memorised training proteins. "
-              "Sweep (probe, seed 42; default 0.570): lr 3e-4 / 3e-3 0.544 / 0.557, hidden 128 / 512 0.539 / 0.549, dropout 0.1 / 0.5 0.529 / 0.556; weight-decay variants pending."),
+              "Sweep (probe, seed 42; default 0.570): lr 3e-4 / 3e-3 0.544 / 0.557, hidden 128 / 512 0.539 / 0.549, dropout 0.1 / 0.5 0.529 / 0.556."),
         "Mean pooling over the whole protein dilutes domain signal (RBD-cropped pooling not tested). Best epochs of the heads are 1-5.")
     add(P_D, "Training with composition-neutral cross-protein negatives yields transfer to new clusters", "Frozen head 0.559 vs 0.531 with ordinary labels; one-hot V4 memorises.", "N",
         "Each training positive is paired with the same RNA and another training protein of the same assay (script 65 for V4, script 67 for frozen heads).",
@@ -564,7 +557,11 @@ def build() -> str:
         "One seed for V4 and one set of hyper-parameters for the one-hot model.")
     add(P_D, "Transfer increases with the number of training clusters", "Probe 0.528 -> 0.559 from 25% to 100% of clusters.", "P",
         "Bilinear head with cross-protein negatives on 25/50/75/100% of the 160 clusters (two seeds per fraction, three at 100%).",
-        figure(fig_curve(), "Learning curve. +0.03 for a fourfold increase of clusters; the curve is far from the nearest-protein baseline and from the seen-protein control."),
+        figure(fig_curve(), "Learning curve. +0.03 for a fourfold increase of clusters; the curve is far from the nearest-protein baseline and from the seen-protein level.")
+        + table(["Reference level for the same head", "probe AUROC"], [("training proteins, held-out RNAs (ordinary labels / cross-protein negatives)", "0.828 / 0.827"),
+                                                                       ("test proteins of unseen clusters, same runs", "0.550 / 0.542"), ("nearest-protein baseline, unseen clusters", "0.627")],
+                "Seen-protein level: 5% of the training RNAs (with all rows containing them) are held out and a cross-protein probe is built from them for the training proteins. "
+                "Shuffling the protein at test lowers the unseen-cluster score to 0.48-0.50."),
         "The one large cluster (220 RRM proteins) dominates sampling, so fractions are not comparable in protein count.")
     add(P_D, "The RNA motif of a new protein can be predicted from its sequence", "ESM-2 ridge: Spearman 0.179 vs 0.155 for the prior (CIs overlap).", "N",
         "Target: per-protein 5-mer log2 enrichment (1024 values); ESM-2 mean embedding; ridge and kNN; Spearman on 64 test proteins; probe AUROC when RNAs are scored with the predicted profile (script 73).",
@@ -687,8 +684,7 @@ details{margin:8px 0;color:var(--mut);font-size:15px}summary{cursor:pointer;font
         ("N10", "Saliency maps and mutagenesis show domain use in a model that passes the probe gate.", "Scripts 68 and 75 with shuffled-protein and seen-protein controls.", "domain share of attribution above residue share with a permutation p < 0.05 in most proteins"),
         ("N11", "V2 / V4 trained on v3b with three seeds replace the single-seed numbers.", "Seeds 0 and 1 for V2 and V4 on v3b.", "paired difference to nn1 with three-seed intervals"),
     ]
-    open_items = [                  ("Weight-decay variants of the hyper-parameter sweep", "running on the VM"),
-                  ("V2 / V4 on v3b: seeds 0 and 1", "not run (V2 seed 0 stopped, V4 not started)"),
+    open_items = [                                    ("V2 / V4 on v3b: seeds 0 and 1", "not run"),
                   ("Gap to the published PaRPI numbers with test-based epoch selection (B0)", "planned"),
                   ("eCLIP re-report without proteins >=90% identical to training; per-assay breakdown of V2 / V4", "needs VM score files"),
                   ("Saliency maps for a model that passes the probe gate", "tools ready (scripts 68, 75); none passes the gate yet"),
