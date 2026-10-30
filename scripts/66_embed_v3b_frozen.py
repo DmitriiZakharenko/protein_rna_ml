@@ -65,20 +65,32 @@ def embed_proteins(df: pd.DataFrame, out: Path, device) -> None:
 
 
 @torch.no_grad()
-def embed_rna(df: pd.DataFrame, out: Path, device, batch: int) -> None:
-    import fm
-    model, alphabet = fm.pretrained.rna_fm_t12()
-    model = model.half().to(device).eval()
-    conv = alphabet.get_batch_converter()
+def embed_rna(df: pd.DataFrame, out: Path, device, batch: int, backend: str) -> None:
     seqs = sorted(df.rna_sequence.unique(), key=len)
     embs = np.zeros((len(seqs), 640), dtype=np.float16)
     t0 = time.time()
+    if backend == "hf":
+        from multimolecule import RnaFmModel, RnaTokenizer
+        tok = RnaTokenizer.from_pretrained("multimolecule/rnafm")
+        model = RnaFmModel.from_pretrained("multimolecule/rnafm").half().to(device).eval()
+    else:
+        import fm
+        model, alphabet = fm.pretrained.rna_fm_t12()
+        model = model.half().to(device).eval()
+        conv = alphabet.get_batch_converter()
     for i in range(0, len(seqs), batch):
         chunk = [clean(s, "ACGU") for s in seqs[i:i + batch]]
-        _, _, tok = conv([(str(j), s) for j, s in enumerate(chunk)])
-        rep = model(tok.to(device), repr_layers=[12])["representations"][12]
-        for j, s in enumerate(chunk):
-            embs[i + j] = rep[j, 1:len(s) + 1].float().mean(0).cpu().numpy()
+        if backend == "hf":
+            x = tok(chunk, return_tensors="pt", padding=True).to(device)
+            h = model(**x).last_hidden_state.float()
+            for j in range(len(chunk)):
+                n = len(chunk[j])
+                embs[i + j] = h[j, 1:n + 1].mean(0).cpu().numpy()
+        else:
+            _, _, tokens = conv([(str(j), s) for j, s in enumerate(chunk)])
+            rep = model(tokens.to(device), repr_layers=[12])["representations"][12]
+            for j, s in enumerate(chunk):
+                embs[i + j] = rep[j, 1:len(s) + 1].float().mean(0).cpu().numpy()
         if (i // batch) % 200 == 0:
             print(f"  rna {i + len(chunk)}/{len(seqs)}  {time.time() - t0:.0f}s", flush=True)
     np.savez(out / "rna_rnafm.npz", seqs=np.array(seqs), emb=embs)
@@ -92,6 +104,8 @@ def main() -> None:
     ap.add_argument("--probe_tsv", default="data/benchmarks/v3b_cross_neg/cross_neg_probe/test.tsv")
     ap.add_argument("--out_dir", default="data/embeddings_v3b")
     ap.add_argument("--rna_batch", type=int, default=256)
+    ap.add_argument("--rna_backend", choices=["hf", "fm"], default="hf",
+                    help="hf = multimolecule/rnafm from HuggingFace; fm = original rna-fm package (weights server may refuse)")
     ap.add_argument("--limit", type=int, default=0, help="debug: only the first N unique sequences")
     args = ap.parse_args()
 
@@ -106,7 +120,7 @@ def main() -> None:
     if args.stage == "proteins":
         embed_proteins(df, out, device)
     else:
-        embed_rna(df, out, device, args.rna_batch)
+        embed_rna(df, out, device, args.rna_batch, args.rna_backend)
 
 
 if __name__ == "__main__":
