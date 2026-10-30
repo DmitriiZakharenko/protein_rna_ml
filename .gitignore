@@ -79,3 +79,4 @@ results/skipper_eclip/cache/
 results/skipper_eclip/bed6/
 results/skipper_eclip/bed10/
 results/skipper_eclip/*.log
+data/embeddings_v3b/
