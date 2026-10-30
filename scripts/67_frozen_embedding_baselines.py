@@ -125,6 +125,14 @@ def main() -> None:
     ap.add_argument("--val_pos", type=int, default=20000)
     ap.add_argument("--patience", type=int, default=5)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--hidden", type=int, default=256)
+    ap.add_argument("--dropout", type=float, default=0.3)
+    ap.add_argument("--wd", type=float, default=1e-2)
+    ap.add_argument("--split_map", default="results/v3b/protein_split_map.tsv")
+    ap.add_argument("--cluster_frac", type=float, default=1.0, help="train on a random fraction of the training CLUSTERS (learning curve)")
+    ap.add_argument("--seen_probe_frac", type=float, default=0.0,
+                    help="positive control: hold out this fraction of the training RNAs (all rows with them), evaluate a cross-protein probe "
+                         "on them for the SEEN training proteins")
     ap.add_argument("--out_dir", default="results/v3b_frozen/run")
     args = ap.parse_args()
 
@@ -141,11 +149,25 @@ def main() -> None:
     test = pd.read_csv(data / "test.tsv", sep="\t", usecols=cols, low_memory=False)
     probe = pd.read_csv(resolve(args.probe_tsv), sep="\t", usecols=cols, low_memory=False)
     ident = pd.read_csv(resolve(args.identity_tsv), sep="\t")
+    if args.cluster_frac < 1.0:
+        cl = pd.read_csv(resolve(args.split_map), sep="\t").set_index("protein_name").cluster_id.to_dict()
+        ids = sorted({cl[p] for p in train.protein_name.unique() if p in cl})
+        keep = set(rng.choice(ids, max(1, int(round(args.cluster_frac * len(ids)))), replace=False).tolist())
+        train = train[train.protein_name.map(lambda p: cl.get(p) in keep)].reset_index(drop=True)
+        print(f"cluster_frac {args.cluster_frac}: {len(keep)}/{len(ids)} clusters, {train.protein_name.nunique()} proteins, {len(train):,} rows")
+    seen_probe = None
+    if args.seen_probe_frac > 0:
+        uniq = train.rna_sequence.unique()
+        held = set(rng.choice(uniq, int(args.seen_probe_frac * len(uniq)), replace=False).tolist())
+        mask = train.rna_sequence.isin(held)
+        seen_probe = t65.build_val_probe(train[mask].reset_index(drop=True), 20000, args.seed)
+        train = train[~mask].reset_index(drop=True)
+        print(f"seen-protein probe: {len(seen_probe):,} rows from {len(held):,} held-out RNAs; train rows left {len(train):,}")
     tab = Tables(resolve(args.emb_dir), device)
     val_probe = t65.build_val_probe(val, args.val_pos, args.seed)
     pos, pos_set, by_src = t65.build_pools(train)
-    model = Head(args.head).to(device)
-    opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-2)
+    model = Head(args.head, h=args.hidden, dropout=args.dropout).to(device)
+    opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.wd)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=args.epochs, eta_min=args.lr * 0.02)
     print(f"device={device} head={args.head} mode={args.train_mode} train rows={len(train):,} pos={len(pos):,}")
 
@@ -196,6 +218,9 @@ def main() -> None:
 
     model.load_state_dict(best_state)
     res = {"args": vars(args), "best_epoch": best_ep, "best_val_probe_auroc": best, "history": hist}
+    if seen_probe is not None:
+        res["seen_probe_auroc"] = float(roc_auc_score(seen_probe.binding_label, score(model, tab, seen_probe)))
+        print(f"seen-protein probe (new RNAs, training proteins): AUROC {res['seen_probe_auroc']:.4f}")
     for name, df in [("test_standard", test), ("probe", probe)]:
         prob = score(model, tab, df)
         df[["protein_name", "binding_label"]].assign(prob=prob).to_csv(out / f"scores_{name}.tsv.gz", sep="\t", index=False)
