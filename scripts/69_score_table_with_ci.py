@@ -76,6 +76,8 @@ def main() -> None:
     ap.add_argument("--scorer", action="append", required=True)
     ap.add_argument("--identity_tsv", default="results/homology_audit/v3b_test_protein_identity.tsv")
     ap.add_argument("--split_map", default="results/v3b/protein_split_map.tsv")
+    ap.add_argument("--source_tsv", default="data/benchmarks/v3b_cross_neg/cross_neg_probe/test.tsv",
+                    help="table with protein_name and dataset_source; adds strata by assay source (protein -> first source)")
     ap.add_argument("--n_boot", type=int, default=300)
     ap.add_argument("--min_proteins", type=int, default=4, help="smallest stratum reported")
     ap.add_argument("--seed", type=int, default=42)
@@ -94,9 +96,13 @@ def main() -> None:
     fam = pd.read_csv(resolve(args.split_map), sep="\t").set_index("protein_name").family.to_dict()
     print(f"{args.name}: {len(prots)} proteins with both classes in all scorers; reference = {ref}")
 
+    src = {}
+    if args.source_tsv and resolve(args.source_tsv).exists():
+        st = pd.read_csv(resolve(args.source_tsv), sep="\t", usecols=["protein_name", "dataset_source"]).drop_duplicates("protein_name")
+        src = dict(zip(st.protein_name, st.dataset_source))
     out = {"name": args.name, "n_proteins": len(prots), "reference": ref, "strata": {}}
     strata = {"all": prots}
-    for key, mp in (("identity", ident), ("family", fam)):
+    for key, mp in (("identity", ident), ("family", fam), ("source", src)):
         for v in sorted({mp.get(p) for p in prots if mp.get(p)}):
             sub = [p for p in prots if mp.get(p) == v]
             if len(sub) >= args.min_proteins:
