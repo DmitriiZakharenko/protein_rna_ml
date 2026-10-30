@@ -1022,3 +1022,10 @@ Reading: on the standard v3b test everything including the protein-blind RNA-onl
 dominated by RNA features); on the composition-neutral probe no neural model reaches the nearest-protein baseline (0.627). The
 only gain from the protein in the frozen-embedding bilinear head is ~0.07 (real 0.551 vs shuffled 0.483). Frozen
 pretrained embeddings do not change the picture on the cluster split. Single seed; per-bin patterns are noisy (few proteins/bin).
+
+### v3b: frozen bilinear head with cross-protein negatives; hybrid pipeline sanity check
+- Frozen ESM-2 + RNA-FM bilinear head trained with composition-neutral cross-protein negatives (script 67 `--train_mode xneg`, seed 42):
+  probe AUROC 0.570 (pp-median 0.583; shuffled protein 0.497); by bin <30% 0.75, 30-50% 0.55, 50-70% 0.50, no hit 0.66. Best of all
+  neural models so far (vs 0.551 with ordinary labels) but still below the nearest-protein gate 0.627.
+- Hybrid pipeline check (script 71 `--mode nn_only`, scores z_nn only, neighbours from script 70): probe 0.6265 (pp-median 0.703),
+  standard 0.6755 (pp-median 0.784) - reproduces script 59 (0.627 / 0.676), so tables and row matching are correct.
