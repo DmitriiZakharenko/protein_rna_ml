@@ -973,3 +973,11 @@ V4 seed 0 and the mechanistic tests (script 61) pending; CIs by identity bin / f
   One example, so anecdotal; the KH domain (608-681 of ~870 aa, ~8% of the sequence) coinciding with a protein peak needs a
   quantitative test (attribution mass in annotated domains vs length-matched random windows, many proteins, with controls).
 - VM check: pip works (rna-fm, fair-esm download); conda channels still unreachable. Model weights (ESM-2, RNA-FM) not yet tested.
+
+### VM housekeeping (2026-10-30)
+- Overnight runner stopped after seed 42 (V2, V4 done; probe after seed 42 logged above). V2 seed 0 was killed manually after >17
+  epochs (val AUROC flat ~0.67; it held 12.5 GB of the P100 and blocked ESM-2 embedding). Its best checkpoint
+  (models/saved/v2_v3b_seed0/best_model.pt, epoch-best at kill time) exists but no probe/summary was computed for it; V4 seed 0
+  and seed 1 were not run. All v3b neural numbers therefore rest on seed 42 only.
+- Script 65 (cross-protein-negative V4) running: epoch 1 val-probe AUROC 0.513, ~381 s/epoch.
+- RNA-FM original weights URL returns 403; switched script 66 to HuggingFace multimolecule/rnafm.
