@@ -64,13 +64,35 @@ def embed_proteins(df: pd.DataFrame, out: Path, device) -> None:
     print(f"wrote {out / 'prot_esm2.npz'}")
 
 
+def import_multimolecule():
+    """Old torch cannot infer schemas for multimolecule.data custom ops; we only need the model, so stub them out."""
+    try:
+        from multimolecule import RnaFmModel, RnaTokenizer
+        return RnaFmModel, RnaTokenizer
+    except ValueError:
+        import sys
+        for k in [k for k in sys.modules if k.startswith("multimolecule")]:
+            del sys.modules[k]
+        import torch.library as tl
+
+        def passthrough(*a, **k):
+            def deco(fn):
+                for attr in ("register_fake", "register_kernel", "register_autograd", "register_vmap"):
+                    setattr(fn, attr, lambda *x, **y: (lambda g: g))
+                return fn
+            return deco
+        tl.custom_op = passthrough
+        from multimolecule import RnaFmModel, RnaTokenizer
+        return RnaFmModel, RnaTokenizer
+
+
 @torch.no_grad()
 def embed_rna(df: pd.DataFrame, out: Path, device, batch: int, backend: str) -> None:
     seqs = sorted(df.rna_sequence.unique(), key=len)
     embs = np.zeros((len(seqs), 640), dtype=np.float16)
     t0 = time.time()
     if backend == "hf":
-        from multimolecule import RnaFmModel, RnaTokenizer
+        RnaFmModel, RnaTokenizer = import_multimolecule()
         tok = RnaTokenizer.from_pretrained("multimolecule/rnafm")
         model = RnaFmModel.from_pretrained("multimolecule/rnafm").half().to(device).eval()
     else:
