@@ -13,6 +13,9 @@ Heads (--head):
 Training (--train_mode):
   std       ordinary labelled rows of train.tsv
   xneg      each positive paired with the same RNA and another training protein of the same source (script 65 sampling)
+  rank      ordinary labelled rows (BCE) + pairwise ranking only: an observed positive must score above the same pair with the
+            protein replaced and above the same pair with the RNA replaced; the alternatives get no label 0 (--rank_weight)
+  rank_prot same as rank with protein replacement only
 --shuffle_protein_eval additionally scores the test sets with proteins permuted among test proteins (control).
 
 Usage
@@ -117,7 +120,7 @@ def main() -> None:
     ap.add_argument("--probe_tsv", default="data/benchmarks/v3b_cross_neg/cross_neg_probe/test.tsv")
     ap.add_argument("--identity_tsv", default="results/homology_audit/v3b_test_protein_identity.tsv")
     ap.add_argument("--head", choices=["rna", "protein", "concat", "bilinear"], default="bilinear")
-    ap.add_argument("--train_mode", choices=["std", "xneg"], default="std")
+    ap.add_argument("--train_mode", choices=["std", "xneg", "rank", "rank_prot"], default="std")
     ap.add_argument("--epochs", type=int, default=15)
     ap.add_argument("--steps_per_epoch", type=int, default=1500)
     ap.add_argument("--batch", type=int, default=512)
@@ -133,6 +136,7 @@ def main() -> None:
     ap.add_argument("--seen_probe_frac", type=float, default=0.0,
                     help="positive control: hold out this fraction of the training RNAs (all rows with them), evaluate a cross-protein probe "
                          "on them for the SEEN training proteins")
+    ap.add_argument("--rank_weight", type=float, default=1.0, help="weight of the pairwise ranking loss (modes rank, rank_prot)")
     ap.add_argument("--out_dir", default="results/v3b_frozen/run")
     args = ap.parse_args()
 
@@ -166,6 +170,7 @@ def main() -> None:
     tab = Tables(resolve(args.emb_dir), device)
     val_probe = t65.build_val_probe(val, args.val_pos, args.seed)
     pos, pos_set, by_src = t65.build_pools(train)
+    rna_by_src = {sname: g.rna_sequence.unique() for sname, g in pos.groupby("dataset_source")}
     model = Head(args.head, h=args.hidden, dropout=args.dropout).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.wd)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=args.epochs, eta_min=args.lr * 0.02)
@@ -183,6 +188,22 @@ def main() -> None:
             sample, partners = sample.loc[keep].reset_index(drop=True), np.array(partners)
             half = args.batch // 2
             n_steps = len(sample) // half
+        elif args.train_mode in ("rank", "rank_prot"):
+            half, quarter = args.batch // 2, args.batch // 4
+            n_steps = args.steps_per_epoch
+            sample = train.sample(n_steps * half, replace=True, random_state=int(rng.integers(1 << 30))).reset_index(drop=True)
+            rk = pos.sample(n_steps * quarter, replace=n_steps * quarter > len(pos), random_state=int(rng.integers(1 << 30))).reset_index(drop=True)
+            keep, partners = t65.draw_negatives(rk, pos_set, by_src, rng)
+            rk, partners = rk.loc[keep].reset_index(drop=True), np.array(partners)
+            rna_alt = np.empty(len(rk), dtype=object)
+            for i, (pn, sname) in enumerate(zip(rk.protein_name, rk.dataset_source)):
+                rna_alt[i] = rk.rna_sequence.values[i]
+                for _ in range(20):
+                    c = rna_by_src[sname][int(rng.integers(len(rna_by_src[sname])))]
+                    if (pn, c) not in pos_set:
+                        rna_alt[i] = c
+                        break
+            n_steps = min(n_steps, len(rk) // quarter)
         else:
             n_s = args.steps_per_epoch * args.batch
             sample = train.sample(n_s, replace=n_s > len(train), random_state=int(rng.integers(1 << 30))).reset_index(drop=True)
@@ -196,6 +217,21 @@ def main() -> None:
                 y = torch.cat([torch.ones(len(sub)), torch.zeros(len(sub))]).to(device)
                 logit = model(r, p)
                 loss = F.binary_cross_entropy_with_logits(logit, y) + F.softplus(-(logit[:len(sub)] - logit[len(sub):])).mean()
+            elif args.train_mode in ("rank", "rank_prot"):
+                sub = sample.iloc[s * half:(s + 1) * half]
+                r, p = tab.get(sub.rna_sequence.values, sub.protein_name.values)
+                y = torch.tensor(sub.binding_label.values, dtype=torch.float32, device=device)
+                loss = F.binary_cross_entropy_with_logits(model(r, p), y)
+                o = slice(s * quarter, (s + 1) * quarter)
+                ro, po = rk.iloc[o], partners[o]
+                r0, p0 = tab.get(ro.rna_sequence.values, ro.protein_name.values)
+                _, pa = tab.get(ro.rna_sequence.values, po)
+                s_obs, s_p = model(r0, p0), model(r0, pa)
+                rank = F.softplus(-(s_obs - s_p)).mean()
+                if args.train_mode == "rank":
+                    ra, _ = tab.get(rna_alt[o], ro.protein_name.values)
+                    rank = rank + F.softplus(-(s_obs - model(ra, p0))).mean()
+                loss = loss + args.rank_weight * rank
             else:
                 sub = sample.iloc[s * args.batch:(s + 1) * args.batch]
                 r, p = tab.get(sub.rna_sequence.values, sub.protein_name.values)

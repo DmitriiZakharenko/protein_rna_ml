@@ -1156,3 +1156,10 @@ Reading: the model's top 5-mer for RBFOX2 is the measured GCAUG (Spearman 0.48);
 (mutating those U lowers the logit most); TIA1 is poorly recovered (0.10). Domain shares of |IG| are 0.86 vs 0.71 (RBFOX2) and 0.36 vs 0.22 (HNRNPC): above the
 residue share, but based on one RNA per protein for the map and without a shuffled-protein control in this script. Illustration only; these proteins were in the training data.
 Fix: overlapping Pfam hits were double counted in the first run (TIA1 'coverage 1.90'); the share now uses the union of domain residues.
+
+## Ranking-only supervision of alternatives (planned, not yet run)
+Hypothesis: replacing cross-protein negative labels by a pairwise ranking loss (observed pair must outscore the same pair with the protein replaced and with the RNA replaced; alternatives get no label 0) improves the v3b cross-protein probe over ordinary-label training (0.531 +- 0.027) and over cross-protein negatives (0.559 +- 0.010). Source idea: ReMatch (ICLR 2027 submission), BCE + bidirectional ranking.
+Implementation: scripts/67 modes `rank` (protein + RNA replacement) and `rank_prot` (protein replacement only); BCE on ordinary labelled rows plus ranking on positives, `--rank_weight` 1.0.
+Difference from `xneg`: xneg labels the alternatives 0 (BCE) and adds a protein-side ranking term.
+Run: `SEEDS="42 0 1" CONFIGS="bilinear:rank bilinear:rank_prot" bash scripts/run_v3b_frozen.sh`.
+Decision rule: supported if the three-seed mean probe AUROC exceeds 0.559 by more than the seed spread; nn1 reference 0.627.
