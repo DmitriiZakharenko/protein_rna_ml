@@ -71,13 +71,26 @@ class Head(nn.Module):
 
 
 class Tables:
-    def __init__(self, emb_dir: Path, device):
+    """Embedding lookup. With extra_dir the RNA vectors get one more column: 0 for the main data, 1 for the extra data (data-type flag)."""
+    def __init__(self, emb_dir: Path, device, extra_dir: Path | None = None):
         z = np.load(emb_dir / "rna_rnafm.npz", allow_pickle=False)
         self.rna_idx = {s: i for i, s in enumerate(z["seqs"])}
-        self.rna = torch.from_numpy(z["emb"]).to(device)
+        rna = z["emb"]
         z = np.load(emb_dir / "prot_esm2.npz", allow_pickle=False)
         self.prot_idx = {s: i for i, s in enumerate(z["names"])}
-        self.prot = torch.from_numpy(z["emb"]).to(device)
+        prot = z["emb"]
+        if extra_dir is not None:
+            rna = np.concatenate([rna, np.zeros((len(rna), 1), rna.dtype)], 1)
+            z = np.load(extra_dir / "rna_rnafm.npz", allow_pickle=False)
+            n0 = len(rna)
+            self.rna_idx.update({s: n0 + i for i, s in enumerate(z["seqs"])})
+            rna = np.concatenate([rna, np.concatenate([z["emb"], np.ones((len(z["emb"]), 1), z["emb"].dtype)], 1)])
+            z = np.load(extra_dir / "prot_esm2.npz", allow_pickle=False)
+            n0 = len(prot)
+            self.prot_idx.update({s: n0 + i for i, s in enumerate(z["names"]) if s not in self.prot_idx})
+            prot = np.concatenate([prot, z["emb"]])
+        self.rna = torch.from_numpy(rna).to(device)
+        self.prot = torch.from_numpy(prot).to(device)
         self.device = device
 
     def get(self, rna_seqs, prot_names):
@@ -137,6 +150,9 @@ def main() -> None:
                     help="positive control: hold out this fraction of the training RNAs (all rows with them), evaluate a cross-protein probe "
                          "on them for the SEEN training proteins")
     ap.add_argument("--rank_weight", type=float, default=1.0, help="weight of the pairwise ranking loss (modes rank, rank_prot)")
+    ap.add_argument("--extra_tsv", default="", help="extra labelled rows added to train (e.g. TF ChIP-seq pairs, script 76)")
+    ap.add_argument("--extra_emb_dir", default="data/embeddings_tf")
+    ap.add_argument("--extra_frac", type=float, default=1.0, help="random fraction of the extra rows used")
     ap.add_argument("--out_dir", default="results/v3b_frozen/run")
     args = ap.parse_args()
 
@@ -167,11 +183,21 @@ def main() -> None:
         seen_probe = t65.build_val_probe(train[mask].reset_index(drop=True), 20000, args.seed)
         train = train[~mask].reset_index(drop=True)
         print(f"seen-protein probe: {len(seen_probe):,} rows from {len(held):,} held-out RNAs; train rows left {len(train):,}")
-    tab = Tables(resolve(args.emb_dir), device)
+    if args.extra_tsv:
+        ex = pd.read_csv(resolve(args.extra_tsv), sep="\t", usecols=cols, low_memory=False)
+        held = set(val.protein_name) | set(test.protein_name) | set(probe.protein_name)
+        n0 = ex.protein_name.nunique()
+        ex = ex[~ex.protein_name.isin(held)]
+        print(f"extra proteins dropped because the name is in v3b val/test/probe: {n0 - ex.protein_name.nunique()}")
+        if args.extra_frac < 1.0:
+            ex = ex.sample(frac=args.extra_frac, random_state=args.seed)
+        train = pd.concat([train, ex], ignore_index=True)
+        print(f"extra rows: {len(ex):,} ({ex.protein_name.nunique()} proteins, {int(ex.binding_label.sum()):,} positives); train rows {len(train):,}")
+    tab = Tables(resolve(args.emb_dir), device, resolve(args.extra_emb_dir) if args.extra_tsv else None)
     val_probe = t65.build_val_probe(val, args.val_pos, args.seed)
     pos, pos_set, by_src = t65.build_pools(train)
     rna_by_src = {sname: g.rna_sequence.unique() for sname, g in pos.groupby("dataset_source")}
-    model = Head(args.head, h=args.hidden, dropout=args.dropout).to(device)
+    model = Head(args.head, d_rna=tab.rna.shape[1], d_prot=tab.prot.shape[1], h=args.hidden, dropout=args.dropout).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.wd)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=args.epochs, eta_min=args.lr * 0.02)
     print(f"device={device} head={args.head} mode={args.train_mode} train rows={len(train):,} pos={len(pos):,}")

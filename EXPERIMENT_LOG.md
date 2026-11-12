@@ -1171,3 +1171,6 @@ Rows: 151-nt window around the peak summit, random strand, DNA written with U. L
 Check: synthetic-genome smoke test passed (window length 151, alphabet AUGC, positive and xtf rows share the strand). Real genome not yet used.
 Known caveats: only 5 TFs have the same name as v3b test proteins (FUBP1, FUBP3, RBM25, SFPQ, SNRNP70); TF families (zinc finger, bHLH) differ from RNA-binding domains; learning curve over clusters was flat (0.528 to 0.559), so a large gain is not expected.
 Next: build pairs on the VM, train frozen heads with and without TF rows, decision rule: mean over three seeds above the reference by more than the seed spread (references: bilinear 0.531 +- 0.027, with cross-protein negatives 0.559 +- 0.010, nn1 0.627).
+
+TF ChIP-seq table built on the VM (script 76): 857,839 rows, 248 TFs (301 TF/cell experiments with a protein sequence), 297,250 positives, 297,234 cross-TF negatives, 263,355 GC-matched negatives.
+Training with the extra rows: script 67 `--extra_tsv` (TF rows appended to train; RNA vector gets a data-type flag column, 0 for in vitro, 1 for ChIP-seq; TF names present in v3b val/test/probe are dropped). Embeddings: script 66 `--tsv` into data/embeddings_tf. Runner: scripts/run_v3b_tf.sh (bilinear std and xneg, seeds 42 0 1). Results: pending.

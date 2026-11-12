@@ -176,13 +176,17 @@ def main() -> None:
     ap.add_argument("--rna_batch", type=int, default=256)
     ap.add_argument("--rna_backend", choices=["hf", "fm"], default="hf",
                     help="hf = multimolecule/rnafm from HuggingFace; fm = original rna-fm package (weights server may refuse)")
+    ap.add_argument("--tsv", default="", help="embed the proteins/RNAs of this single table instead of the v3b splits")
     ap.add_argument("--limit", type=int, default=0, help="debug: only the first N unique sequences")
     args = ap.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     out = resolve(args.out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    df = load_tables(resolve(args.data_dir), resolve(args.probe_tsv))
+    if args.tsv:
+        df = pd.read_csv(resolve(args.tsv), sep="\t", usecols=["protein_name", "rna_sequence", "protein_sequence"], low_memory=False)
+    else:
+        df = load_tables(resolve(args.data_dir), resolve(args.probe_tsv))
     if args.limit:
         keep = df.drop_duplicates("protein_name" if args.stage == "proteins" else "rna_sequence").head(args.limit)
         df = keep
