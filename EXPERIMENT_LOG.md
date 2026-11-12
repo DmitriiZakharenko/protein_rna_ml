@@ -1186,3 +1186,9 @@ Seeds 0 / 1 / 42 (order of the sorted run directories).
 Paired differences (with TF minus without): ordinary labels +0.045, +0.020, -0.021; cross-protein negatives -0.013, -0.002, -0.059.
 Decision rule (mean above the reference by more than the seed spread): not met. Ordinary labels +0.016 against sd 0.027 (mixed sign across seeds); cross-protein negatives -0.024 (lower in all three seeds). Best configuration stays cross-protein negatives without TF rows (0.559), nn1 0.627.
 Verdict: hypothesis not supported. Adding 248 TFs (about 0.86 M ChIP-seq rows, data-type flag in the RNA vector) does not improve transfer to new RNA-binding proteins. Not tested: other ways to use the rows (separate head, pretraining then fine-tuning, a DNA-specific encoder), restriction to the 5 dual-function proteins.
+
+## Protein similarity vs similarity of measured binding preferences (script 77; planned, not yet run on real data)
+Hypothesis: the correlation (Pearson) of the 5-mer profiles of two proteins rises with their sequence identity and with the cosine of their ESM-2 embeddings; sequence identity predicts profile similarity better than the embedding.
+Inputs: results/v3b_profile/profiles.npz (script 73, 1024-value log2 enrichment per protein), data/embeddings_v3b, pairwise local-alignment identity (Biopython, BLOSUM62; matches / length of the shorter protein), family labels from results/v3b/protein_split_map.tsv.
+Outputs: median profile Pearson per identity bin (all, same family, different family, bootstrap CI), Spearman identity vs Pearson and cosine vs Pearson with permutation p-values, nearest-neighbour table (identity / embedding / random / best possible), three figures.
+Check: synthetic data (40 proteins) reproduces the planted ordering. Pairs are not independent (proteins appear in many pairs); CIs are over pairs and optimistic.
