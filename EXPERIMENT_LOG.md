@@ -1174,3 +1174,15 @@ Next: build pairs on the VM, train frozen heads with and without TF rows, decisi
 
 TF ChIP-seq table built on the VM (script 76): 857,839 rows, 248 TFs (301 TF/cell experiments with a protein sequence), 297,250 positives, 297,234 cross-TF negatives, 263,355 GC-matched negatives.
 Training with the extra rows: script 67 `--extra_tsv` (TF rows appended to train; RNA vector gets a data-type flag column, 0 for in vitro, 1 for ChIP-seq; TF names present in v3b val/test/probe are dropped). Embeddings: script 66 `--tsv` into data/embeddings_tf. Runner: scripts/run_v3b_tf.sh (bilinear std and xneg, seeds 42 0 1). Results: pending.
+
+### Result: TF ChIP-seq rows added to training (v3b cross-protein probe, test AUROC, frozen bilinear head)
+Seeds 0 / 1 / 42 (order of the sorted run directories).
+| Training | seed 0 | seed 1 | seed 42 | mean +- sd |
+|---|---|---|---|---|
+| ordinary labels | 0.5013 | 0.5418 | 0.5514 | 0.531 +- 0.027 |
+| ordinary labels + TF rows | 0.5466 | 0.5622 | 0.5306 | 0.547 +- 0.016 |
+| cross-protein negatives | 0.5531 | 0.5542 | 0.5701 | 0.559 +- 0.009 |
+| cross-protein negatives + TF rows | 0.5401 | 0.5525 | 0.5112 | 0.535 +- 0.021 |
+Paired differences (with TF minus without): ordinary labels +0.045, +0.020, -0.021; cross-protein negatives -0.013, -0.002, -0.059.
+Decision rule (mean above the reference by more than the seed spread): not met. Ordinary labels +0.016 against sd 0.027 (mixed sign across seeds); cross-protein negatives -0.024 (lower in all three seeds). Best configuration stays cross-protein negatives without TF rows (0.559), nn1 0.627.
+Verdict: hypothesis not supported. Adding 248 TFs (about 0.86 M ChIP-seq rows, data-type flag in the RNA vector) does not improve transfer to new RNA-binding proteins. Not tested: other ways to use the rows (separate head, pretraining then fine-tuning, a DNA-specific encoder), restriction to the 5 dual-function proteins.
