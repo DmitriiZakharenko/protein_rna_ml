@@ -1163,3 +1163,11 @@ Implementation: scripts/67 modes `rank` (protein + RNA replacement) and `rank_pr
 Difference from `xneg`: xneg labels the alternatives 0 (BCE) and adds a protein-side ranking term.
 Run: `SEEDS="42 0 1" CONFIGS="bilinear:rank bilinear:rank_prot" bash scripts/run_v3b_frozen.sh`.
 Decision rule: supported if the three-seed mean probe AUROC exceeds 0.559 by more than the seed spread; nn1 reference 0.627.
+
+## TF ChIP-seq as extra labelled training data (script 76, built; not yet run on the VM)
+Hypothesis: adding transcription-factor ChIP-seq pairs with an explicit data-type label increases the number of distinct training proteins and improves transfer to new RNA-binding proteins (v3b cross-protein probe, eCLIP protein-disjoint test).
+Source: ENCODE TF ChIP-seq, GRCh38, K562 and HepG2, optimal IDR thresholded narrowPeak. Manifest: 310 experiments, 256 TFs (K562 175, HepG2 135; one experiment per TF and cell line, TF-annotated targets only). Files are small (about 0.2 GB).
+Rows: 151-nt window around the peak summit, random strand, DNA written with U. Label 1 = peak; label 0 `xtf` = same window with another TF of the cell line that has no peak there (cross-protein layout); label 0 `gc` = GC-matched genomic window without peak overlap. Column `data_type` = dna_chip.
+Check: synthetic-genome smoke test passed (window length 151, alphabet AUGC, positive and xtf rows share the strand). Real genome not yet used.
+Known caveats: only 5 TFs have the same name as v3b test proteins (FUBP1, FUBP3, RBM25, SFPQ, SNRNP70); TF families (zinc finger, bHLH) differ from RNA-binding domains; learning curve over clusters was flat (0.528 to 0.559), so a large gain is not expected.
+Next: build pairs on the VM, train frozen heads with and without TF rows, decision rule: mean over three seeds above the reference by more than the seed spread (references: bilinear 0.531 +- 0.027, with cross-protein negatives 0.559 +- 0.010, nn1 0.627).
