@@ -45,7 +45,7 @@ def clean(seq: str, alphabet: str) -> str:
 
 
 @torch.no_grad()
-def embed_proteins(df: pd.DataFrame, out: Path, device) -> None:
+def embed_proteins(df: pd.DataFrame, out: Path, device, layer: int = 33) -> None:
     import esm
     model, alphabet = esm.pretrained.esm2_t33_650M_UR50D()
     model = model.half().to(device).eval()
@@ -56,7 +56,7 @@ def embed_proteins(df: pd.DataFrame, out: Path, device) -> None:
     for i, n in enumerate(names):
         seq = clean(prots[n], "ACDEFGHIKLMNPQRSTVWYX")[:1022]
         _, _, tok = conv([(n, seq)])
-        rep = model(tok.to(device), repr_layers=[33])["representations"][33][0, 1:len(seq) + 1]
+        rep = model(tok.to(device), repr_layers=[layer])["representations"][layer][0, 1:len(seq) + 1]
         embs.append(rep.float().mean(0).cpu().numpy().astype(np.float16))
         if (i + 1) % 50 == 0:
             print(f"  proteins {i + 1}/{len(names)}", flush=True)
@@ -177,6 +177,7 @@ def main() -> None:
     ap.add_argument("--rna_backend", choices=["hf", "fm"], default="hf",
                     help="hf = multimolecule/rnafm from HuggingFace; fm = original rna-fm package (weights server may refuse)")
     ap.add_argument("--tsv", default="", help="embed the proteins/RNAs of this single table instead of the v3b splits")
+    ap.add_argument("--prot_layer", type=int, default=33, help="ESM-2 layer (0-33) mean-pooled for the protein embedding")
     ap.add_argument("--limit", type=int, default=0, help="debug: only the first N unique sequences")
     args = ap.parse_args()
 
@@ -192,7 +193,7 @@ def main() -> None:
         df = keep
     print(f"device={device} proteins={df.protein_name.nunique():,} rnas={df.rna_sequence.nunique():,}")
     if args.stage == "proteins":
-        embed_proteins(df, out, device)
+        embed_proteins(df, out, device, args.prot_layer)
     else:
         embed_rna(df, out, device, args.rna_batch, args.rna_backend)
 
