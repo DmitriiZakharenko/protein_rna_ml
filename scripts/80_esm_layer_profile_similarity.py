@@ -17,6 +17,8 @@ Stages
   meta     experiment_id, protein_name, protein_sequence from a pairs table (column subset, read in chunks) -> out_dir/experiments.tsv
   embed    ESM-2 650M, all layers 0..33, mean pooled -> out_dir/esm2_layers.npz           (GPU)
   analyze  similarity matrices, per-layer Spearman, figure -> out_dir/layer_correlation.tsv, fig_layer_correlation.png
+  domains  Pfam hmmscan on the proteins (local, needs hmmscan and data/external/pfam/Pfam-A.hmm) -> out_dir/domains.tsv (RNA-binding
+           families only); the embed stage then also saves embeddings pooled over the domain residues only (emb_domain)
   bootstrap  95% intervals over proteins (resampling with replacement, pairs of the same protein dropped) for every layer and for
            the difference to layer 0 and to layer 33 -> out_dir/layer_bootstrap.tsv
 
@@ -60,7 +62,36 @@ def stage_meta(args) -> None:
     print(f"{len(df)} experiments, {df.protein_sequence.nunique()} distinct sequences, {n_long} longer than {WINDOW}")
 
 
-def embed_one(model, converter, seq: str, device, layers: list[int]) -> np.ndarray:
+FAMILIES = [("RRM", "RRM"), ("KH_", "KH"), ("zf-CCCH", "CCCH"), ("zf-CCHC", "CCHC"), ("zf-C2H2", "C2H2"), ("DEAD", "DEAD"),
+            ("dsrm", "dsRBD"), ("PUF", "PUF"), ("CSD", "CSD"), ("La", "La"), ("YTH", "YTH"), ("S1", "S1"), ("Piwi", "Piwi"), ("PAZ", "PAZ")]
+
+
+def stage_domains(args) -> None:
+    import subprocess
+    import tempfile
+    out = resolve(args.out_dir)
+    seqs = sorted(pd.read_csv(out / "experiments.tsv", sep="\t").protein_sequence.unique())
+    with tempfile.TemporaryDirectory() as td:
+        fa, tbl = Path(td) / "q.fa", Path(td) / "dom.tbl"
+        fa.write_text("".join(f">s{i}\n{q}\n" for i, q in enumerate(seqs)))
+        subprocess.run(["hmmscan", "--cpu", "4", "-E", "1e-3", "--domE", "1e-3", "--domtblout", str(tbl), str(resolve(args.pfam)), str(fa)],
+                       check=True, stdout=subprocess.DEVNULL)
+        rows = []
+        for line in tbl.read_text().splitlines():
+            if line.startswith("#"):
+                continue
+            f = line.split()
+            fam = next((fm for pre, fm in FAMILIES if f[0] == pre or f[0].startswith(pre)), None)
+            if fam:
+                i = int(f[3][1:])
+                rows.append((seqs[i], i, f[0], fam, float(f[12]), int(f[19]), int(f[20])))
+    df = pd.DataFrame(rows, columns=["protein_sequence", "seq_index", "pfam", "family", "domain_ievalue", "env_from", "env_to"])
+    df.to_csv(out / "domains.tsv", sep="\t", index=False)
+    n = df.protein_sequence.nunique()
+    print(f"{n} of {len(seqs)} proteins with an RNA-binding Pfam domain; families {df.drop_duplicates(['seq_index', 'family']).family.value_counts().to_dict()}")
+
+
+def embed_one(model, converter, seq: str, device, layers: list[int], mask: np.ndarray | None = None):
     import torch
     n = len(seq)
     starts = list(range(0, max(1, n - WINDOW) + 1, STRIDE))
@@ -76,7 +107,11 @@ def embed_one(model, converter, seq: str, device, layers: list[int]) -> np.ndarr
         for k, L in enumerate(layers):
             acc[k, s:s + len(w)] += rep[L][0, 1:len(w) + 1].float().cpu().numpy()
         cnt[s:s + len(w)] += 1
-    return (acc / cnt[None, :, None]).mean(axis=1)
+    res = acc / cnt[None, :, None]
+    nan = np.full((len(layers), 1280), np.nan, dtype=np.float32)
+    dom = res[:, mask].mean(axis=1) if mask is not None and mask.any() else nan
+    outside = res[:, ~mask].mean(axis=1) if mask is not None and (~mask).sum() >= 10 else nan
+    return res.mean(axis=1), dom, outside
 
 
 def stage_embed(args) -> None:
@@ -89,12 +124,21 @@ def stage_embed(args) -> None:
     model = model.eval().to(device)
     conv = alphabet.get_batch_converter()
     layers = list(range(34))
-    emb, t0 = [], time.time()
+    masks = {}
+    if (out / "domains.tsv").exists():
+        for r in pd.read_csv(out / "domains.tsv", sep="\t").itertuples():
+            m = masks.setdefault(r.protein_sequence, np.zeros(len(r.protein_sequence), dtype=bool))
+            m[r.env_from - 1:r.env_to] = True
+    emb, dom, outs, t0 = [], [], [], time.time()
     for i, s in enumerate(seqs, 1):
-        emb.append(embed_one(model, conv, s, device, layers))
+        a, b, c = embed_one(model, conv, s, device, layers, masks.get(s))
+        emb.append(a)
+        dom.append(b)
+        outs.append(c)
         if i % 25 == 0:
             print(f"  {i}/{len(seqs)}  {time.time() - t0:.0f}s", flush=True)
-    np.savez(out / "esm2_layers.npz", emb=np.stack(emb).astype(np.float32), seqs=np.array(seqs, dtype=object))
+    np.savez(out / "esm2_layers.npz", emb=np.stack(emb).astype(np.float32), emb_domain=np.stack(dom).astype(np.float32), emb_outside=np.stack(outs).astype(np.float32),
+             seqs=np.array(seqs, dtype=object))
     print(f"saved {len(seqs)} proteins x {len(layers)} layers")
 
 
@@ -188,6 +232,12 @@ def stage_analyze(args) -> None:
     V = np.vstack(vec)
     bind = np.corrcoef(V - V.mean(axis=1, keepdims=True))
     emb = z["emb"][keep]
+    full = None
+    if args.pool in ("domain", "outside"):
+        dom = z["emb_domain" if args.pool == "domain" else "emb_outside"][keep]
+        ok = np.isfinite(dom[:, 0, 0])
+        print(f"{args.pool} pooling: {int(ok.sum())} of {len(ok)} proteins usable (domain hit; outside: at least 10 residues outside)", flush=True)
+        bind, full, emb, keep = bind[np.ix_(ok, ok)], emb[ok], dom[ok], [k for k, o in zip(keep, ok) if o]
     rng = np.random.default_rng(args.seed)
     rows = []
     for L in range(emb.shape[1]):
@@ -195,11 +245,14 @@ def stage_analyze(args) -> None:
         for tag, centre in (("raw", False), ("centred", True)):
             rho, p = spearman_mantel(cosine(emb[:, L], centre), bind, args.n_perm, rng)
             r[f"spearman_{tag}"], r[f"mantel_p_{tag}"] = rho, p
+            if full is not None:
+                r[f"spearman_{tag}_full_pool"], r[f"mantel_p_{tag}_full_pool"] = spearman_mantel(cosine(full[:, L], centre), bind, args.n_perm, rng)
         rows.append(r)
         print({k: round(v, 4) if isinstance(v, float) else v for k, v in r.items()}, flush=True)
     df = pd.DataFrame(rows)
     df.insert(1, "n_proteins", len(keep))
-    df.to_csv(out / "layer_correlation.tsv", sep="\t", index=False)
+    suffix = "" if args.pool == "full" else f"_{args.pool}"
+    df.to_csv(out / f"layer_correlation{suffix}.tsv", sep="\t", index=False)
     fig, ax = plt.subplots(figsize=(6, 3.4))
     ax.plot(df.layer, df.spearman_raw, marker="o", ms=3, label="cosine, raw")
     ax.plot(df.layer, df.spearman_centred, marker="s", ms=3, label="cosine, centred over proteins")
@@ -207,20 +260,26 @@ def stage_analyze(args) -> None:
     ax.set_ylabel(f"Spearman with 7-mer Z-score Pearson (n={len(keep)})")
     ax.legend(frameon=False)
     fig.tight_layout()
-    fig.savefig(out / "fig_layer_correlation.png", dpi=160)
+    if full is not None:
+        ax.plot(df.layer, df.spearman_raw_full_pool, ls="--", color="C0", label="raw, whole sequence (same proteins)")
+        ax.plot(df.layer, df.spearman_centred_full_pool, ls="--", color="C1", label="centred, whole sequence (same proteins)")
+        ax.legend(frameon=False, fontsize=8)
+    fig.savefig(out / f"fig_layer_correlation{suffix}.png", dpi=160)
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", choices=["meta", "embed", "analyze", "bootstrap"])
+    ap.add_argument("stage", choices=["meta", "domains", "embed", "analyze", "bootstrap"])
     ap.add_argument("--pairs", default="data/benchmarks/rnacompete/rnacompete_human.tsv")
     ap.add_argument("--zscores", default="rnacompete_analysis/data/raw/Zscores_RNAcompete2025.txt.gz")
     ap.add_argument("--out_dir", default="results/esm_layer_profile")
     ap.add_argument("--n_perm", type=int, default=500)
     ap.add_argument("--n_boot", type=int, default=200)
+    ap.add_argument("--pool", choices=["full", "domain", "outside"], default="full", help="analyze: pooling over the whole sequence or the Pfam RNA-binding domains")
+    ap.add_argument("--pfam", default="data/external/pfam/Pfam-A.hmm")
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
-    {"meta": stage_meta, "embed": stage_embed, "analyze": stage_analyze, "bootstrap": stage_bootstrap}[args.stage](args)
+    {"meta": stage_meta, "domains": stage_domains, "embed": stage_embed, "analyze": stage_analyze, "bootstrap": stage_bootstrap}[args.stage](args)
 
 
 if __name__ == "__main__":

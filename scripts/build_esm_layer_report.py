@@ -38,11 +38,11 @@ def load() -> pd.DataFrame:
 
 def svg(df: pd.DataFrame) -> str:
     W, H, L, R, T, B = 760, 380, 62, 20, 20, 52
-    ymax = 0.2
+    ymax = 0.25
     x = lambda v: L + (W - L - R) * v / 33  # noqa: E731
     y = lambda v: H - B - (H - T - B) * v / ymax  # noqa: E731
     o = [f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Spearman correlation by ESM-2 layer">']
-    for t in (0, 0.05, 0.10, 0.15, 0.20):
+    for t in (0, 0.05, 0.10, 0.15, 0.20, 0.25):
         o.append(f'<line x1="{L}" x2="{W - R}" y1="{y(t):.1f}" y2="{y(t):.1f}" stroke="var(--line)"/>'
                  f'<text x="{L - 8}" y="{y(t) + 4:.1f}" text-anchor="end" font-size="13">{t:.2f}</text>')
     for t in range(0, 34, 3):
@@ -68,15 +68,36 @@ def main() -> None:
     df = load()
     ci = "Shaded bands are 95% bootstrap intervals over proteins." if "spearman_raw_lo" in df.columns else "No confidence intervals (not yet computed)."
     pick = [0, 5, 10, 15, 20, 22, 26, 30, 32, 33]
-    rows = "".join(f"<tr><td>{int(r.layer)}</td><td>{r.spearman_raw:.3f}</td><td>{r.spearman_centred:.3f}</td></tr>"
-                   for r in df[df.layer.isin(pick)].itertuples())
+    has_ci = "spearman_raw_lo" in df.columns and df["spearman_raw_lo"].notna().all()
+    iv = lambda r, c: f"{r[c]:.3f} [{r[c + '_lo']:.3f}, {r[c + '_hi']:.3f}]"  # noqa: E731
+    if has_ci:
+        head = ("<tr><th>Layer</th><th>raw</th><th>centred</th><th>raw, difference to layer 33</th><th>centred, difference to layer 33</th>"
+                "<th>raw, difference to layer 0</th><th>centred, difference to layer 0</th></tr>")
+        def diff(r, ref, t):
+            return "<td>-</td>" if r.layer == ref else f"<td>[{r[f'diff_vs{ref}_{t}_lo']:.3f}, {r[f'diff_vs{ref}_{t}_hi']:.3f}]</td>"
+
+        rows = "".join(f"<tr><td>{int(r.layer)}</td><td>{iv(r, 'spearman_raw')}</td><td>{iv(r, 'spearman_centred')}</td>"
+                       + "".join(diff(r, ref, t) for ref in (33, 0) for t in ("raw", "centred")) + "</tr>"
+                       for _, r in df[df.layer.isin(pick)].iterrows())
+    else:
+        head = "<tr><th>Layer</th><th>raw</th><th>centred</th></tr>"
+        rows = "".join(f"<tr><td>{int(r.layer)}</td><td>{r.spearman_raw:.3f}</td><td>{r.spearman_centred:.3f}</td></tr>"
+                       for r in df[df.layer.isin(pick)].itertuples())
+    lst = lambda m: ", ".join(str(int(v)) for v in df.layer[m & ~df.layer.isin([0, 33])]) or "none"  # noqa: E731
+    ci_bullets = ""
+    if has_ci:
+        ci_bullets = (
+            f"<li>Intervals (95%, 200 bootstrap resamples over proteins). Layers above layer 33 with an interval of the difference that excludes 0: "
+            f"raw {lst(df.diff_vs33_raw_lo > 0)}; centred {lst(df.diff_vs33_centred_lo > 0)}. No layer is below layer 33.</li>"
+            f"<li>Layers above layer 0 (amino-acid composition) with an interval that excludes 0: raw {lst(df.diff_vs0_raw_lo > 0)}; "
+            f"centred {lst(df.diff_vs0_centred_lo > 0)}. Layers below layer 0: raw {lst(df.diff_vs0_raw_hi < 0)}; centred {lst(df.diff_vs0_centred_hi < 0)}.</li>")
     best_r, best_c = df.loc[df.spearman_raw.idxmax()], df.loc[df.spearman_centred.idxmax()]
     html_ = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ESM-2 layers and RNAcompete similarity</title><style>
 :root{{color-scheme:light;--bg:#fff;--fg:#17191c;--mut:#555d68;--line:#d6dbe1;--card:#f4f6f8}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--fg);font:17px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}}
 main{{max-width:900px;margin:0 auto;padding:28px 20px 70px}}h1{{font-size:28px;margin:0 0 6px;line-height:1.2}}h2{{font-size:21px;margin:30px 0 8px}}
-.meta{{color:var(--mut);font-size:15px;margin:0 0 18px}}table{{border-collapse:collapse;width:100%;max-width:520px;font-size:15.5px}}
+.meta{{color:var(--mut);font-size:15px;margin:0 0 18px}}table{{border-collapse:collapse;width:100%;font-size:14.5px}}
 th,td{{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left}}th{{background:var(--card)}}svg text{{fill:var(--fg)}}
 .note{{color:var(--mut);font-size:15px}}li{{margin:6px 0}}@media (max-width:760px){{body{{font-size:16px}}}}
 </style></head><body><main>
@@ -89,14 +110,14 @@ th,td{{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left}}th{
 <li>Per layer: Spearman correlation between the upper triangles of the two matrices (15,225 protein pairs); Mantel permutation test (500 permutations).</li></ol>
 <h2>Result</h2>
 <figure style="margin:8px 0">{svg(df)}<figcaption class="note">{ci}</figcaption></figure>
-<table><tr><th>Layer</th><th>raw</th><th>centred</th></tr>{rows}</table>
+<div style="overflow-x:auto"><table>{head}{rows}</table></div>
 <ul>
 <li>All layers correlate positively with binding similarity (rho {df.spearman_raw.min():.2f}-{df.spearman_centred.max():.2f}); Mantel p = 0.002 for every layer (smallest value possible with 500 permutations).</li>
 <li>Maximum: layer {int(best_r.layer)} for raw cosine ({best_r.spearman_raw:.3f}), layer {int(best_c.layer)} for centred cosine ({best_c.spearman_centred:.3f}).</li>
 <li>The last layer (33), used by the frozen heads, is lower: {df.spearman_raw.iloc[-1]:.3f} raw, {df.spearman_centred.iloc[-1]:.3f} centred.</li>
-<li>Layer 0 (token embedding, i.e. amino-acid composition) reaches {df.spearman_raw.iloc[0]:.3f} / {df.spearman_centred.iloc[0]:.3f}, similar to most deep layers.</li></ul>
+{ci_bullets}<li>Layer 0 (token embedding, i.e. amino-acid composition) reaches {df.spearman_raw.iloc[0]:.3f} / {df.spearman_centred.iloc[0]:.3f}, similar to most deep layers.</li></ul>
 <h2>Limits</h2><ul>
-<li>The permutation test compares each layer with zero; differences between layers are not tested unless intervals are drawn above.</li>
+<li>The permutation test compares each layer with zero. Intervals of differences between layers are given for layer 33 and layer 0 only, without correction for the number of layers; layer 33 was chosen as reference after seeing the curve.</li>
 <li>Protein pairs are not independent (each protein is in 174 pairs). Several proteins belong to the same families.</li>
 <li>The whole protein sequence is pooled, not the RNA-binding domain only.</li></ul>
 <p class="note">Source: scripts/80_esm_layer_profile_similarity.py; log in EXPERIMENT_LOG.md.</p>
