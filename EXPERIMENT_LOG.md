@@ -1198,3 +1198,30 @@ Hypothesis: in the component-wise folds (same positives as in the ReMatch benchm
 Data: Zenodo 10.5281/zenodo.19730809, archive coral-benchmarks.tar.gz (743 MB), 25 folds (5 strategies x 5 folds), columns RNA_id, Protein_id, RNA_seqs, Prot_seqs plus a 0/1 label (label column name to be confirmed on the real files; the script detects it).
 Measured per fold: id and sequence overlap with train; share of validation rows with a training hit at >=30/50/70% (protein) and >=50/80% (RNA) identity (MMseqs2, query coverage >=0.5); AUROC train to validation of RNA-only, protein-only, concatenated (logistic regression and gradient boosting) k-mer scorers and of a per-id positive-rate scorer.
 Check: synthetic folds (random and component-wise) give the expected overlap and identity values and AUROC near 0.5. Fold-level numbers on the real data: pending.
+
+### Result: CORAL component-wise folds audited (script 78, local run with MMseqs2; 2 strategies x 5 folds = 10 of 25 folds)
+Data downloaded from Zenodo record 19730810 (742,791,323 bytes); label column is `labels`. Other three strategies (redundant, pairwise 30/50, pairwise 60/80) extracted but not audited. All validation sets are balanced (positive fraction 0.500); train 22.0-24.1 k rows, validation 3.7-4.3 k rows per fold.
+Overlap of validation with train (id, sequence, pair): 0.0 in all 10 folds.
+Share of validation rows with a training protein at the given identity (mean over 5 folds):
+| Strategy | >=30% | >=50% | >=70% | median best identity |
+|---|---|---|---|---|
+| component-wise 30/50 | 0.157 | 0.075 | 0.029 | 0.000 |
+| component-wise 60/80 | 0.460 | 0.199 | 0.010 | 0.269 |
+Training RNA with >=50% / >=80% identity: 0.035 / 0.025 (30/50), 0.040 / 0.021 (60/80); median best RNA identity 0.000.
+AUROC train to validation (mean +- sd over 5 folds):
+| Scorer | 30/50 | 60/80 |
+|---|---|---|
+| RNA 3-mer frequencies, logistic regression | 0.569 +- 0.038 | 0.563 +- 0.036 |
+| protein composition (1-, 2-mers), logistic regression | 0.480 +- 0.051 | 0.565 +- 0.079 |
+| both, logistic regression | 0.505 +- 0.045 | 0.569 +- 0.075 |
+| both, gradient boosting | 0.654 +- 0.029 | 0.710 +- 0.015 |
+| positive rate of the id in train | 0.500 | 0.500 |
+Reading: the degree scorer sits at 0.5, so no id-level shortcut; RNA-only composition reaches 0.51-0.61 per fold. Gradient boosting on concatenated composition features (no learned pair model, 24 k training rows) reaches 0.62-0.73 per fold, i.e. composition of the two molecules carries signal about the re-paired labels. The 60/80 folds contain training homologs for about half of the validation proteins (>=30% identity); the 30/50 folds for about 16%.
+Not done: the same audit on the other 15 folds; comparison of these scorers with CORAL / ReMatch models on identical folds (script 79 writes the folds in the generalized layout for that).
+
+## ESM-2 layers vs RNAcompete binding-profile similarity (script 80; planned, not yet run on real data)
+Hypothesis: the Spearman correlation between the cosine similarity of mean-pooled ESM-2 embeddings and the Pearson correlation of 7-mer Z-score vectors differs between layers; the layer with the highest value is the most informative about binding similarity.
+Inputs: published RNAcompete 7-mer Z-scores (RBPzoo matrix, one column per experiment, mean over experiments of the same protein sequence), experiment table with protein sequences from the pairs TSV, ESM-2 650M layers 0-33. Proteins longer than 1,022 residues: windows of 1,022 with stride 511, overlapping per-residue representations averaged.
+Output: per layer Spearman (raw cosine and cosine of embeddings centred over proteins) with Mantel permutation p-value (500 permutations), figure.
+Check: synthetic data with a planted latent structure gives a monotone increase over layers; window coverage checked for lengths 1022, 1023, 1500, 3000. Real data: pending. Local copies of the Z-score file are iCloud placeholders and hang when read, so the run is planned on the VM.
+Script 79 converts the 10 CORAL folds to the generalized layout (3,318 unique proteins, 7,506 unique RNAs).
