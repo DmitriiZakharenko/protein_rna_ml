@@ -17,6 +17,8 @@ Stages
   meta     experiment_id, protein_name, protein_sequence from a pairs table (column subset, read in chunks) -> out_dir/experiments.tsv
   embed    ESM-2 650M, all layers 0..33, mean pooled -> out_dir/esm2_layers.npz           (GPU)
   analyze  similarity matrices, per-layer Spearman, figure -> out_dir/layer_correlation.tsv, fig_layer_correlation.png
+  bootstrap  95% intervals over proteins (resampling with replacement, pairs of the same protein dropped) for every layer and for
+           the difference to layer 0 and to layer 33 -> out_dir/layer_bootstrap.tsv
 
 Usage
 -----
@@ -118,6 +120,53 @@ def spearman_mantel(a: np.ndarray, b: np.ndarray, n_perm: int, rng) -> tuple[flo
     return rho, (ge + 1) / (n_perm + 1)
 
 
+def load_inputs(args, out: Path):
+    exp = pd.read_csv(out / "experiments.tsv", sep="\t")
+    z = np.load(out / "esm2_layers.npz", allow_pickle=True)
+    seqs = list(z["seqs"])
+    zs = pd.read_csv(resolve(args.zscores), sep="\t", index_col=0)
+    zs = zs.loc[:, ~zs.columns.duplicated()]
+    vec, keep = [], []
+    for i, s in enumerate(seqs):
+        ids = [e for e in exp[exp.protein_sequence == s].experiment_id.unique() if e in zs.columns]
+        if ids:
+            vec.append(zs[ids].mean(axis=1).to_numpy(dtype=np.float64))
+            keep.append(i)
+    V = np.vstack(vec)
+    return np.corrcoef(V - V.mean(axis=1, keepdims=True)), z["emb"][keep], zs.shape[0]
+
+
+def stage_bootstrap(args) -> None:
+    out = resolve(args.out_dir)
+    bind, emb, _ = load_inputs(args, out)
+    n, n_layers = len(bind), emb.shape[1]
+    mats = {tag: [cosine(emb[:, L], c) for L in range(n_layers)] for tag, c in (("raw", False), ("centred", True))}
+    rng = np.random.default_rng(args.seed)
+    iu = np.triu_indices(n, k=1)
+    res = {tag: np.zeros((args.n_boot, n_layers)) for tag in mats}
+    for b in range(args.n_boot):
+        idx = rng.integers(0, n, n)
+        a, c = idx[iu[0]], idx[iu[1]]
+        ok = a != c
+        rb = rankdata(bind[a[ok], c[ok]])
+        for tag in mats:
+            for L in range(n_layers):
+                res[tag][b, L] = np.corrcoef(rb, rankdata(mats[tag][L][a[ok], c[ok]]))[0, 1]
+        if (b + 1) % 25 == 0:
+            print(f"  bootstrap {b + 1}/{args.n_boot}", flush=True)
+    q = lambda x: np.percentile(x, [2.5, 97.5], axis=0)  # noqa: E731
+    df = pd.DataFrame({"layer": range(n_layers)})
+    for tag in mats:
+        lo, hi = q(res[tag])
+        df[f"spearman_{tag}_lo"], df[f"spearman_{tag}_hi"] = lo, hi
+        for ref in (0, n_layers - 1):
+            d = res[tag] - res[tag][:, [ref]]
+            dl, dh = q(d)
+            df[f"diff_vs{ref}_{tag}_lo"], df[f"diff_vs{ref}_{tag}_hi"] = dl, dh
+    df.to_csv(out / "layer_bootstrap.tsv", sep="\t", index=False)
+    print(df.round(3).to_string(index=False))
+
+
 def stage_analyze(args) -> None:
     import matplotlib
     matplotlib.use("Agg")
@@ -163,14 +212,15 @@ def stage_analyze(args) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", choices=["meta", "embed", "analyze"])
+    ap.add_argument("stage", choices=["meta", "embed", "analyze", "bootstrap"])
     ap.add_argument("--pairs", default="data/benchmarks/rnacompete/rnacompete_human.tsv")
     ap.add_argument("--zscores", default="rnacompete_analysis/data/raw/Zscores_RNAcompete2025.txt.gz")
     ap.add_argument("--out_dir", default="results/esm_layer_profile")
     ap.add_argument("--n_perm", type=int, default=500)
+    ap.add_argument("--n_boot", type=int, default=200)
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
-    {"meta": stage_meta, "embed": stage_embed, "analyze": stage_analyze}[args.stage](args)
+    {"meta": stage_meta, "embed": stage_embed, "analyze": stage_analyze, "bootstrap": stage_bootstrap}[args.stage](args)
 
 
 if __name__ == "__main__":

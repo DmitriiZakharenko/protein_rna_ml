@@ -1225,3 +1225,20 @@ Inputs: published RNAcompete 7-mer Z-scores (RBPzoo matrix, one column per exper
 Output: per layer Spearman (raw cosine and cosine of embeddings centred over proteins) with Mantel permutation p-value (500 permutations), figure.
 Check: synthetic data with a planted latent structure gives a monotone increase over layers; window coverage checked for lengths 1022, 1023, 1500, 3000. Real data: pending. Local copies of the Z-score file are iCloud placeholders and hang when read, so the run is planned on the VM.
 Script 79 converts the 10 CORAL folds to the generalized layout (3,318 unique proteins, 7,506 unique RNAs).
+
+### Result: ESM-2 650M layers vs RNAcompete 7-mer Z-score similarity (script 80, VM, 175 proteins, 16,382 7-mers)
+Input: RBPzoo Z-score matrix (176 experiments, 175 distinct protein sequences, none longer than 1,022 residues, so no sliding window was needed). Spearman between the upper triangles (15,225 protein pairs) of the cosine matrix and the Pearson matrix of Z-score vectors; Mantel p = 0.002 for every layer (smallest value possible with 500 permutations).
+| Layer | cosine, raw | cosine, centred over proteins |
+|---|---|---|
+| 0 (token embedding) | 0.112 | 0.119 |
+| 5 | 0.082 | 0.120 |
+| 10 | 0.068 | 0.093 |
+| 15 | 0.082 | 0.109 |
+| 20 | 0.094 | 0.138 |
+| 22 | 0.104 | 0.158 (maximum) |
+| 26 | 0.109 | 0.157 |
+| 30 | 0.125 | 0.148 |
+| 32 | 0.132 (maximum) | 0.124 |
+| 33 (last layer, used by the frozen heads) | 0.087 | 0.100 |
+Reading: all layers correlate positively with binding-profile similarity (rho 0.07-0.16), the values are small. Layer 0, which is a mean of token embeddings (composition), reaches 0.112 / 0.119, similar to most deep layers; the best layers exceed it by about 0.02-0.04. The last layer is lower than layers 20-32 (0.087 vs 0.132 raw, 0.100 vs 0.158 centred). The Mantel test compares each layer with zero only; no confidence interval over proteins and no test of differences between layers was computed, and protein pairs are not independent.
+Not done: protein bootstrap CI per layer; comparison with sequence identity and with a composition baseline as predictors of profile similarity; pooling over the RNA-binding domain only; frozen-head runs with layers 22-26 instead of 33.
