@@ -1,0 +1,253 @@
+accession	target	cell	investigated_as
+ENCSR825SVO	AARS	K562	transcription factor
+ENCSR819XBT	AATF	K562	RNA binding protein
+ENCSR089BXO	ABCF1	K562	RNA binding protein
+ENCSR750YOM	ADAT1	K562	RNA binding protein
+ENCSR543TPH	AGGF1	HepG2	other context
+ENCSR725ARB	AGGF1	K562	other context
+ENCSR177QQY	AKAP1	K562	RNA binding protein
+ENCSR356ZMO	AKAP1	HepG2	RNA binding protein
+ENCSR206RXT	AKAP8L	K562	chromatin remodeler
+ENCSR256NCI	APEX1	K562	RNA binding protein
+ENCSR739VVT	APOBEC3C	K562	RNA binding protein
+ENCSR018WPY	AQR	HepG2	DNA repair,RNA binding protein
+ENCSR606BPV	AQR	K562	DNA repair,RNA binding protein
+ENCSR485QCG	BCCIP	HepG2	RNA binding protein
+ENCSR876EYA	BCLAF1	HepG2	transcription factor
+ENCSR663WES	BUD13	K562	RNA binding protein
+ENCSR830BSQ	BUD13	HepG2	RNA binding protein
+ENCSR815VVI	CDC40	HepG2	RNA binding protein
+ENCSR046JHH	CPEB4	K562	RNA binding protein
+ENCSR532VUB	CPSF6	K562	RNA binding protein
+ENCSR384MWO	CSTF2	HepG2	RNA binding protein
+ENCSR840DRD	CSTF2T	K562	RNA binding protein
+ENCSR919HSE	CSTF2T	HepG2	RNA binding protein
+ENCSR293FWY	DDX1	K562	DNA repair,RNA binding protein,cofactor
+ENCSR040QLV	DDX21	K562	RNA binding protein
+ENCSR999WKT	DDX24	K562	RNA binding protein
+ENCSR648LAH	DDX3X	HepG2	RNA binding protein
+ENCSR930BZL	DDX3X	K562	RNA binding protein
+ENCSR576SHT	DDX42	K562	RNA binding protein
+ENCSR008MQM	DDX43	K562	RNA binding protein
+ENCSR631HUN	DDX47	K562	RNA binding protein
+ENCSR145NLR	DDX51	K562	RNA binding protein
+ENCSR154CSN	DDX52	K562	RNA binding protein
+ENCSR970FEW	DDX52	HepG2	RNA binding protein
+ENCSR845VGB	DDX55	HepG2	RNA binding protein
+ENCSR923NKN	DDX55	K562	RNA binding protein
+ENCSR214BZA	DDX59	HepG2	transcription factor
+ENCSR141OIM	DDX6	HepG2	RNA binding protein
+ENCSR893EFU	DDX6	K562	RNA binding protein
+ENCSR061SZV	DGCR8	HepG2	RNA binding protein
+ENCSR634MFO	DGCR8	adrenal gland	RNA binding protein
+ENCSR947JVR	DGCR8	K562	RNA binding protein
+ENCSR529GSJ	DHX30	K562	RNA binding protein
+ENCSR565DGW	DHX30	HepG2	RNA binding protein
+ENCSR301TFY	DKC1	HepG2	RNA binding protein
+ENCSR653HQC	DROSHA	K562	RNA binding protein
+ENCSR834YLD	DROSHA	HepG2	RNA binding protein
+ENCSR004VIR	EEF2	K562	RNA binding protein
+ENCSR527DXF	EFTUD2	HepG2	RNA binding protein
+ENCSR844RVX	EFTUD2	K562	RNA binding protein
+ENCSR041NUV	EIF3D	HepG2	RNA binding protein
+ENCSR023PKW	EIF3G	K562	RNA binding protein
+ENCSR916XIV	EIF3H	HepG2	RNA binding protein
+ENCSR391BBA	EIF4E	K562	RNA binding protein
+ENCSR307YIW	EIF4G2	K562	RNA binding protein
+ENCSR440MSY	ELAC2	K562	RNA binding protein
+ENCSR090LNQ	ELAVL1	K562	RNA binding protein
+ENCSR887LPK	EWSR1	K562	RNA binding protein
+ENCSR521GON	EXOSC10	K562	RNA binding protein
+ENCSR013CTQ	EXOSC5	K562	RNA binding protein
+ENCSR693JWP	EXOSC5	HepG2	RNA binding protein
+ENCSR006OEQ	FAM120A	K562	RNA binding protein
+ENCSR987NYS	FAM120A	HepG2	RNA binding protein
+ENCSR023UHL	FASTKD2	HepG2	RNA binding protein
+ENCSR887FHF	FASTKD2	K562	RNA binding protein
+ENCSR018ZUE	FKBP4	HepG2	RNA binding protein
+ENCSR331VNX	FMR1	K562	RNA binding protein
+ENCSR554UVB	FMR1	K562	RNA binding protein
+ENCSR903PRV	FTO	HepG2	DNA repair
+ENCSR989SMC	FTO	K562	DNA repair
+ENCSR486YGP	FUBP3	HepG2	transcription factor
+ENCSR069EVH	FUS	K562	DNA repair,cofactor
+ENCSR464OSH	FUS	HepG2	DNA repair,cofactor
+ENCSR248TXP	FXR1	K562	RNA binding protein
+ENCSR774RFN	FXR1	K562	RNA binding protein
+ENCSR224QWC	FXR2	K562	RNA binding protein
+ENCSR767OEY	FXR2	K562	RNA binding protein
+ENCSR973HOJ	FXR2	HepG2	RNA binding protein
+ENCSR721HPX	G3BP1	HepG2	RNA binding protein
+ENCSR448GXJ	GARS	K562	RNA binding protein
+ENCSR238CLX	GEMIN5	K562	RNA binding protein
+ENCSR301UQM	GNL3	K562	RNA binding protein
+ENCSR647CLF	GPKOW	K562	RNA binding protein
+ENCSR668MJX	GRSF1	HepG2	RNA binding protein
+ENCSR893NWB	GRWD1	HepG2	chromatin remodeler
+ENCSR999YGP	GRWD1	K562	chromatin remodeler
+ENCSR265ZIS	GTF2F1	HepG2	RNA polymerase complex
+ENCSR736AAG	GTF2F1	K562	RNA polymerase complex
+ENCSR589YHM	HLTF	K562	RNA binding protein
+ENCSR647HOX	HLTF	HepG2	RNA binding protein
+ENCSR154HRN	HNRNPA1	K562	RNA binding protein
+ENCSR769UEW	HNRNPA1	HepG2	RNA binding protein
+ENCSR249ROI	HNRNPC	K562	RNA binding protein
+ENCSR550DVK	HNRNPC	HepG2	RNA binding protein
+ENCSR268ETU	HNRNPK	K562	transcription factor
+ENCSR828ZID	HNRNPK	HepG2	transcription factor
+ENCSR953ZOA	HNRNPK	K562	transcription factor
+ENCSR724RDN	HNRNPL	HepG2	RNA binding protein
+ENCSR795CAI	HNRNPL	K562	RNA binding protein
+ENCSR267UCX	HNRNPM	HepG2	RNA binding protein
+ENCSR412NOW	HNRNPM	K562	RNA binding protein
+ENCSR240MVJ	HNRNPU	HepG2	RNA binding protein
+ENCSR368GER	HNRNPU	adrenal gland	RNA binding protein
+ENCSR520BZQ	HNRNPU	K562	RNA binding protein
+ENCSR571VHI	HNRNPUL1	K562	RNA binding protein
+ENCSR755TJC	HNRNPUL1	HepG2	RNA binding protein
+ENCSR744GEU	IGF2BP1	HepG2	RNA binding protein
+ENCSR975KIR	IGF2BP1	K562	RNA binding protein
+ENCSR062NNB	IGF2BP2	K562	RNA binding protein
+ENCSR993OLA	IGF2BP3	HepG2	RNA binding protein
+ENCSR438KWZ	ILF3	K562	RNA binding protein
+ENCSR786TSC	ILF3	HepG2	RNA binding protein
+ENCSR628IDK	KHDRBS1	K562	RNA binding protein
+ENCSR366DGX	KHSRP	HepG2	RNA binding protein
+ENCSR438GZQ	KHSRP	K562	RNA binding protein
+ENCSR805SRN	LARP4	HepG2	RNA binding protein
+ENCSR888YTT	LARP4	K562	RNA binding protein
+ENCSR456KXI	LARP7	K562	RNA binding protein
+ENCSR961OKA	LARP7	HepG2	RNA binding protein
+ENCSR861GYE	LIN28B	HepG2	RNA binding protein
+ENCSR970NKP	LIN28B	K562	RNA binding protein
+ENCSR022BVV	LSM11	K562	RNA binding protein
+ENCSR135VMS	LSM11	HepG2	RNA binding protein
+ENCSR290VLT	MATR3	HepG2	RNA binding protein
+ENCSR440SUX	MATR3	K562	RNA binding protein
+ENCSR497XZI	MBNL1	K562	RNA binding protein
+ENCSR303OQD	METAP2	K562	RNA binding protein
+ENCSR498DQS	METTL1	K562	RNA binding protein
+ENCSR168VUE	MORC2	K562	RNA binding protein
+ENCSR200DKE	MTPAP	K562	transcription factor
+ENCSR018RVZ	NCBP2	HepG2	RNA binding protein
+ENCSR484LTQ	NCBP2	K562	RNA binding protein
+ENCSR361OCV	NIP7	HepG2	RNA binding protein
+ENCSR891RIC	NIPBL	K562	cohesin
+ENCSR277DEO	NKRF	HepG2	transcription factor
+ENCSR820DQJ	NOL12	HepG2	RNA binding protein
+ENCSR001VAC	NOLC1	K562	RNA binding protein
+ENCSR194HZU	NOLC1	HepG2	RNA binding protein
+ENCSR861PAR	NONO	K562	RNA binding protein
+ENCSR867DSZ	NPM1	K562	cofactor
+ENCSR081JYH	NSUN2	K562	RNA binding protein
+ENCSR379GZS	NSUN2	HepG2	RNA binding protein
+ENCSR958FKZ	PABPC4	K562	RNA binding protein
+ENCSR820UYE	PABPN1	HepG2	RNA binding protein
+ENCSR256CHX	PCBP1	HepG2	RNA binding protein
+ENCSR922WJV	PCBP1	K562	RNA binding protein
+ENCSR339FUY	PCBP2	HepG2	RNA binding protein
+ENCSR001KKZ	PHF6	K562	transcription factor
+ENCSR820WHR	POLR2G	HepG2	RNA polymerase complex
+ENCSR097NEE	PPIG	HepG2	RNA binding protein
+ENCSR197INS	PPIL4	K562	RNA binding protein
+ENCSR977OXG	PRPF4	HepG2	RNA binding protein
+ENCSR121NVA	PRPF8	HepG2	RNA binding protein
+ENCSR534YOI	PRPF8	K562	RNA binding protein
+ENCSR384KAN	PTBP1	HepG2	RNA binding protein
+ENCSR981WKN	PTBP1	K562	RNA binding protein
+ENCSR308YNT	PUM1	K562	RNA binding protein
+ENCSR661ICQ	PUM2	K562	RNA binding protein
+ENCSR291XPT	PUS1	K562	RNA binding protein
+ENCSR366YOG	QKI	K562	RNA binding protein
+ENCSR570WLM	QKI	HepG2	RNA binding protein
+ENCSR756CKJ	RBFOX2	K562	cofactor
+ENCSR987FTF	RBFOX2	HepG2	cofactor
+ENCSR196INN	RBM15	K562	RNA binding protein
+ENCSR754NDA	RBM15	HepG2	RNA binding protein
+ENCSR295OKT	RBM22	K562	RNA binding protein
+ENCSR456JJQ	RBM22	HepG2	RNA binding protein
+ENCSR489ABS	RBM5	HepG2	RNA binding protein
+ENCSR153STI	RNF187	K562	RNA binding protein
+ENCSR937RSF	RPS10	K562	RNA binding protein
+ENCSR269AJF	RPS11	K562	RNA binding protein
+ENCSR120EAR	RPS3	K562	transcription factor
+ENCSR766FAC	RPS3	HepG2	transcription factor
+ENCSR100ARZ	RPS6	K562	RNA binding protein
+ENCSR179MPN	RYBP	K562	RNA binding protein
+ENCSR337XGI	SAFB	HepG2	RNA binding protein,chromatin remodeler
+ENCSR484LAB	SAFB	K562	RNA binding protein,chromatin remodeler
+ENCSR943MHU	SAFB2	K562	RNA binding protein
+ENCSR059CWF	SBDS	K562	RNA binding protein
+ENCSR050BDZ	SDAD1	HepG2	other context
+ENCSR906ZJF	SDAD1	K562	other context
+ENCSR121GQH	SERBP1	K562	RNA binding protein
+ENCSR331MIC	SF3A3	HepG2	RNA binding protein
+ENCSR133QEA	SF3B1	K562	RNA binding protein
+ENCSR267OLV	SF3B4	K562	RNA binding protein
+ENCSR279UJF	SF3B4	HepG2	RNA binding protein
+ENCSR965DLL	SFPQ	HepG2	transcription factor
+ENCSR483NOP	SLBP	K562	DNA replication,RNA binding protein
+ENCSR000SSH	SLTM	K562	RNA binding protein
+ENCSR351PVI	SLTM	HepG2	RNA binding protein
+ENCSR373ODC	SMNDC1	HepG2	RNA binding protein
+ENCSR658IQB	SMNDC1	K562	RNA binding protein
+ENCSR061EVO	SND1	HepG2	RNA binding protein
+ENCSR128VXC	SND1	K562	RNA binding protein
+ENCSR321PWZ	SRSF1	K562	RNA binding protein
+ENCSR432XUP	SRSF1	K562	RNA binding protein
+ENCSR989VIY	SRSF1	HepG2	RNA binding protein
+ENCSR468FSW	SRSF7	K562	RNA binding protein
+ENCSR513NDD	SRSF7	HepG2	RNA binding protein
+ENCSR381VNR	SRSF9	K562	RNA binding protein
+ENCSR773KRC	SRSF9	HepG2	RNA binding protein
+ENCSR352STY	SSB	HepG2	RNA binding protein
+ENCSR356MSW	SSB	K562	RNA binding protein
+ENCSR979EWD	STAU2	HepG2	RNA binding protein
+ENCSR406OOZ	SUB1	HepG2	cofactor
+ENCSR506UPY	SUGP2	HepG2	RNA binding protein
+ENCSR580MFX	SUPV3L1	HepG2	RNA binding protein,chromatin remodeler
+ENCSR580OFI	SUPV3L1	K562	RNA binding protein,chromatin remodeler
+ENCSR568DZW	TAF15	K562	RNA binding protein
+ENCSR841EQA	TAF15	HepG2	RNA binding protein
+ENCSR187VEQ	TARDBP	HepG2	RNA binding protein
+ENCSR584TCR	TARDBP	K562	RNA binding protein
+ENCSR720BJU	TARDBP	K562	RNA binding protein
+ENCSR506OTC	TBRG4	K562	RNA binding protein
+ENCSR916SRV	TBRG4	HepG2	RNA binding protein
+ENCSR057DWB	TIA1	K562	RNA binding protein
+ENCSR623VEQ	TIA1	HepG2	RNA binding protein
+ENCSR322HHA	TIAL1	HepG2	RNA binding protein
+ENCSR314UMJ	TRA2A	HepG2	RNA binding protein
+ENCSR365NVO	TRA2A	K562	RNA binding protein
+ENCSR539ZTS	TROVE2	K562	RNA binding protein
+ENCSR993FMY	TROVE2	HepG2	RNA binding protein
+ENCSR328LLU	U2AF1	HepG2	RNA binding protein
+ENCSR862QCH	U2AF1	K562	RNA binding protein
+ENCSR202BFN	U2AF2	HepG2	RNA binding protein
+ENCSR893RAV	U2AF2	K562	RNA binding protein
+ENCSR349KMG	UCHL5	K562	RNA binding protein
+ENCSR490IEE	UCHL5	HepG2	RNA binding protein
+ENCSR456ASB	UPF1	K562	DNA replication
+ENCSR539BEV	UPF1	HepG2	DNA replication
+ENCSR488JKQ	UTP18	HepG2	RNA binding protein
+ENCSR964VOX	UTP18	K562	RNA binding protein
+ENCSR734ZHL	UTP3	K562	RNA binding protein
+ENCSR202HKN	WDR3	K562	RNA binding protein
+ENCSR085JPB	WDR43	HepG2	RNA binding protein
+ENCSR349CMI	WDR43	K562	RNA binding protein
+ENCSR038JME	WRN	K562	transcription factor
+ENCSR921SXC	XPO5	HepG2	RNA binding protein
+ENCSR258QKO	XRCC6	K562	DNA repair
+ENCSR571ROL	XRCC6	HepG2	DNA repair
+ENCSR655NZA	XRN2	HepG2	transcription factor
+ENCSR657TZB	XRN2	K562	transcription factor
+ENCSR529FKI	YBX3	K562	RNA binding protein,cofactor
+ENCSR735HOK	YBX3	HepG2	RNA binding protein,cofactor
+ENCSR867ZVK	YWHAG	K562	RNA binding protein
+ENCSR712IAG	ZC3H11A	K562	RNA binding protein
+ENCSR907GUB	ZC3H11A	HepG2	RNA binding protein
+ENCSR181NRW	ZC3H8	K562	transcription factor
+ENCSR657TZZ	ZNF622	K562	RNA binding protein
+ENCSR586DGV	ZNF800	K562	transcription factor
+ENCSR685AUR	ZNF800	HepG2	transcription factor
+ENCSR663NRA	ZRANB2	K562	RNA binding protein,transcription factor

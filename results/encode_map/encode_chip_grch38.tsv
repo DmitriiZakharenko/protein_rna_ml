@@ -1,0 +1,3492 @@
+accession	target	cell	investigated_as
+ENCSR440VKE	ADNP	K562	transcription factor
+ENCSR981BHT	ADNP	HepG2	transcription factor
+ENCSR769JRS	AEBP2	HEK293	transcription factor
+ENCSR241LIH	AFF1	K562	transcription factor
+ENCSR426URK	AFF1	K562	transcription factor
+ENCSR261EBV	AFF4	WTC11	transcription factor
+ENCSR436CZV	AFF4	K562	transcription factor
+ENCSR463DPV	AFF4	HepG2	transcription factor
+ENCSR555ZMV	AGO1	HepG2	RNA binding protein
+ENCSR641BSL	AGO1	K562	RNA binding protein
+ENCSR151NQL	AGO2	HepG2	RNA binding protein
+ENCSR168AUX	AHDC1	HepG2	transcription factor
+ENCSR412ZDC	AHR	HepG2	transcription factor
+ENCSR279NEA	AKAP8	HepG2	chromatin remodeler
+ENCSR494HMS	AKAP8L	HepG2	chromatin remodeler
+ENCSR929IMB	AKNA	HepG2	transcription factor
+ENCSR762LIP	AR	WTC11	transcription factor
+ENCSR571BUF	ARHGAP35	K562	transcription factor
+ENCSR577YCO	ARHGAP35	HepG2	transcription factor
+ENCSR822CCM	ARID1B	K562	chromatin remodeler,cofactor,transcription factor
+ENCSR141XJW	ARID2	HepG2	chromatin remodeler
+ENCSR491EBY	ARID2	K562	chromatin remodeler
+ENCSR000EDP	ARID3A	HepG2	transcription factor
+ENCSR000EFY	ARID3A	K562	transcription factor
+ENCSR231ENE	ARID3A	MCF-7	transcription factor
+ENCSR778UBR	ARID3A	GM12878	transcription factor
+ENCSR932BNN	ARID3A	HepG2	transcription factor
+ENCSR360UHC	ARID3B	K562	transcription factor
+ENCSR386UBO	ARID4A	HepG2	transcription factor
+ENCSR676KDJ	ARID4B	K562	transcription factor
+ENCSR939CDD	ARID4B	K562	transcription factor
+ENCSR963CCJ	ARID4B	WTC11	transcription factor
+ENCSR988LZG	ARID4B	HepG2	transcription factor
+ENCSR730DZO	ARID5B	HepG2	transcription factor
+ENCSR029IBC	ARNT	HepG2	transcription factor
+ENCSR155KHM	ARNT	K562	transcription factor
+ENCSR590KEQ	ARNT	GM12878	transcription factor
+ENCSR613NUC	ARNT	K562	transcription factor
+ENCSR669NFS	ARNT	K562	transcription factor
+ENCSR760UKJ	ARNT	HEK293T	transcription factor
+ENCSR267TGY	ARNT2	HepG2	transcription factor
+ENCSR794LVK	ARNTL	HepG2	transcription factor
+ENCSR949COJ	ARNTL	SK-N-SH	transcription factor
+ENCSR115BBC	ASH1L	K562	chromatin remodeler
+ENCSR508LMH	ASH2L	HepG2	chromatin remodeler
+ENCSR849WCQ	ASH2L	GM12878	chromatin remodeler
+ENCSR850KIP	ASH2L	H1	chromatin remodeler
+ENCSR843QIL	ATAD3A	HepG2	transcription factor
+ENCSR000DNZ	ATF1	K562	transcription factor
+ENCSR085XDP	ATF1	K562	transcription factor
+ENCSR091GVJ	ATF1	K562	transcription factor
+ENCSR159OCC	ATF1	K562	transcription factor
+ENCSR253OON	ATF1	HepG2	transcription factor
+ENCSR887VJM	ATF1	WTC11	transcription factor
+ENCSR000BQK	ATF2	GM12878	transcription factor
+ENCSR000BQU	ATF2	H1	transcription factor
+ENCSR014ARU	ATF2	K562	transcription factor
+ENCSR047BUZ	ATF2	HepG2	transcription factor
+ENCSR217HTK	ATF2	HEK293	transcription factor
+ENCSR869IUD	ATF2	K562	transcription factor
+ENCSR908HWZ	ATF2	HepG2	transcription factor
+ENCSR928BPP	ATF2	WTC11	transcription factor
+ENCSR961PPA	ATF2	GM12878	transcription factor
+ENCSR000BJY	ATF3	GM12878	transcription factor
+ENCSR000BKC	ATF3	H1	transcription factor
+ENCSR000BKE	ATF3	HepG2	transcription factor
+ENCSR000BNU	ATF3	K562	transcription factor
+ENCSR000BPS	ATF3	A549	transcription factor
+ENCSR000BUG	ATF3	HCT116	transcription factor
+ENCSR000DOG	ATF3	K562	transcription factor
+ENCSR028UIU	ATF3	K562	transcription factor
+ENCSR205FOW	ATF3	liver	transcription factor
+ENCSR402ZCY	ATF3	HepG2	transcription factor
+ENCSR480LIS	ATF3	liver	transcription factor
+ENCSR568ZXG	ATF3	K562	transcription factor
+ENCSR632DCH	ATF3	K562	transcription factor
+ENCSR879YNX	ATF3	WTC11	transcription factor
+ENCSR044UJJ	ATF4	K562	transcription factor
+ENCSR145TSJ	ATF4	K562	transcription factor
+ENCSR288ZFV	ATF4	HepG2	transcription factor
+ENCSR803PAI	ATF4	HepG2	transcription factor
+ENCSR965SHB	ATF4	HepG2	transcription factor
+ENCSR887TWV	ATF5	HepG2	transcription factor
+ENCSR125RFR	ATF6	K562	transcription factor
+ENCSR769CWW	ATF6	HepG2	transcription factor
+ENCSR987FPY	ATF6	WTC11	transcription factor
+ENCSR014YCR	ATF7	GM12878	cofactor
+ENCSR516DDO	ATF7	HepG2	cofactor
+ENCSR545FXC	ATF7	HepG2	cofactor
+ENCSR866QPZ	ATF7	MCF-7	cofactor
+ENCSR972ZBV	ATF7	K562	cofactor
+ENCSR979KHU	ATF7-NPFF	HepG2	other context
+ENCSR859JGF	ATM	HepG2	DNA repair
+ENCSR161CZA	ATOH8	A549	transcription factor
+ENCSR196NVU	ATRX	HepG2	chromatin remodeler
+ENCSR000EBQ	BACH1	H1	transcription factor
+ENCSR000EGD	BACH1	K562	transcription factor
+ENCSR636MKU	BACH1	GM12878	transcription factor
+ENCSR740NPG	BACH1	K562	transcription factor
+ENCSR036THH	BACH2	SK-N-SH	transcription factor
+ENCSR000BGT	BATF	GM12878	transcription factor
+ENCSR507BRS	BATF2	HepG2	transcription factor
+ENCSR039IQA	BAZ2A	HepG2	transcription factor
+ENCSR000BHA	BCL11A	GM12878	transcription factor
+ENCSR000BIP	BCL11A	H1	transcription factor
+ENCSR000BMJ	BCL11A	H1	transcription factor
+ENCSR021DJC	BCL11A	HEK293	transcription factor
+ENCSR770PQN	BCL11B	HEK293	transcription factor
+ENCSR000BNQ	BCL3	GM12878	transcription factor
+ENCSR000BQH	BCL3	A549	transcription factor
+ENCSR013KHB	BCL3	A549	transcription factor
+ENCSR186IQL	BCL3	A549	transcription factor
+ENCSR215UXN	BCL3	A549	transcription factor
+ENCSR288EPV	BCL3	A549	transcription factor
+ENCSR304NTV	BCL3	HepG2	transcription factor
+ENCSR446SPT	BCL3	A549	transcription factor
+ENCSR473CRE	BCL3	A549	transcription factor
+ENCSR544GUO	BCL3	A549	transcription factor
+ENCSR555AYD	BCL3	A549	transcription factor
+ENCSR639KFO	BCL3	A549	transcription factor
+ENCSR673OGC	BCL3	A549	transcription factor
+ENCSR904OTM	BCL3	A549	transcription factor
+ENCSR948JXU	BCL3	A549	transcription factor
+ENCSR759BDG	BCL6	HepG2	transcription factor
+ENCSR802AHH	BCL6	K562	transcription factor
+ENCSR673SGK	BCL6B	HEK293	transcription factor
+ENCSR000BJZ	BCLAF1	GM12878	transcription factor
+ENCSR000BKH	BCLAF1	K562	transcription factor
+ENCSR015TKV	BCLAF1	HepG2	transcription factor
+ENCSR342THD	BCLAF1	GM12878	transcription factor
+ENCSR492LTS	BCLAF1	K562	transcription factor
+ENCSR792IYC	BCLAF1	K562	transcription factor
+ENCSR808AKZ	BCOR	K562	chromatin remodeler
+ENCSR000DNX	BDP1	HeLa-S3	cofactor
+ENCSR000DOK	BDP1	K562	cofactor
+ENCSR888QFJ	BHLHA15	HepG2	transcription factor
+ENCSR000BID	BHLHE40	HepG2	transcription factor
+ENCSR000DYJ	BHLHE40	A549	transcription factor
+ENCSR000DZJ	BHLHE40	GM12878	transcription factor
+ENCSR000EDT	BHLHE40	HepG2	transcription factor
+ENCSR000EGV	BHLHE40	K562	transcription factor
+ENCSR789GVU	BHLHE40	HEK293T	transcription factor
+ENCSR957KYB	BHLHE40	IMR-90	transcription factor
+ENCSR987MTA	BHLHE40	GM12878	transcription factor
+ENCSR469WII	BMI1	GM12878	chromatin remodeler,transcription factor
+ENCSR782WRO	BMI1	K562	chromatin remodeler,transcription factor
+ENCSR966YYJ	BMI1	MCF-7	chromatin remodeler,transcription factor
+ENCSR754GYI	BNC2	SK-N-SH	transcription factor
+ENCSR238XDV	BORCS8-MEF2B	HepG2	other context
+ENCSR000DZS	BRCA1	GM12878	chromatin remodeler
+ENCSR000EBX	BRCA1	H1	chromatin remodeler
+ENCSR000EDB	BRCA1	HeLa-S3	chromatin remodeler
+ENCSR000EDY	BRCA1	HepG2	chromatin remodeler
+ENCSR223MLH	BRCA1	K562	chromatin remodeler
+ENCSR343RJR	BRCA1	HepG2	chromatin remodeler
+ENCSR946BXO	BRCA1	K562	chromatin remodeler
+ENCSR119OFH	BRCA2	MCF-7	chromatin remodeler
+ENCSR395MHA	BRD4	HepG2	chromatin remodeler,cofactor
+ENCSR514EOE	BRD4	HepG2	chromatin remodeler,cofactor
+ENCSR583ACG	BRD4	K562	chromatin remodeler,cofactor
+ENCSR177XCS	BRD9	K562	chromatin remodeler
+ENCSR000DNW	BRF1	HeLa-S3	cofactor
+ENCSR000DOJ	BRF1	K562	cofactor
+ENCSR000DNV	BRF2	HeLa-S3	transcription factor
+ENCSR000DOC	BRF2	K562	transcription factor
+ENCSR715EIP	BRF2	HepG2	transcription factor
+ENCSR350XWY	C11orf30	K562	DNA repair,chromatin remodeler
+ENCSR336GFK	CAMTA2	K562	cofactor
+ENCSR660ENW	CAMTA2	HepG2	cofactor
+ENCSR699PVC	CBFA2T2	K562	cofactor
+ENCSR697YLJ	CBFA2T3	K562	cofactor
+ENCSR116NDV	CBFB	K562	transcription factor
+ENCSR479RZV	CBFB	HepG2	transcription factor
+ENCSR860UHK	CBFB	GM12878	transcription factor
+ENCSR866VOW	CBFB	WTC11	transcription factor
+ENCSR819WZE	CBX1	HepG2	transcription factor
+ENCSR948QLZ	CBX1	K562	transcription factor
+ENCSR000ATU	CBX2	K562	transcription factor
+ENCSR469WAO	CBX2	A549	transcription factor
+ENCSR478ZYO	CBX2	HepG2	transcription factor
+ENCSR801GJU	CBX2	HepG2	transcription factor
+ENCSR000ATV	CBX3	K562	chromatin remodeler
+ENCSR000BRT	CBX3	K562	chromatin remodeler
+ENCSR000BUH	CBX3	HCT116	chromatin remodeler
+ENCSR549NPZ	CBX3	GM12878	chromatin remodeler
+ENCSR272JAT	CBX5	K562	chromatin remodeler,cofactor
+ENCSR372GIN	CBX5	GM12878	chromatin remodeler,cofactor
+ENCSR814KIO	CBX5	H1	chromatin remodeler,cofactor
+ENCSR892RCP	CBX5	HepG2	chromatin remodeler,cofactor
+ENCSR000ATW	CBX8	K562	DNA repair,RNA binding protein,chromatin remodeler
+ENCSR616MOB	CBX8	A549	DNA repair,RNA binding protein,chromatin remodeler
+ENCSR771SNW	CBX8	H1	DNA repair,RNA binding protein,chromatin remodeler
+ENCSR343IFJ	CC2D1A	K562	transcription factor
+ENCSR846FMR	CC2D1A	HepG2	transcription factor
+ENCSR247XFV	CCAR2	HepG2	RNA binding protein
+ENCSR598GER	CCAR2	K562	RNA binding protein
+ENCSR976KGR	CCDC6	HepG2	other context
+ENCSR000DOA	CCNT2	K562	RNA binding protein
+ENCSR121PFY	CDC5L	K562	transcription factor
+ENCSR027BEE	CDX4	WTC11	transcription factor
+ENCSR142IGM	CEBPA	HepG2	transcription factor
+ENCSR000BQI	CEBPB	HepG2	transcription factor
+ENCSR000BRQ	CEBPB	K562	transcription factor
+ENCSR000BRX	CEBPB	GM12878	transcription factor
+ENCSR000BSD	CEBPB	HCT116	transcription factor
+ENCSR000BSR	CEBPB	MCF-7	transcription factor
+ENCSR000BTT	CEBPB	Ishikawa	transcription factor
+ENCSR000BUB	CEBPB	A549	transcription factor
+ENCSR000DYI	CEBPB	A549	transcription factor
+ENCSR000EBV	CEBPB	H1	transcription factor
+ENCSR000EDA	CEBPB	HeLa-S3	transcription factor
+ENCSR000EEE	CEBPB	HepG2	transcription factor
+ENCSR000EEX	CEBPB	HepG2	transcription factor
+ENCSR000EFM	CEBPB	IMR-90	transcription factor
+ENCSR000EHE	CEBPB	K562	transcription factor
+ENCSR182OZC	CEBPB	A549	transcription factor
+ENCSR190VMK	CEBPB	A549	transcription factor
+ENCSR216GEB	CEBPB	A549	transcription factor
+ENCSR269IUA	CEBPB	A549	transcription factor
+ENCSR299ILN	CEBPB	A549	transcription factor
+ENCSR375BUB	CEBPB	A549	transcription factor
+ENCSR416QLJ	CEBPB	K562	transcription factor
+ENCSR447ZMS	CEBPB	A549	transcription factor
+ENCSR474DCX	CEBPB	A549	transcription factor
+ENCSR606ZTC	CEBPB	A549	transcription factor
+ENCSR681NOM	CEBPB	GM12878	transcription factor
+ENCSR701TCU	CEBPB	A549	transcription factor
+ENCSR752AQK	CEBPB	A549	transcription factor
+ENCSR853DWE	CEBPB	A549	transcription factor
+ENCSR520MCD	CEBPD	HepG2	transcription factor
+ENCSR058DRG	CEBPG	K562	transcription factor
+ENCSR094ZCF	CEBPG	MCF-7	transcription factor
+ENCSR490LWA	CEBPG	K562	transcription factor
+ENCSR620VIC	CEBPG	K562	transcription factor
+ENCSR639IIZ	CEBPG	HepG2	transcription factor
+ENCSR000EDO	CEBPZ	HepG2	transcription factor
+ENCSR347NOB	CEBPZ	GM12878	transcription factor
+ENCSR618GDK	CEBPZ	K562	transcription factor
+ENCSR539PMH	CENPBD1	HepG2	transcription factor
+ENCSR110GQV	CENPT	HepG2	chromatin remodeler
+ENCSR617CDJ	CENPX	HepG2	DNA replication
+ENCSR767HDQ	CERS6	HepG2	transcription factor
+ENCSR763FNU	CGGBP1	K562	transcription factor
+ENCSR065XVO	CHAMP1	K562	transcription factor
+ENCSR315NNL	CHAMP1	K562	transcription factor
+ENCSR163PYB	CHCHD3	HepG2	transcription factor
+ENCSR775NLJ	CHCHD3	K562	transcription factor
+ENCSR000AQD	CHD1	K562	chromatin remodeler
+ENCSR000AQK	CHD1	H1	chromatin remodeler
+ENCSR000DZE	CHD1	GM12878	chromatin remodeler
+ENCSR000EBU	CHD1	H1	chromatin remodeler
+ENCSR000EFC	CHD1	IMR-90	chromatin remodeler
+ENCSR360JOC	CHD1	MCF-7	chromatin remodeler
+ENCSR000DZR	CHD2	GM12878	RNA binding protein
+ENCSR000EBT	CHD2	H1	RNA binding protein
+ENCSR000ECP	CHD2	HeLa-S3	RNA binding protein
+ENCSR000EED	CHD2	HepG2	RNA binding protein
+ENCSR000EHD	CHD2	K562	RNA binding protein
+ENCSR067HGI	CHD2	A549	RNA binding protein
+ENCSR274SLQ	CHD2	SK-N-SH	RNA binding protein
+ENCSR000ATL	CHD4	K562	chromatin remodeler
+ENCSR431FOF	CHD4	HepG2	chromatin remodeler
+ENCSR550SCU	CHD4	A549	chromatin remodeler
+ENCSR751CJG	CHD4	GM12878	chromatin remodeler
+ENCSR000AVA	CHD7	H1	transcription factor
+ENCSR000AVD	CHD7	K562	transcription factor
+ENCSR228OQM	CLOCK	K562	transcription factor
+ENCSR699YFX	CLOCK	MCF-7	transcription factor
+ENCSR934JDG	CLOCK	MCF-7	transcription factor
+ENCSR130HEG	COPS2	K562	DNA repair
+ENCSR173EEH	COPS2	MCF-7	DNA repair
+ENCSR000BRA	CREB1	A549	transcription factor
+ENCSR000BRB	CREB1	A549	transcription factor
+ENCSR000BRC	CREB1	A549	transcription factor
+ENCSR000BSN	CREB1	H1	transcription factor
+ENCSR000BSO	CREB1	K562	transcription factor
+ENCSR000BUF	CREB1	GM12878	transcription factor
+ENCSR000BUR	CREB1	Ishikawa	transcription factor
+ENCSR000BVL	CREB1	HepG2	transcription factor
+ENCSR112ALD	CREB1	HepG2	transcription factor
+ENCSR214ZAV	CREB1	GM23338	transcription factor
+ENCSR331ORD	CREB1	HepG2	transcription factor
+ENCSR471WXT	CREB1	K562	transcription factor
+ENCSR620DUQ	CREB1	MCF-7	transcription factor
+ENCSR700LFA	CREB1	WTC11	transcription factor
+ENCSR897JAS	CREB1	MCF-7	transcription factor
+ENCSR093FKD	CREB3	K562	transcription factor
+ENCSR855XFL	CREB3	HepG2	transcription factor
+ENCSR109YGM	CREB3L1	K562	transcription factor
+ENCSR758GOA	CREB5	SK-N-SH	transcription factor
+ENCSR935PEA	CREB5	K562	transcription factor
+ENCSR000ATT	CREBBP	K562	cofactor
+ENCSR237OGW	CREBL2	HepG2	transcription factor
+ENCSR077DKV	CREM	K562	transcription factor
+ENCSR564TIP	CREM	WTC11	transcription factor
+ENCSR799FCZ	CREM	HepG2	transcription factor
+ENCSR839XZU	CREM	GM12878	transcription factor
+ENCSR903ELW	CREM	HepG2	transcription factor
+ENCSR474KBG	CSDC2	SK-N-SH	RNA binding protein
+ENCSR116QUR	CSDE1	MCF-7	RNA binding protein
+ENCSR402XII	CSDE1	K562	RNA binding protein
+ENCSR626QJQ	CSDE1	K562	RNA binding protein
+ENCSR430BKC	CSRNP1	HepG2	transcription factor
+ENCSR620ZUC	CSRNP2	HepG2	transcription factor
+ENCSR835VBH	CSRNP3	SK-N-SH	transcription factor
+ENCSR201NQZ	CTBP1	K562	chromatin remodeler
+ENCSR237TFX	CTBP1	HEK293T	chromatin remodeler
+ENCSR636EYA	CTBP1	MCF-7	chromatin remodeler
+ENCSR000EUO	CTBP2	H1	cofactor
+ENCSR000AHD	CTCF	MCF-7	transcription factor
+ENCSR000AKB	CTCF	GM12878	transcription factor
+ENCSR000AKO	CTCF	K562	transcription factor
+ENCSR000ALA	CTCF	endothelial cell of umbilical vein	transcription factor
+ENCSR000ALJ	CTCF	keratinocyte	transcription factor
+ENCSR000ALV	CTCF	mammary epithelial cell	transcription factor
+ENCSR000AMA	CTCF	HepG2	transcription factor
+ENCSR000AMF	CTCF	H1	transcription factor
+ENCSR000ANE	CTCF	skeletal muscle myoblast	transcription factor
+ENCSR000ANO	CTCF	fibroblast of lung	transcription factor
+ENCSR000ANS	CTCF	myotube	transcription factor
+ENCSR000AOA	CTCF	HeLa-S3	transcription factor
+ENCSR000AOO	CTCF	astrocyte	transcription factor
+ENCSR000APF	CTCF	osteoblast	transcription factor
+ENCSR000APM	CTCF	fibroblast of dermis	transcription factor
+ENCSR000AQU	CTCF	DND-41	transcription factor
+ENCSR000ATN	CTCF	CD14-positive monocyte	transcription factor
+ENCSR000AUE	CTCF	A549	transcription factor
+ENCSR000AUF	CTCF	A549	transcription factor
+ENCSR000AUV	CTCF	B cell	transcription factor
+ENCSR000BHV	CTCF	A549	transcription factor
+ENCSR000BHW	CTCF	A549	transcription factor
+ENCSR000BIE	CTCF	HepG2	transcription factor
+ENCSR000BLX	CTCF	SK-N-SH	transcription factor
+ENCSR000BNH	CTCF	H1	transcription factor
+ENCSR000BNO	CTCF	T47D	transcription factor
+ENCSR000BPJ	CTCF	K562	transcription factor
+ENCSR000BQE	CTCF	Ishikawa	transcription factor
+ENCSR000BSE	CTCF	HCT116	transcription factor
+ENCSR000DKN	CTCF	H54	transcription factor
+ENCSR000DKP	CTCF	GM10248	transcription factor
+ENCSR000DKR	CTCF	GM10266	transcription factor
+ENCSR000DKV	CTCF	GM12878	transcription factor
+ENCSR000DKZ	CTCF	GM13976	transcription factor
+ENCSR000DLB	CTCF	GM13977	transcription factor
+ENCSR000DLG	CTCF	GM20000	transcription factor
+ENCSR000DLK	CTCF	H1	transcription factor
+ENCSR000DLO	CTCF	HeLa-S3	transcription factor
+ENCSR000DLS	CTCF	HepG2	transcription factor
+ENCSR000DLW	CTCF	endothelial cell of umbilical vein	transcription factor
+ENCSR000DMA	CTCF	K562	transcription factor
+ENCSR000DMC	CTCF	kidney	transcription factor
+ENCSR000DME	CTCF	LNCaP clone FGC	transcription factor
+ENCSR000DMF	CTCF	LNCaP clone FGC	transcription factor
+ENCSR000DMH	CTCF	lung	transcription factor
+ENCSR000DML	CTCF	MCF-7	transcription factor
+ENCSR000DMO	CTCF	MCF-7	transcription factor
+ENCSR000DMR	CTCF	MCF-7	transcription factor
+ENCSR000DMS	CTCF	MCF-7	transcription factor
+ENCSR000DMV	CTCF	MCF-7	transcription factor
+ENCSR000DMY	CTCF	D721Med	transcription factor
+ENCSR000DNA	CTCF	A549	transcription factor
+ENCSR000DNC	CTCF	keratinocyte	transcription factor
+ENCSR000DND	CTCF	pancreas	transcription factor
+ENCSR000DNI	CTCF	spleen	transcription factor
+ENCSR000DPF	CTCF	A549	transcription factor
+ENCSR000DPG	CTCF	AG04449	transcription factor
+ENCSR000DPM	CTCF	AG04450	transcription factor
+ENCSR000DPP	CTCF	AG09309	transcription factor
+ENCSR000DPS	CTCF	AG09319	transcription factor
+ENCSR000DPV	CTCF	AG10803	transcription factor
+ENCSR000DPY	CTCF	fibroblast of the aortic adventitia	transcription factor
+ENCSR000DQD	CTCF	BE2C	transcription factor
+ENCSR000DQI	CTCF	BJ	transcription factor
+ENCSR000DQN	CTCF	Caco-2	transcription factor
+ENCSR000DQW	CTCF	GM06990	transcription factor
+ENCSR000DQY	CTCF	GM12801	transcription factor
+ENCSR000DRB	CTCF	GM12864	transcription factor
+ENCSR000DRE	CTCF	GM12865	transcription factor
+ENCSR000DRN	CTCF	GM12872	transcription factor
+ENCSR000DRP	CTCF	GM12873	transcription factor
+ENCSR000DRR	CTCF	GM12874	transcription factor
+ENCSR000DRU	CTCF	GM12875	transcription factor
+ENCSR000DRZ	CTCF	GM12878	transcription factor
+ENCSR000DSU	CTCF	astrocyte of the spinal cord	transcription factor
+ENCSR000DSZ	CTCF	astrocyte of the cerebellum	transcription factor
+ENCSR000DTA	CTCF	brain microvascular endothelial cell	transcription factor
+ENCSR000DTF	CTCF	cardiac fibroblast	transcription factor
+ENCSR000DTI	CTCF	cardiac muscle cell	transcription factor
+ENCSR000DTL	CTCF	choroid plexus epithelial cell	transcription factor
+ENCSR000DTO	CTCF	HCT116	transcription factor
+ENCSR000DTR	CTCF	epithelial cell of esophagus	transcription factor
+ENCSR000DTW	CTCF	HEK293	transcription factor
+ENCSR000DUB	CTCF	HeLa-S3	transcription factor
+ENCSR000DUG	CTCF	HepG2	transcription factor
+ENCSR000DUH	CTCF	foreskin fibroblast	transcription factor
+ENCSR000DUM	CTCF	HFF-Myc	transcription factor
+ENCSR000DUP	CTCF	HL-60	transcription factor
+ENCSR000DUS	CTCF	mammary epithelial cell	transcription factor
+ENCSR000DUU	CTCF	fibroblast of mammary gland	transcription factor
+ENCSR000DUX	CTCF	fibroblast of pulmonary artery	transcription factor
+ENCSR000DVA	CTCF	fibroblast of lung	transcription factor
+ENCSR000DVH	CTCF	kidney epithelial cell	transcription factor
+ENCSR000DVI	CTCF	retinal pigment epithelial cell	transcription factor
+ENCSR000DVP	CTCF	endothelial cell of umbilical vein	transcription factor
+ENCSR000DVQ	CTCF	fibroblast of villous mesenchyme	transcription factor
+ENCSR000DWE	CTCF	K562	transcription factor
+ENCSR000DWH	CTCF	MCF-7	transcription factor
+ENCSR000DWN	CTCF	NB4	transcription factor
+ENCSR000DWQ	CTCF	foreskin fibroblast	transcription factor
+ENCSR000DWX	CTCF	keratinocyte	transcription factor
+ENCSR000DWY	CTCF	fibroblast of lung	transcription factor
+ENCSR000DXD	CTCF	epithelial cell of proximal tubule	transcription factor
+ENCSR000DXI	CTCF	bronchial epithelial cell	transcription factor
+ENCSR000DXQ	CTCF	SK-N-SH	transcription factor
+ENCSR000DXW	CTCF	WERI-Rb-1	transcription factor
+ENCSR000DYB	CTCF	WI38	transcription factor
+ENCSR000DYD	CTCF	A549	transcription factor
+ENCSR000DZN	CTCF	GM12878	transcription factor
+ENCSR000EFI	CTCF	IMR-90	transcription factor
+ENCSR000EGM	CTCF	K562	transcription factor
+ENCSR000EIC	CTCF	SK-N-SH	transcription factor
+ENCSR000VGD	CTCF	right lobe of liver	transcription factor
+ENCSR003SZZ	CTCF	esophagus squamous epithelium	transcription factor
+ENCSR005LPI	CTCF	omental fat pad	transcription factor
+ENCSR014GSQ	CTCF	adrenal gland	transcription factor
+ENCSR027FSZ	CTCF	upper lobe of left lung	transcription factor
+ENCSR027HML	CTCF	OCI-LY7	transcription factor
+ENCSR028YEV	CTCF	spleen	transcription factor
+ENCSR031PXV	CTCF	endothelial cell	transcription factor
+ENCSR033KMZ	CTCF	thyroid gland	transcription factor
+ENCSR035OXA	CTCF	A549	transcription factor
+ENCSR036EGV	CTCF	foreskin keratinocyte	transcription factor
+ENCSR037GKL	CTCF	stomach	transcription factor
+ENCSR038FOS	CTCF	suprapubic skin	transcription factor
+ENCSR038VWU	CTCF	mucosa of descending colon	transcription factor
+ENCSR048RGR	CTCF	HCT116	transcription factor
+ENCSR059BCO	CTCF	HCT116	transcription factor
+ENCSR059KXR	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR062JAC	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR066BZZ	CTCF	bipolar neuron	transcription factor
+ENCSR066GBX	CTCF	right atrium auricular region	transcription factor
+ENCSR068DJS	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR068HEE	CTCF	left ventricle myocardium inferior	transcription factor
+ENCSR071XWO	CTCF	gastrocnemius medialis	transcription factor
+ENCSR072EUE	CTCF	OCI-LY1	transcription factor
+ENCSR073BPG	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR073TPC	CTCF	esophagus muscularis mucosa	transcription factor
+ENCSR074SFL	CTCF	esophagus muscularis mucosa	transcription factor
+ENCSR075NRV	CTCF	B cell	transcription factor
+ENCSR079YAP	CTCF	tibial artery	transcription factor
+ENCSR084RDK	CTCF	DOHH2	transcription factor
+ENCSR089DTY	CTCF	omental fat pad	transcription factor
+ENCSR089NBS	CTCF	heart right ventricle	transcription factor
+ENCSR092VKJ	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR094PSL	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR102CSD	CTCF	transverse colon	transcription factor
+ENCSR105HEC	CTCF	activated B cell	transcription factor
+ENCSR105KGD	CTCF	heart right ventricle	transcription factor
+ENCSR107GWZ	CTCF	HCT116	transcription factor
+ENCSR113COJ	CTCF	pancreas	transcription factor
+ENCSR116AKQ	CTCF	CD8-positive, alpha-beta T cell	transcription factor
+ENCSR125DKL	CTCF	SU-DHL-6	transcription factor
+ENCSR125NBL	CTCF	neural progenitor cell	transcription factor
+ENCSR130TQM	CTCF	A549	transcription factor
+ENCSR133AFF	CTCF	lower lobe of left lung	transcription factor
+ENCSR138FTN	CTCF	heart right ventricle	transcription factor
+ENCSR145HBC	CTCF	thyroid gland	transcription factor
+ENCSR146BGM	CTCF	gastroesophageal sphincter	transcription factor
+ENCSR160GVO	CTCF	HCT116	transcription factor
+ENCSR162KZY	CTCF	CD14-positive monocyte	transcription factor
+ENCSR163ULN	CTCF	HFFc6	transcription factor
+ENCSR164ASX	CTCF	upper lobe of right lung	transcription factor
+ENCSR168KQC	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR173AIR	CTCF	stomach	transcription factor
+ENCSR173IEA	CTCF	A549	transcription factor
+ENCSR175FLL	CTCF	coronary artery	transcription factor
+ENCSR185CCV	CTCF	stomach	transcription factor
+ENCSR186NVR	CTCF	gastroesophageal sphincter	transcription factor
+ENCSR188XCX	CTCF	adrenal gland	transcription factor
+ENCSR190BZA	CTCF	chondrocyte	transcription factor
+ENCSR193SZD	CTCF	MCF 10A	transcription factor
+ENCSR194JAU	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR194WQV	CTCF	nephron	transcription factor
+ENCSR195POA	CTCF	lower lobe of left lung	transcription factor
+ENCSR196HOM	CTCF	epithelial cell of prostate	transcription factor
+ENCSR203QEB	CTCF	Panc1	transcription factor
+ENCSR206ETG	CTCF	gastroesophageal sphincter	transcription factor
+ENCSR211AFA	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR216SIK	CTCF	HCT116	transcription factor
+ENCSR218MVT	CTCF	neural crest cell	transcription factor
+ENCSR222SQE	CTCF	sigmoid colon	transcription factor
+ENCSR224WWI	CTCF	upper lobe of left lung	transcription factor
+ENCSR225KOS	CTCF	brain	transcription factor
+ENCSR225OKX	CTCF	omental fat pad	transcription factor
+ENCSR225YGX	CTCF	spleen	transcription factor
+ENCSR230ORT	CTCF	prostate gland	transcription factor
+ENCSR230RQK	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR232OFD	CTCF	right atrium auricular region	transcription factor
+ENCSR234HEM	CTCF	spleen	transcription factor
+ENCSR236YGF	CTCF	transverse colon	transcription factor
+ENCSR237BTA	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR240PRQ	CTCF	HCT116	transcription factor
+ENCSR243INX	CTCF	PC-9	transcription factor
+ENCSR244KEW	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR249JOH	CTCF	A549	transcription factor
+ENCSR251BHU	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR252QYR	CTCF	hepatocyte	transcription factor
+ENCSR252XWG	CTCF	lower leg skin	transcription factor
+ENCSR253ALG	CTCF	pancreas	transcription factor
+ENCSR254YRM	CTCF	liver	transcription factor
+ENCSR255SQR	CTCF	left lung	transcription factor
+ENCSR259PNW	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR260FAS	CTCF	neural progenitor cell	transcription factor
+ENCSR261VAS	CTCF	smooth muscle cell	transcription factor
+ENCSR265ARE	CTCF	VCaP	transcription factor
+ENCSR265PFQ	CTCF	body of pancreas	transcription factor
+ENCSR266CJT	CTCF	spleen	transcription factor
+ENCSR266UTR	CTCF	esophagus squamous epithelium	transcription factor
+ENCSR266ZUX	CTCF	nephron	transcription factor
+ENCSR270KFY	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR275JVX	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR287UXS	CTCF	A549	transcription factor
+ENCSR288YJL	CTCF	HCT116	transcription factor
+ENCSR291YNH	CTCF	placenta	transcription factor
+ENCSR296JFK	CTCF	heart left ventricle	transcription factor
+ENCSR298ZPF	CTCF	gastroesophageal sphincter	transcription factor
+ENCSR300DWM	CTCF	osteocyte	transcription factor
+ENCSR300WOR	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR303GFI	CTCF	RWPE1	transcription factor
+ENCSR304XUZ	CTCF	breast epithelium	transcription factor
+ENCSR307PFP	CTCF	body of pancreas	transcription factor
+ENCSR315NAC	CTCF	LNCAP	transcription factor
+ENCSR323ZAP	CTCF	heart right ventricle	transcription factor
+ENCSR329KRE	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR331OGX	CTCF	thyroid gland	transcription factor
+ENCSR332WTG	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR336PTS	CTCF	parathyroid adenoma	transcription factor
+ENCSR336VBV	CTCF	A549	transcription factor
+ENCSR341OQG	CTCF	HCT116	transcription factor
+ENCSR343RJH	CTCF	spleen	transcription factor
+ENCSR347MXL	CTCF	activated CD8-positive, alpha-beta T cell	transcription factor
+ENCSR350NBQ	CTCF	heart left ventricle	transcription factor
+ENCSR351SWL	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR352EIC	CTCF	HCT116	transcription factor
+ENCSR353DFU	CTCF	esophagus muscularis mucosa	transcription factor
+ENCSR355ALW	CTCF	gastrocnemius medialis	transcription factor
+ENCSR355PMV	CTCF	heart left ventricle	transcription factor
+ENCSR359LOD	CTCF	PC-3	transcription factor
+ENCSR361KVZ	CTCF	stomach	transcription factor
+ENCSR369RRE	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR372JWF	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR374PKX	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR375VXU	CTCF	Peyer's patch	transcription factor
+ENCSR376EOW	CTCF	heart right ventricle	transcription factor
+ENCSR378BVM	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR378KET	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR380WJL	CTCF	colonic mucosa	transcription factor
+ENCSR384DBJ	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR384KPP	CTCF	A549	transcription factor
+ENCSR385CDF	CTCF	HCT116	transcription factor
+ENCSR391ZKN	CTCF	Peyer's patch	transcription factor
+ENCSR392SFJ	CTCF	uterus	transcription factor
+ENCSR398RET	CTCF	endodermal cell	transcription factor
+ENCSR401KRN	CTCF	right atrium auricular region	transcription factor
+ENCSR402IDP	CTCF	MM.1S	transcription factor
+ENCSR408XTO	CTCF	body of pancreas	transcription factor
+ENCSR408ZEE	CTCF	adrenal gland	transcription factor
+ENCSR414CQB	CTCF	A549	transcription factor
+ENCSR419ANE	CTCF	Peyer's patch	transcription factor
+ENCSR423MQG	CTCF	brain	transcription factor
+ENCSR423ZUM	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR428BKN	CTCF	gastrocnemius medialis	transcription factor
+ENCSR430TEE	CTCF	lower leg skin	transcription factor
+ENCSR430YRJ	CTCF	KMS-11	transcription factor
+ENCSR432AXE	CTCF	A549	transcription factor
+ENCSR434XLP	CTCF	tibial nerve	transcription factor
+ENCSR443NWG	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR443WKD	CTCF	esophagus muscularis mucosa	transcription factor
+ENCSR445NJB	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR446FOM	CTCF	HCT116	transcription factor
+ENCSR447ANW	CTCF	coronary artery	transcription factor
+ENCSR449SEF	CTCF	transverse colon	transcription factor
+ENCSR450BLH	CTCF	adrenal gland	transcription factor
+ENCSR450DXU	CTCF	HCT116	transcription factor
+ENCSR450FRI	CTCF	esophagus squamous epithelium	transcription factor
+ENCSR452KYY	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR458PYQ	CTCF	type B pancreatic cell	transcription factor
+ENCSR460LGH	CTCF	C4-2B	transcription factor
+ENCSR461HOC	CTCF	heart left ventricle	transcription factor
+ENCSR461VHZ	CTCF	astrocyte	transcription factor
+ENCSR463XCZ	CTCF	upper lobe of left lung	transcription factor
+ENCSR464DKE	CTCF	Loucy	transcription factor
+ENCSR466TNQ	CTCF	spleen	transcription factor
+ENCSR467EQP	CTCF	brain	transcription factor
+ENCSR469POZ	CTCF	tibial nerve	transcription factor
+ENCSR470KCE	CTCF	CD4-positive, alpha-beta T cell	transcription factor
+ENCSR473DVS	CTCF	heart right ventricle	transcription factor
+ENCSR482PMN	CTCF	spleen	transcription factor
+ENCSR484DDO	CTCF	body of pancreas	transcription factor
+ENCSR485VQV	CTCF	suprapubic skin	transcription factor
+ENCSR489QDF	CTCF	glutamatergic neuron	transcription factor
+ENCSR492ZIW	CTCF	thyroid gland	transcription factor
+ENCSR493APD	CTCF	ovary	transcription factor
+ENCSR494TNM	CTCF	testis	transcription factor
+ENCSR505RTK	CTCF	heart right ventricle	transcription factor
+ENCSR505ZGX	CTCF	thyroid gland	transcription factor
+ENCSR515LRI	CTCF	suprapubic skin	transcription factor
+ENCSR525VXD	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR527TPP	CTCF	uterus	transcription factor
+ENCSR541AMF	CTCF	SK-N-SH	transcription factor
+ENCSR542SCB	CTCF	Peyer's patch	transcription factor
+ENCSR544APK	CTCF	heart left ventricle	transcription factor
+ENCSR548DDS	CTCF	ovary	transcription factor
+ENCSR549TXG	CTCF	thoracic aorta	transcription factor
+ENCSR549WAU	CTCF	stomach	transcription factor
+ENCSR553UWG	CTCF	A549	transcription factor
+ENCSR555DCD	CTCF	ascending aorta	transcription factor
+ENCSR558HTE	CTCF	transverse colon	transcription factor
+ENCSR559KAB	CTCF	esophagus muscularis mucosa	transcription factor
+ENCSR560BUE	CTCF	MCF-7	transcription factor
+ENCSR565HBN	CTCF	heart left ventricle	transcription factor
+ENCSR568IVD	CTCF	Peyer's patch	transcription factor
+ENCSR572DUJ	CTCF	body of pancreas	transcription factor
+ENCSR575WYM	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR578AKX	CTCF	heart left ventricle	transcription factor
+ENCSR582MTM	CTCF	lower leg skin	transcription factor
+ENCSR585JVS	CTCF	heart right ventricle	transcription factor
+ENCSR585KBH	CTCF	body of pancreas	transcription factor
+ENCSR587KPW	CTCF	heart right ventricle	transcription factor
+ENCSR594NSU	CTCF	gastrocnemius medialis	transcription factor
+ENCSR595BPR	CTCF	spleen	transcription factor
+ENCSR597TGH	CTCF	HCT116	transcription factor
+ENCSR601FEB	CTCF	spleen	transcription factor
+ENCSR606TNN	CTCF	vagina	transcription factor
+ENCSR607XFI	CTCF	HepG2	transcription factor
+ENCSR608WPS	CTCF	transverse colon	transcription factor
+ENCSR610UDC	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR611HGB	CTCF	GM23338	transcription factor
+ENCSR611JJS	CTCF	A673	transcription factor
+ENCSR614HHL	CTCF	vagina	transcription factor
+ENCSR617IFZ	CTCF	HEK293	transcription factor
+ENCSR618QYE	CTCF	stomach	transcription factor
+ENCSR619IUE	CTCF	bipolar neuron	transcription factor
+ENCSR619WGF	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR634OAQ	CTCF	NCI-H929	transcription factor
+ENCSR647SQF	CTCF	mesothelial cell of epicardium	transcription factor
+ENCSR655ECZ	CTCF	vagina	transcription factor
+ENCSR661NXJ	CTCF	breast epithelium	transcription factor
+ENCSR661XNQ	CTCF	gastroesophageal sphincter	transcription factor
+ENCSR666JEF	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR668BTN	CTCF	thoracic aorta	transcription factor
+ENCSR671ITY	CTCF	HCT116	transcription factor
+ENCSR673WZL	CTCF	LNCAP	transcription factor
+ENCSR676LDQ	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR680WMF	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR684PGO	CTCF	uterus	transcription factor
+ENCSR687APM	CTCF	body of pancreas	transcription factor
+ENCSR689LFJ	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR689VEF	CTCF	tibial nerve	transcription factor
+ENCSR692ILH	CTCF	spleen	transcription factor
+ENCSR697YIN	CTCF	breast epithelium	transcription factor
+ENCSR699BEK	CTCF	tibial artery	transcription factor
+ENCSR699BRV	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR705DNM	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR713SXF	CTCF	cardiac muscle cell	transcription factor
+ENCSR715FHW	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR718SDR	CTCF	heart left ventricle	transcription factor
+ENCSR720USO	CTCF	prostate gland	transcription factor
+ENCSR721AHD	CTCF	sigmoid colon	transcription factor
+ENCSR724YTA	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR727HME	CTCF	lower leg skin	transcription factor
+ENCSR736PZW	CTCF	left lung	transcription factor
+ENCSR740GKG	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR744YJR	CTCF	thyroid gland	transcription factor
+ENCSR753RME	CTCF	testis	transcription factor
+ENCSR755WXO	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR756KRS	CTCF	suprapubic skin	transcription factor
+ENCSR756URL	CTCF	esophagus squamous epithelium	transcription factor
+ENCSR756ZKG	CTCF	OCI-LY3	transcription factor
+ENCSR757DFT	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR762PCG	CTCF	subcutaneous adipose tissue	transcription factor
+ENCSR763VUL	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR769WKR	CTCF	transverse colon	transcription factor
+ENCSR770IWO	CTCF	adrenal gland	transcription factor
+ENCSR773JBP	CTCF	esophagus squamous epithelium	transcription factor
+ENCSR774PGN	CTCF	pancreas	transcription factor
+ENCSR776AEL	CTCF	stomach	transcription factor
+ENCSR778NDP	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR778ZPK	CTCF	heart left ventricle	transcription factor
+ENCSR779YTI	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR780OZE	CTCF	parathyroid adenoma	transcription factor
+ENCSR782BSY	CTCF	placenta	transcription factor
+ENCSR785YRL	CTCF	neutrophil	transcription factor
+ENCSR791AYW	CTCF	heart left ventricle	transcription factor
+ENCSR793YAD	CTCF	tibial nerve	transcription factor
+ENCSR798NVH	CTCF	uterus	transcription factor
+ENCSR799GJD	CTCF	nephron progenitor cell	transcription factor
+ENCSR799TJD	CTCF	upper lobe of left lung	transcription factor
+ENCSR799WDT	CTCF	Peyer's patch	transcription factor
+ENCSR805YLE	CTCF	gastroesophageal sphincter	transcription factor
+ENCSR806WWX	CTCF	activated CD4-positive, alpha-beta T cell	transcription factor
+ENCSR812FNU	CTCF	foreskin keratinocyte	transcription factor
+ENCSR813KUE	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR817HTJ	CTCF	foreskin keratinocyte	transcription factor
+ENCSR819WDZ	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR822CEA	CTCF	neural cell	transcription factor
+ENCSR822PJT	CTCF	tibial nerve	transcription factor
+ENCSR825NXC	CTCF	heart left ventricle	transcription factor
+ENCSR829HTO	CTCF	prostate gland	transcription factor
+ENCSR832TWW	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR833FWC	CTCF	transverse colon	transcription factor
+ENCSR834XPX	CTCF	heart left ventricle	transcription factor
+ENCSR837OOH	CTCF	right lobe of liver	transcription factor
+ENCSR838RUX	CTCF	esophagus squamous epithelium	transcription factor
+ENCSR839NFL	CTCF	right lobe of liver	transcription factor
+ENCSR840EYN	CTCF	heart right ventricle	transcription factor
+ENCSR841XDW	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR846JKO	CTCF	ascending aorta	transcription factor
+ENCSR847OSL	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR847XGE	CTCF	22Rv1	transcription factor
+ENCSR851SOK	CTCF	A549	transcription factor
+ENCSR852BLA	CTCF	pancreas	transcription factor
+ENCSR856JJB	CTCF	RWPE2	transcription factor
+ENCSR856TKC	CTCF	natural killer cell	transcription factor
+ENCSR857PBV	CTCF	22Rv1	transcription factor
+ENCSR857RJQ	CTCF	sigmoid colon	transcription factor
+ENCSR863HZM	CTCF	lower lobe of right lung	transcription factor
+ENCSR871MKQ	CTCF	H9	transcription factor
+ENCSR875NEW	CTCF	tibial nerve	transcription factor
+ENCSR876UZD	CTCF	A549	transcription factor
+ENCSR881YFU	CTCF	heart left ventricle	transcription factor
+ENCSR899JSO	CTCF	adrenal gland	transcription factor
+ENCSR901NIN	CTCF	progenitor cell of endocrine pancreas	transcription factor
+ENCSR904RIA	CTCF	heart left ventricle	transcription factor
+ENCSR907BES	CTCF	transverse colon	transcription factor
+ENCSR908TBJ	CTCF	HCT116	transcription factor
+ENCSR911GFJ	CTCF	right lobe of liver	transcription factor
+ENCSR913SEI	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR921ERP	CTCF	Calu3	transcription factor
+ENCSR922HGS	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR925GDS	CTCF	sigmoid colon	transcription factor
+ENCSR928RNP	CTCF	heart right ventricle	transcription factor
+ENCSR930SOT	CTCF	brain	transcription factor
+ENCSR932XBJ	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR932ZMX	CTCF	GM23338	transcription factor
+ENCSR934GQS	CTCF	ovary	transcription factor
+ENCSR946MNG	CTCF	prostate gland	transcription factor
+ENCSR954MUZ	CTCF	HCT116	transcription factor
+ENCSR955BIB	CTCF	thyroid gland	transcription factor
+ENCSR957UPE	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR960MDF	CTCF	ascending aorta	transcription factor
+ENCSR961IOA	CTCF	Caco-2	transcription factor
+ENCSR961SKY	CTCF	spleen	transcription factor
+ENCSR964BKO	CTCF	upper lobe of left lung	transcription factor
+ENCSR966OUM	CTCF	nephron	transcription factor
+ENCSR967BSF	CTCF	spleen	transcription factor
+ENCSR967QUQ	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR970UZD	CTCF	upper lobe of left lung	transcription factor
+ENCSR972LYL	CTCF	upper lobe of left lung	transcription factor
+ENCSR979PTL	CTCF	dorsolateral prefrontal cortex	transcription factor
+ENCSR979ZEO	CTCF	HCT116	transcription factor
+ENCSR981CID	CTCF	testis	transcription factor
+ENCSR984IUE	CTCF	psoas muscle	transcription factor
+ENCSR987GXT	CTCF	GM23338	transcription factor
+ENCSR992XTY	CTCF	WTC11	transcription factor
+ENCSR998NQG	CTCF	gastrocnemius medialis	transcription factor
+ENCSR000BNK	CTCFL	K562	transcription factor
+ENCSR000DYR	CUX1	GM12878	transcription factor
+ENCSR000EFO	CUX1	K562	transcription factor
+ENCSR017CEO	CUX1	MCF-7	transcription factor
+ENCSR178NTX	CUX1	K562	transcription factor
+ENCSR996SKD	CXXC5	K562	cofactor
+ENCSR195PUH	Cebpa	BLaER1	transcription factor
+ENCSR236DYB	Cebpa	BLaER1	transcription factor
+ENCSR288MRA	Cebpa	BLaER1	transcription factor
+ENCSR334SSD	Cebpa	BLaER1	transcription factor
+ENCSR368EZK	Cebpa	BLaER1	transcription factor
+ENCSR377EZA	Cebpa	BLaER1	transcription factor
+ENCSR400YGT	Cebpa	BLaER1	transcription factor
+ENCSR490DXW	Cebpa	BLaER1	transcription factor
+ENCSR548ADW	Cebpa	BLaER1	transcription factor
+ENCSR827TOM	Cebpa	BLaER1	transcription factor
+ENCSR867ARL	Cebpa	BLaER1	transcription factor
+ENCSR917FJW	Cebpa	BLaER1	transcription factor
+ENCSR030TJP	DACH1	K562	transcription factor
+ENCSR944LSA	DBP	HepG2	transcription factor
+ENCSR046DIG	DDIT3	HepG2	transcription factor
+ENCSR387BVC	DDIT3	K562	transcription factor
+ENCSR330ADN	DDX20	MCF-7	cofactor
+ENCSR382AIB	DDX20	K562	cofactor
+ENCSR446LAV	DDX20	K562	cofactor
+ENCSR119FAD	DEAF1	K562	transcription factor
+ENCSR387SYS	DEAF1	K562	transcription factor
+ENCSR219MKK	DEK	HeLa-S3	DNA repair
+ENCSR167JBG	DIDO1	K562	RNA binding protein
+ENCSR017EJY	DLX4	K562	transcription factor
+ENCSR272TOJ	DLX6	HepG2	transcription factor
+ENCSR670YPQ	DMAP1	HepG2	chromatin remodeler
+ENCSR091IQZ	DMBX1	K562	transcription factor
+ENCSR015KAM	DMTF1	K562	transcription factor
+ENCSR251XFX	DMTF1	HepG2	transcription factor
+ENCSR606LDL	DNMT1	HepG2	chromatin remodeler
+ENCSR987PBI	DNMT1	K562	chromatin remodeler
+ENCSR156CWW	DNMT3B	HepG2	chromatin remodeler,cofactor
+ENCSR219BXP	DPF2	K562	cofactor
+ENCSR234VCE	DPF2	MCF-7	cofactor
+ENCSR509FWH	DPF2	GM12878	cofactor
+ENCSR715CCR	DPF2	K562	cofactor
+ENCSR813QEO	DPF2	HepG2	cofactor
+ENCSR185AYQ	DR1	HepG2	chromatin remodeler,cofactor
+ENCSR765MKZ	DRAP1	HepG2	cofactor,transcription factor
+ENCSR895KNN	DZIP1	HepG2	transcription factor
+ENCSR000EVJ	E2F1	HeLa-S3	transcription factor
+ENCSR000EVM	E2F1	HeLa-S3	transcription factor
+ENCSR000EWX	E2F1	MCF-7	transcription factor
+ENCSR153DWR	E2F1	K562	transcription factor
+ENCSR563LLO	E2F1	K562	transcription factor
+ENCSR717ZZW	E2F1	HepG2	transcription factor
+ENCSR720HUL	E2F1	K562	transcription factor
+ENCSR836SPL	E2F1	WTC11	transcription factor
+ENCSR013RNH	E2F2	HepG2	transcription factor
+ENCSR036QIR	E2F3	K562	transcription factor
+ENCSR000DOR	E2F4	MCF 10A	transcription factor
+ENCSR000DYY	E2F4	GM12878	transcription factor
+ENCSR000EVL	E2F4	HeLa-S3	transcription factor
+ENCSR000EWL	E2F4	K562	transcription factor
+ENCSR264OKN	E2F4	WTC11	transcription factor
+ENCSR368GJN	E2F4	K562	transcription factor
+ENCSR505NMN	E2F4	MCF-7	transcription factor
+ENCSR924LSO	E2F4	HepG2	transcription factor
+ENCSR150LGS	E2F5	WTC11	transcription factor
+ENCSR486JYI	E2F5	HepG2	transcription factor
+ENCSR709DRM	E2F5	K562	transcription factor
+ENCSR744GHR	E2F5	K562	transcription factor
+ENCSR000BLI	E2F6	K562	transcription factor
+ENCSR000BSI	E2F6	H1	transcription factor
+ENCSR000BTC	E2F6	A549	transcription factor
+ENCSR000EVK	E2F6	HeLa-S3	transcription factor
+ENCSR000EWJ	E2F6	K562	transcription factor
+ENCSR171CAY	E2F7	K562	transcription factor
+ENCSR634GEO	E2F8	HepG2	transcription factor
+ENCSR793HVL	E2F8	GM12878	transcription factor
+ENCSR897ZXU	E2F8	MCF-7	transcription factor
+ENCSR953DVM	E2F8	K562	transcription factor
+ENCSR003GUC	E4F1	K562	transcription factor
+ENCSR439WAF	E4F1	GM12878	transcription factor
+ENCSR731LHZ	E4F1	K562	transcription factor
+ENCSR841YWU	E4F1	MCF-7	transcription factor
+ENCSR000BGU	EBF1	GM12878	transcription factor
+ENCSR000DZQ	EBF1	GM12878	transcription factor
+ENCSR387TUH	EEA1	HepG2	transcription factor
+ENCSR199WXF	EED	GM12878	chromatin remodeler
+ENCSR690FIA	EED	HepG2	chromatin remodeler
+ENCSR000BJA	EGR1	H1	transcription factor
+ENCSR000BMQ	EGR1	GM12878	transcription factor
+ENCSR000BNE	EGR1	K562	transcription factor
+ENCSR000BRG	EGR1	GM12878	transcription factor
+ENCSR000BRZ	EGR1	HCT116	transcription factor
+ENCSR000BSQ	EGR1	Ishikawa	transcription factor
+ENCSR000BUX	EGR1	MCF-7	transcription factor
+ENCSR024CNP	EGR1	K562	transcription factor
+ENCSR026GSW	EGR1	HepG2	transcription factor
+ENCSR211LTF	EGR1	K562	transcription factor
+ENCSR290ZOS	EGR1	liver	transcription factor
+ENCSR426WZU	EGR1	WTC11	transcription factor
+ENCSR736BUG	EGR1	liver	transcription factor
+ENCSR749BFL	EGR1	glutamatergic neuron	transcription factor
+ENCSR919CZU	EGR2	HEK293	transcription factor
+ENCSR171TDM	EHF	A549	transcription factor
+ENCSR175EOM	EHMT2	K562	chromatin remodeler
+ENCSR321BJQ	EHMT2	A549	chromatin remodeler
+ENCSR376FMN	EHMT2	HepG2	chromatin remodeler
+ENCSR000BMB	ELF1	GM12878	transcription factor
+ENCSR000BMD	ELF1	K562	transcription factor
+ENCSR000BMZ	ELF1	HepG2	transcription factor
+ENCSR000BPT	ELF1	A549	transcription factor
+ENCSR000BSS	ELF1	MCF-7	transcription factor
+ENCSR000BTA	ELF1	SK-N-SH	transcription factor
+ENCSR000BVH	ELF1	HCT116	transcription factor
+ENCSR321VGW	ELF1	HepG2	transcription factor
+ENCSR475SOC	ELF1	MCF-7	transcription factor
+ENCSR502NRF	ELF1	MCF-7	transcription factor
+ENCSR502OEK	ELF1	K562	transcription factor
+ENCSR744CXJ	ELF1	K562	transcription factor
+ENCSR841NDX	ELF1	GM12878	transcription factor
+ENCSR975SSR	ELF1	K562	transcription factor
+ENCSR594HXD	ELF2	K562	transcription factor
+ENCSR770AOR	ELF3	HepG2	cofactor
+ENCSR473ASI	ELF4	WTC11	transcription factor
+ENCSR494ZGC	ELF4	K562	transcription factor
+ENCSR498JCG	ELF4	K562	transcription factor
+ENCSR638QHV	ELF4	K562	transcription factor
+ENCSR778QLY	ELF4	HEK293T	transcription factor
+ENCSR980HGI	ELF4	HepG2	transcription factor
+ENCSR000DZB	ELK1	GM12878	transcription factor
+ENCSR000ECI	ELK1	HeLa-S3	transcription factor
+ENCSR000EFU	ELK1	K562	transcription factor
+ENCSR382WLL	ELK1	MCF-7	transcription factor
+ENCSR392JVX	ELK1	K562	transcription factor
+ENCSR623KNM	ELK1	A549	transcription factor
+ENCSR664OKA	ELK1	IMR-90	transcription factor
+ENCSR717QSS	ELK1	HepG2	transcription factor
+ENCSR972CVS	ELK3	K562	transcription factor
+ENCSR000EVB	ELK4	HEK293	transcription factor
+ENCSR000EVI	ELK4	HeLa-S3	transcription factor
+ENCSR513YMV	ELK4	HepG2	transcription factor
+ENCSR440UPD	EMX1	WTC11	transcription factor
+ENCSR000AUQ	EP300	H1	transcription factor
+ENCSR000BHB	EP300	GM12878	transcription factor
+ENCSR000BKK	EP300	H1	transcription factor
+ENCSR000BLM	EP300	T47D	transcription factor
+ENCSR000BLW	EP300	HepG2	transcription factor
+ENCSR000BMA	EP300	SK-N-SH	transcription factor
+ENCSR000BPW	EP300	A549	transcription factor
+ENCSR000BTR	EP300	MCF-7	transcription factor
+ENCSR000BUA	EP300	SK-N-SH	transcription factor
+ENCSR000BUE	EP300	Ishikawa	transcription factor
+ENCSR000DZD	EP300	GM12878	transcription factor
+ENCSR000DZG	EP300	GM12878	transcription factor
+ENCSR000ECV	EP300	HeLa-S3	transcription factor
+ENCSR000EDV	EP300	HepG2	transcription factor
+ENCSR000EGE	EP300	K562	transcription factor
+ENCSR000EGY	EP300	K562	transcription factor
+ENCSR000EHV	EP300	SK-N-SH	transcription factor
+ENCSR000MMZ	EP300	upper lobe of left lung	transcription factor
+ENCSR044IFH	EP300	A549	transcription factor
+ENCSR047EVQ	EP300	A549	transcription factor
+ENCSR124VXG	EP300	A549	transcription factor
+ENCSR145YCX	EP300	A549	transcription factor
+ENCSR167QIJ	EP300	A549	transcription factor
+ENCSR174FJD	EP300	A549	transcription factor
+ENCSR244ZAO	EP300	sigmoid colon	transcription factor
+ENCSR260WCE	EP300	A549	transcription factor
+ENCSR271XMW	EP300	HepG2	transcription factor
+ENCSR290QBB	EP300	upper lobe of left lung	transcription factor
+ENCSR313BMV	EP300	sigmoid colon	transcription factor
+ENCSR358ELZ	EP300	A549	transcription factor
+ENCSR360BLQ	EP300	esophagus muscularis mucosa	transcription factor
+ENCSR429JTR	EP300	transverse colon	transcription factor
+ENCSR467VXG	EP300	A549	transcription factor
+ENCSR551MLB	EP300	gastroesophageal sphincter	transcription factor
+ENCSR561ZRE	EP300	A549	transcription factor
+ENCSR569SZK	EP300	tibial nerve	transcription factor
+ENCSR580XUK	EP300	tibial nerve	transcription factor
+ENCSR602BTS	EP300	A549	transcription factor
+ENCSR610RKF	EP300	A549	transcription factor
+ENCSR635XLM	EP300	upper lobe of left lung	transcription factor
+ENCSR680OFU	EP300	HeLa-S3	transcription factor
+ENCSR684NJD	EP300	stomach	transcription factor
+ENCSR686BQM	EP300	A549	transcription factor
+ENCSR696LQU	EP300	ovary	transcription factor
+ENCSR770OTI	EP300	A549	transcription factor
+ENCSR788VKG	EP300	A549	transcription factor
+ENCSR792VMN	EP300	A549	transcription factor
+ENCSR828PZH	EP300	upper lobe of left lung	transcription factor
+ENCSR841ASB	EP300	A549	transcription factor
+ENCSR843ZUP	EP300	neural cell	transcription factor
+ENCSR886OEO	EP300	A549	transcription factor
+ENCSR906OMM	EP300	gastroesophageal sphincter	transcription factor
+ENCSR906UPC	EP300	sigmoid colon	transcription factor
+ENCSR923WJS	EP300	sigmoid colon	transcription factor
+ENCSR928LDG	EP300	suprapubic skin	transcription factor
+ENCSR817QKV	EP400	K562	chromatin remodeler
+ENCSR159DQO	ERF	HepG2	cofactor
+ENCSR225OGU	ERF	K562	cofactor
+ENCSR459FUE	ERF	K562	cofactor
+ENCSR127NBZ	ERG	WTC11	transcription factor
+ENCSR000BIY	ESR1	Ishikawa	transcription factor
+ENCSR000BIZ	ESR1	Ishikawa	transcription factor
+ENCSR000BJS	ESR1	T47D	transcription factor
+ENCSR000BKL	ESR1	Ishikawa	transcription factor
+ENCSR000BKN	ESR1	T47D	transcription factor
+ENCSR000BLL	ESR1	T47D	transcription factor
+ENCSR000BQD	ESR1	T47D	transcription factor
+ENCSR000BQR	ESR1	Ishikawa	transcription factor
+ENCSR463GOT	ESR1	MCF-7	transcription factor
+ENCSR000DYQ	ESRRA	GM12878	transcription factor
+ENCSR000EEW	ESRRA	HepG2	transcription factor
+ENCSR029OPK	ESRRA	WTC11	transcription factor
+ENCSR267NVP	ESRRA	HepG2	transcription factor
+ENCSR337NQP	ESRRA	MCF-7	transcription factor
+ENCSR473SUA	ESRRA	A549	transcription factor
+ENCSR486IFJ	ESRRA	K562	transcription factor
+ENCSR954WVZ	ESRRA	MCF-7	transcription factor
+ENCSR264LYE	ESRRB	K562	transcription factor
+ENCSR023KKB	ESRRG	SK-N-SH	transcription factor
+ENCSR000BKA	ETS1	GM12878	transcription factor
+ENCSR000BKQ	ETS1	K562	transcription factor
+ENCSR000BPU	ETS1	A549	transcription factor
+ENCSR534VHI	ETS1	GM23338	transcription factor
+ENCSR672BSA	ETS1	HepG2	transcription factor
+ENCSR681WHQ	ETS1	HepG2	transcription factor
+ENCSR596IKD	ETS2	K562	transcription factor
+ENCSR277DMR	ETV1	K562	transcription factor
+ENCSR537FDJ	ETV4	HepG2	transcription factor
+ENCSR714YZG	ETV4	HepG2	transcription factor
+ENCSR096IIB	ETV5	HepG2	transcription factor
+ENCSR971EWR	ETV5	K562	transcription factor
+ENCSR000FCE	ETV6	K562	transcription factor
+ENCSR029TLS	ETV6	WTC11	transcription factor
+ENCSR124BJR	ETV6	K562	transcription factor
+ENCSR493JTJ	ETV6	K562	transcription factor
+ENCSR597VGC	ETV6	GM12878	transcription factor
+ENCSR626VUC	ETV6	GM12878	transcription factor
+ENCSR925TWM	ETV6	HepG2	transcription factor
+ENCSR142YYA	EWSR1	K562	RNA binding protein
+ENCSR000AQE	EZH2	K562	chromatin remodeler
+ENCSR000ARD	EZH2	GM12878	chromatin remodeler
+ENCSR000ARE	EZH2	mammary epithelial cell	chromatin remodeler
+ENCSR000ARH	EZH2	skeletal muscle myoblast	chromatin remodeler
+ENCSR000ARI	EZH2	HepG2	chromatin remodeler
+ENCSR000ARK	EZH2	keratinocyte	chromatin remodeler
+ENCSR000ARO	EZH2	fibroblast of lung	chromatin remodeler
+ENCSR000ARR	EZH2	astrocyte	chromatin remodeler
+ENCSR000ASE	EZH2	fibroblast of dermis	chromatin remodeler
+ENCSR000ASW	EZH2	DND-41	chromatin remodeler
+ENCSR000ASY	EZH2	H1	chromatin remodeler
+ENCSR000ASZ	EZH2	myotube	chromatin remodeler
+ENCSR000ATA	EZH2	endothelial cell of umbilical vein	chromatin remodeler
+ENCSR000ATC	EZH2	HeLa-S3	chromatin remodeler
+ENCSR000AUZ	EZH2	B cell	chromatin remodeler
+ENCSR045YHA	EZH2	GM23338	chromatin remodeler
+ENCSR046HGP	EZH2	HCT116	chromatin remodeler
+ENCSR069DPL	EZH2	neural progenitor cell	chromatin remodeler
+ENCSR113GDB	EZH2	SK-N-MC	chromatin remodeler
+ENCSR131FFJ	EZH2	GM23248	chromatin remodeler
+ENCSR179SAO	EZH2	A673	chromatin remodeler
+ENCSR218QFN	EZH2	PC-3	chromatin remodeler
+ENCSR384LYW	EZH2	hepatocyte	chromatin remodeler
+ENCSR511CUH	EZH2	neural cell	chromatin remodeler
+ENCSR520VTO	EZH2	OCI-LY1	chromatin remodeler
+ENCSR703KWN	EZH2	MM.1S	chromatin remodeler
+ENCSR793USK	EZH2	PC-9	chromatin remodeler
+ENCSR088HZI	EZH2phosphoT487	SU-DHL-6	chromatin remodeler
+ENCSR096KPA	EZH2phosphoT487	GM23248	chromatin remodeler
+ENCSR297MUV	EZH2phosphoT487	SK-N-SH	chromatin remodeler
+ENCSR341VYI	EZH2phosphoT487	hepatocyte	chromatin remodeler
+ENCSR429CLV	EZH2phosphoT487	HCT116	chromatin remodeler
+ENCSR562NOP	EZH2phosphoT487	DOHH2	chromatin remodeler
+ENCSR565XSL	EZH2phosphoT487	OCI-LY7	chromatin remodeler
+ENCSR584ATA	EZH2phosphoT487	OCI-LY3	chromatin remodeler
+ENCSR591DTH	EZH2phosphoT487	GM23338	chromatin remodeler
+ENCSR617RSQ	EZH2phosphoT487	PC-3	chromatin remodeler
+ENCSR656MXA	EZH2phosphoT487	neural progenitor cell	chromatin remodeler
+ENCSR702GMW	EZH2phosphoT487	PC-9	chromatin remodeler
+ENCSR783QUL	EZH2phosphoT487	Loucy	chromatin remodeler
+ENCSR886KKK	EZH2phosphoT487	bipolar neuron	chromatin remodeler
+ENCSR894QWM	EZH2phosphoT487	MM.1S	chromatin remodeler
+ENCSR941WVJ	FBXL19	HepG2	transcription factor
+ENCSR827NWO	FEZF1	HEK293	transcription factor
+ENCSR177DNR	FIP1L1	K562	RNA binding protein
+ENCSR313VZG	FIP1L1	HepG2	RNA binding protein
+ENCSR440OJH	FLYWCH1	HepG2	cofactor
+ENCSR000DKB	FOS	K562	transcription factor
+ENCSR000DON	FOS	MCF 10A	transcription factor
+ENCSR000DOO	FOS	MCF 10A	transcription factor
+ENCSR000DOP	FOS	MCF 10A	transcription factor
+ENCSR000DOT	FOS	MCF 10A	transcription factor
+ENCSR000EVU	FOS	endothelial cell of umbilical vein	transcription factor
+ENCSR000EYZ	FOS	GM12878	transcription factor
+ENCSR000EZE	FOS	HeLa-S3	transcription factor
+ENCSR000FAI	FOS	K562	transcription factor
+ENCSR124AIG	FOS	IMR-90	transcription factor
+ENCSR569XNP	FOS	MCF-7	transcription factor
+ENCSR572DUR	FOS	WTC11	transcription factor
+ENCSR918GHT	FOSB	A549	cofactor
+ENCSR000BMV	FOSL1	K562	transcription factor
+ENCSR000BNS	FOSL1	H1	transcription factor
+ENCSR000BTE	FOSL1	HCT116	transcription factor
+ENCSR239ZLZ	FOSL1	K562	transcription factor
+ENCSR767NGL	FOSL1	HepG2	transcription factor
+ENCSR950CIR	FOSL1	glutamatergic neuron	transcription factor
+ENCSR000BHP	FOSL2	HepG2	transcription factor
+ENCSR000BQO	FOSL2	A549	transcription factor
+ENCSR000BUI	FOSL2	MCF-7	transcription factor
+ENCSR000BVB	FOSL2	SK-N-SH	transcription factor
+ENCSR067XTW	FOSL2	A549	transcription factor
+ENCSR103UVU	FOSL2	A549	transcription factor
+ENCSR111ZXV	FOSL2	A549	transcription factor
+ENCSR242EWU	FOSL2	A549	transcription factor
+ENCSR249EYB	FOSL2	HepG2	transcription factor
+ENCSR274WRI	FOSL2	A549	transcription factor
+ENCSR330IJE	FOSL2	A549	transcription factor
+ENCSR448TVS	FOSL2	A549	transcription factor
+ENCSR535HFQ	FOSL2	A549	transcription factor
+ENCSR546KCN	FOSL2	MCF-7	transcription factor
+ENCSR563GCV	FOSL2	A549	transcription factor
+ENCSR593DGU	FOSL2	A549	transcription factor
+ENCSR686HIU	FOSL2	A549	transcription factor
+ENCSR775UFR	FOSL2	A549	transcription factor
+ENCSR900RUE	FOSL2	A549	transcription factor
+ENCSR000BKW	FOXA1	Ishikawa	transcription factor
+ENCSR000BKY	FOXA1	T47D	transcription factor
+ENCSR000BLE	FOXA1	HepG2	transcription factor
+ENCSR000BMO	FOXA1	HepG2	transcription factor
+ENCSR000BPX	FOXA1	A549	transcription factor
+ENCSR000BRD	FOXA1	A549	transcription factor
+ENCSR094WHO	FOXA1	HEK293T	transcription factor
+ENCSR126YEB	FOXA1	MCF-7	transcription factor
+ENCSR267DFA	FOXA1	HepG2	transcription factor
+ENCSR324RCI	FOXA1	liver	transcription factor
+ENCSR735KEY	FOXA1	liver	transcription factor
+ENCSR819LHG	FOXA1	K562	transcription factor
+ENCSR865RXA	FOXA1	HepG2	transcription factor
+ENCSR000BNI	FOXA2	HepG2	transcription factor
+ENCSR000BRE	FOXA2	A549	transcription factor
+ENCSR066EBK	FOXA2	HepG2	transcription factor
+ENCSR080XEY	FOXA2	liver	transcription factor
+ENCSR310NYI	FOXA2	liver	transcription factor
+ENCSR490AMH	FOXA2	HepG2	transcription factor
+ENCSR092OVN	FOXA3	HepG2	transcription factor
+ENCSR231ZVN	FOXA3	K562	transcription factor
+ENCSR788DXU	FOXA3	K562	transcription factor
+ENCSR170AMG	FOXC1	HepG2	transcription factor
+ENCSR445FHB	FOXF2	A549	transcription factor
+ENCSR847LBF	FOXJ2	K562	transcription factor
+ENCSR056VMR	FOXJ3	K562	transcription factor
+ENCSR413AJG	FOXJ3	HepG2	transcription factor
+ENCSR667WDR	FOXJ3	SK-N-SH	transcription factor
+ENCSR905MSY	FOXJ3	WTC11	transcription factor
+ENCSR352RXE	FOXK1	WTC11	transcription factor
+ENCSR603BJQ	FOXK1	HepG2	transcription factor
+ENCSR659CCI	FOXK1	K562	transcription factor
+ENCSR171FUX	FOXK2	HepG2	transcription factor
+ENCSR302AWT	FOXK2	K562	transcription factor
+ENCSR465VLK	FOXK2	MCF-7	transcription factor
+ENCSR508DQA	FOXK2	K562	transcription factor
+ENCSR861JUQ	FOXK2	GM12878	transcription factor
+ENCSR872BOU	FOXK2	HEK293T	transcription factor
+ENCSR000BRU	FOXM1	GM12878	DNA repair
+ENCSR000BTB	FOXM1	SK-N-SH	DNA repair
+ENCSR000BUJ	FOXM1	MCF-7	DNA repair
+ENCSR000BUS	FOXM1	Ishikawa	DNA repair
+ENCSR429QPP	FOXM1	K562	DNA repair
+ENCSR435ARI	FOXM1	HepG2	DNA repair
+ENCSR438RRM	FOXM1	K562	DNA repair
+ENCSR831EIW	FOXM1	HEK293T	DNA repair
+ENCSR321OAA	FOXO1	HepG2	transcription factor
+ENCSR329RRQ	FOXO4	HepG2	transcription factor
+ENCSR426PTT	FOXO4	K562	transcription factor
+ENCSR029LBT	FOXP1	HepG2	cofactor
+ENCSR369YUK	FOXP1	HepG2	cofactor
+ENCSR530WIV	FOXP1	K562	cofactor
+ENCSR546PDE	FOXP1	WTC11	cofactor
+ENCSR000BGA	FOXP2	PFSK-1	transcription factor
+ENCSR000BGB	FOXP2	SK-N-MC	transcription factor
+ENCSR084WHZ	FOXP4	K562	transcription factor
+ENCSR232LLP	FOXP4	HepG2	transcription factor
+ENCSR507RVF	FOXP4	WTC11	transcription factor
+ENCSR199MFT	FOXQ1	HepG2	transcription factor
+ENCSR326AQV	FOXS1	A549	transcription factor
+ENCSR922MQU	FUBP1	HepG2	RNA binding protein,transcription factor
+ENCSR417EWD	FUBP3	HepG2	transcription factor
+ENCSR051DXE	FUS	K562	DNA repair,cofactor
+ENCSR590QQP	FUS	HepG2	DNA repair,cofactor
+ENCSR000BHS	GABPA	HeLa-S3	transcription factor
+ENCSR000BIW	GABPA	H1	transcription factor
+ENCSR000BJK	GABPA	HepG2	transcription factor
+ENCSR000BLO	GABPA	K562	transcription factor
+ENCSR000BPY	GABPA	A549	transcription factor
+ENCSR000BTG	GABPA	SK-N-SH	transcription factor
+ENCSR000BTK	GABPA	HL-60	transcription factor
+ENCSR000BUK	GABPA	MCF-7	transcription factor
+ENCSR038GMB	GABPA	liver	transcription factor
+ENCSR038RXU	GABPA	MCF-7	transcription factor
+ENCSR269TNX	GABPA	HepG2	transcription factor
+ENCSR290MUH	GABPA	K562	transcription factor
+ENCSR331HPA	GABPA	GM12878	transcription factor
+ENCSR350ORK	GABPA	liver	transcription factor
+ENCSR011WGT	GABPB1	K562	transcription factor
+ENCSR138YYY	GABPB1	K562	transcription factor
+ENCSR462KYU	GABPB1	HepG2	transcription factor
+ENCSR561YGS	GABPB1	WTC11	transcription factor
+ENCSR879HUU	GABPB2	K562	transcription factor
+ENCSR000EFT	GATA1	K562	transcription factor
+ENCSR000EWM	GATA1	K562	transcription factor
+ENCSR000EXP	GATA1	erythroblast	transcription factor
+ENCSR000EXR	GATA1	erythroblast	transcription factor
+ENCSR000BKM	GATA2	K562	transcription factor
+ENCSR000DKA	GATA2	K562	transcription factor
+ENCSR000EVW	GATA2	endothelial cell of umbilical vein	transcription factor
+ENCSR000EWG	GATA2	K562	transcription factor
+ENCSR000EYB	GATA2	SH-SY5Y	transcription factor
+ENCSR257RKC	GATA2	K562	transcription factor
+ENCSR706VOO	GATA2	SK-N-SH	transcription factor
+ENCSR897LDT	GATA2	HepG2	transcription factor
+ENCSR000BMX	GATA3	T47D	transcription factor
+ENCSR000BST	GATA3	MCF-7	transcription factor
+ENCSR000BTH	GATA3	SK-N-SH	transcription factor
+ENCSR000BTI	GATA3	A549	transcription factor
+ENCSR000EWS	GATA3	MCF-7	transcription factor
+ENCSR000EWV	GATA3	MCF-7	transcription factor
+ENCSR000EXZ	GATA3	SH-SY5Y	transcription factor
+ENCSR423RTK	GATA3	MCF-7	transcription factor
+ENCSR590CNM	GATA4	HepG2	transcription factor
+ENCSR108TYQ	GATAD1	HepG2	chromatin remodeler
+ENCSR160QYK	GATAD2A	K562	chromatin remodeler
+ENCSR925BFV	GATAD2A	HepG2	chromatin remodeler
+ENCSR250LJG	GATAD2B	HepG2	transcription factor
+ENCSR389BLX	GATAD2B	MCF-7	transcription factor
+ENCSR547LKC	GATAD2B	K562	transcription factor
+ENCSR828NCB	GATAD2B	GM12878	transcription factor
+ENCSR979FQP	GATAD2B	MCF-7	transcription factor
+ENCSR849FVL	GFI1	HepG2	transcription factor
+ENCSR445PDR	GFI1B	HEK293	transcription factor
+ENCSR978EQY	GLI2	HEK293	transcription factor
+ENCSR211PZO	GLI4	HEK293	transcription factor
+ENCSR502YME	GLI4	HepG2	transcription factor
+ENCSR482BBZ	GLIS1	HEK293	transcription factor
+ENCSR535DIA	GLIS2	HEK293	transcription factor
+ENCSR507BWM	GLIS3	SK-N-SH	transcription factor
+ENCSR567IOQ	GLMP	HepG2	transcription factor
+ENCSR159RBE	GLYR1	HepG2	transcription factor
+ENCSR376RCX	GMEB1	K562	transcription factor
+ENCSR780OXL	GMEB1	HepG2	transcription factor
+ENCSR928KOR	GMEB1	K562	transcription factor
+ENCSR745VSQ	GMEB2	HepG2	transcription factor
+ENCSR664FGR	GPBP1L1	HepG2	transcription factor
+ENCSR076SHT	GPN1	HepG2	transcription factor
+ENCSR088LFR	GRHL1	HepG2	transcription factor
+ENCSR744RAS	GRHL2	WTC11	transcription factor
+ENCSR801RPW	GTF2A2	K562	RNA polymerase complex
+ENCSR000DOE	GTF2B	K562	transcription factor
+ENCSR532KTI	GTF2E2	K562	RNA polymerase complex
+ENCSR000EBP	GTF2F1	H1	RNA polymerase complex
+ENCSR000ECZ	GTF2F1	HeLa-S3	RNA polymerase complex
+ENCSR000EHC	GTF2F1	K562	RNA polymerase complex
+ENCSR189VXS	GTF2F1	K562	RNA polymerase complex
+ENCSR219NRT	GTF2F1	HepG2	RNA polymerase complex
+ENCSR377BLZ	GTF2F1	K562	RNA polymerase complex
+ENCSR382PVA	GTF2F1	HepG2	RNA polymerase complex
+ENCSR557JTZ	GTF2F1	MCF-7	RNA polymerase complex
+ENCSR281VWZ	GTF2I	WTC11	transcription factor
+ENCSR653WFU	GTF2I	K562	transcription factor
+ENCSR220AQM	GTF3A	HepG2	RNA binding protein
+ENCSR000DNY	GTF3C2	HeLa-S3	transcription factor
+ENCSR000DOD	GTF3C2	K562	transcription factor
+ENCSR479WQX	GZF1	HepG2	transcription factor
+ENCSR103TYK	HBP1	K562	transcription factor
+ENCSR616WEG	HBP1	HepG2	transcription factor
+ENCSR000ECH	HCFC1	HeLa-S3	chromatin remodeler
+ENCSR000EFN	HCFC1	K562	chromatin remodeler
+ENCSR514VAY	HCFC1	GM12878	chromatin remodeler
+ENCSR529JYA	HCFC1	HepG2	chromatin remodeler
+ENCSR697CUP	HCFC1	MCF-7	chromatin remodeler
+ENCSR000AQF	HDAC1	K562	chromatin remodeler
+ENCSR362CPB	HDAC1	HepG2	chromatin remodeler
+ENCSR387UWP	HDAC1	K562	chromatin remodeler
+ENCSR568PGX	HDAC1	K562	chromatin remodeler
+ENCSR711VWL	HDAC1	K562	chromatin remodeler
+ENCSR750OWO	HDAC1	HepG2	chromatin remodeler
+ENCSR000AQG	HDAC2	K562	chromatin remodeler
+ENCSR000AVB	HDAC2	H1	chromatin remodeler
+ENCSR000BMC	HDAC2	HepG2	chromatin remodeler
+ENCSR000BMG	HDAC2	K562	chromatin remodeler
+ENCSR000BNR	HDAC2	H1	chromatin remodeler
+ENCSR000BTP	HDAC2	MCF-7	chromatin remodeler
+ENCSR075HTM	HDAC2	K562	chromatin remodeler
+ENCSR330OEO	HDAC2	GM12878	chromatin remodeler
+ENCSR337NWW	HDAC2	HepG2	chromatin remodeler
+ENCSR659LJJ	HDAC2	A549	chromatin remodeler
+ENCSR893WSB	HDAC2	K562	chromatin remodeler
+ENCSR950FIL	HDAC2	HepG2	chromatin remodeler
+ENCSR024LKA	HDAC3	K562	chromatin remodeler,cofactor
+ENCSR000ATJ	HDAC6	K562	chromatin remodeler
+ENCSR000ATQ	HDAC6	H1	chromatin remodeler
+ENCSR277VIC	HDAC6	HepG2	chromatin remodeler
+ENCSR933EYC	HDAC6	GM12878	chromatin remodeler
+ENCSR000DJZ	HDAC8	K562	cohesin
+ENCSR835TCD	HDAC8	K562	cohesin
+ENCSR145XQO	HDGF	GM12878	cofactor
+ENCSR197ALX	HDGF	K562	cofactor
+ENCSR200CUA	HDGF	MCF-7	cofactor
+ENCSR522LDJ	HDGF	HEK293T	cofactor
+ENCSR563YDA	HDGF	K562	cofactor
+ENCSR091JXL	HES1	K562	transcription factor
+ENCSR109ODF	HES1	MCF-7	transcription factor
+ENCSR078POK	HES2	A549	cofactor,transcription factor
+ENCSR356YXW	HES2	A549	cofactor,transcription factor
+ENCSR419TWL	HES2	A549	cofactor,transcription factor
+ENCSR425MXK	HES2	A549	cofactor,transcription factor
+ENCSR646EFO	HES2	A549	cofactor,transcription factor
+ENCSR686BIE	HES2	A549	cofactor,transcription factor
+ENCSR690HWX	HES2	A549	cofactor,transcription factor
+ENCSR796VBR	HES2	A549	cofactor,transcription factor
+ENCSR911KBJ	HES2	A549	cofactor,transcription factor
+ENCSR951SNW	HES2	A549	cofactor,transcription factor
+ENCSR964KSS	HES2	A549	cofactor,transcription factor
+ENCSR979IOT	HES2	A549	cofactor,transcription factor
+ENCSR363XHT	HES4	HepG2	cofactor
+ENCSR405KTQ	HEY1	K562	transcription factor
+ENCSR995CFS	HEYL	A549	transcription factor
+ENCSR656JZL	HHEX	HepG2	transcription factor
+ENCSR803GYT	HIC1	HEK293	transcription factor
+ENCSR015LYB	HIC2	HepG2	transcription factor
+ENCSR619GFP	HINFP	K562	transcription factor
+ENCSR621PAN	HINFP	HepG2	transcription factor
+ENCSR697WMX	HIVEP1	HepG2	transcription factor
+ENCSR947PJZ	HIVEP1	K562	transcription factor
+ENCSR528PSI	HLF	HepG2	transcription factor
+ENCSR090JNM	HLTF	K562	RNA binding protein
+ENCSR757IIU	HMBOX1	K562	transcription factor
+ENCSR072GJV	HMG20A	HepG2	transcription factor
+ENCSR126YJQ	HMG20A	K562	transcription factor
+ENCSR626HJW	HMG20A	K562	transcription factor
+ENCSR034GHQ	HMG20B	K562	transcription factor
+ENCSR925QAW	HMG20B	HepG2	transcription factor
+ENCSR332EKO	HMGA1	HepG2	cofactor
+ENCSR207WFD	HMGA2	A549	transcription factor
+ENCSR742DAU	HMGA2	WTC11	transcription factor
+ENCSR000DOB	HMGN3	K562	cofactor
+ENCSR601KKB	HMGXB3	HepG2	transcription factor
+ENCSR174GOO	HMGXB4	HepG2	transcription factor
+ENCSR192SKV	HMGXB4	A549	transcription factor
+ENCSR279IMD	HMGXB4	K562	transcription factor
+ENCSR599XKG	HMGXB4	HepG2	transcription factor
+ENCSR713KVZ	HMGXB4	WTC11	transcription factor
+ENCSR633HRJ	HNF1A	HepG2	transcription factor
+ENCSR800QIT	HNF1A	HepG2	transcription factor
+ENCSR127XTZ	HNF1B	HepG2	transcription factor
+ENCSR000BLF	HNF4A	HepG2	transcription factor
+ENCSR000EEU	HNF4A	HepG2	transcription factor
+ENCSR445QRF	HNF4A	liver	transcription factor
+ENCSR469FBY	HNF4A	HepG2	transcription factor
+ENCSR601OGE	HNF4A	liver	transcription factor
+ENCSR000BNJ	HNF4G	HepG2	transcription factor
+ENCSR297GII	HNF4G	liver	transcription factor
+ENCSR793EHQ	HNF4G	HepG2	transcription factor
+ENCSR066FXN	HNRNPH1	HepG2	RNA binding protein
+ENCSR581CVA	HNRNPH1	K562	RNA binding protein
+ENCSR014RCS	HNRNPK	K562	transcription factor
+ENCSR519QAA	HNRNPK	HepG2	transcription factor
+ENCSR315JJE	HNRNPL	HepG2	RNA binding protein
+ENCSR594BNR	HNRNPL	K562	RNA binding protein
+ENCSR112RNT	HNRNPLL	K562	RNA binding protein
+ENCSR804HMZ	HNRNPLL	HepG2	RNA binding protein
+ENCSR183AXJ	HNRNPUL1	HepG2	RNA binding protein
+ENCSR296MXW	HNRNPUL1	K562	RNA binding protein
+ENCSR117CHD	HOMEZ	HepG2	transcription factor
+ENCSR801JWB	HOMEZ	K562	transcription factor
+ENCSR692RKS	HOXA10	HepG2	transcription factor
+ENCSR999JKC	HOXA3	HepG2	transcription factor
+ENCSR869JZW	HOXA5	HepG2	transcription factor
+ENCSR402OYZ	HOXA7	A549	transcription factor
+ENCSR600SMN	HOXA7	HEK293	transcription factor
+ENCSR823QTA	HOXA7	HepG2	transcription factor
+ENCSR318GET	HOXA9	HepG2	transcription factor
+ENCSR967ZMR	HOXB13	A549	transcription factor
+ENCSR748HJZ	HOXB5	A549	transcription factor
+ENCSR861UWB	HOXB6	K562	RNA binding protein
+ENCSR847PFO	HOXB7	HEK293	transcription factor
+ENCSR294SAK	HOXC10	HEK293	transcription factor
+ENCSR359TWG	HOXD1	HepG2	transcription factor
+ENCSR418XXL	HOXD13	HEK293	transcription factor
+ENCSR000EET	HSF1	HepG2	transcription factor
+ENCSR009MBP	HSF1	GM12878	transcription factor
+ENCSR062HDL	HSF1	MCF-7	transcription factor
+ENCSR764ZBK	HSF2	HepG2	transcription factor
+ENCSR579XWM	HSF4	K562	cofactor
+ENCSR005NMT	ID3	K562	transcription factor
+ENCSR125YGM	ID3	K562	transcription factor
+ENCSR431UCR	ID3	glutamatergic neuron	transcription factor
+ENCSR208VNN	IFI16	K562	transcription factor
+ENCSR000EUJ	IKZF1	GM12878	transcription factor
+ENCSR278JQG	IKZF1	HepG2	transcription factor
+ENCSR395HWC	IKZF1	K562	transcription factor
+ENCSR441VHN	IKZF1	GM12878	transcription factor
+ENCSR874AFU	IKZF1	GM12878	transcription factor
+ENCSR948VFL	IKZF1	K562	transcription factor
+ENCSR680UQE	IKZF2	GM12878	transcription factor
+ENCSR822AHX	IKZF2	GM12878	transcription factor
+ENCSR304AMN	IKZF3	HEK293	transcription factor
+ENCSR799DUB	IKZF4	HepG2	transcription factor
+ENCSR210HBN	IKZF5	HepG2	transcription factor
+ENCSR632TJQ	ILF3	K562	RNA binding protein
+ENCSR648INT	ILK	K562	transcription factor
+ENCSR382GSF	INSM2	HEK293	transcription factor
+ENCSR000EGK	IRF1	K562	transcription factor
+ENCSR000EGL	IRF1	K562	transcription factor
+ENCSR000EGT	IRF1	K562	transcription factor
+ENCSR000EGU	IRF1	K562	transcription factor
+ENCSR381IES	IRF1	WTC11	transcription factor
+ENCSR809JSD	IRF1	K562	transcription factor
+ENCSR854MCV	IRF1	K562	transcription factor
+ENCSR890DSP	IRF1	HepG2	transcription factor
+ENCSR376WCJ	IRF2	K562	transcription factor
+ENCSR592ZQB	IRF2	WTC11	transcription factor
+ENCSR604UJV	IRF2	HepG2	transcription factor
+ENCSR645ZWR	IRF2	K562	transcription factor
+ENCSR000DZX	IRF3	GM12878	transcription factor
+ENCSR000EDF	IRF3	HeLa-S3	transcription factor
+ENCSR000EEJ	IRF3	HepG2	transcription factor
+ENCSR408JQO	IRF3	GM12878	transcription factor
+ENCSR422ZAO	IRF3	SK-N-SH	transcription factor
+ENCSR000BGY	IRF4	GM12878	transcription factor
+ENCSR025EXJ	IRF5	HepG2	transcription factor
+ENCSR976TBC	IRF5	GM12878	transcription factor
+ENCSR631JFU	IRF9	HepG2	transcription factor
+ENCSR926KTP	IRF9	K562	transcription factor
+ENCSR225UTR	IRX3	HepG2	transcription factor
+ENCSR008LHT	ISL1	SK-N-SH	transcription factor
+ENCSR492IHH	ISL2	HepG2	transcription factor
+ENCSR543BNN	ISX	HepG2	transcription factor
+ENCSR165EGX	JARID2	HepG2	chromatin remodeler
+ENCSR568LRK	JAZF1	WTC11	cofactor
+ENCSR211BDR	JDP2	HepG2	cofactor
+ENCSR741TTE	JRK	HepG2	RNA binding protein
+ENCSR000ECA	JUN	H1	transcription factor
+ENCSR000EDG	JUN	HeLa-S3	transcription factor
+ENCSR000EEK	JUN	HepG2	transcription factor
+ENCSR000EFA	JUN	endothelial cell of umbilical vein	transcription factor
+ENCSR000EFS	JUN	K562	transcription factor
+ENCSR000EGH	JUN	K562	transcription factor
+ENCSR000EZT	JUN	K562	transcription factor
+ENCSR000EZW	JUN	K562	transcription factor
+ENCSR000EZX	JUN	K562	transcription factor
+ENCSR000FAH	JUN	K562	transcription factor
+ENCSR022WVP	JUN	A549	transcription factor
+ENCSR048CVK	JUN	A549	transcription factor
+ENCSR090RGB	JUN	A549	transcription factor
+ENCSR110UPH	JUN	A549	transcription factor
+ENCSR176EXN	JUN	MCF-7	transcription factor
+ENCSR192PBJ	JUN	A549	transcription factor
+ENCSR489DIG	JUN	A549	transcription factor
+ENCSR504LBE	JUN	A549	transcription factor
+ENCSR604CKQ	JUN	A549	transcription factor
+ENCSR612GKD	JUN	A549	transcription factor
+ENCSR628MQN	JUN	A549	transcription factor
+ENCSR664ZHF	JUN	A549	transcription factor
+ENCSR708DGM	JUN	A549	transcription factor
+ENCSR716SJK	JUN	A549	transcription factor
+ENCSR747VUU	JUN	HepG2	transcription factor
+ENCSR761RDU	JUN	A549	transcription factor
+ENCSR783THJ	JUN	A549	transcription factor
+ENCSR793HZD	JUN	A549	transcription factor
+ENCSR804OBA	JUN	WTC11	transcription factor
+ENCSR946WBN	JUN	K562	transcription factor
+ENCSR991RJM	JUN	A549	transcription factor
+ENCSR991VVW	JUN	A549	transcription factor
+ENCSR996DUT	JUN	A549	transcription factor
+ENCSR000DJY	JUNB	K562	cofactor
+ENCSR163EXK	JUNB	A549	cofactor
+ENCSR226UQG	JUNB	A549	cofactor
+ENCSR269RPR	JUNB	A549	cofactor
+ENCSR332WDQ	JUNB	A549	cofactor
+ENCSR426BPV	JUNB	A549	cofactor
+ENCSR431LRW	JUNB	A549	cofactor
+ENCSR490YTY	JUNB	A549	cofactor
+ENCSR523BPZ	JUNB	A549	cofactor
+ENCSR525VAT	JUNB	K562	cofactor
+ENCSR656VWZ	JUNB	A549	cofactor
+ENCSR666BEY	JUNB	A549	cofactor
+ENCSR685GGQ	JUNB	HepG2	cofactor
+ENCSR795IYP	JUNB	K562	cofactor
+ENCSR814UWE	JUNB	A549	cofactor
+ENCSR871NPV	JUNB	A549	cofactor
+ENCSR897MMC	JUNB	GM12878	cofactor
+ENCSR917MAH	JUNB	GM23338	cofactor
+ENCSR000BGK	JUND	HepG2	transcription factor
+ENCSR000BKP	JUND	H1	transcription factor
+ENCSR000BRF	JUND	A549	transcription factor
+ENCSR000BSA	JUND	HCT116	transcription factor
+ENCSR000BSK	JUND	SK-N-SH	transcription factor
+ENCSR000BSU	JUND	MCF-7	transcription factor
+ENCSR000BVO	JUND	T47D	transcription factor
+ENCSR000DJX	JUND	K562	transcription factor
+ENCSR000DYS	JUND	GM12878	transcription factor
+ENCSR000EBZ	JUND	H1	transcription factor
+ENCSR000EDH	JUND	HeLa-S3	transcription factor
+ENCSR000EEI	JUND	HepG2	transcription factor
+ENCSR000EGN	JUND	K562	transcription factor
+ENCSR000EIB	JUND	SK-N-SH	transcription factor
+ENCSR000EYV	JUND	GM12878	transcription factor
+ENCSR196HGZ	JUND	liver	transcription factor
+ENCSR282ZLP	JUND	HepG2	transcription factor
+ENCSR837GTK	JUND	liver	transcription factor
+ENCSR000DNO	KAT2A	GM12878	chromatin remodeler
+ENCSR000ECR	KAT2A	HeLa-S3	chromatin remodeler
+ENCSR000ATZ	KAT2B	K562	chromatin remodeler
+ENCSR620YNB	KAT2B	HepG2	chromatin remodeler
+ENCSR340BXT	KAT7	HepG2	chromatin remodeler
+ENCSR350LBJ	KAT7	WTC11	chromatin remodeler
+ENCSR924JOW	KAT7	K562	chromatin remodeler
+ENCSR086FZL	KAT8	K562	chromatin remodeler
+ENCSR954KIC	KAT8	HepG2	chromatin remodeler
+ENCSR000ATX	KDM1A	K562	chromatin remodeler
+ENCSR087NSR	KDM1A	HepG2	chromatin remodeler
+ENCSR115BLD	KDM1A	HepG2	chromatin remodeler
+ENCSR360HRA	KDM1A	K562	chromatin remodeler
+ENCSR391IWM	KDM1A	GM12878	chromatin remodeler
+ENCSR418RRF	KDM1A	H1	chromatin remodeler
+ENCSR639GWS	KDM1A	A549	chromatin remodeler
+ENCSR908CMW	KDM1A	K562	chromatin remodeler
+ENCSR754KCC	KDM2A	HepG2	chromatin remodeler
+ENCSR620MHD	KDM2B	K562	chromatin remodeler
+ENCSR387JKT	KDM3A	HepG2	chromatin remodeler
+ENCSR000AVC	KDM4A	H1	chromatin remodeler
+ENCSR280SCF	KDM4B	HepG2	chromatin remodeler
+ENCSR642VZY	KDM4B	K562	chromatin remodeler
+ENCSR660RNO	KDM4B	K562	chromatin remodeler
+ENCSR160ZLP	KDM5A	H1	chromatin remodeler
+ENCSR872ZHM	KDM5A	HepG2	chromatin remodeler
+ENCSR933MHJ	KDM5A	A549	chromatin remodeler
+ENCSR000AQA	KDM5B	K562	chromatin remodeler
+ENCSR227MRE	KDM5B	HepG2	chromatin remodeler
+ENCSR031ING	KDM6A	HepG2	transcription factor
+ENCSR686EYO	KHSRP	K562	RNA binding protein
+ENCSR597QZQ	KIAA2018	HepG2	transcription factor
+ENCSR550HCT	KLF1	K562	transcription factor
+ENCSR859BMR	KLF1	HEK293	transcription factor
+ENCSR006GAQ	KLF10	HEK293	transcription factor
+ENCSR121SPB	KLF10	K562	transcription factor
+ENCSR616OSG	KLF11	HepG2	transcription factor
+ENCSR552YWL	KLF12	HepG2	transcription factor
+ENCSR608HVP	KLF13	K562	transcription factor
+ENCSR756SZU	KLF13	HepG2	transcription factor
+ENCSR860ONE	KLF15	HepG2	transcription factor
+ENCSR009KLQ	KLF16	HepG2	transcription factor
+ENCSR397DQC	KLF16	HEK293	transcription factor
+ENCSR760UVO	KLF16	K562	transcription factor
+ENCSR913KJZ	KLF16	HepG2	transcription factor
+ENCSR065WUF	KLF17	HEK293	transcription factor
+ENCSR265WJC	KLF4	MCF-7	transcription factor
+ENCSR974OFJ	KLF5	GM12878	transcription factor
+ENCSR297CGF	KLF6	K562	transcription factor
+ENCSR757EKM	KLF6	HepG2	transcription factor
+ENCSR604VWJ	KLF7	HEK293	transcription factor
+ENCSR635NOQ	KLF8	HEK293	transcription factor
+ENCSR076EZB	KLF9	HEK293	transcription factor
+ENCSR125ZYC	KLF9	MCF-7	transcription factor
+ENCSR938ETG	KLF9	HepG2	transcription factor
+ENCSR692GFR	KMT2A	HepG2	chromatin remodeler
+ENCSR071YVR	KMT2B	HepG2	chromatin remodeler
+ENCSR530XQI	L3MBTL2	K562	chromatin remodeler
+ENCSR862PNL	L3MBTL2	HEK293T	chromatin remodeler
+ENCSR288MOZ	LARP7	K562	RNA binding protein
+ENCSR657PEW	LARP7	GM12878	RNA binding protein
+ENCSR725ELR	LARP7	MCF-7	RNA binding protein
+ENCSR735VJE	LBX2	HepG2	transcription factor
+ENCSR469GZL	LCOR	HepG2	transcription factor
+ENCSR672OHP	LCOR	K562	transcription factor
+ENCSR880PMU	LCORL	HepG2	transcription factor
+ENCSR950NAZ	LCORL	HepG2	transcription factor
+ENCSR240XWM	LEF1	HEK293T	transcription factor
+ENCSR343ELW	LEF1	K562	transcription factor
+ENCSR832OGB	LEF1	K562	transcription factor
+ENCSR597MCV	LIN54	HepG2	transcription factor
+ENCSR700USV	LRRFIP1	HepG2	transcription factor
+ENCSR498TWD	MAF1	HepG2	transcription factor
+ENCSR000EEC	MAFF	HepG2	transcription factor
+ENCSR000EGI	MAFF	K562	transcription factor
+ENCSR140DSL	MAFF	HeLa-S3	transcription factor
+ENCSR708KAA	MAFG	HepG2	transcription factor
+ENCSR818DQV	MAFG	K562	transcription factor
+ENCSR000DYV	MAFK	GM12878	transcription factor
+ENCSR000EBS	MAFK	H1	transcription factor
+ENCSR000ECK	MAFK	HeLa-S3	transcription factor
+ENCSR000EDZ	MAFK	HepG2	transcription factor
+ENCSR000EEB	MAFK	HepG2	transcription factor
+ENCSR000EFH	MAFK	IMR-90	transcription factor
+ENCSR000EGX	MAFK	K562	transcription factor
+ENCSR541WQI	MAFK	A549	transcription factor
+ENCSR555PBN	MAFK	MCF-7	transcription factor
+ENCSR080EKH	MATR3	HepG2	RNA binding protein
+ENCSR000BLP	MAX	K562	transcription factor
+ENCSR000BSH	MAX	HCT116	transcription factor
+ENCSR000BSJ	MAX	H1	transcription factor
+ENCSR000BTJ	MAX	A549	transcription factor
+ENCSR000BTM	MAX	HepG2	transcription factor
+ENCSR000BTY	MAX	Ishikawa	transcription factor
+ENCSR000BUL	MAX	MCF-7	transcription factor
+ENCSR000BVD	MAX	SK-N-SH	transcription factor
+ENCSR000DYG	MAX	A549	transcription factor
+ENCSR000DZF	MAX	GM12878	transcription factor
+ENCSR000ECN	MAX	HeLa-S3	transcription factor
+ENCSR000EDS	MAX	HepG2	transcription factor
+ENCSR000EEZ	MAX	endothelial cell of umbilical vein	transcription factor
+ENCSR000EFV	MAX	K562	transcription factor
+ENCSR000EHS	MAX	NB4	transcription factor
+ENCSR000EUP	MAX	H1	transcription factor
+ENCSR000EZF	MAX	HeLa-S3	transcription factor
+ENCSR000FAE	MAX	K562	transcription factor
+ENCSR158LJN	MAX	K562	transcription factor
+ENCSR168DYA	MAX	HepG2	transcription factor
+ENCSR349FYX	MAX	WTC11	transcription factor
+ENCSR521IID	MAX	liver	transcription factor
+ENCSR847DIT	MAX	liver	transcription factor
+ENCSR000DZA	MAZ	GM12878	transcription factor
+ENCSR000ECL	MAZ	HeLa-S3	transcription factor
+ENCSR000EDN	MAZ	HepG2	transcription factor
+ENCSR000EFF	MAZ	IMR-90	transcription factor
+ENCSR000EFX	MAZ	K562	transcription factor
+ENCSR163IUV	MAZ	K562	transcription factor
+ENCSR288IJC	MAZ	MCF-7	transcription factor
+ENCSR290SSQ	MAZ	HEK293	transcription factor
+ENCSR636YLV	MAZ	A549	transcription factor
+ENCSR643JRH	MAZ	K562	transcription factor
+ENCSR700PNE	MAZ	HepG2	transcription factor
+ENCSR903MVU	MAZ	GM12878	transcription factor
+ENCSR158BGH	MBD1	K562	transcription factor
+ENCSR260UJI	MBD1	HepG2	transcription factor
+ENCSR396QWK	MBD1	HepG2	transcription factor
+ENCSR221GAN	MBD2	K562	chromatin remodeler
+ENCSR940MHE	MBD2	MCF-7	chromatin remodeler
+ENCSR000BQW	MBD4	HepG2	DNA repair
+ENCSR151WAM	MBNL3	HepG2	RNA binding protein
+ENCSR138SFL	MCM2	K562	DNA replication
+ENCSR552PSV	MCM2	K562	DNA replication
+ENCSR990AZC	MCM3	K562	DNA replication
+ENCSR079WHK	MCM5	K562	DNA replication
+ENCSR628APV	MCM5	K562	DNA replication
+ENCSR038RGL	MCM7	K562	DNA replication
+ENCSR068VRA	MCM7	K562	DNA replication
+ENCSR542WJU	MCM7	K562	DNA replication
+ENCSR935UQL	MECOM	K562	chromatin remodeler,transcription factor
+ENCSR269BSA	MED1	K562	cofactor
+ENCSR959XNY	MED1	HepG2	cofactor
+ENCSR269DQN	MED13	HepG2	cofactor
+ENCSR243OKN	MED8	HepG2	cofactor
+ENCSR000BKB	MEF2A	GM12878	transcription factor
+ENCSR000BNV	MEF2A	K562	transcription factor
+ENCSR000BVC	MEF2A	SK-N-SH	transcription factor
+ENCSR291MJH	MEF2A	HepG2	transcription factor
+ENCSR177VFS	MEF2B	GM12878	transcription factor
+ENCSR000BNG	MEF2C	GM12878	transcription factor
+ENCSR647ZXA	MEF2D	K562	transcription factor
+ENCSR923MOO	MEF2D	HepG2	transcription factor
+ENCSR186JMM	MEIS1	HEK293	transcription factor
+ENCSR695WOH	MEIS1	HepG2	transcription factor
+ENCSR830LDY	MEIS2	HepG2	transcription factor
+ENCSR851BNE	MEIS2	K562	transcription factor
+ENCSR710WLO	MGA	K562	transcription factor
+ENCSR912NEF	MGA	HepG2	transcription factor
+ENCSR426MDV	MIER1	K562	chromatin remodeler
+ENCSR115PIK	MIER2	HepG2	chromatin remodeler
+ENCSR531VIJ	MIER3	HepG2	chromatin remodeler
+ENCSR000FCB	MITF	K562	transcription factor
+ENCSR797SWM	MITF	K562	transcription factor
+ENCSR966PJY	MIXL1	HepG2	transcription factor
+ENCSR107GRP	MLLT1	K562	transcription factor
+ENCSR427BBI	MLLT1	MCF-7	transcription factor
+ENCSR552XSN	MLLT1	GM12878	transcription factor
+ENCSR675LRO	MLLT1	K562	transcription factor
+ENCSR639UKJ	MLLT10	HepG2	transcription factor
+ENCSR125DAD	MLX	HepG2	transcription factor
+ENCSR373ZOY	MLX	WTC11	transcription factor
+ENCSR475ZGL	MLX	K562	transcription factor
+ENCSR873LYH	MLX	K562	transcription factor
+ENCSR802UCW	MLXIP	HepG2	transcription factor
+ENCSR261EDU	MNT	HepG2	transcription factor
+ENCSR390VGH	MNT	K562	transcription factor
+ENCSR460XGV	MNT	MCF-7	transcription factor
+ENCSR512NLO	MNT	K562	transcription factor
+ENCSR663ZZZ	MNT	MCF-7	transcription factor
+ENCSR730TBC	MNT	HepG2	transcription factor
+ENCSR979QYJ	MNT	K562	transcription factor
+ENCSR108MKR	MNX1	HepG2	transcription factor
+ENCSR604WXQ	MSX2	MCF-7	transcription factor
+ENCSR348JOJ	MTA1	MCF-7	cofactor
+ENCSR807BGP	MTA1	K562	cofactor
+ENCSR983KRB	MTA1	HepG2	cofactor
+ENCSR113LAS	MTA2	K562	chromatin remodeler
+ENCSR293QAR	MTA2	GM12878	chromatin remodeler
+ENCSR411UYA	MTA2	K562	chromatin remodeler
+ENCSR551ZDZ	MTA2	MCF-7	chromatin remodeler
+ENCSR000BRH	MTA3	GM12878	chromatin remodeler
+ENCSR391KQC	MTA3	MCF-7	chromatin remodeler
+ENCSR873OVI	MTA3	HepG2	chromatin remodeler
+ENCSR914NEI	MTA3	K562	chromatin remodeler
+ENCSR482SWD	MTERF2	HepG2	transcription factor
+ENCSR992KMO	MTERF4	HepG2	transcription factor
+ENCSR194NVP	MTF1	HepG2	transcription factor
+ENCSR849LXI	MTF1	K562	transcription factor
+ENCSR913ODG	MTF2	HepG2	chromatin remodeler
+ENCSR026RAK	MXD1	K562	transcription factor
+ENCSR165YVX	MXD1	HepG2	transcription factor
+ENCSR909GJR	MXD3	HepG2	transcription factor
+ENCSR441KFW	MXD4	HepG2	cofactor
+ENCSR803FIV	MXD4	WTC11	cofactor
+ENCSR000DZI	MXI1	GM12878	transcription factor
+ENCSR000EBR	MXI1	H1	transcription factor
+ENCSR000ECU	MXI1	HeLa-S3	transcription factor
+ENCSR000EDU	MXI1	HepG2	transcription factor
+ENCSR000EFE	MXI1	IMR-90	transcription factor
+ENCSR000EGZ	MXI1	K562	transcription factor
+ENCSR000EIA	MXI1	SK-N-SH	transcription factor
+ENCSR934NHU	MXI1	neural cell	transcription factor
+ENCSR819ATC	MYB	GM12878	chromatin remodeler
+ENCSR000BRO	MYBL2	HepG2	transcription factor
+ENCSR162IEM	MYBL2	K562	transcription factor
+ENCSR361UTL	MYBL2	K562	transcription factor
+ENCSR581KCO	MYBL2	HepG2	transcription factor
+ENCSR859ZAC	MYBL2	WTC11	transcription factor
+ENCSR000DKU	MYC	GM12878	transcription factor
+ENCSR000DLI	MYC	H1	transcription factor
+ENCSR000DLN	MYC	HeLa-S3	transcription factor
+ENCSR000DLR	MYC	HepG2	transcription factor
+ENCSR000DLU	MYC	endothelial cell of umbilical vein	transcription factor
+ENCSR000DLZ	MYC	K562	transcription factor
+ENCSR000DMJ	MYC	MCF-7	transcription factor
+ENCSR000DMM	MYC	MCF-7	transcription factor
+ENCSR000DMP	MYC	MCF-7	transcription factor
+ENCSR000DMQ	MYC	MCF-7	transcription factor
+ENCSR000DOM	MYC	MCF 10A	transcription factor
+ENCSR000DOS	MYC	MCF 10A	transcription factor
+ENCSR000DYC	MYC	A549	transcription factor
+ENCSR000EBY	MYC	H1	transcription factor
+ENCSR000EGJ	MYC	K562	transcription factor
+ENCSR000EGS	MYC	K562	transcription factor
+ENCSR000EHR	MYC	NB4	transcription factor
+ENCSR000EZD	MYC	HeLa-S3	transcription factor
+ENCSR000EZU	MYC	K562	transcription factor
+ENCSR000EZV	MYC	K562	transcription factor
+ENCSR000FAG	MYC	K562	transcription factor
+ENCSR000FAZ	MYC	K562	transcription factor
+ENCSR744JJU	MYC	K562	transcription factor
+ENCSR784BVD	MYC	HepG2	transcription factor
+ENCSR307YJU	MYNN	K562	transcription factor
+ENCSR398TMP	MYNN	HepG2	transcription factor
+ENCSR707BNG	MYNN	HEK293	transcription factor
+ENCSR737LTZ	MYNN	K562	transcription factor
+ENCSR992KLV	MYNN	K562	transcription factor
+ENCSR056SXR	MYPOP	HepG2	transcription factor
+ENCSR792MZV	MYRF	HepG2	transcription factor
+ENCSR298QUH	MZF1	HEK293	transcription factor
+ENCSR384YOP	MZF1	HepG2	transcription factor
+ENCSR545ADB	NACC2	HepG2	transcription factor
+ENCSR598NQU	NAIF1	HepG2	other context
+ENCSR000BMT	NANOG	H1	transcription factor
+ENCSR061DGF	NANOG	GM23338	transcription factor
+ENCSR085QEV	NBN	K562	DNA repair
+ENCSR210ZYL	NBN	HepG2	DNA repair
+ENCSR278SQL	NBN	GM12878	DNA repair
+ENCSR591EBL	NBN	MCF-7	DNA repair
+ENCSR658WFQ	NCOA1	K562	cofactor
+ENCSR707WZK	NCOA1	HepG2	cofactor
+ENCSR711SNW	NCOA1	K562	cofactor
+ENCSR931HNY	NCOA1	K562	cofactor
+ENCSR178SXA	NCOA2	HepG2	cofactor
+ENCSR349TZO	NCOA2	K562	cofactor
+ENCSR803EKW	NCOA2	K562	cofactor
+ENCSR573OJP	NCOA3	MCF-7	cofactor
+ENCSR686SOV	NCOA3	MCF-7	cofactor
+ENCSR119ULQ	NCOA4	K562	cofactor
+ENCSR989QTM	NCOA5	HepG2	RNA binding protein
+ENCSR168CEE	NCOA6	K562	cofactor
+ENCSR000ATY	NCOR1	K562	cofactor
+ENCSR298JCG	NCOR1	K562	cofactor
+ENCSR419KSZ	NCOR1	HepG2	cofactor
+ENCSR798ILC	NCOR1	K562	cofactor
+ENCSR910JAI	NCOR1	K562	cofactor
+ENCSR000DOF	NELFE	K562	RNA binding protein
+ENCSR006WUS	NEUROD1	MCF-7	transcription factor
+ENCSR986CDX	NEUROD1	K562	transcription factor
+ENCSR565BVI	NFAT5	HepG2	transcription factor
+ENCSR000BQL	NFATC1	GM12878	transcription factor
+ENCSR051OUX	NFATC3	K562	transcription factor
+ENCSR437GBJ	NFATC3	GM12878	transcription factor
+ENCSR635SKD	NFATC3	HepG2	transcription factor
+ENCSR670FDA	NFATC3	K562	transcription factor
+ENCSR096OUP	NFATC4	WTC11	transcription factor
+ENCSR000FAF	NFE2	K562	transcription factor
+ENCSR000FCC	NFE2	K562	transcription factor
+ENCSR552YGL	NFE2	K562	transcription factor
+ENCSR983FBD	NFE2	HepG2	transcription factor
+ENCSR245QUM	NFE2L1	WTC11	cofactor
+ENCSR543SBE	NFE2L1	HepG2	cofactor
+ENCSR632SHZ	NFE2L1	K562	cofactor
+ENCSR197WGI	NFE2L2	IMR-90	transcription factor
+ENCSR488EES	NFE2L2	HepG2	transcription factor
+ENCSR584GHV	NFE2L2	A549	transcription factor
+ENCSR707IUN	NFE2L2	HeLa-S3	transcription factor
+ENCSR226QQM	NFIA	HepG2	transcription factor
+ENCSR414WBQ	NFIB	HepG2	transcription factor
+ENCSR582ZOA	NFIB	MCF-7	transcription factor
+ENCSR702BYX	NFIB	MCF-7	transcription factor
+ENCSR000BQX	NFIC	HepG2	transcription factor
+ENCSR000BRN	NFIC	GM12878	transcription factor
+ENCSR000BSV	NFIC	SK-N-SH	transcription factor
+ENCSR000BUT	NFIC	Ishikawa	transcription factor
+ENCSR796ITY	NFIC	K562	transcription factor
+ENCSR201GGK	NFIL3	HepG2	transcription factor
+ENCSR574VJG	NFIX	K562	transcription factor
+ENCSR164YJZ	NFKB2	HepG2	transcription factor
+ENCSR235OVI	NFKBIZ	HepG2	other context
+ENCSR145BHD	NFRKB	HepG2	DNA repair
+ENCSR248IMH	NFRKB	MCF-7	DNA repair
+ENCSR657EOF	NFRKB	K562	DNA repair
+ENCSR996ESX	NFRKB	K562	DNA repair
+ENCSR997GPO	NFRKB	HEK293T	DNA repair
+ENCSR085DDI	NFXL1	K562	transcription factor
+ENCSR417DKD	NFXL1	MCF-7	transcription factor
+ENCSR746XEG	NFXL1	GM12878	transcription factor
+ENCSR829UCH	NFXL1	K562	transcription factor
+ENCSR000DNN	NFYA	GM12878	transcription factor
+ENCSR000DNS	NFYA	HeLa-S3	transcription factor
+ENCSR000EGR	NFYA	K562	transcription factor
+ENCSR124APT	NFYA	HepG2	transcription factor
+ENCSR163VTS	NFYA	K562	transcription factor
+ENCSR000DNM	NFYB	GM12878	transcription factor
+ENCSR000DNR	NFYB	HeLa-S3	transcription factor
+ENCSR000EGQ	NFYB	K562	transcription factor
+ENCSR146UIC	NFYB	WTC11	transcription factor
+ENCSR935GZV	NFYB	HepG2	transcription factor
+ENCSR569ARC	NFYC	HepG2	transcription factor
+ENCSR331BDJ	NKRF	K562	transcription factor
+ENCSR732PJX	NKRF	GM12878	transcription factor
+ENCSR647CXR	NKX3-1	HepG2	transcription factor
+ENCSR415TXN	NONO	K562	RNA binding protein
+ENCSR476BQA	NONO	HepG2	RNA binding protein
+ENCSR886RYH	NONO	K562	RNA binding protein
+ENCSR898XQZ	NONO	HepG2	RNA binding protein
+ENCSR912NMR	NONO	MCF-7	RNA binding protein
+ENCSR923UTX	NONO	HepG2	RNA binding protein
+ENCSR505ELD	NPAS2	HepG2	DNA repair
+ENCSR769FXE	NPAS2	A549	DNA repair
+ENCSR764YDL	NR0B1	K562	transcription factor
+ENCSR982CFC	NR0B2	HepG2	cofactor,transcription factor
+ENCSR798MFW	NR1H2	K562	transcription factor
+ENCSR946BKU	NR1H2	HepG2	transcription factor
+ENCSR963EQY	NR1H2	WTC11	transcription factor
+ENCSR178DEG	NR2C1	K562	transcription factor
+ENCSR742IDN	NR2C1	K562	transcription factor
+ENCSR784VIQ	NR2C1	GM12878	transcription factor
+ENCSR000EUL	NR2C2	GM12878	transcription factor
+ENCSR000EVN	NR2C2	HeLa-S3	transcription factor
+ENCSR000EVS	NR2C2	HepG2	transcription factor
+ENCSR000EWH	NR2C2	K562	transcription factor
+ENCSR454GVT	NR2C2	WTC11	transcription factor
+ENCSR516SWI	NR2C2	K562	transcription factor
+ENCSR559ZKI	NR2C2	HepG2	transcription factor
+ENCSR750LYM	NR2C2	K562	transcription factor
+ENCSR044RZF	NR2E3	A549	transcription factor
+ENCSR136OFY	NR2F1	HepG2	transcription factor
+ENCSR514VYD	NR2F1	GM12878	transcription factor
+ENCSR662EOU	NR2F1	HepG2	transcription factor
+ENCSR970NKQ	NR2F1	K562	transcription factor
+ENCSR000BRS	NR2F2	K562	transcription factor
+ENCSR000BUY	NR2F2	MCF-7	transcription factor
+ENCSR000BVM	NR2F2	HepG2	transcription factor
+ENCSR168SMX	NR2F2	liver	transcription factor
+ENCSR338MMB	NR2F2	liver	transcription factor
+ENCSR087TYG	NR2F6	K562	transcription factor
+ENCSR128KLX	NR2F6	K562	transcription factor
+ENCSR518WPL	NR2F6	HepG2	transcription factor
+ENCSR707QWA	NR2F6	K562	transcription factor
+ENCSR798IJO	NR2F6	HepG2	transcription factor
+ENCSR000BHE	NR3C1	A549	transcription factor
+ENCSR000BHF	NR3C1	A549	transcription factor
+ENCSR000BHG	NR3C1	A549	transcription factor
+ENCSR000BIO	NR3C1	A549	transcription factor
+ENCSR000BJC	NR3C1	Ishikawa	transcription factor
+ENCSR000BJR	NR3C1	A549	transcription factor
+ENCSR000BJT	NR3C1	A549	transcription factor
+ENCSR000BLB	NR3C1	Ishikawa	transcription factor
+ENCSR000EEV	NR3C1	HepG2	transcription factor
+ENCSR070VXO	NR3C1	A549	transcription factor
+ENCSR255CTA	NR3C1	A549	transcription factor
+ENCSR287FWE	NR3C1	A549	transcription factor
+ENCSR325DER	NR3C1	K562	transcription factor
+ENCSR355HLV	NR3C1	A549	transcription factor
+ENCSR385RUW	NR3C1	A549	transcription factor
+ENCSR424JOE	NR3C1	A549	transcription factor
+ENCSR458VTP	NR3C1	A549	transcription factor
+ENCSR471EKW	NR3C1	A549	transcription factor
+ENCSR481QLH	NR3C1	HepG2	transcription factor
+ENCSR494UQJ	NR3C1	K562	transcription factor
+ENCSR516IVY	NR3C1	A549	transcription factor
+ENCSR660RYY	NR3C1	A549	transcription factor
+ENCSR686PFM	NR3C1	A549	transcription factor
+ENCSR691GRA	NR3C1	A549	transcription factor
+ENCSR720DXT	NR3C1	A549	transcription factor
+ENCSR722OTA	NR3C1	WTC11	transcription factor
+ENCSR773NQB	NR3C1	A549	transcription factor
+ENCSR857QEA	NR3C1	A549	transcription factor
+ENCSR908AOO	NR3C1	A549	transcription factor
+ENCSR919OXR	NR3C1	A549	transcription factor
+ENCSR952GOL	NR3C1	A549	transcription factor
+ENCSR980ZWE	NR3C1	K562	transcription factor
+ENCSR000DJW	NR4A1	K562	transcription factor
+ENCSR130PDE	NR4A1	K562	transcription factor
+ENCSR692RET	NR4A1	K562	transcription factor
+ENCSR310OZS	NR5A1	HepG2	transcription factor
+ENCSR190GIW	NR5A2	A549	transcription factor
+ENCSR000DZO	NRF1	GM12878	transcription factor
+ENCSR000ECC	NRF1	H1	transcription factor
+ENCSR000EDJ	NRF1	HeLa-S3	transcription factor
+ENCSR000EEH	NRF1	HepG2	transcription factor
+ENCSR000EHH	NRF1	K562	transcription factor
+ENCSR000EHZ	NRF1	SK-N-SH	transcription factor
+ENCSR135ANT	NRF1	MCF-7	transcription factor
+ENCSR494TDU	NRF1	K562	transcription factor
+ENCSR689JMY	NRF1	HepG2	transcription factor
+ENCSR837EYC	NRF1	K562	transcription factor
+ENCSR853ADA	NRF1	HepG2	transcription factor
+ENCSR998AJK	NRF1	K562	transcription factor
+ENCSR518KLO	NRL	HepG2	transcription factor
+ENCSR574XEO	NUFIP1	K562	RNA binding protein
+ENCSR956OSX	ONECUT1	HepG2	transcription factor
+ENCSR661PKJ	ONECUT2	HepG2	transcription factor
+ENCSR701SED	OSR1	SK-N-SH	transcription factor
+ENCSR324LTM	OSR2	HEK293	transcription factor
+ENCSR079SHZ	OTX1	MCF-7	transcription factor
+ENCSR475ZYA	OTX1	K562	transcription factor
+ENCSR004HEA	OTX2	WTC11	transcription factor
+ENCSR829WBA	OVOL1	MCF-7	transcription factor
+ENCSR181ELQ	OVOL2	WTC11	transcription factor
+ENCSR768LIO	OVOL3	HEK293	transcription factor
+ENCSR327RFM	PAF1	HepG2	chromatin remodeler
+ENCSR549PVK	PATZ1	K562	transcription factor
+ENCSR658YLN	PATZ1	HepG2	transcription factor
+ENCSR966ULI	PATZ1	HEK293	transcription factor
+ENCSR969AIM	PATZ1	SK-N-SH	transcription factor
+ENCSR722TRY	PAWR	HepG2	cofactor
+ENCSR000BHD	PAX5	GM12878	transcription factor
+ENCSR000BHJ	PAX5	GM12878	transcription factor
+ENCSR000BJH	PAX5	GM12891	transcription factor
+ENCSR000BJI	PAX5	GM12892	transcription factor
+ENCSR102YQB	PAX8	HepG2	transcription factor
+ENCSR192AFN	PAX8	GM12878	transcription factor
+ENCSR949IWY	PAX8	MCF-7	transcription factor
+ENCSR530ARJ	PAXIP1	HepG2	chromatin remodeler,transcription factor
+ENCSR637RKG	PBX1	A549	transcription factor
+ENCSR263DFP	PBX2	K562	transcription factor
+ENCSR633EIC	PBX2	K562	transcription factor
+ENCSR849DFF	PBX2	HepG2	transcription factor
+ENCSR000BGR	PBX3	GM12878	transcription factor
+ENCSR000BTN	PBX3	A549	transcription factor
+ENCSR000BVE	PBX3	SK-N-SH	transcription factor
+ENCSR136EQX	PBX3	HepG2	transcription factor
+ENCSR865HXK	PBX3	HEK293	transcription factor
+ENCSR052PTN	PCBP1	K562	RNA binding protein
+ENCSR872EVQ	PCBP1	HepG2	RNA binding protein
+ENCSR603REQ	PCBP2	K562	RNA binding protein
+ENCSR945NSF	PCBP2	HepG2	RNA binding protein
+ENCSR650AWW	PHB	K562	chromatin remodeler
+ENCSR170DNV	PHB2	HepG2	transcription factor
+ENCSR924GXX	PHB2	K562	transcription factor
+ENCSR594SMP	PHF20	K562	chromatin remodeler
+ENCSR612XVQ	PHF20	HepG2	chromatin remodeler
+ENCSR119VCX	PHF21A	K562	chromatin remodeler
+ENCSR315VYZ	PHF21A	HepG2	chromatin remodeler
+ENCSR191TLD	PHF5A	HepG2	RNA binding protein
+ENCSR000AQH	PHF8	K562	chromatin remodeler
+ENCSR000ATK	PHF8	H1	chromatin remodeler
+ENCSR487LUQ	PHF8	HepG2	chromatin remodeler
+ENCSR541AOQ	PHF8	A549	chromatin remodeler
+ENCSR604VAE	PHF8	HepG2	chromatin remodeler
+ENCSR059BWP	PHTF2	K562	transcription factor
+ENCSR875FZN	PIN1	HepG2	other context
+ENCSR374MAS	PITX1	HepG2	transcription factor
+ENCSR115SMW	PKNOX1	K562	transcription factor
+ENCSR233FAG	PKNOX1	HEK293T	transcription factor
+ENCSR711XNY	PKNOX1	GM12878	transcription factor
+ENCSR986XYK	PKNOX1	MCF-7	transcription factor
+ENCSR019KPC	PLRG1	HepG2	other context
+ENCSR039CUX	PLSCR1	HepG2	transcription factor
+ENCSR000BQM	PML	GM12878	DNA repair
+ENCSR000BQY	PML	K562	DNA repair
+ENCSR000BUZ	PML	MCF-7	DNA repair
+ENCSR747MFU	POGK	HepG2	transcription factor
+ENCSR902SBX	POGZ	HepG2	cohesin
+ENCSR000BGD	POLR2A	GM12878	RNA polymerase complex
+ENCSR000BGO	POLR2A	HeLa-S3	RNA polymerase complex
+ENCSR000BHH	POLR2A	A549	RNA polymerase complex
+ENCSR000BHI	POLR2A	A549	RNA polymerase complex
+ENCSR000BHN	POLR2A	H1	RNA polymerase complex
+ENCSR000BHZ	POLR2A	GM12892	RNA polymerase complex
+ENCSR000BIK	POLR2A	GM12891	RNA polymerase complex
+ENCSR000BJM	POLR2A	HepG2	RNA polymerase complex
+ENCSR000BKI	POLR2A	Ishikawa	RNA polymerase complex
+ENCSR000BMR	POLR2A	K562	RNA polymerase complex
+ENCSR000BQB	POLR2A	endothelial cell of umbilical vein	RNA polymerase complex
+ENCSR000DKM	POLR2A	H54	RNA polymerase complex
+ENCSR000DKT	POLR2A	GM12878	RNA polymerase complex
+ENCSR000DLJ	POLR2A	H1	RNA polymerase complex
+ENCSR000DLM	POLR2A	HeLa-S3	RNA polymerase complex
+ENCSR000DLQ	POLR2A	HepG2	RNA polymerase complex
+ENCSR000DLV	POLR2A	endothelial cell of umbilical vein	RNA polymerase complex
+ENCSR000DLY	POLR2A	K562	RNA polymerase complex
+ENCSR000DMK	POLR2A	MCF-7	RNA polymerase complex
+ENCSR000DMN	POLR2A	MCF-7	RNA polymerase complex
+ENCSR000DMT	POLR2A	MCF-7	RNA polymerase complex
+ENCSR000DMZ	POLR2A	A549	RNA polymerase complex
+ENCSR000DPA	POLR2A	MCF 10A	RNA polymerase complex
+ENCSR000DPC	POLR2A	MCF 10A	RNA polymerase complex
+ENCSR000DYO	POLR2A	GM10847	RNA polymerase complex
+ENCSR000EAD	POLR2A	GM12878	RNA polymerase complex
+ENCSR000EAJ	POLR2A	GM12891	RNA polymerase complex
+ENCSR000EAM	POLR2A	GM12892	RNA polymerase complex
+ENCSR000EAR	POLR2A	GM15510	RNA polymerase complex
+ENCSR000EAU	POLR2A	GM18505	RNA polymerase complex
+ENCSR000EAY	POLR2A	GM18526	RNA polymerase complex
+ENCSR000EBC	POLR2A	GM18951	RNA polymerase complex
+ENCSR000EBG	POLR2A	GM19099	RNA polymerase complex
+ENCSR000EBK	POLR2A	GM19193	RNA polymerase complex
+ENCSR000EEM	POLR2A	HepG2	RNA polymerase complex
+ENCSR000EEP	POLR2A	HepG2	RNA polymerase complex
+ENCSR000EFB	POLR2A	endothelial cell of umbilical vein	RNA polymerase complex
+ENCSR000EFK	POLR2A	IMR-90	RNA polymerase complex
+ENCSR000EHL	POLR2A	K562	RNA polymerase complex
+ENCSR000EHP	POLR2A	K562	RNA polymerase complex
+ENCSR000EUU	POLR2A	HCT116	RNA polymerase complex
+ENCSR000EXO	POLR2A	erythroblast	RNA polymerase complex
+ENCSR000EXX	POLR2A	Raji	RNA polymerase complex
+ENCSR000EZL	POLR2A	HeLa-S3	RNA polymerase complex
+ENCSR000EZQ	POLR2A	HepG2	RNA polymerase complex
+ENCSR000FAJ	POLR2A	K562	RNA polymerase complex
+ENCSR000FAL	POLR2A	NB4	RNA polymerase complex
+ENCSR000FAW	POLR2A	K562	RNA polymerase complex
+ENCSR000FAX	POLR2A	K562	RNA polymerase complex
+ENCSR000FAY	POLR2A	K562	RNA polymerase complex
+ENCSR025ZZA	POLR2A	suprapubic skin	RNA polymerase complex
+ENCSR031KWR	POLR2A	adrenal gland	RNA polymerase complex
+ENCSR031TFS	POLR2A	K562	RNA polymerase complex
+ENCSR033NHF	POLR2A	upper lobe of left lung	RNA polymerase complex
+ENCSR038YKU	POLR2A	stomach	RNA polymerase complex
+ENCSR055WBT	POLR2A	body of pancreas	RNA polymerase complex
+ENCSR068WNI	POLR2A	upper lobe of left lung	RNA polymerase complex
+ENCSR091CSG	POLR2A	gastroesophageal sphincter	RNA polymerase complex
+ENCSR097EEA	POLR2A	gastroesophageal sphincter	RNA polymerase complex
+ENCSR103UPR	POLR2A	gastrocnemius medialis	RNA polymerase complex
+ENCSR107EUS	POLR2A	transverse colon	RNA polymerase complex
+ENCSR122EYE	POLR2A	stomach	RNA polymerase complex
+ENCSR122LGV	POLR2A	prostate gland	RNA polymerase complex
+ENCSR132XRW	POLR2A	transverse colon	RNA polymerase complex
+ENCSR142SQX	POLR2A	uterus	RNA polymerase complex
+ENCSR147PYL	POLR2A	esophagus squamous epithelium	RNA polymerase complex
+ENCSR153AGA	POLR2A	lower leg skin	RNA polymerase complex
+ENCSR154GUK	POLR2A	tibial nerve	RNA polymerase complex
+ENCSR156UQO	POLR2A	esophagus squamous epithelium	RNA polymerase complex
+ENCSR175BVD	POLR2A	lower leg skin	RNA polymerase complex
+ENCSR266XFE	POLR2A	spleen	RNA polymerase complex
+ENCSR289VTP	POLR2A	spleen	RNA polymerase complex
+ENCSR299CAV	POLR2A	breast epithelium	RNA polymerase complex
+ENCSR304IVU	POLR2A	breast epithelium	RNA polymerase complex
+ENCSR322JEO	POLR2A	sigmoid colon	RNA polymerase complex
+ENCSR336YRS	POLR2A	heart left ventricle	RNA polymerase complex
+ENCSR367UUC	POLR2A	gastroesophageal sphincter	RNA polymerase complex
+ENCSR388QZF	POLR2A	K562	RNA polymerase complex
+ENCSR401ORC	POLR2A	vagina	RNA polymerase complex
+ENCSR412QGD	POLR2A	adrenal gland	RNA polymerase complex
+ENCSR414SWG	POLR2A	gastrocnemius medialis	RNA polymerase complex
+ENCSR414TPL	POLR2A	gastroesophageal sphincter	RNA polymerase complex
+ENCSR415MOW	POLR2A	right lobe of liver	RNA polymerase complex
+ENCSR431EHE	POLR2A	sigmoid colon	RNA polymerase complex
+ENCSR432GAO	POLR2A	thyroid gland	RNA polymerase complex
+ENCSR434MWV	POLR2A	stomach	RNA polymerase complex
+ENCSR472VBD	POLR2A	sigmoid colon	RNA polymerase complex
+ENCSR485BEB	POLR2A	thyroid gland	RNA polymerase complex
+ENCSR517FVL	POLR2A	body of pancreas	RNA polymerase complex
+ENCSR543DUC	POLR2A	lower leg skin	RNA polymerase complex
+ENCSR576PII	POLR2A	Peyer's patch	RNA polymerase complex
+ENCSR610EFT	POLR2A	body of pancreas	RNA polymerase complex
+ENCSR667UWT	POLR2A	transverse colon	RNA polymerase complex
+ENCSR674IEI	POLR2A	upper lobe of left lung	RNA polymerase complex
+ENCSR691CPM	POLR2A	spleen	RNA polymerase complex
+ENCSR696HTM	POLR2A	vagina	RNA polymerase complex
+ENCSR699ZGH	POLR2A	heart left ventricle	RNA polymerase complex
+ENCSR724FCJ	POLR2A	sigmoid colon	RNA polymerase complex
+ENCSR729GXE	POLR2A	spleen	RNA polymerase complex
+ENCSR734ZOZ	POLR2A	esophagus squamous epithelium	RNA polymerase complex
+ENCSR754DWU	POLR2A	ovary	RNA polymerase complex
+ENCSR775VUA	POLR2A	stomach	RNA polymerase complex
+ENCSR803FAP	POLR2A	testis	RNA polymerase complex
+ENCSR825RBI	POLR2A	suprapubic skin	RNA polymerase complex
+ENCSR877OYD	POLR2A	esophagus squamous epithelium	RNA polymerase complex
+ENCSR888HXN	POLR2A	lower leg skin	RNA polymerase complex
+ENCSR888OWU	POLR2A	upper lobe of left lung	RNA polymerase complex
+ENCSR911JAX	POLR2A	prostate gland	RNA polymerase complex
+ENCSR922GUA	POLR2A	esophagus muscularis mucosa	RNA polymerase complex
+ENCSR935XOT	POLR2A	tibial nerve	RNA polymerase complex
+ENCSR974HQI	POLR2A	transverse colon	RNA polymerase complex
+ENCSR979DMN	POLR2A	body of pancreas	RNA polymerase complex
+ENCSR995QNB	POLR2A	Peyer's patch	RNA polymerase complex
+ENCSR999QVR	POLR2A	uterus	RNA polymerase complex
+ENCSR000DYF	POLR2AphosphoS2	A549	RNA polymerase complex
+ENCSR000DZK	POLR2AphosphoS2	GM12878	RNA polymerase complex
+ENCSR000ECT	POLR2AphosphoS2	HeLa-S3	RNA polymerase complex
+ENCSR000EDX	POLR2AphosphoS2	HepG2	RNA polymerase complex
+ENCSR000EGF	POLR2AphosphoS2	K562	RNA polymerase complex
+ENCSR000EHF	POLR2AphosphoS2	K562	RNA polymerase complex
+ENCSR000BIA	POLR2AphosphoS5	GM12892	RNA polymerase complex
+ENCSR000BIC	POLR2AphosphoS5	H1	RNA polymerase complex
+ENCSR000BIF	POLR2AphosphoS5	GM12878	RNA polymerase complex
+ENCSR000BIL	POLR2AphosphoS5	GM12891	RNA polymerase complex
+ENCSR000BKR	POLR2AphosphoS5	K562	RNA polymerase complex
+ENCSR000BML	POLR2AphosphoS5	HCT116	RNA polymerase complex
+ENCSR000BOV	POLR2AphosphoS5	Panc1	RNA polymerase complex
+ENCSR000BPA	POLR2AphosphoS5	SK-N-SH	RNA polymerase complex
+ENCSR000BPC	POLR2AphosphoS5	PFSK-1	RNA polymerase complex
+ENCSR000BPI	POLR2AphosphoS5	HepG2	RNA polymerase complex
+ENCSR000BPL	POLR2AphosphoS5	SK-N-MC	RNA polymerase complex
+ENCSR000BQC	POLR2AphosphoS5	endothelial cell of umbilical vein	RNA polymerase complex
+ENCSR000BTL	POLR2AphosphoS5	HL-60	RNA polymerase complex
+ENCSR000BTW	POLR2AphosphoS5	neural cell	RNA polymerase complex
+ENCSR033FDW	POLR2AphosphoS5	stomach	RNA polymerase complex
+ENCSR170NMC	POLR2AphosphoS5	transverse colon	RNA polymerase complex
+ENCSR217KAL	POLR2AphosphoS5	esophagus muscularis mucosa	RNA polymerase complex
+ENCSR350PUV	POLR2AphosphoS5	spleen	RNA polymerase complex
+ENCSR369NGL	POLR2AphosphoS5	GM23338	RNA polymerase complex
+ENCSR400WEK	POLR2AphosphoS5	breast epithelium	RNA polymerase complex
+ENCSR403USE	POLR2AphosphoS5	sigmoid colon	RNA polymerase complex
+ENCSR404VWY	POLR2AphosphoS5	prostate gland	RNA polymerase complex
+ENCSR442CIF	POLR2AphosphoS5	prostate gland	RNA polymerase complex
+ENCSR442ZTI	POLR2AphosphoS5	esophagus muscularis mucosa	RNA polymerase complex
+ENCSR464CSO	POLR2AphosphoS5	suprapubic skin	RNA polymerase complex
+ENCSR491PTJ	POLR2AphosphoS5	suprapubic skin	RNA polymerase complex
+ENCSR633OEO	POLR2AphosphoS5	sigmoid colon	RNA polymerase complex
+ENCSR645JVW	POLR2AphosphoS5	vagina	RNA polymerase complex
+ENCSR714EQS	POLR2AphosphoS5	transverse colon	RNA polymerase complex
+ENCSR714JRB	POLR2AphosphoS5	stomach	RNA polymerase complex
+ENCSR823FFR	POLR2AphosphoS5	stomach	RNA polymerase complex
+ENCSR844PVS	POLR2AphosphoS5	breast epithelium	RNA polymerase complex
+ENCSR861XGM	POLR2AphosphoS5	suprapubic skin	RNA polymerase complex
+ENCSR889GGV	POLR2AphosphoS5	bipolar neuron	RNA polymerase complex
+ENCSR893MYW	POLR2AphosphoS5	upper lobe of left lung	RNA polymerase complex
+ENCSR916JAC	POLR2AphosphoS5	gastroesophageal sphincter	RNA polymerase complex
+ENCSR919UCY	POLR2AphosphoS5	vagina	RNA polymerase complex
+ENCSR920FID	POLR2AphosphoS5	sigmoid colon	RNA polymerase complex
+ENCSR930CPA	POLR2AphosphoS5	transverse colon	RNA polymerase complex
+ENCSR936JHB	POLR2AphosphoS5	esophagus muscularis mucosa	RNA polymerase complex
+ENCSR939FGB	POLR2AphosphoS5	breast epithelium	RNA polymerase complex
+ENCSR950CUQ	POLR2AphosphoS5	spleen	RNA polymerase complex
+ENCSR959UQA	POLR2AphosphoS5	spleen	RNA polymerase complex
+ENCSR978LQC	POLR2AphosphoS5	sigmoid colon	RNA polymerase complex
+ENCSR986QAR	POLR2AphosphoS5	upper lobe of left lung	RNA polymerase complex
+ENCSR325RLL	POLR2B	K562	RNA polymerase complex
+ENCSR283ZRI	POLR2G	K562	RNA polymerase complex
+ENCSR854JES	POLR2G	HepG2	RNA polymerase complex
+ENCSR400FSM	POLR2H	K562	RNA polymerase complex
+ENCSR000DNU	POLR3A	HeLa-S3	RNA polymerase complex
+ENCSR000DOI	POLR3A	K562	RNA polymerase complex
+ENCSR000EHQ	POLR3G	K562	RNA polymerase complex
+ENCSR871EQD	POU2F1	HepG2	transcription factor
+ENCSR000BGP	POU2F2	GM12878	transcription factor
+ENCSR000BII	POU2F2	GM12891	transcription factor
+ENCSR000BMU	POU5F1	H1	transcription factor
+ENCSR264RJX	POU5F1	GM23338	transcription factor
+ENCSR362VCG	POU5F1	bipolar neuron	transcription factor
+ENCSR364SNE	POU5F1	K562	transcription factor
+ENCSR706OJM	POU6F1	SK-N-SH	transcription factor
+ENCSR602QEJ	PPARA	SK-N-SH	transcription factor
+ENCSR576AMK	PPARD	K562	transcription factor
+ENCSR130VQL	PPARG	HepG2	transcription factor
+ENCSR000EEQ	PPARGC1A	HepG2	cofactor
+ENCSR509DOK	PPP1R10	MCF-7	RNA binding protein
+ENCSR000ECY	PRDM1	HeLa-S3	transcription factor
+ENCSR098YLE	PRDM1	HEK293	transcription factor
+ENCSR977FEF	PRDM1	A549	transcription factor
+ENCSR120MPG	PRDM10	K562	transcription factor
+ENCSR223TAV	PRDM10	HEK293	transcription factor
+ENCSR289PSX	PRDM10	HepG2	transcription factor
+ENCSR011INW	PRDM15	HepG2	transcription factor
+ENCSR092DCD	PRDM15	WTC11	transcription factor
+ENCSR748SQL	PRDM15	GM12878	transcription factor
+ENCSR714LYA	PRDM2	HEK293	transcription factor
+ENCSR130NZQ	PRDM4	HepG2	transcription factor
+ENCSR443MVV	PRDM4	HEK293	transcription factor
+ENCSR892QHR	PRDM6	HEK293	transcription factor
+ENCSR284SMX	PREB	WTC11	transcription factor
+ENCSR689JMN	PREB	HepG2	transcription factor
+ENCSR926TAH	PREB	K562	transcription factor
+ENCSR810DBO	PRMT3	HepG2	chromatin remodeler
+ENCSR625ZVM	PRMT5	K562	chromatin remodeler
+ENCSR443YTB	PROX1	HepG2	transcription factor
+ENCSR220YXI	PRPF4	K562	RNA binding protein
+ENCSR243LNQ	PRPF4	HepG2	RNA binding protein
+ENCSR023IPQ	PRRX2	WTC11	transcription factor
+ENCSR156APP	PTBP1	HepG2	RNA binding protein
+ENCSR948KMB	PTBP1	K562	RNA binding protein
+ENCSR126FZN	PTRF	K562	RNA binding protein
+ENCSR314BBS	PTTG1	K562	transcription factor
+ENCSR805SIA	PURB	K562	RNA binding protein
+ENCSR410DWC	PYGO2	K562	chromatin remodeler
+ENCSR431XGJ	PYGO2	K562	chromatin remodeler
+ENCSR000BKV	RAD21	K562	cohesin
+ENCSR000BLD	RAD21	H1	cohesin
+ENCSR000BLS	RAD21	HepG2	cohesin
+ENCSR000BLY	RAD21	SK-N-SH	cohesin
+ENCSR000BMY	RAD21	GM12878	cohesin
+ENCSR000BSB	RAD21	HCT116	cohesin
+ENCSR000BTQ	RAD21	MCF-7	cohesin
+ENCSR000BTU	RAD21	Ishikawa	cohesin
+ENCSR000BUC	RAD21	A549	cohesin
+ENCSR000DYE	RAD21	A549	cohesin
+ENCSR000EAC	RAD21	GM12878	cohesin
+ENCSR000ECE	RAD21	H1	cohesin
+ENCSR000EDE	RAD21	HeLa-S3	cohesin
+ENCSR000EEG	RAD21	HepG2	cohesin
+ENCSR000EFJ	RAD21	IMR-90	cohesin
+ENCSR000EHX	RAD21	SK-N-SH	cohesin
+ENCSR000FAD	RAD21	K562	cohesin
+ENCSR054FKH	RAD21	HepG2	cohesin
+ENCSR193NSH	RAD21	A549	cohesin
+ENCSR198ZYJ	RAD21	neural cell	cohesin
+ENCSR217ELF	RAD21	A549	cohesin
+ENCSR230ZWH	RAD21	liver	cohesin
+ENCSR247LSH	RAD21	A549	cohesin
+ENCSR338DUC	RAD21	HepG2	cohesin
+ENCSR495WGO	RAD21	A549	cohesin
+ENCSR635OSG	RAD21	liver	cohesin
+ENCSR676MJK	RAD21	A549	cohesin
+ENCSR703TNG	RAD21	MCF-7	cohesin
+ENCSR748MVX	RAD21	A549	cohesin
+ENCSR760NPX	RAD21	A549	cohesin
+ENCSR807WAC	RAD21	A549	cohesin
+ENCSR853VWZ	RAD21	A549	cohesin
+ENCSR879KXD	RAD21	K562	cohesin
+ENCSR895JMI	RAD21	A549	cohesin
+ENCSR917QNE	RAD21	liver	cohesin
+ENCSR942XQI	RAD21	K562	cohesin
+ENCSR956LGB	RAD21	A549	cohesin
+ENCSR984DZW	RAD21	A549	cohesin
+ENCSR081WLS	RAD51	HepG2	DNA repair
+ENCSR442VBJ	RAD51	MCF-7	DNA repair
+ENCSR482TWQ	RAD51	GM12878	DNA repair
+ENCSR524BUE	RAD51	K562	DNA repair
+ENCSR500WXT	RARA	HepG2	cofactor
+ENCSR461MQX	RARB	A549	transcription factor
+ENCSR603TMB	RARB	SK-N-SH	transcription factor
+ENCSR514RAH	RARG	HepG2	transcription factor
+ENCSR670JDQ	RB1	K562	cohesin
+ENCSR785OKZ	RB1	GM12878	cohesin
+ENCSR144NTH	RBAK	HepG2	transcription factor
+ENCSR441UBA	RBAK	HEK293	transcription factor
+ENCSR000AQC	RBBP5	H1	chromatin remodeler
+ENCSR000AQI	RBBP5	K562	chromatin remodeler
+ENCSR330EXS	RBBP5	GM12878	chromatin remodeler
+ENCSR784FYS	RBFOX2	HepG2	cofactor
+ENCSR822LBD	RBFOX2	K562	cofactor
+ENCSR423FCW	RBM14	K562	RNA binding protein
+ENCSR850WUE	RBM15	K562	RNA binding protein
+ENCSR836COE	RBM17	K562	DNA repair
+ENCSR356ECR	RBM22	HepG2	RNA binding protein
+ENCSR848AOP	RBM22	K562	RNA binding protein
+ENCSR791OZM	RBM25	K562	RNA binding protein
+ENCSR899GSH	RBM34	K562	RNA binding protein
+ENCSR339JTP	RBM39	HepG2	RNA binding protein
+ENCSR764OXF	RBM39	K562	RNA binding protein
+ENCSR596FEL	RBPJ	HepG2	transcription factor
+ENCSR740XMB	RBPJ	K562	transcription factor
+ENCSR000DZC	RCOR1	GM12878	chromatin remodeler,transcription factor
+ENCSR000ECM	RCOR1	HeLa-S3	chromatin remodeler,transcription factor
+ENCSR000EDQ	RCOR1	HepG2	chromatin remodeler,transcription factor
+ENCSR000EFG	RCOR1	IMR-90	chromatin remodeler,transcription factor
+ENCSR000EGC	RCOR1	K562	chromatin remodeler,transcription factor
+ENCSR000EGG	RCOR1	K562	chromatin remodeler,transcription factor
+ENCSR009TKN	RCOR1	SK-N-SH	chromatin remodeler,transcription factor
+ENCSR391JII	RCOR1	MCF-7	chromatin remodeler,transcription factor
+ENCSR618ICR	RCOR1	A549	chromatin remodeler,transcription factor
+ENCSR455DOO	RCOR2	HepG2	transcription factor
+ENCSR136QQF	REL	HepG2	transcription factor
+ENCSR000EAG	RELA	GM12878	transcription factor
+ENCSR000EAI	RELA	GM12891	transcription factor
+ENCSR000EAN	RELA	GM12892	transcription factor
+ENCSR000EAQ	RELA	GM15510	transcription factor
+ENCSR000EBA	RELA	GM18526	transcription factor
+ENCSR000EBD	RELA	GM18951	transcription factor
+ENCSR000EBI	RELA	GM19099	transcription factor
+ENCSR000EBM	RELA	GM19193	transcription factor
+ENCSR580HOI	RELA	HepG2	transcription factor
+ENCSR664POU	RELA	GM12878	transcription factor
+ENCSR772EEN	RELA	K562	transcription factor
+ENCSR989LMJ	RELA	WTC11	transcription factor
+ENCSR387QUV	RELB	GM12878	cofactor,transcription factor
+ENCSR146NLL	REPIN1	HEK293	RNA binding protein
+ENCSR893BAO	REPIN1	HepG2	RNA binding protein
+ENCSR133DMU	RERE	K562	cofactor,transcription factor
+ENCSR988ZSI	RERE	HepG2	cofactor,transcription factor
+ENCSR000ATM	REST	K562	transcription factor
+ENCSR000BGF	REST	GM12878	transcription factor
+ENCSR000BHM	REST	H1	transcription factor
+ENCSR000BJJ	REST	SK-N-SH	transcription factor
+ENCSR000BJL	REST	HepG2	transcription factor
+ENCSR000BJO	REST	Panc1	transcription factor
+ENCSR000BJP	REST	PFSK-1	transcription factor
+ENCSR000BMN	REST	HeLa-S3	transcription factor
+ENCSR000BMW	REST	K562	transcription factor
+ENCSR000BOT	REST	HepG2	transcription factor
+ENCSR000BOX	REST	PFSK-1	transcription factor
+ENCSR000BOZ	REST	SK-N-SH	transcription factor
+ENCSR000BPK	REST	Panc1	transcription factor
+ENCSR000BQP	REST	A549	transcription factor
+ENCSR000BQS	REST	GM12878	transcription factor
+ENCSR000BSP	REST	MCF-7	transcription factor
+ENCSR000BTF	REST	HL-60	transcription factor
+ENCSR000BTV	REST	neural cell	transcription factor
+ENCSR000BUP	REST	Panc1	transcription factor
+ENCSR000BUU	REST	Ishikawa	transcription factor
+ENCSR000BVI	REST	HCT116	transcription factor
+ENCSR054JMQ	REST	K562	transcription factor
+ENCSR137ZMQ	REST	K562	transcription factor
+ENCSR663WAR	REST	H1	transcription factor
+ENCSR867WPH	REST	liver	transcription factor
+ENCSR871KYB	REST	GM23338	transcription factor
+ENCSR892DRK	REST	A549	transcription factor
+ENCSR893QWP	REST	liver	transcription factor
+ENCSR896UBV	REST	HEK293	transcription factor
+ENCSR655QNQ	REXO4	HepG2	DNA repair,cofactor
+ENCSR041AXL	RFX1	K562	transcription factor
+ENCSR066TET	RFX1	MCF-7	transcription factor
+ENCSR788XNX	RFX1	MCF-7	transcription factor
+ENCSR928API	RFX1	HepG2	transcription factor
+ENCSR968GIB	RFX1	K562	transcription factor
+ENCSR633OVO	RFX3	HepG2	transcription factor
+ENCSR000DZW	RFX5	GM12878	transcription factor
+ENCSR000ECF	RFX5	H1	transcription factor
+ENCSR000ECX	RFX5	HeLa-S3	transcription factor
+ENCSR000EEA	RFX5	HepG2	transcription factor
+ENCSR000EFD	RFX5	IMR-90	transcription factor
+ENCSR000EGO	RFX5	K562	transcription factor
+ENCSR000EHY	RFX5	SK-N-SH	transcription factor
+ENCSR064LJN	RFX5	A549	transcription factor
+ENCSR924TVL	RFX5	MCF-7	transcription factor
+ENCSR444MSK	RFX7	K562	transcription factor
+ENCSR823ADL	RFXANK	HepG2	cofactor
+ENCSR524RLU	RFXAP	HepG2	cofactor
+ENCSR551KXD	RHOXF2B	K562	transcription factor
+ENCSR718SDE	RLF	K562	transcription factor
+ENCSR000AUA	RNF2	K562	transcription factor
+ENCSR076YPO	RNF2	K562	transcription factor
+ENCSR138FUZ	RNF2	K562	transcription factor
+ENCSR523XCR	RNF2	HepG2	transcription factor
+ENCSR608XTF	RNF2	K562	transcription factor
+ENCSR784VUY	RNF2	H1	transcription factor
+ENCSR798EGJ	RNF2	A549	transcription factor
+ENCSR820GND	RNF2	K562	transcription factor
+ENCSR041QAZ	RNF219	K562	transcription factor
+ENCSR365YCX	RNF219	HepG2	transcription factor
+ENCSR707RKU	RORA	HepG2	transcription factor
+ENCSR110QIL	RORB	WTC11	transcription factor
+ENCSR180MUU	RREB1	HepG2	transcription factor
+ENCSR250WFW	RREB1	K562	transcription factor
+ENCSR414TYY	RUNX1	K562	transcription factor
+ENCSR588AKU	RUNX1	K562	transcription factor
+ENCSR000BRI	RUNX3	GM12878	transcription factor
+ENCSR000BHU	RXRA	HepG2	transcription factor
+ENCSR000BJD	RXRA	GM12878	transcription factor
+ENCSR000BJW	RXRA	H1	transcription factor
+ENCSR000BVG	RXRA	SK-N-SH	transcription factor
+ENCSR098XMN	RXRA	liver	transcription factor
+ENCSR352QSB	RXRA	liver	transcription factor
+ENCSR416HDG	RXRA	HepG2	transcription factor
+ENCSR560SEP	RXRB	HepG2	transcription factor
+ENCSR072VUO	SAFB	K562	RNA binding protein,chromatin remodeler
+ENCSR036RHV	SAFB2	HepG2	RNA binding protein
+ENCSR724GSW	SAFB2	K562	RNA binding protein
+ENCSR407MQT	SALL1	HepG2	transcription factor
+ENCSR044FMM	SALL2	HEK293	transcription factor
+ENCSR062TDX	SALL2	HepG2	transcription factor
+ENCSR959OMS	SAP130	HepG2	chromatin remodeler
+ENCSR000AQJ	SAP30	K562	chromatin remodeler,cofactor
+ENCSR000ATR	SAP30	H1	chromatin remodeler,cofactor
+ENCSR753KZY	SATB2	HepG2	transcription factor
+ENCSR600SCF	SCMH1	HepG2	chromatin remodeler
+ENCSR605MGM	SCRT1	HEK293	transcription factor
+ENCSR338DGO	SCRT2	HEK293	transcription factor
+ENCSR000AUT	SETDB1	K562	chromatin remodeler
+ENCSR000EWD	SETDB1	K562	chromatin remodeler
+ENCSR000EWI	SETDB1	K562	chromatin remodeler
+ENCSR193ADW	SETDB1	HepG2	chromatin remodeler
+ENCSR348AGV	SETDB1	HEK293	chromatin remodeler
+ENCSR258SXK	SFPQ	HepG2	transcription factor
+ENCSR647PJW	SFPQ	K562	transcription factor
+ENCSR757HBB	SFPQ	HepG2	transcription factor
+ENCSR000BGL	SIN3A	HepG2	chromatin remodeler
+ENCSR000BIS	SIN3A	H1	chromatin remodeler
+ENCSR000BLR	SIN3A	K562	chromatin remodeler
+ENCSR000BOW	SIN3A	Panc1	chromatin remodeler
+ENCSR000BOY	SIN3A	PFSK-1	chromatin remodeler
+ENCSR000BPB	SIN3A	SK-N-SH	chromatin remodeler
+ENCSR000BRM	SIN3A	A549	chromatin remodeler
+ENCSR000BSG	SIN3A	HCT116	chromatin remodeler
+ENCSR000BUM	SIN3A	MCF-7	chromatin remodeler
+ENCSR000DYX	SIN3A	GM12878	chromatin remodeler
+ENCSR000EBO	SIN3A	H1	chromatin remodeler
+ENCSR468LUO	SIN3A	MCF-7	chromatin remodeler
+ENCSR513XQX	SIN3A	A549	chromatin remodeler
+ENCSR920BLG	SIN3A	K562	chromatin remodeler
+ENCSR452YHM	SIN3B	HepG2	chromatin remodeler
+ENCSR657JLK	SIN3B	K562	chromatin remodeler
+ENCSR000AUB	SIRT6	K562	chromatin remodeler
+ENCSR000AUS	SIRT6	H1	chromatin remodeler
+ENCSR000DOH	SIRT6	K562	chromatin remodeler
+ENCSR561BQM	SIX1	HepG2	transcription factor
+ENCSR279IEM	SIX4	MCF-7	transcription factor
+ENCSR513WUJ	SIX4	WTC11	transcription factor
+ENCSR849TMV	SIX4	HepG2	transcription factor
+ENCSR000BGX	SIX5	K562	transcription factor
+ENCSR000BIQ	SIX5	H1	transcription factor
+ENCSR000BJE	SIX5	GM12878	transcription factor
+ENCSR000BNW	SIX5	K562	transcription factor
+ENCSR000BRL	SIX5	A549	transcription factor
+ENCSR754MUD	SKI	HepG2	cofactor
+ENCSR212YKD	SKIL	GM12878	transcription factor
+ENCSR336DXE	SKIL	K562	transcription factor
+ENCSR929KSH	SKIL	HepG2	transcription factor
+ENCSR922YDT	SLC30A9	K562	DNA repair
+ENCSR038DJJ	SMAD1	K562	transcription factor
+ENCSR213QOZ	SMAD1	HepG2	transcription factor
+ENCSR813DCK	SMAD1	GM12878	transcription factor
+ENCSR189PYJ	SMAD2	K562	transcription factor
+ENCSR005GZH	SMAD3	HepG2	transcription factor
+ENCSR140GLO	SMAD3	K562	transcription factor
+ENCSR376XAV	SMAD3	K562	transcription factor
+ENCSR579RFH	SMAD3	WTC11	transcription factor
+ENCSR068QXO	SMAD4	K562	transcription factor
+ENCSR109SJT	SMAD4	K562	transcription factor
+ENCSR623TZE	SMAD4	WTC11	transcription factor
+ENCSR826YMT	SMAD4	HepG2	transcription factor
+ENCSR000FCD	SMAD5	K562	transcription factor
+ENCSR251OVJ	SMAD5	GM12878	transcription factor
+ENCSR410LFU	SMAD7	HepG2	transcription factor
+ENCSR042BQZ	SMAD9	HepG2	transcription factor
+ENCSR000EHO	SMARCA4	K562	cofactor
+ENCSR000EZC	SMARCA4	HeLa-S3	cofactor
+ENCSR587OQL	SMARCA4	K562	cofactor
+ENCSR643VTW	SMARCA4	K562	cofactor
+ENCSR839SFJ	SMARCA4	bipolar neuron	cofactor
+ENCSR487ASM	SMARCA5	MCF-7	chromatin remodeler
+ENCSR706YUH	SMARCA5	GM12878	chromatin remodeler
+ENCSR895HSJ	SMARCA5	K562	chromatin remodeler
+ENCSR000EDK	SMARCB1	HeLa-S3	chromatin remodeler
+ENCSR000EHN	SMARCB1	K562	chromatin remodeler
+ENCSR000EDM	SMARCC1	HeLa-S3	chromatin remodeler
+ENCSR000EDL	SMARCC2	HeLa-S3	chromatin remodeler
+ENCSR519WMW	SMARCC2	K562	chromatin remodeler
+ENCSR887LYD	SMARCC2	HepG2	chromatin remodeler
+ENCSR157TCS	SMARCE1	K562	chromatin remodeler
+ENCSR431TLD	SMARCE1	MCF-7	chromatin remodeler
+ENCSR968QDP	SMARCE1	HepG2	chromatin remodeler
+ENCSR000DZP	SMC3	GM12878	DNA replication
+ENCSR000ECS	SMC3	HeLa-S3	DNA replication
+ENCSR000EDW	SMC3	HepG2	DNA replication
+ENCSR000EGW	SMC3	K562	DNA replication
+ENCSR000EHW	SMC3	SK-N-SH	DNA replication
+ENCSR000HPG	SMC3	IMR-90	DNA replication
+ENCSR150EFU	SMC3	A549	DNA replication
+ENCSR199XBQ	SMC3	A549	DNA replication
+ENCSR330ELC	SMC3	A549	DNA replication
+ENCSR335RKQ	SMC3	A549	DNA replication
+ENCSR404BPV	SMC3	neural cell	DNA replication
+ENCSR481YWD	SMC3	A549	DNA replication
+ENCSR501LQA	SMC3	A549	DNA replication
+ENCSR537EFT	SMC3	A549	DNA replication
+ENCSR620NWG	SMC3	A549	DNA replication
+ENCSR767DFK	SMC3	A549	DNA replication
+ENCSR768DOX	SMC3	A549	DNA replication
+ENCSR806UKK	SMC3	A549	DNA replication
+ENCSR944ZCT	SMC3	A549	DNA replication
+ENCSR981FDC	SMC3	A549	DNA replication
+ENCSR765VDK	SMYD3	HepG2	RNA binding protein
+ENCSR188EMJ	SNAI1	HepG2	transcription factor
+ENCSR106GVM	SNAI2	SK-N-SH	transcription factor
+ENCSR775EOB	SNAPC2	HepG2	other context
+ENCSR306HAG	SNAPC4	HepG2	transcription factor
+ENCSR008DOU	SNAPC5	K562	transcription factor
+ENCSR423TVD	SNAPC5	HepG2	transcription factor
+ENCSR042TWZ	SNIP1	MCF-7	RNA binding protein
+ENCSR654CQU	SNIP1	K562	RNA binding protein
+ENCSR128IYN	SNRNP70	HepG2	RNA binding protein
+ENCSR754ZHU	SNRNP70	K562	RNA binding protein
+ENCSR041RCS	SOX13	HepG2	transcription factor
+ENCSR445ACU	SOX13	HepG2	transcription factor
+ENCSR715UCI	SOX13	HepG2	transcription factor
+ENCSR231CZR	SOX15	WTC11	transcription factor
+ENCSR830FJY	SOX18	HepG2	transcription factor
+ENCSR961WLZ	SOX5	HepG2	transcription factor
+ENCSR543BVU	SOX6	HepG2	transcription factor
+ENCSR766TSU	SOX6	HepG2	transcription factor
+ENCSR788RSW	SOX6	K562	transcription factor
+ENCSR000BHK	SP1	GM12878	transcription factor
+ENCSR000BIR	SP1	H1	transcription factor
+ENCSR000BJX	SP1	HepG2	transcription factor
+ENCSR000BKO	SP1	K562	transcription factor
+ENCSR000BPE	SP1	A549	transcription factor
+ENCSR000BSF	SP1	HCT116	transcription factor
+ENCSR085IXF	SP1	liver	transcription factor
+ENCSR334KIQ	SP1	HepG2	transcription factor
+ENCSR372IML	SP1	K562	transcription factor
+ENCSR386YIH	SP1	liver	transcription factor
+ENCSR460YAM	SP1	HepG2	transcription factor
+ENCSR583CGO	SP1	WTC11	transcription factor
+ENCSR729LGA	SP1	MCF-7	transcription factor
+ENCSR906PEI	SP1	HEK293T	transcription factor
+ENCSR991ELG	SP1	K562	transcription factor
+ENCSR623RFC	SP110	HepG2	transcription factor
+ENCSR107DKT	SP140L	HepG2	transcription factor
+ENCSR000BNL	SP2	K562	transcription factor
+ENCSR000BOU	SP2	HepG2	transcription factor
+ENCSR000BQG	SP2	H1	transcription factor
+ENCSR807LQP	SP2	HEK293	transcription factor
+ENCSR946RZN	SP2	HepG2	transcription factor
+ENCSR141PZA	SP3	HEK293	transcription factor
+ENCSR000BQV	SP4	H1	transcription factor
+ENCSR642PQK	SP4	HepG2	transcription factor
+ENCSR019NPF	SP5	HepG2	transcription factor
+ENCSR468IJT	SP7	HEK293	transcription factor
+ENCSR042GSX	SPDEF	MCF-7	transcription factor
+ENCSR452UFJ	SPEN	HepG2	cofactor
+ENCSR000BGQ	SPI1	GM12878	chromatin remodeler
+ENCSR000BGW	SPI1	K562	chromatin remodeler
+ENCSR000BIJ	SPI1	GM12891	chromatin remodeler
+ENCSR000BUW	SPI1	HL-60	chromatin remodeler
+ENCSR000DYU	SREBF1	GM12878	transcription factor
+ENCSR000EEO	SREBF1	HepG2	transcription factor
+ENCSR000EZP	SREBF1	HepG2	transcription factor
+ENCSR197DJH	SREBF1	MCF-7	transcription factor
+ENCSR815ZDS	SREBF1	K562	transcription factor
+ENCSR897MYK	SREBF1	A549	transcription factor
+ENCSR000DYT	SREBF2	GM12878	transcription factor
+ENCSR000EZO	SREBF2	HepG2	transcription factor
+ENCSR150QDE	SREBF2	K562	transcription factor
+ENCSR611WZO	SREBF2	HeLa-S3	transcription factor
+ENCSR638QYO	SREBF2	A549	transcription factor
+ENCSR000BGE	SRF	GM12878	transcription factor
+ENCSR000BIV	SRF	H1	transcription factor
+ENCSR000BLK	SRF	K562	transcription factor
+ENCSR000BLV	SRF	HepG2	transcription factor
+ENCSR000BMI	SRF	GM12878	transcription factor
+ENCSR000BSC	SRF	HCT116	transcription factor
+ENCSR000BTD	SRF	Ishikawa	transcription factor
+ENCSR000BVA	SRF	MCF-7	transcription factor
+ENCSR041XML	SRF	GM12878	transcription factor
+ENCSR504HOI	SRF	K562	transcription factor
+ENCSR516SMM	SRF	HepG2	transcription factor
+ENCSR582IAO	SRF	K562	transcription factor
+ENCSR465BWW	SRSF1	HepG2	RNA binding protein
+ENCSR832DMO	SRSF1	K562	RNA binding protein
+ENCSR268QIQ	SRSF3	K562	RNA binding protein
+ENCSR696MBC	SRSF4	HepG2	RNA binding protein
+ENCSR222MYK	SRSF7	K562	RNA binding protein
+ENCSR624GNZ	SRSF9	HepG2	RNA binding protein
+ENCSR814AJH	SRSF9	K562	RNA binding protein
+ENCSR308LFD	SRY	HepG2	transcription factor
+ENCSR571PDN	SSRP1	HepG2	RNA binding protein
+ENCSR153HNT	STAG1	K562	cohesin
+ENCSR167MTG	STAG1	HepG2	cohesin
+ENCSR000DZM	STAT1	GM12878	transcription factor
+ENCSR000EHJ	STAT1	K562	transcription factor
+ENCSR000EHK	STAT1	K562	transcription factor
+ENCSR000EZK	STAT1	HeLa-S3	transcription factor
+ENCSR000FAU	STAT1	K562	transcription factor
+ENCSR000FAV	STAT1	K562	transcription factor
+ENCSR071NFQ	STAT1	GM23338	transcription factor
+ENCSR332EYT	STAT1	GM12878	transcription factor
+ENCSR000FAT	STAT2	K562	transcription factor
+ENCSR000FBC	STAT2	K562	transcription factor
+ENCSR000DOQ	STAT3	MCF 10A	transcription factor
+ENCSR000DOZ	STAT3	MCF 10A	transcription factor
+ENCSR000DPB	STAT3	MCF 10A	transcription factor
+ENCSR000DZV	STAT3	GM12878	transcription factor
+ENCSR000EDC	STAT3	HeLa-S3	transcription factor
+ENCSR000BQZ	STAT5A	GM12878	transcription factor
+ENCSR000BRR	STAT5A	K562	transcription factor
+ENCSR354FPG	STAT5B	HepG2	transcription factor
+ENCSR663NFC	STAT5B	K562	transcription factor
+ENCSR048PPE	STAT6	WTC11	transcription factor
+ENCSR228ZYW	STAT6	HepG2	transcription factor
+ENCSR338UQU	STAT6	K562	transcription factor
+ENCSR000DNP	SUPT20H	GM12878	cofactor
+ENCSR000ECQ	SUPT20H	HeLa-S3	cofactor
+ENCSR894CGX	SUPT5H	K562	RNA binding protein
+ENCSR000ATS	SUZ12	H1	chromatin remodeler
+ENCSR000AUC	SUZ12	K562	chromatin remodeler
+ENCSR000EUQ	SUZ12	H1	chromatin remodeler
+ENCSR000EXH	SUZ12	NT2/D1	chromatin remodeler
+ENCSR090ZDO	SUZ12	HEK293T	chromatin remodeler
+ENCSR091BOQ	SUZ12	GM12878	chromatin remodeler
+ENCSR412CTM	SUZ12	K562	chromatin remodeler
+ENCSR757EMK	SUZ12	MCF-7	chromatin remodeler
+ENCSR771GTF	SUZ12	HepG2	chromatin remodeler
+ENCSR625ORP	SYNCRIP	HepG2	RNA binding protein
+ENCSR000AHF	TAF1	MCF-7	RNA polymerase complex
+ENCSR000BGS	TAF1	GM12878	RNA polymerase complex
+ENCSR000BHO	TAF1	H1	RNA polymerase complex
+ENCSR000BHT	TAF1	HeLa-S3	RNA polymerase complex
+ENCSR000BIB	TAF1	GM12892	RNA polymerase complex
+ENCSR000BIM	TAF1	GM12891	RNA polymerase complex
+ENCSR000BJN	TAF1	HepG2	RNA polymerase complex
+ENCSR000BKS	TAF1	K562	RNA polymerase complex
+ENCSR000BPF	TAF1	A549	RNA polymerase complex
+ENCSR000BQF	TAF1	SK-N-SH	RNA polymerase complex
+ENCSR000BQN	TAF1	PFSK-1	RNA polymerase complex
+ENCSR000BTO	TAF1	Ishikawa	RNA polymerase complex
+ENCSR000BTX	TAF1	neural cell	RNA polymerase complex
+ENCSR016BMM	TAF1	liver	RNA polymerase complex
+ENCSR062QVQ	TAF1	liver	RNA polymerase complex
+ENCSR918OKK	TAF1	HepG2	RNA polymerase complex
+ENCSR047LSJ	TAF15	K562	RNA binding protein
+ENCSR825MZS	TAF15	HepG2	RNA binding protein
+ENCSR000BLU	TAF7	H1	RNA polymerase complex
+ENCSR000BNM	TAF7	K562	RNA polymerase complex
+ENCSR671GFC	TAF7	K562	RNA polymerase complex
+ENCSR100UQX	TAF9B	K562	RNA polymerase complex
+ENCSR000EHB	TAL1	K562	chromatin remodeler
+ENCSR106FRG	TAL1	K562	chromatin remodeler
+ENCSR016UEH	TARDBP	GM12878	RNA binding protein
+ENCSR033VAZ	TARDBP	K562	RNA binding protein
+ENCSR145CXH	TARDBP	HepG2	RNA binding protein
+ENCSR353HEP	TARDBP	K562	RNA binding protein
+ENCSR412QBS	TARDBP	GM12878	RNA binding protein
+ENCSR429XTR	TARDBP	K562	RNA binding protein
+ENCSR753GIA	TARDBP	HEK293T	RNA binding protein
+ENCSR801SWX	TARDBP	MCF-7	RNA binding protein
+ENCSR998LUY	TARDBP	HepG2	RNA binding protein
+ENCSR000DYZ	TBL1XR1	GM12878	cofactor
+ENCSR000EGA	TBL1XR1	K562	cofactor
+ENCSR000EGB	TBL1XR1	K562	cofactor
+ENCSR101FJS	TBL1XR1	HepG2	cofactor
+ENCSR000DZZ	TBP	GM12878	transcription factor
+ENCSR000ECB	TBP	H1	transcription factor
+ENCSR000EDD	TBP	HeLa-S3	transcription factor
+ENCSR000EEL	TBP	HepG2	transcription factor
+ENCSR000EHA	TBP	K562	transcription factor
+ENCSR798KXG	TBP	HepG2	transcription factor
+ENCSR783EPA	TBPL1	K562	transcription factor
+ENCSR385IUC	TBX18	K562	transcription factor
+ENCSR410FEH	TBX2	HepG2	transcription factor
+ENCSR739IHN	TBX21	GM12878	transcription factor
+ENCSR238QRG	TBX3	HepG2	transcription factor
+ENCSR605YWG	TBX3	HepG2	transcription factor
+ENCSR000BGZ	TCF12	GM12878	transcription factor
+ENCSR000BIT	TCF12	H1	transcription factor
+ENCSR000BJG	TCF12	HepG2	transcription factor
+ENCSR000BQQ	TCF12	A549	transcription factor
+ENCSR000BSL	TCF12	SK-N-SH	transcription factor
+ENCSR000BUN	TCF12	MCF-7	transcription factor
+ENCSR000BUV	TCF12	Ishikawa	transcription factor
+ENCSR189TRZ	TCF12	K562	transcription factor
+ENCSR268XPQ	TCF12	HepG2	transcription factor
+ENCSR725VFL	TCF12	GM12878	transcription factor
+ENCSR744WOO	TCF12	K562	transcription factor
+ENCSR894SXR	TCF12	HepG2	transcription factor
+ENCSR567NTZ	TCF15	K562	transcription factor
+ENCSR000BQT	TCF3	GM12878	transcription factor
+ENCSR911MML	TCF3	HepG2	transcription factor
+ENCSR970OJY	TCF3	K562	transcription factor
+ENCSR922RFY	TCF4	SK-N-SH	transcription factor
+ENCSR444LIN	TCF7	HepG2	transcription factor
+ENCSR501DKS	TCF7	GM12878	transcription factor
+ENCSR753PPY	TCF7	WTC11	transcription factor
+ENCSR863KUB	TCF7	K562	transcription factor
+ENCSR000EUV	TCF7L2	HCT116	transcription factor
+ENCSR000EUY	TCF7L2	HEK293	transcription factor
+ENCSR000EVE	TCF7L2	HeLa-S3	transcription factor
+ENCSR000EVF	TCF7L2	HeLa-S3	transcription factor
+ENCSR000EVQ	TCF7L2	HepG2	transcription factor
+ENCSR000EWT	TCF7L2	MCF-7	transcription factor
+ENCSR000EXL	TCF7L2	Panc1	transcription factor
+ENCSR346BOD	TCF7L2	HepG2	transcription factor
+ENCSR888XZK	TCF7L2	K562	transcription factor
+ENCSR844JVU	TCFL5	K562	transcription factor
+ENCSR228ELU	TEAD1	K562	transcription factor
+ENCSR497JLX	TEAD1	HepG2	transcription factor
+ENCSR591ASD	TEAD1	K562	transcription factor
+ENCSR934WOF	TEAD1	WTC11	transcription factor
+ENCSR635GTR	TEAD2	K562	cofactor,transcription factor
+ENCSR710EFA	TEAD2	HepG2	cofactor,transcription factor
+ENCSR666QNP	TEAD3	HepG2	transcription factor
+ENCSR000BRK	TEAD4	K562	transcription factor
+ENCSR000BRP	TEAD4	HepG2	transcription factor
+ENCSR000BRY	TEAD4	H1	transcription factor
+ENCSR000BSW	TEAD4	Ishikawa	transcription factor
+ENCSR000BUD	TEAD4	A549	transcription factor
+ENCSR000BUO	TEAD4	MCF-7	transcription factor
+ENCSR000BUQ	TEAD4	SK-N-SH	transcription factor
+ENCSR000BVJ	TEAD4	HCT116	transcription factor
+ENCSR285HHZ	TEAD4	WTC11	transcription factor
+ENCSR800JRG	TEAD4	HepG2	transcription factor
+ENCSR817FMN	TEAD4	K562	transcription factor
+ENCSR583KLD	TEF	HepG2	transcription factor
+ENCSR031WWM	TERF1	HepG2	transcription factor
+ENCSR674WPB	TFAM	K562	transcription factor
+ENCSR630GGD	TFAP2B	SK-N-SH	transcription factor
+ENCSR103SZL	TFAP4	HepG2	transcription factor
+ENCSR587BVQ	TFAP4	HepG2	transcription factor
+ENCSR784IMK	TFAP4	K562	transcription factor
+ENCSR998OMC	TFCP2	K562	transcription factor
+ENCSR742KNZ	TFCP2L1	A549	cofactor
+ENCSR017GBO	TFDP1	K562	transcription factor
+ENCSR558OMR	TFDP1	HepG2	transcription factor
+ENCSR901VIE	TFDP1	K562	transcription factor
+ENCSR069JKP	TFDP2	HepG2	transcription factor
+ENCSR589SNT	TFE3	HepG2	transcription factor
+ENCSR953KEY	TFE3	K562	transcription factor
+ENCSR028WJI	TGIF2	K562	transcription factor
+ENCSR910UQX	TGIF2	WTC11	transcription factor
+ENCSR993LMB	TGIF2	HepG2	transcription factor
+ENCSR000BNN	THAP1	K562	transcription factor
+ENCSR562POI	THAP11	HepG2	transcription factor
+ENCSR415NNQ	THAP12	K562	transcription factor
+ENCSR720ODW	THAP4	HepG2	transcription factor
+ENCSR193ZLW	THAP7	K562	transcription factor
+ENCSR421ADK	THAP7	HepG2	transcription factor
+ENCSR544MTJ	THAP8	HepG2	transcription factor
+ENCSR123GPC	THAP9	HepG2	transcription factor
+ENCSR264CZJ	THRA	K562	transcription factor
+ENCSR551QJT	THRA	HepG2	transcription factor
+ENCSR871TKJ	THRAP3	K562	cofactor
+ENCSR430JGJ	THRB	HepG2	transcription factor
+ENCSR867MET	THRB	K562	transcription factor
+ENCSR722IIB	THYN1	HepG2	other context
+ENCSR725QZQ	TIGD3	HepG2	transcription factor
+ENCSR960ASR	TIGD6	HepG2	transcription factor
+ENCSR605JAI	TMF1	HepG2	cofactor
+ENCSR013UDY	TOE1	K562	RNA binding protein
+ENCSR213HBY	TOE1	K562	RNA binding protein
+ENCSR554YEH	TOE1	HepG2	RNA binding protein
+ENCSR659SCK	TOE1	HepG2	RNA binding protein
+ENCSR810WXH	TOE1	MCF-7	RNA binding protein
+ENCSR204ZIN	TOPORS	HepG2	transcription factor
+ENCSR641XWH	TOX	SK-N-SH	transcription factor
+ENCSR226NRS	TOX2	SK-N-SH	transcription factor
+ENCSR364POR	TOX4	glutamatergic neuron	transcription factor
+ENCSR508NBY	TOX4	WTC11	transcription factor
+ENCSR112XUO	TP53	A549	transcription factor
+ENCSR760GZL	TP53	WTC11	transcription factor
+ENCSR980EGJ	TP53	HepG2	transcription factor
+ENCSR913JBH	TP63	A549	transcription factor
+ENCSR661IKO	TRAFD1	HepG2	transcription factor
+ENCSR547WSB	TRERF1	WTC11	transcription factor
+ENCSR506HXN	TRIM22	HepG2	transcription factor
+ENCSR637QAM	TRIM22	GM12878	transcription factor
+ENCSR835XKS	TRIM22	GM12878	transcription factor
+ENCSR875PEI	TRIM22	MCF-7	transcription factor
+ENCSR124XCX	TRIM24	HepG2	transcription factor
+ENCSR907MZR	TRIM24	K562	transcription factor
+ENCSR957LDM	TRIM24	K562	transcription factor
+ENCSR213VUI	TRIM25	K562	transcription factor
+ENCSR664AOA	TRIM25	K562	transcription factor
+ENCSR000BRW	TRIM28	K562	transcription factor
+ENCSR000EUZ	TRIM28	HEK293	transcription factor
+ENCSR000EVY	TRIM28	K562	transcription factor
+ENCSR474CVP	TRIM28	K562	transcription factor
+ENCSR618HNF	TRIM28	HEK293	transcription factor
+ENCSR154EIH	TRIP13	K562	cofactor
+ENCSR478SKI	TSC22D1	HepG2	transcription factor
+ENCSR848QXX	TSC22D1	MCF-7	transcription factor
+ENCSR118LGS	TSC22D2	HepG2	transcription factor
+ENCSR658GYQ	TSC22D2	MCF-7	transcription factor
+ENCSR787RVK	TSC22D4	K562	transcription factor
+ENCSR217WRC	TSHZ1	HEK293	transcription factor
+ENCSR958JPH	TSHZ1	K562	transcription factor
+ENCSR282NLQ	TSHZ2	SK-N-SH	transcription factor
+ENCSR690GUG	U2AF1	K562	RNA binding protein
+ENCSR868JLS	U2AF1	HepG2	RNA binding protein
+ENCSR479QAJ	U2AF2	K562	RNA binding protein
+ENCSR991ADX	U2AF2	HepG2	RNA binding protein
+ENCSR000EFW	UBTF	K562	transcription factor
+ENCSR000EFZ	UBTF	K562	transcription factor
+ENCSR459FTB	UBTF	GM12878	transcription factor
+ENCSR634ZGP	UBTF	HeLa-S3	transcription factor
+ENCSR957FIZ	UBTF	HepG2	transcription factor
+ENCSR000BGI	USF1	GM12878	transcription factor
+ENCSR000BGM	USF1	HepG2	transcription factor
+ENCSR000BHX	USF1	A549	transcription factor
+ENCSR000BIU	USF1	H1	transcription factor
+ENCSR000BJB	USF1	A549	transcription factor
+ENCSR000BKT	USF1	K562	transcription factor
+ENCSR000BMF	USF1	SK-N-SH	transcription factor
+ENCSR000BPV	USF1	A549	transcription factor
+ENCSR000BSX	USF1	Ishikawa	transcription factor
+ENCSR000BTZ	USF1	SK-N-SH	transcription factor
+ENCSR000BVK	USF1	HCT116	transcription factor
+ENCSR099FCQ	USF1	HepG2	transcription factor
+ENCSR248QBT	USF1	WTC11	transcription factor
+ENCSR787CHF	USF1	K562	transcription factor
+ENCSR000DZU	USF2	GM12878	transcription factor
+ENCSR000ECD	USF2	H1	transcription factor
+ENCSR000ECW	USF2	HeLa-S3	transcription factor
+ENCSR000EEF	USF2	HepG2	transcription factor
+ENCSR000EHG	USF2	K562	transcription factor
+ENCSR145QNL	USF2	HepG2	transcription factor
+ENCSR229QAN	USF2	WTC11	transcription factor
+ENCSR359NFW	USF2	K562	transcription factor
+ENCSR513UQG	USF2	IMR-90	transcription factor
+ENCSR563FBT	USF2	A549	transcription factor
+ENCSR578KEN	USF2	K562	transcription factor
+ENCSR945NFL	USF2	SK-N-SH	transcription factor
+ENCSR189YMA	VEZF1	K562	transcription factor
+ENCSR000AVE	WHSC1	K562	DNA repair,chromatin remodeler
+ENCSR434ZNS	WIZ	HepG2	DNA replication
+ENCSR000EAA	WRNIP1	GM12878	DNA repair,DNA replication
+ENCSR966PJJ	WT1	HEK293	transcription factor
+ENCSR988EVQ	XBP1	HepG2	transcription factor
+ENCSR997NGQ	XRCC3	K562	DNA repair
+ENCSR000FAC	XRCC4	K562	DNA repair
+ENCSR031URL	XRCC5	HepG2	transcription factor
+ENCSR506KWJ	XRCC5	K562	transcription factor
+ENCSR107RHZ	YBX1	K562	transcription factor
+ENCSR205SKQ	YBX1	GM12878	transcription factor
+ENCSR799GOY	YBX1	HepG2	transcription factor
+ENCSR864KNH	YBX1	MCF-7	transcription factor
+ENCSR567JEU	YBX3	K562	RNA binding protein,cofactor
+ENCSR647BZJ	YEATS2	HepG2	chromatin remodeler
+ENCSR474YDA	YEATS4	HepG2	chromatin remodeler
+ENCSR000BKD	YY1	H1	transcription factor
+ENCSR000BKJ	YY1	GM12891	transcription factor
+ENCSR000BKU	YY1	K562	transcription factor
+ENCSR000BLT	YY1	GM12892	transcription factor
+ENCSR000BLZ	YY1	SK-N-SH	transcription factor
+ENCSR000BMH	YY1	K562	transcription factor
+ENCSR000BNP	YY1	GM12878	transcription factor
+ENCSR000BNT	YY1	HepG2	transcription factor
+ENCSR000BNX	YY1	HCT116	transcription factor
+ENCSR000BPM	YY1	A549	transcription factor
+ENCSR000BSM	YY1	SK-N-SH	transcription factor
+ENCSR000BSY	YY1	Ishikawa	transcription factor
+ENCSR000EUM	YY1	GM12878	transcription factor
+ENCSR000EWF	YY1	K562	transcription factor
+ENCSR000EXG	YY1	NT2/D1	transcription factor
+ENCSR382MOM	YY1	liver	transcription factor
+ENCSR859RAO	YY1	HEK293	transcription factor
+ENCSR994YLZ	YY1	liver	transcription factor
+ENCSR692HSE	YY2	HEK293	transcription factor
+ENCSR207PFI	ZBED1	GM12878	transcription factor
+ENCSR286PCG	ZBED1	K562	transcription factor
+ENCSR409PMR	ZBED4	HepG2	transcription factor
+ENCSR656SIB	ZBED5	HepG2	transcription factor
+ENCSR166BAY	ZBTB1	K562	DNA repair
+ENCSR309ELI	ZBTB1	MCF-7	DNA repair
+ENCSR331HWO	ZBTB1	HepG2	DNA repair
+ENCSR927UJQ	ZBTB1	HEK293	DNA repair
+ENCSR004PLU	ZBTB10	HEK293	transcription factor
+ENCSR959COF	ZBTB10	HepG2	transcription factor
+ENCSR057DTZ	ZBTB11	GM12878	transcription factor
+ENCSR155VDK	ZBTB11	MCF-7	transcription factor
+ENCSR331GDC	ZBTB11	K562	transcription factor
+ENCSR468DVP	ZBTB11	K562	transcription factor
+ENCSR706BJO	ZBTB11	K562	transcription factor
+ENCSR882ZTS	ZBTB11	HEK293	transcription factor
+ENCSR985OYK	ZBTB11	K562	transcription factor
+ENCSR172OSX	ZBTB12	K562	transcription factor
+ENCSR543KOA	ZBTB12	HEK293	transcription factor
+ENCSR532WFC	ZBTB14	HepG2	transcription factor
+ENCSR026KKZ	ZBTB17	K562	transcription factor
+ENCSR631WAA	ZBTB17	HEK293	transcription factor
+ENCSR175MIA	ZBTB2	HepG2	transcription factor
+ENCSR230PTV	ZBTB2	K562	transcription factor
+ENCSR392TWV	ZBTB20	HepG2	transcription factor
+ENCSR460MBI	ZBTB20	HEK293	transcription factor
+ENCSR321MSF	ZBTB21	HEK293	transcription factor
+ENCSR549PAU	ZBTB21	HepG2	transcription factor
+ENCSR962BEI	ZBTB21	WTC11	transcription factor
+ENCSR396XDF	ZBTB24	HepG2	transcription factor
+ENCSR485OYR	ZBTB25	HepG2	transcription factor
+ENCSR115HLM	ZBTB26	K562	transcription factor
+ENCSR184SVO	ZBTB26	HepG2	transcription factor
+ENCSR229DYF	ZBTB26	HEK293	transcription factor
+ENCSR481AIK	ZBTB3	HepG2	transcription factor
+ENCSR000BHC	ZBTB33	GM12878	transcription factor
+ENCSR000BHR	ZBTB33	HepG2	transcription factor
+ENCSR000BKF	ZBTB33	K562	transcription factor
+ENCSR000BNA	ZBTB33	HepG2	transcription factor
+ENCSR000BNY	ZBTB33	HCT116	transcription factor
+ENCSR000BPZ	ZBTB33	A549	transcription factor
+ENCSR000BTS	ZBTB33	SK-N-SH	transcription factor
+ENCSR231YFE	ZBTB33	MCF-7	transcription factor
+ENCSR345YWJ	ZBTB33	liver	transcription factor
+ENCSR421DAO	ZBTB33	HepG2	transcription factor
+ENCSR516HUP	ZBTB33	liver	transcription factor
+ENCSR542FLV	ZBTB33	GM12878	transcription factor
+ENCSR876GXA	ZBTB33	K562	transcription factor
+ENCSR943MQH	ZBTB33	WTC11	transcription factor
+ENCSR955LXM	ZBTB33	K562	transcription factor
+ENCSR567QAD	ZBTB34	K562	transcription factor
+ENCSR864WKA	ZBTB34	HepG2	transcription factor
+ENCSR775YXE	ZBTB37	HepG2	transcription factor
+ENCSR932ZRD	ZBTB38	HepG2	DNA replication
+ENCSR087NSZ	ZBTB39	HepG2	transcription factor
+ENCSR479PRL	ZBTB4	HepG2	transcription factor
+ENCSR691IQB	ZBTB4	GM12878	transcription factor
+ENCSR158RYZ	ZBTB40	K562	transcription factor
+ENCSR189YYK	ZBTB40	GM12878	transcription factor
+ENCSR200AWS	ZBTB40	HepG2	transcription factor
+ENCSR237VLT	ZBTB40	K562	transcription factor
+ENCSR318LVG	ZBTB40	MCF-7	transcription factor
+ENCSR525YFS	ZBTB40	HepG2	transcription factor
+ENCSR579YNY	ZBTB40	K562	transcription factor
+ENCSR232AAR	ZBTB42	HepG2	transcription factor
+ENCSR173USN	ZBTB43	HepG2	transcription factor
+ENCSR199PXS	ZBTB43	WTC11	transcription factor
+ENCSR800KMQ	ZBTB43	K562	transcription factor
+ENCSR076STQ	ZBTB44	HEK293	transcription factor
+ENCSR269MEF	ZBTB44	HepG2	transcription factor
+ENCSR931SYA	ZBTB46	HepG2	transcription factor
+ENCSR781EQJ	ZBTB48	HEK293	transcription factor
+ENCSR249VFB	ZBTB49	K562	transcription factor
+ENCSR803IYP	ZBTB49	HepG2	transcription factor
+ENCSR924GRG	ZBTB49	HEK293	transcription factor
+ENCSR389PWB	ZBTB5	K562	transcription factor
+ENCSR786OQY	ZBTB5	K562	transcription factor
+ENCSR619OUC	ZBTB6	HEK293	transcription factor
+ENCSR000BME	ZBTB7A	K562	cofactor
+ENCSR000BQA	ZBTB7A	HepG2	cofactor
+ENCSR000BSZ	ZBTB7A	Ishikawa	cofactor
+ENCSR773REP	ZBTB7A	HEK293	cofactor
+ENCSR850YDX	ZBTB7A	HepG2	cofactor
+ENCSR277BXW	ZBTB7B	MCF-7	transcription factor
+ENCSR322ULL	ZBTB7B	HepG2	transcription factor
+ENCSR283ZNI	ZBTB8A	K562	transcription factor
+ENCSR481FEC	ZBTB8A	HEK293	transcription factor
+ENCSR625XAV	ZBTB8A	HepG2	transcription factor
+ENCSR536CBU	ZBTB9	K562	transcription factor
+ENCSR219GUP	ZC3H10	SK-N-SH	RNA binding protein
+ENCSR000EFR	ZC3H11A	K562	RNA binding protein
+ENCSR277OOQ	ZC3H11A	A549	RNA binding protein
+ENCSR938SDM	ZC3H13	HepG2	RNA binding protein
+ENCSR419CNA	ZC3H4	K562	RNA binding protein
+ENCSR953MMC	ZC3H4	HepG2	RNA binding protein
+ENCSR143CEO	ZC3H8	K562	transcription factor
+ENCSR494PWZ	ZC3H8	K562	transcription factor
+ENCSR734CRN	ZC3H8	HepG2	transcription factor
+ENCSR915APT	ZCCHC11	HepG2	RNA binding protein
+ENCSR000BND	ZEB1	GM12878	transcription factor
+ENCSR000BVN	ZEB1	HepG2	transcription factor
+ENCSR418KUS	ZEB1	bipolar neuron	transcription factor
+ENCSR909HMT	ZEB1	HEK293	transcription factor
+ENCSR004GKA	ZEB2	K562	transcription factor
+ENCSR322CFO	ZEB2	K562	transcription factor
+ENCSR417VWF	ZEB2	HEK293	transcription factor
+ENCSR409DYM	ZFAT	HepG2	transcription factor
+ENCSR632SIM	ZFHX2	HEK293	transcription factor
+ENCSR879RGN	ZFHX3	HepG2	transcription factor
+ENCSR586DEH	ZFP1	HepG2	transcription factor
+ENCSR617POJ	ZFP1	K562	transcription factor
+ENCSR620DBD	ZFP14	HepG2	transcription factor
+ENCSR134QIE	ZFP3	HEK293	transcription factor
+ENCSR581GUY	ZFP3	SK-N-SH	transcription factor
+ENCSR279OXE	ZFP30	K562	transcription factor
+ENCSR376QPI	ZFP30	SK-N-SH	transcription factor
+ENCSR184MFH	ZFP36	HeLa-S3	RNA binding protein
+ENCSR294JWV	ZFP36	A549	RNA binding protein
+ENCSR382XLA	ZFP36	HepG2	RNA binding protein
+ENCSR776CYN	ZFP36	K562	RNA binding protein
+ENCSR900XDB	ZFP36	GM12878	RNA binding protein
+ENCSR081VFY	ZFP36L1	HepG2	RNA binding protein
+ENCSR563SHQ	ZFP36L2	HepG2	RNA binding protein
+ENCSR365GRX	ZFP37	HEK293	transcription factor
+ENCSR505LJT	ZFP37	HepG2	transcription factor
+ENCSR348ONY	ZFP41	HEK293	transcription factor
+ENCSR731UPJ	ZFP41	HepG2	transcription factor
+ENCSR495RMN	ZFP62	HepG2	transcription factor
+ENCSR487CPI	ZFP64	HepG2	transcription factor
+ENCSR381VYR	ZFP69B	HEK293	transcription factor
+ENCSR196FSX	ZFP82	HepG2	transcription factor
+ENCSR377GZS	ZFP90	HepG2	transcription factor
+ENCSR201DCF	ZFP91	K562	transcription factor
+ENCSR678KUJ	ZFP91	HepG2	transcription factor
+ENCSR898XMH	ZFP91	K562	transcription factor
+ENCSR906CWK	ZFPM2	K562	cofactor
+ENCSR027UFT	ZFX	C4-2B	cofactor
+ENCSR218GSN	ZFX	HEK293T	cofactor
+ENCSR246MLJ	ZFX	22Rv1	cofactor
+ENCSR266HHO	ZFX	HepG2	cofactor
+ENCSR435OQD	ZFX	MCF-7	cofactor
+ENCSR503GVO	ZFX	HCT116	cofactor
+ENCSR628DJK	ZFX	K562	cofactor
+ENCSR920ASP	ZFX	K562	cofactor
+ENCSR949OEV	ZFY	HepG2	transcription factor
+ENCSR203UQM	ZFYVE20	HepG2	transcription factor
+ENCSR704IGU	ZGPAT	HepG2	transcription factor
+ENCSR557RVF	ZHX1	K562	cofactor,transcription factor
+ENCSR887MXT	ZHX1	HeLa-S3	cofactor,transcription factor
+ENCSR978DQT	ZHX1	HepG2	cofactor,transcription factor
+ENCSR401VBM	ZHX2	HepG2	cofactor,transcription factor
+ENCSR407BEZ	ZHX2	HepG2	cofactor,transcription factor
+ENCSR876UYH	ZHX2	MCF-7	cofactor,transcription factor
+ENCSR367KYL	ZHX3	HepG2	transcription factor
+ENCSR728MWW	ZIC2	HEK293	transcription factor
+ENCSR862VDD	ZIK1	HepG2	transcription factor
+ENCSR000ECJ	ZKSCAN1	HeLa-S3	transcription factor
+ENCSR157CAU	ZKSCAN1	HepG2	transcription factor
+ENCSR449UFF	ZKSCAN1	MCF-7	transcription factor
+ENCSR882ERE	ZKSCAN1	K562	transcription factor
+ENCSR199HGP	ZKSCAN3	K562	transcription factor
+ENCSR159BTO	ZKSCAN5	HepG2	transcription factor
+ENCSR115QIT	ZKSCAN8	WTC11	transcription factor
+ENCSR448UKK	ZKSCAN8	K562	transcription factor
+ENCSR755CRA	ZKSCAN8	K562	transcription factor
+ENCSR808FFI	ZKSCAN8	HepG2	transcription factor
+ENCSR843JCI	ZMAT3	HepG2	RNA binding protein
+ENCSR807VQT	ZMAT4	WTC11	transcription factor
+ENCSR215XSZ	ZMAT5	HepG2	transcription factor
+ENCSR000EFQ	ZMIZ1	K562	transcription factor
+ENCSR907JPB	ZMIZ1	K562	transcription factor
+ENCSR066EWR	ZMYM2	HepG2	transcription factor
+ENCSR102KIN	ZMYM3	K562	transcription factor
+ENCSR505DVB	ZMYM3	HepG2	transcription factor
+ENCSR848YWD	ZMYM3	HepG2	transcription factor
+ENCSR202OLE	ZMYM4	HepG2	transcription factor
+ENCSR009LIA	ZNF10	HepG2	transcription factor
+ENCSR019WUS	ZNF10	HEK293	transcription factor
+ENCSR519QYU	ZNF101	HepG2	transcription factor
+ENCSR751PNN	ZNF112	HEK293	transcription factor
+ENCSR555KFE	ZNF114	GM23338	transcription factor
+ENCSR985MYI	ZNF114	HEK293	transcription factor
+ENCSR041YBR	ZNF12	K562	transcription factor
+ENCSR711KBM	ZNF12	HepG2	transcription factor
+ENCSR203PCF	ZNF121	WTC11	transcription factor
+ENCSR224QDY	ZNF121	HEK293	transcription factor
+ENCSR799URB	ZNF121	K562	transcription factor
+ENCSR945QEW	ZNF121	HepG2	transcription factor
+ENCSR124YFA	ZNF124	K562	transcription factor
+ENCSR357YPP	ZNF124	HepG2	transcription factor
+ENCSR138RCE	ZNF132	HEK293	transcription factor
+ENCSR283MWQ	ZNF133	HEK293	transcription factor
+ENCSR619UPN	ZNF133	K562	transcription factor
+ENCSR553NTC	ZNF134	K562	transcription factor
+ENCSR560HRJ	ZNF136	HepG2	cofactor
+ENCSR373KKV	ZNF138	WTC11	transcription factor
+ENCSR551KAP	ZNF138	HEK293	transcription factor
+ENCSR910MUD	ZNF138	HepG2	transcription factor
+ENCSR377HQG	ZNF140	K562	transcription factor
+ENCSR464KFG	ZNF140	HEK293	transcription factor
+ENCSR512ECF	ZNF142	HepG2	transcription factor
+ENCSR063FUV	ZNF143	WTC11	transcription factor
+ENCSR080UEM	ZNF143	HepG2	transcription factor
+ENCSR427WZJ	ZNF143	K562	transcription factor
+ENCSR689YFA	ZNF146	HEK293	transcription factor
+ENCSR713IFY	ZNF146	K562	transcription factor
+ENCSR957LTN	ZNF146	HepG2	transcription factor
+ENCSR018MSO	ZNF148	K562	transcription factor
+ENCSR736ZKL	ZNF148	HEK293	transcription factor
+ENCSR801BWR	ZNF155	HEK293	transcription factor
+ENCSR564YYW	ZNF157	HEK293	transcription factor
+ENCSR093HXE	ZNF16	HEK293	transcription factor
+ENCSR917SSX	ZNF160	HepG2	transcription factor
+ENCSR172XJS	ZNF165	K562	transcription factor
+ENCSR661AXW	ZNF169	HEK293	transcription factor
+ENCSR075BAS	ZNF17	HepG2	transcription factor
+ENCSR056VYW	ZNF174	K562	transcription factor
+ENCSR516VQK	ZNF174	HEK293	transcription factor
+ENCSR011PEI	ZNF175	K562	transcription factor
+ENCSR103GAK	ZNF175	HEK293	transcription factor
+ENCSR553ZJQ	ZNF18	HepG2	transcription factor
+ENCSR977HTH	ZNF18	HEK293	transcription factor
+ENCSR298DSB	ZNF180	HepG2	transcription factor
+ENCSR115LFG	ZNF181	HepG2	transcription factor
+ENCSR020UPN	ZNF184	HEK293	transcription factor
+ENCSR526HRN	ZNF184	K562	transcription factor
+ENCSR546IHU	ZNF184	K562	transcription factor
+ENCSR621ATC	ZNF184	K562	transcription factor
+ENCSR640STN	ZNF184	WTC11	transcription factor
+ENCSR163RYW	ZNF189	HEK293	transcription factor
+ENCSR811JJM	ZNF19	HEK293	transcription factor
+ENCSR580IAO	ZNF197	K562	transcription factor
+ENCSR011CKE	ZNF2	HEK293	transcription factor
+ENCSR720PDY	ZNF20	HepG2	transcription factor
+ENCSR996FYT	ZNF202	HEK293	transcription factor
+ENCSR157CEN	ZNF205	HepG2	transcription factor
+ENCSR096KWU	ZNF207	MCF-7	RNA binding protein
+ENCSR117KWH	ZNF207	GM12878	RNA binding protein
+ENCSR683CSF	ZNF207	HepG2	RNA binding protein
+ENCSR365DQH	ZNF211	HEK293	transcription factor
+ENCSR002ZGC	ZNF212	K562	transcription factor
+ENCSR993DED	ZNF214	HEK293	transcription factor
+ENCSR699RWG	ZNF215	K562	transcription factor
+ENCSR000EWU	ZNF217	MCF-7	transcription factor
+ENCSR055FQB	ZNF217	HepG2	transcription factor
+ENCSR465XQW	ZNF217	MCF-7	transcription factor
+ENCSR764CZW	ZNF217	GM12878	transcription factor
+ENCSR841GLE	ZNF217	K562	transcription factor
+ENCSR912ATU	ZNF217	MCF-7	transcription factor
+ENCSR214RUE	ZNF219	WTC11	transcription factor
+ENCSR243BPI	ZNF219	HepG2	transcription factor
+ENCSR194BBY	ZNF221	HEK293	transcription factor
+ENCSR347HAM	ZNF221	HepG2	transcription factor
+ENCSR906PCS	ZNF223	HEK293	transcription factor
+ENCSR409PXW	ZNF224	K562	transcription factor
+ENCSR886VSY	ZNF224	HepG2	transcription factor
+ENCSR075PWK	ZNF225	HepG2	transcription factor
+ENCSR877UJB	ZNF227	MCF-7	transcription factor
+ENCSR679KXF	ZNF23	HEK293	transcription factor
+ENCSR898IDK	ZNF23	K562	transcription factor
+ENCSR087HFN	ZNF230	HepG2	transcription factor
+ENCSR034IND	ZNF232	WTC11	transcription factor
+ENCSR360ECJ	ZNF232	K562	transcription factor
+ENCSR837GLU	ZNF232	HepG2	transcription factor
+ENCSR800ASH	ZNF234	HepG2	transcription factor
+ENCSR924KZA	ZNF235	HepG2	transcription factor
+ENCSR440COG	ZNF239	HEK293	transcription factor
+ENCSR606KTL	ZNF239	K562	transcription factor
+ENCSR072PWP	ZNF24	GM12878	transcription factor
+ENCSR099NCH	ZNF24	K562	transcription factor
+ENCSR117WTM	ZNF24	K562	transcription factor
+ENCSR362NWP	ZNF24	HepG2	transcription factor
+ENCSR385AHH	ZNF24	K562	transcription factor
+ENCSR503VTG	ZNF24	MCF-7	transcription factor
+ENCSR695EQB	ZNF24	K562	transcription factor
+ENCSR791AGT	ZNF24	HepG2	transcription factor
+ENCSR984MDV	ZNF24	HEK293	transcription factor
+ENCSR338SEM	ZNF248	HEK293	transcription factor
+ENCSR384SQB	ZNF25	HepG2	transcription factor
+ENCSR605KVV	ZNF251	HepG2	transcription factor
+ENCSR271RRH	ZNF253	K562	transcription factor
+ENCSR569GKR	ZNF253	HepG2	transcription factor
+ENCSR563JME	ZNF256	HepG2	transcription factor
+ENCSR492FKD	ZNF257	K562	transcription factor
+ENCSR028EGI	ZNF26	HEK293	transcription factor
+ENCSR024ZIS	ZNF260	HepG2	transcription factor
+ENCSR000EVD	ZNF263	HEK293	transcription factor
+ENCSR000EWN	ZNF263	K562	transcription factor
+ENCSR156JWW	ZNF263	WTC11	transcription factor
+ENCSR313MMD	ZNF263	HepG2	transcription factor
+ENCSR845GGY	ZNF263	K562	transcription factor
+ENCSR248BVU	ZNF264	HepG2	transcription factor
+ENCSR466VYP	ZNF266	HEK293	transcription factor
+ENCSR000EUI	ZNF274	GM08714	transcription factor
+ENCSR000EUK	ZNF274	GM12878	transcription factor
+ENCSR000EUN	ZNF274	H1	transcription factor
+ENCSR000EVG	ZNF274	HeLa-S3	transcription factor
+ENCSR000EVR	ZNF274	HepG2	transcription factor
+ENCSR000EVX	ZNF274	K562	transcription factor
+ENCSR000EWE	ZNF274	K562	transcription factor
+ENCSR000EWY	ZNF274	NT2/D1	transcription factor
+ENCSR000FCI	ZNF274	HEK293	transcription factor
+ENCSR101FJM	ZNF274	HCT116	transcription factor
+ENCSR178QVJ	ZNF274	HEK293	transcription factor
+ENCSR871VNN	ZNF274	HepG2	transcription factor
+ENCSR590BHJ	ZNF275	HepG2	transcription factor
+ENCSR076KLJ	ZNF276	HepG2	transcription factor
+ENCSR358PJI	ZNF277	K562	transcription factor
+ENCSR370NFS	ZNF280A	K562	transcription factor
+ENCSR775FSH	ZNF280B	K562	transcription factor
+ENCSR940EZR	ZNF280B	HepG2	transcription factor
+ENCSR076KZW	ZNF280C	HEK293	transcription factor
+ENCSR233FJO	ZNF280D	HepG2	transcription factor
+ENCSR451CYX	ZNF280D	HEK293	transcription factor
+ENCSR032DGZ	ZNF281	WTC11	transcription factor
+ENCSR214EKV	ZNF281	K562	transcription factor
+ENCSR403MJY	ZNF281	HepG2	transcription factor
+ENCSR229KXQ	ZNF282	K562	transcription factor
+ENCSR742TMU	ZNF282	K562	transcription factor
+ENCSR752NDX	ZNF282	HepG2	transcription factor
+ENCSR228PGT	ZNF292	HEK293	transcription factor
+ENCSR853BYT	ZNF292	HepG2	transcription factor
+ENCSR862LJQ	ZNF296	HepG2	transcription factor
+ENCSR182QWU	ZNF3	HepG2	transcription factor
+ENCSR195QFV	ZNF3	K562	transcription factor
+ENCSR934RJP	ZNF3	K562	transcription factor
+ENCSR891KNP	ZNF30	HepG2	transcription factor
+ENCSR513MGG	ZNF302	HEK293	transcription factor
+ENCSR590IHT	ZNF302	A549	transcription factor
+ENCSR096LSN	ZNF311	HEK293	transcription factor
+ENCSR388ZRV	ZNF311	K562	transcription factor
+ENCSR167KBO	ZNF316	K562	transcription factor
+ENCSR200JYP	ZNF316	K562	transcription factor
+ENCSR016OHL	ZNF317	HepG2	transcription factor
+ENCSR795KRU	ZNF317	WTC11	transcription factor
+ENCSR976MXN	ZNF317	K562	transcription factor
+ENCSR334HSW	ZNF318	K562	transcription factor
+ENCSR352BJL	ZNF318	K562	transcription factor
+ENCSR832PID	ZNF318	HepG2	transcription factor
+ENCSR231PDA	ZNF319	K562	transcription factor
+ENCSR712KVZ	ZNF324	K562	transcription factor
+ENCSR768HOH	ZNF324	HEK293	transcription factor
+ENCSR237RPW	ZNF326	HepG2	RNA binding protein
+ENCSR681KXT	ZNF329	HepG2	transcription factor
+ENCSR369TCR	ZNF331	HepG2	transcription factor
+ENCSR860XVO	ZNF331	MCF-7	transcription factor
+ENCSR918LRB	ZNF331	GM23338	transcription factor
+ENCSR505UNL	ZNF333	HepG2	transcription factor
+ENCSR328SUD	ZNF335	HEK293	chromatin remodeler
+ENCSR432QMW	ZNF335	HepG2	chromatin remodeler
+ENCSR759KXQ	ZNF337	HepG2	transcription factor
+ENCSR110BYN	ZNF33A	HepG2	transcription factor
+ENCSR052FXA	ZNF33B	HepG2	transcription factor
+ENCSR727PIC	ZNF34	HEK293	transcription factor
+ENCSR904JEY	ZNF34	HepG2	transcription factor
+ENCSR185FOY	ZNF341	HEK293	transcription factor
+ENCSR938VRO	ZNF343	HepG2	transcription factor
+ENCSR590FLL	ZNF347	K562	transcription factor
+ENCSR842SRB	ZNF350	HepG2	transcription factor
+ENCSR854ORP	ZNF350	HEK293	transcription factor
+ENCSR044IXA	ZNF354B	K562	transcription factor
+ENCSR124QQJ	ZNF354B	HepG2	transcription factor
+ENCSR674SCQ	ZNF354B	K562	transcription factor
+ENCSR289NSN	ZNF354C	HEK293	transcription factor
+ENCSR506SSQ	ZNF354C	K562	transcription factor
+ENCSR032LZZ	ZNF362	HepG2	transcription factor
+ENCSR715QNO	ZNF362	HEK293	transcription factor
+ENCSR106EBH	ZNF366	HEK293	cofactor
+ENCSR048WVW	ZNF367	HepG2	transcription factor
+ENCSR371LLY	ZNF37A	HEK293	transcription factor
+ENCSR014HQD	ZNF382	HepG2	transcription factor
+ENCSR264LQX	ZNF383	HepG2	transcription factor
+ENCSR000DYP	ZNF384	GM12878	transcription factor
+ENCSR000EFP	ZNF384	K562	transcription factor
+ENCSR101FJU	ZNF384	HepG2	transcription factor
+ENCSR882ICT	ZNF384	HEK293T	transcription factor
+ENCSR210MET	ZNF391	HEK293	transcription factor
+ENCSR125DNC	ZNF394	HEK293	transcription factor
+ENCSR462QZZ	ZNF395	K562	transcription factor
+ENCSR422ODX	ZNF396	WTC11	transcription factor
+ENCSR508EEX	ZNF397	K562	transcription factor
+ENCSR676ZEF	ZNF398	HEK293	transcription factor
+ENCSR948JND	ZNF398	K562	transcription factor
+ENCSR669GUM	ZNF404	HEK293	transcription factor
+ENCSR005WGY	ZNF407	HepG2	transcription factor
+ENCSR011NOZ	ZNF407	K562	transcription factor
+ENCSR439OCL	ZNF407	K562	transcription factor
+ENCSR758PLU	ZNF408	K562	transcription factor
+ENCSR235PYI	ZNF41	K562	transcription factor
+ENCSR224NQI	ZNF414	HepG2	transcription factor
+ENCSR288NNJ	ZNF416	WTC11	transcription factor
+ENCSR604CNJ	ZNF416	HEK293	transcription factor
+ENCSR413CVQ	ZNF423	WTC11	transcription factor
+ENCSR477OJI	ZNF423	HEK293	transcription factor
+ENCSR717QWW	ZNF425	WTC11	transcription factor
+ENCSR224NFP	ZNF426	HEK293	transcription factor
+ENCSR618END	ZNF430	HepG2	transcription factor
+ENCSR204ALX	ZNF431	HepG2	transcription factor
+ENCSR609ZLF	ZNF431	K562	transcription factor
+ENCSR043VRG	ZNF432	HepG2	transcription factor
+ENCSR586BRJ	ZNF433	HEK293	transcription factor
+ENCSR335SUD	ZNF436	K562	transcription factor
+ENCSR914HPP	ZNF44	HepG2	transcription factor
+ENCSR673GDQ	ZNF441	HepG2	transcription factor
+ENCSR038XIA	ZNF444	MCF-7	transcription factor
+ENCSR164RIC	ZNF444	K562	transcription factor
+ENCSR883UGG	ZNF445	K562	transcription factor
+ENCSR839AJZ	ZNF446	HepG2	transcription factor
+ENCSR659YWQ	ZNF449	K562	transcription factor
+ENCSR738SLS	ZNF449	HEK293	transcription factor
+ENCSR931ZOM	ZNF451	HepG2	chromatin remodeler,cofactor
+ENCSR261UIH	ZNF460	HepG2	transcription factor
+ENCSR334UWP	ZNF462	GM23338	transcription factor
+ENCSR613YQN	ZNF468	HepG2	transcription factor
+ENCSR567XAM	ZNF473	HEK293	transcription factor
+ENCSR415AEB	ZNF48	HepG2	transcription factor
+ENCSR517DDU	ZNF48	HEK293	transcription factor
+ENCSR436PIH	ZNF483	HepG2	transcription factor
+ENCSR471VAY	ZNF484	HepG2	transcription factor
+ENCSR574UJE	ZNF485	HepG2	transcription factor
+ENCSR363XBR	ZNF488	HEK293	transcription factor
+ENCSR542PZA	ZNF490	HepG2	transcription factor
+ENCSR828TVO	ZNF496	HepG2	transcription factor
+ENCSR227PHM	ZNF501	HepG2	transcription factor
+ENCSR461ZJT	ZNF501	HEK293	transcription factor
+ENCSR998YJI	ZNF503	HepG2	transcription factor
+ENCSR419ODQ	ZNF507	MCF-7	transcription factor
+ENCSR577KQD	ZNF507	K562	transcription factor
+ENCSR598TIR	ZNF507	K562	transcription factor
+ENCSR595FAO	ZNF510	HEK293	transcription factor
+ENCSR695SLS	ZNF510	HepG2	transcription factor
+ENCSR372JXR	ZNF511	HepG2	transcription factor
+ENCSR652OGX	ZNF511	K562	transcription factor
+ENCSR264SRY	ZNF512	HepG2	transcription factor
+ENCSR591CCL	ZNF512	K562	transcription factor
+ENCSR634WRC	ZNF512	WTC11	transcription factor
+ENCSR696URR	ZNF512	K562	transcription factor
+ENCSR555DCF	ZNF512B	MCF-7	transcription factor
+ENCSR761LRR	ZNF512B	MCF-7	transcription factor
+ENCSR801SNX	ZNF512B	HepG2	transcription factor
+ENCSR171KUL	ZNF513	HepG2	transcription factor
+ENCSR503DPC	ZNF513	HEK293	transcription factor
+ENCSR897RVP	ZNF514	HEK293	transcription factor
+ENCSR159GFL	ZNF518A	HEK293	transcription factor
+ENCSR597CHL	ZNF518B	K562	transcription factor
+ENCSR665KYH	ZNF521	HEK293	transcription factor
+ENCSR608XRC	ZNF526	HepG2	transcription factor
+ENCSR656RTA	ZNF527	HepG2	transcription factor
+ENCSR754SOI	ZNF529	HEK293	transcription factor
+ENCSR013DKM	ZNF530	HepG2	transcription factor
+ENCSR701RXW	ZNF530	HEK293	transcription factor
+ENCSR444BFV	ZNF532	WTC11	transcription factor
+ENCSR584DEL	ZNF543	HepG2	transcription factor
+ENCSR167XFW	ZNF544	HEK293	transcription factor
+ENCSR782WWY	ZNF546	HepG2	transcription factor
+ENCSR909TSW	ZNF547	HEK293	transcription factor
+ENCSR964ZJC	ZNF547	HepG2	transcription factor
+ENCSR756UNW	ZNF548	HepG2	transcription factor
+ENCSR892ZTO	ZNF548	HEK293	transcription factor
+ENCSR185QFX	ZNF549	HEK293	transcription factor
+ENCSR545ACM	ZNF549	HepG2	transcription factor
+ENCSR198BHH	ZNF550	HepG2	transcription factor
+ENCSR451UQX	ZNF551	K562	transcription factor
+ENCSR448RAP	ZNF552	HepG2	transcription factor
+ENCSR767XSF	ZNF555	HEK293	transcription factor
+ENCSR644WQN	ZNF556	HepG2	transcription factor
+ENCSR325VYA	ZNF557	HepG2	transcription factor
+ENCSR154YWK	ZNF558	HepG2	transcription factor
+ENCSR447ZTA	ZNF558	HEK293	transcription factor
+ENCSR538RDA	ZNF560	HEK293	transcription factor
+ENCSR125ULS	ZNF561	HEK293	transcription factor
+ENCSR350GZC	ZNF561	K562	transcription factor
+ENCSR727IJD	ZNF562	HepG2	transcription factor
+ENCSR977FRK	ZNF563	HepG2	transcription factor
+ENCSR397EOT	ZNF564	HepG2	transcription factor
+ENCSR754ALX	ZNF565	SK-N-SH	transcription factor
+ENCSR231NMZ	ZNF567	HepG2	transcription factor
+ENCSR225SLE	ZNF569	HepG2	transcription factor
+ENCSR918EFA	ZNF57	K562	transcription factor
+ENCSR055ZIA	ZNF570	HepG2	transcription factor
+ENCSR421QXA	ZNF571	HEK293	transcription factor
+ENCSR697CNF	ZNF571	HepG2	transcription factor
+ENCSR663CTC	ZNF572	HepG2	transcription factor
+ENCSR402JAC	ZNF574	MCF-7	transcription factor
+ENCSR886YJI	ZNF574	HepG2	transcription factor
+ENCSR253HUM	ZNF576	HepG2	transcription factor
+ENCSR436RQS	ZNF577	HepG2	transcription factor
+ENCSR018MQH	ZNF579	MCF-7	RNA binding protein
+ENCSR173CTF	ZNF580	HepG2	transcription factor
+ENCSR668HOP	ZNF580	HEK293	transcription factor
+ENCSR775EQV	ZNF583	K562	transcription factor
+ENCSR149ZBI	ZNF584	K562	transcription factor
+ENCSR011XCI	ZNF585B	HEK293	transcription factor
+ENCSR236JZN	ZNF586	K562	transcription factor
+ENCSR603XLW	ZNF589	K562	transcription factor
+ENCSR827ZGB	ZNF589	HepG2	transcription factor
+ENCSR028NUR	ZNF592	MCF-7	transcription factor
+ENCSR173ZVL	ZNF592	GM12878	transcription factor
+ENCSR249BHQ	ZNF592	K562	transcription factor
+ENCSR701AQS	ZNF592	MCF-7	transcription factor
+ENCSR344SBD	ZNF596	HEK293	transcription factor
+ENCSR669PVF	ZNF597	HepG2	transcription factor
+ENCSR173NAL	ZNF598	HepG2	RNA binding protein
+ENCSR017QBI	ZNF600	HEK293	transcription factor
+ENCSR903JFF	ZNF605	HepG2	transcription factor
+ENCSR788SXN	ZNF607	HepG2	transcription factor
+ENCSR277VXX	ZNF608	HepG2	transcription factor
+ENCSR837YGS	ZNF608	SK-N-SH	transcription factor
+ENCSR407BPU	ZNF609	HepG2	transcription factor
+ENCSR940PYZ	ZNF609	K562	transcription factor
+ENCSR691TXI	ZNF610	HEK293	transcription factor
+ENCSR011CIR	ZNF614	HepG2	transcription factor
+ENCSR286LPH	ZNF615	HepG2	transcription factor
+ENCSR654PQY	ZNF616	HepG2	transcription factor
+ENCSR613RDS	ZNF619	HepG2	transcription factor
+ENCSR858FAN	ZNF621	HEK293	transcription factor
+ENCSR075FNZ	ZNF622	GM12878	RNA binding protein
+ENCSR022IZK	ZNF623	HEK293	transcription factor
+ENCSR419VVI	ZNF624	A549	transcription factor
+ENCSR878DES	ZNF624	HEK293	transcription factor
+ENCSR588MQZ	ZNF626	HEK293	transcription factor
+ENCSR351NON	ZNF629	HEK293	transcription factor
+ENCSR363ASY	ZNF629	HepG2	transcription factor
+ENCSR080CST	ZNF639	HEK293	transcription factor
+ENCSR258PSN	ZNF639	K562	transcription factor
+ENCSR497VFH	ZNF639	K562	transcription factor
+ENCSR665UFC	ZNF639	HepG2	transcription factor
+ENCSR845BCL	ZNF639	K562	transcription factor
+ENCSR949NVY	ZNF639	K562	transcription factor
+ENCSR578CXC	ZNF644	HepG2	transcription factor
+ENCSR729HVR	ZNF644	K562	transcription factor
+ENCSR776LDJ	ZNF645	HEK293	transcription factor
+ENCSR488ZNK	ZNF646	HepG2	transcription factor
+ENCSR502GAX	ZNF652	HepG2	transcription factor
+ENCSR504VDV	ZNF654	HEK293	transcription factor
+ENCSR568YNC	ZNF655	K562	transcription factor
+ENCSR762DQP	ZNF658	HEK293	transcription factor
+ENCSR283DOU	ZNF660	HEK293	transcription factor
+ENCSR902AMJ	ZNF660	HepG2	transcription factor
+ENCSR714LZQ	ZNF664	HEK293	transcription factor
+ENCSR682AAS	ZNF668	K562	transcription factor
+ENCSR233MWH	ZNF670	HEK293	transcription factor
+ENCSR699ZES	ZNF670	HepG2	transcription factor
+ENCSR260GQA	ZNF671	WTC11	transcription factor
+ENCSR263YXJ	ZNF672	HepG2	transcription factor
+ENCSR171BKT	ZNF674	HepG2	transcription factor
+ENCSR279KDC	ZNF677	HEK293	transcription factor
+ENCSR946PKH	ZNF678	HepG2	transcription factor
+ENCSR307CKC	ZNF680	HEK293	transcription factor
+ENCSR647PSR	ZNF687	HepG2	transcription factor
+ENCSR859FDL	ZNF687	GM12878	transcription factor
+ENCSR899BKM	ZNF687	MCF-7	transcription factor
+ENCSR130ZAR	ZNF691	HepG2	transcription factor
+ENCSR418MKG	ZNF692	HEK293	transcription factor
+ENCSR187RGF	ZNF695	K562	transcription factor
+ENCSR276RQG	ZNF696	K562	transcription factor
+ENCSR734WFB	ZNF697	HepG2	transcription factor
+ENCSR303SHG	ZNF699	K562	transcription factor
+ENCSR454SCH	ZNF7	K562	transcription factor
+ENCSR553QMC	ZNF7	HepG2	transcription factor
+ENCSR207GYC	ZNF70	SK-N-SH	transcription factor
+ENCSR959BQO	ZNF700	K562	transcription factor
+ENCSR547TGL	ZNF701	HEK293	transcription factor
+ENCSR400JHG	ZNF703	HepG2	cofactor
+ENCSR194KWL	ZNF704	HEK293	transcription factor
+ENCSR523RGJ	ZNF704	HepG2	transcription factor
+ENCSR017XHZ	ZNF707	HepG2	transcription factor
+ENCSR077TKJ	ZNF707	K562	transcription factor
+ENCSR854IPI	ZNF707	HEK293	transcription factor
+ENCSR984IXF	ZNF709	HepG2	transcription factor
+ENCSR670UEX	ZNF710	HepG2	transcription factor
+ENCSR513NBU	ZNF713	HepG2	transcription factor
+ENCSR987KYK	ZNF717	K562	transcription factor
+ENCSR643XPG	ZNF720	HepG2	transcription factor
+ENCSR512JVC	ZNF724P	HepG2	transcription factor
+ENCSR127IHN	ZNF737	HepG2	transcription factor
+ENCSR427XYP	ZNF740	K562	transcription factor
+ENCSR532EMP	ZNF740	K562	transcription factor
+ENCSR737UST	ZNF740	K562	transcription factor
+ENCSR755ZAY	ZNF740	HepG2	transcription factor
+ENCSR591MYB	ZNF746	HepG2	transcription factor
+ENCSR155IXY	ZNF747	HepG2	transcription factor
+ENCSR497IAS	ZNF747	HEK293	transcription factor
+ENCSR125MLR	ZNF749	HepG2	transcription factor
+ENCSR099MNR	ZNF75A	K562	transcription factor
+ENCSR693TYT	ZNF75D	HepG2	transcription factor
+ENCSR072LQF	ZNF76	HEK293	transcription factor
+ENCSR257AFV	ZNF76	K562	transcription factor
+ENCSR622AMZ	ZNF761	HepG2	transcription factor
+ENCSR023OOE	ZNF764	K562	transcription factor
+ENCSR194IJN	ZNF766	K562	transcription factor
+ENCSR869RSW	ZNF766	HepG2	transcription factor
+ENCSR070HWF	ZNF768	HEK293	RNA binding protein
+ENCSR181ABP	ZNF768	HepG2	RNA binding protein
+ENCSR844MAB	ZNF77	K562	transcription factor
+ENCSR242BGR	ZNF770	HEK293	transcription factor
+ENCSR510GKB	ZNF770	HepG2	transcription factor
+ENCSR248WAU	ZNF772	HepG2	transcription factor
+ENCSR029ARE	ZNF773	HepG2	transcription factor
+ENCSR856QJP	ZNF775	HepG2	transcription factor
+ENCSR274LVQ	ZNF776	HEK293	transcription factor
+ENCSR704ENT	ZNF776	HepG2	transcription factor
+ENCSR068ZQR	ZNF777	HepG2	transcription factor
+ENCSR295BIP	ZNF777	HEK293	transcription factor
+ENCSR110JLQ	ZNF778	K562	transcription factor
+ENCSR141ELR	ZNF778	HepG2	transcription factor
+ENCSR095JQV	ZNF780A	HepG2	transcription factor
+ENCSR214PDW	ZNF780A	K562	transcription factor
+ENCSR517HGZ	ZNF781	HepG2	transcription factor
+ENCSR198RHC	ZNF782	HepG2	transcription factor
+ENCSR082QGT	ZNF784	HepG2	transcription factor
+ENCSR222TVA	ZNF785	K562	transcription factor
+ENCSR950ACO	ZNF785	HEK293	transcription factor
+ENCSR206BVQ	ZNF786	HepG2	transcription factor
+ENCSR731LZB	ZNF788	HepG2	transcription factor
+ENCSR995FUM	ZNF79	K562	transcription factor
+ENCSR117XJA	ZNF790	HepG2	transcription factor
+ENCSR775HFF	ZNF791	HEK293	transcription factor
+ENCSR396SOH	ZNF792	HepG2	transcription factor
+ENCSR679STZ	ZNF792	HEK293	transcription factor
+ENCSR325QLX	ZNF8	SK-N-SH	transcription factor
+ENCSR785UCD	ZNF8	MCF-7	transcription factor
+ENCSR701WPG	ZNF800	HepG2	transcription factor
+ENCSR905BNO	ZNF816	HepG2	transcription factor
+ENCSR148FHD	ZNF827	HepG2	transcription factor
+ENCSR257XVY	ZNF83	K562	transcription factor
+ENCSR263XFO	ZNF83	HepG2	transcription factor
+ENCSR033NQK	ZNF830	K562	DNA repair
+ENCSR582EIB	ZNF830	K562	DNA repair
+ENCSR781DPA	ZNF830	HEK293	DNA repair
+ENCSR851XLW	ZNF830	K562	DNA repair
+ENCSR711UOA	ZNF837	HEK293	transcription factor
+ENCSR540LPD	ZNF839	HepG2	transcription factor
+ENCSR376UMR	ZNF84	K562	transcription factor
+ENCSR808FZR	ZNF841	HepG2	transcription factor
+ENCSR502KPJ	ZNF843	HEK293	transcription factor
+ENCSR756CJS	ZNF850	HepG2	transcription factor
+ENCSR891KPP	ZNF865	HepG2	transcription factor
+ENCSR907PAR	ZNF878	HepG2	transcription factor
+ENCSR073OBD	ZNF879	HepG2	transcription factor
+ENCSR882YYL	ZNF883	HepG2	transcription factor
+ENCSR020CLV	ZNF891	HepG2	transcription factor
+ENCSR574YRZ	ZSCAN12	HepG2	transcription factor
+ENCSR864VJE	ZSCAN16	HEK293	transcription factor
+ENCSR499FDW	ZSCAN18	WTC11	transcription factor
+ENCSR721QZV	ZSCAN18	HEK293	transcription factor
+ENCSR169JRW	ZSCAN20	HepG2	transcription factor
+ENCSR548FLW	ZSCAN20	A549	transcription factor
+ENCSR210DDA	ZSCAN21	HepG2	transcription factor
+ENCSR253CKN	ZSCAN21	HEK293	transcription factor
+ENCSR050KWL	ZSCAN22	HepG2	transcription factor
+ENCSR705ASR	ZSCAN23	HEK293	transcription factor
+ENCSR037LQB	ZSCAN25	HepG2	transcription factor
+ENCSR501NSC	ZSCAN26	HEK293	transcription factor
+ENCSR175SZH	ZSCAN29	K562	transcription factor
+ENCSR412YGM	ZSCAN29	GM12878	transcription factor
+ENCSR422VAG	ZSCAN29	HepG2	transcription factor
+ENCSR635EXI	ZSCAN29	K562	transcription factor
+ENCSR768VNZ	ZSCAN30	HEK293	transcription factor
+ENCSR795CKZ	ZSCAN30	HepG2	transcription factor
+ENCSR493VBX	ZSCAN31	HepG2	transcription factor
+ENCSR870YEN	ZSCAN32	K562	transcription factor
+ENCSR211GNP	ZSCAN4	HEK293	transcription factor
+ENCSR216GKQ	ZSCAN5A	HepG2	transcription factor
+ENCSR357QJR	ZSCAN5A	HEK293	transcription factor
+ENCSR731AGO	ZSCAN5C	HEK293	transcription factor
+ENCSR712FAM	ZSCAN9	HepG2	transcription factor
+ENCSR658UQD	ZUFSP	HepG2	transcription factor
+ENCSR559IOZ	ZXDB	HEK293	transcription factor
+ENCSR347PUQ	ZXDC	HepG2	transcription factor
+ENCSR000DNQ	ZZZ3	GM12878	transcription factor
+ENCSR000DNT	ZZZ3	HeLa-S3	transcription factor
+ENCSR428LOB	ZZZ3	HepG2	transcription factor
+ENCSR780BBJ	ZZZ3	K562	transcription factor

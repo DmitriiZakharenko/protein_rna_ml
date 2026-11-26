@@ -210,6 +210,29 @@ With these values the runner makes 4 embeddings and 24 head runs. Script 66 argp
 The runner has no `set -e`. A failed embedding shows up as failed head runs, so `results/v3b_layers_embed_L<L>.log` is read first.
 References at layer 33 (probe AUROC, mean +- sd over seeds 42, 0, 1): std 0.531 +- 0.027, xneg 0.559 +- 0.009. The decision rule in EXPERIMENT_LOG.md is a mean above the layer-33 value by more than the seed spread.
 
+## 5a. ENCODE protein map (script 82)
+
+Embeddings and 5-mer profiles are computed on the VM, statistics and the interactive page locally. The protein table `results/encode_map/proteins.tsv` (1,051 proteins) is in the repository.
+
+```bash
+cd /vol/space/protein_rna_ml && git pull && source /vol/space/venv_emb/bin/activate
+python scripts/82_encode_protein_map.py embed      # ESM-2 650M, 34 layers, about 1,051 proteins, writes results/encode_map/esm2_layers.npz (about 90 MB)
+python scripts/82_encode_protein_map.py kmer       # 5-mer profiles from data/benchmarks/tf_chipseq/pairs.tsv and data/benchmarks/skipper_eclip/fixlen_151_all.tsv
+ls -la results/encode_map/                         # expected: esm2_layers.npz and kmer_profiles.npz
+```
+
+Copy both files to the local repository (dry run with `-n` first), then run locally:
+
+```bash
+rsync -avn -e "$SSH" "$HOST:$VMDIR/results/encode_map/esm2_layers.npz" "$HOST:$VMDIR/results/encode_map/kmer_profiles.npz" "$LOCAL/results/encode_map/"
+python scripts/82_encode_protein_map.py stats --chip_def broad
+python scripts/82_encode_protein_map.py kmerstats --chip_def broad
+python scripts/82_encode_protein_map.py map --chip_def broad
+python -m http.server 8765 --bind 127.0.0.1 --directory results/encode_map   # then open http://127.0.0.1:8765/encode_protein_map.html
+```
+
+Run times of `embed` and `kmer` are not recorded. Expected end of `embed`: a line `saved N proteins x 34 layers`. The columns of the two input tables (`protein_name`, `rna_sequence`, `binding_label`, `neg_type`) are read from the code and not verified on the VM.
+
 ## 6. Collecting results
 
 Table of probe and standard-test AUROC (reads `results.json` only, keys `probe.auroc`, `test_standard.auroc`, `best_epoch`). Not verified on the VM.
