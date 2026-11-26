@@ -1,0 +1,21 @@
+{
+  "checkpoint": "models/saved/generalized_v4_phase3a/best_model.pt",
+  "dataset": "data/external/external_benchmark_expanded.tsv",
+  "model": "V4_concat_bi",
+  "use_source_emb": true,
+  "n_pairs": 540,
+  "n_pos": 114,
+  "n_neg": 426,
+  "pos_rate": 0.2111,
+  "random_auprc_baseline": 0.2111,
+  "v4": {
+    "auroc": 0.6655,
+    "auprc": 0.3407,
+    "auprc_gain_over_random": 0.1296
+  },
+  "sliding_window": {
+    "rna_max": 60,
+    "step": 30
+  },
+  "prot_max": 700
+}

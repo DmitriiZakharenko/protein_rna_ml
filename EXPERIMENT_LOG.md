@@ -5,7 +5,7 @@
 
 This file is the canonical record of every training run. Each entry documents what
 was run, what the results were, what failed, and what was learned. All Phase 2 results have been retrained with the double class-weighting bug fixed (2026-05-13).
-Numbers in this log reflect clean checkpoints unless otherwise noted. Result files of the V4 runs (3 seeds) are on the GPU VM and are not in this copy of the repository. Their numbers are recorded in `results/phase3b_summary.json`.
+Numbers in this log reflect clean checkpoints unless otherwise noted. Result files of the V4 runs (3 seeds) are in `results/multiseed/v4_concat_bi_v3a/`, and their numbers are recorded in `results/phase3b_summary.json`. Model weights are on the GPU VM only.
 
 ---
 

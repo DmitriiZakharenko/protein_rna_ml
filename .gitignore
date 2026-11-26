@@ -30,7 +30,10 @@ results/benchmarks/
 
 # Large per-protein model pickles (optimistic 80/20 run; regenerate via script 25)
 results/rna_only_per_protein/
-results/multiseed/
+results/multiseed/*
+!results/multiseed/v4_concat_bi_v3a/
+results/multiseed/v4_concat_bi_v3a/**/checkpoints/
+results/multiseed/v4_concat_bi_v3a/**/*.pt
 
 # Staging dirs from separate RNAcompete runs (merged into top_bottom_examples/)
 results/top_bottom_examples_rbpzoo/

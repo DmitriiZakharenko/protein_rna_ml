@@ -539,7 +539,7 @@ Phase 1, Phase 2 and V2 on v3a use seed 42. Three seeds (42, 0, 1) are used for 
 
 ### 8.6 Result files of the V4 runs
 
-The V4 numbers (3-seed test AUROC 0.829 +- 0.009, AUPRC 0.732 +- 0.011, external curated 0.737 and expanded 0.666) are recorded in `results/phase3b_summary.json`. The per-run result files (`results/multiseed/v4_concat_bi_v3a/`, `results/generalized/v4_phase3a/` and the V4 external JSON files) are on the GPU VM and are not in this copy of the repository.
+The V4 numbers (3-seed test AUROC 0.829 +- 0.009, AUPRC 0.732 +- 0.011, external curated 0.737 and expanded 0.666) are recorded in `results/phase3b_summary.json`. The per-run result files (`results/multiseed/v4_concat_bi_v3a/`, `results/generalized/v4_phase3a/` and the V4 external JSON files) are in the repository (small JSON, TSV and the scored external pairs). Model weights are on the GPU VM only. The field `vs_v2` in the V4 result JSON files is the difference to the Phase 2 V2 test AUROC and AUPRC of 0.690 and 0.580 on `generalized_v2`. The comparison on the same test set (`generalized_v3a`) is 0.829 against 0.813 AUROC, +0.016.
 
 ---
 

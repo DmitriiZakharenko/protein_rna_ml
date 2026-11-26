@@ -1,0 +1,84 @@
+{
+  "best_val_probe_auroc": 0.5220918499354854,
+  "best_epoch": 2,
+  "args": {
+    "data_dir": "data/generalized_v3b",
+    "out_dir": "results/v3b_crossneg/v4x_seed42",
+    "model_dir": "models/saved/v4x_v3b_seed42",
+    "rna_max": 60,
+    "prot_max": 700,
+    "inter_dim": 256,
+    "dropout": 0.3,
+    "epochs": 40,
+    "pos_per_epoch": 200000,
+    "batch_pos": 128,
+    "lr": 0.0003,
+    "lambda_rank": 1.0,
+    "std_frac": 0.0,
+    "val_pos": 20000,
+    "patience": 8,
+    "seed": 42
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 1.3605285333046453,
+      "val_probe_auroc": 0.5126614015169955,
+      "val_probe_auprc": 0.510840027694596
+    },
+    {
+      "epoch": 2,
+      "loss": 1.1407096932427059,
+      "val_probe_auroc": 0.5220918499354854,
+      "val_probe_auprc": 0.5177260020857911
+    },
+    {
+      "epoch": 3,
+      "loss": 1.029566492625558,
+      "val_probe_auroc": 0.5198740309076688,
+      "val_probe_auprc": 0.5081781676392856
+    },
+    {
+      "epoch": 4,
+      "loss": 0.9512659365064581,
+      "val_probe_auroc": 0.5083720691931717,
+      "val_probe_auprc": 0.49712844180492777
+    },
+    {
+      "epoch": 5,
+      "loss": 0.9010805118488182,
+      "val_probe_auroc": 0.5151252845106387,
+      "val_probe_auprc": 0.5055694721103864
+    },
+    {
+      "epoch": 6,
+      "loss": 0.8668398051329019,
+      "val_probe_auroc": 0.5022470929471596,
+      "val_probe_auprc": 0.49630189493861254
+    },
+    {
+      "epoch": 7,
+      "loss": 0.8390672346833267,
+      "val_probe_auroc": 0.49816604035815193,
+      "val_probe_auprc": 0.4907003862828103
+    },
+    {
+      "epoch": 8,
+      "loss": 0.8133827732376616,
+      "val_probe_auroc": 0.4921973615709649,
+      "val_probe_auprc": 0.4846160294636272
+    },
+    {
+      "epoch": 9,
+      "loss": 0.7905544596685482,
+      "val_probe_auroc": 0.48963411229850634,
+      "val_probe_auprc": 0.4875387025874668
+    },
+    {
+      "epoch": 10,
+      "loss": 0.7659100093142924,
+      "val_probe_auroc": 0.4953370066389748,
+      "val_probe_auprc": 0.49077573207590347
+    }
+  ]
+}

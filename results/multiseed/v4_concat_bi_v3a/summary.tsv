@@ -1,0 +1,4 @@
+seed	test_auroc	test_auprc	best_val_auroc	best_val_auprc	best_epoch	per_protein_median	per_protein_min	n_proteins
+42	0.82976	0.73469	0.83574	0.72799	14	0.85783	0.15890	55
+0	0.83671	0.74143	0.82528	0.71251	9	0.85055	0.18803	55
+1	0.81928	0.71987	0.82224	0.70724	14	0.85221	0.31162	55
