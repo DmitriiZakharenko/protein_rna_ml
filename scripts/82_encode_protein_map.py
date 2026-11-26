@@ -6,18 +6,25 @@ Stages
   embed     ESM-2 650M mean embedding of every protein for all 34 layers (GPU VM, sliding window above 1,022 residues).
   kmer      5-mer enrichment profile (log2 positives against GC-matched negatives, 1,024 values) per protein and assay from
             the TF ChIP-seq window table and the Skipper eCLIP window table (run where these tables are, the GPU VM).
+  annot     facts per protein: UniProt keywords, Pfam domains and function, sequence features (length, composition, charge,
+            C2H2 zinc-finger motifs, RGG motifs), number of ENCODE ChIP-seq and eCLIP experiments and cell lines.
   stats     per layer: nearest-neighbour agreement with the class label, cohesion of the proteins that have both
             assays, silhouette, each against a label-permutation null.
   kmerstats per layer: Spearman correlation between the centred cosine of two proteins and the similarity of their 5-mer
             profiles (Pearson r and Jaccard of the 50 most enriched 5-mers), by pair group, with a permutation p-value.
   map       2D PNG per layer and one self-contained interactive 3D page: rotation, zoom, search, click on a protein
             lists its nearest and farthest proteins with centred cosine, 5-mer profile r and Jaccard.
+  patterns  comparisons: how well the embedding finds proteins with both assays, agreement with UniProt keywords, 5-mer
+            profile similarity inside and between domain groups, pairs with similar profiles but distant embeddings.
+  predict   ridge prediction of the centred 5-mer profile from the embedding, random 5-fold and leave-one-domain-group-out,
+            against a permutation null, and the known-consensus control of the profiles.
   selftest  planted synthetic embeddings and profiles through all analysis stages and the page (no ESM, no data).
 
 Class (from the chosen ChIP definition): tf = ChIP-seq only, rbp = eCLIP only, both = ChIP-seq and eCLIP.
 ChIP definition: tf = ENCODE TF-annotated targets (list of the TF FASTA), broad = any target of the ENCODE TF ChIP-seq assay (GRCh38, released).
 eCLIP = ENCODE eCLIP targets (GRCh38, released). Both lists are the tables results/encode_map/encode_{chip,eclip}_grch38.tsv (ENCODE API, 2026-11-26).
-Centred cosine: embeddings are centred over proteins before the cosine, as in scripts/77 and 80.
+Centred cosine: embeddings are centred over proteins before the cosine, as in scripts/77 and 80. 5-mer profiles are centred over
+proteins within each assay before r5 and the top-50 Jaccard, so that the shared promoter signature of ChIP-seq peaks is not counted.
 
 Usage (project root)
   python scripts/82_encode_protein_map.py proteins
@@ -28,7 +35,6 @@ Usage (project root)
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
 import tempfile
 import time
@@ -77,8 +83,14 @@ def stage_proteins(args) -> None:
     eclip = set(pd.read_csv(resolve(args.eclip_tsv), sep="\t").target.str.upper())
     chip_broad = set(pd.read_csv(resolve(args.chip_tsv), sep="\t").target.str.upper())
     split = pd.read_csv(resolve(args.split_map), sep="\t")
+    exact = split.drop_duplicates("protein_name").set_index("protein_name")
     split["key"] = split.protein_name.str.upper()
-    sp = split.set_index("key")
+    sp = split.drop_duplicates("key").set_index("key")
+
+    def lookup(s: str, col: str) -> str:
+        if s in exact.index:
+            return exact.loc[s, col]
+        return sp.loc[s, col] if s in sp.index else ""
     rows = []
     for s in sorted(set(tf) | set(rbp_seq)):
         seq = rbp_seq.get(s) or tf[s][1]
@@ -86,7 +98,7 @@ def stage_proteins(args) -> None:
         differs = bool(s in tf and s in rbp_seq and tf[s][1] != rbp_seq[s])
         rows.append(dict(symbol=s, accession=acc, length=len(seq), sequence=seq, chip_tf=s in tf, chip_broad=s in chip_broad,
                          eclip=s in eclip, seq_differs=differs,
-                         v3_split=sp.split[s] if s in sp.index else "", family=sp.family[s] if s in sp.index else ""))
+                         v3_split=lookup(s, "split"), family=lookup(s, "family")))
     df = pd.DataFrame(rows)
     for d, col in (("tf", "chip_tf"), ("broad", "chip_broad")):
         df["class_" + d] = np.where(df[col] & df.eclip, "both", np.where(df[col], "tf", "rbp"))
@@ -96,11 +108,29 @@ def stage_proteins(args) -> None:
           f"sequence differs between sources {int(df.seq_differs.sum())}")
 
 
-def load_embed_one():
-    spec = importlib.util.spec_from_file_location("s80", ROOT / "scripts" / "80_esm_layer_profile_similarity.py")
-    m = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(m)
-    return m.embed_one
+WINDOW, STRIDE = 1022, 511
+
+
+def embed_mean(model, converter, seq: str, device, layers: list[int]) -> np.ndarray:
+    """Mean over residues of the per-residue average over overlapping windows (same rule as scripts/80), shape (layers, 1280)."""
+    import torch
+    n = len(seq)
+    starts = list(range(0, max(1, n - WINDOW) + 1, STRIDE))
+    if starts[-1] + WINDOW < n:
+        starts.append(n - WINDOW)
+    cnt = np.zeros(n, dtype=np.float32)
+    for s in starts:
+        cnt[s:s + min(WINDOW, n - s)] += 1
+    total = np.zeros((len(layers), 1280), dtype=np.float64)
+    for s in starts:
+        w = seq[s:s + WINDOW]
+        _, _, tok = converter([("p", w)])
+        with torch.no_grad():
+            rep = model(tok.to(device), repr_layers=layers)["representations"]
+        c = cnt[s:s + len(w), None]
+        for k, L in enumerate(layers):
+            total[k] += (rep[L][0, 1:len(w) + 1].float().cpu().numpy() / c).sum(axis=0)
+    return (total / n).astype(np.float32)
 
 
 def stage_embed(args) -> None:
@@ -108,7 +138,6 @@ def stage_embed(args) -> None:
     import esm
     out = resolve(args.out_dir)
     df = pd.read_csv(out / "proteins.tsv", sep="\t")
-    embed_one = load_embed_one()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model, alphabet = esm.pretrained.esm2_t33_650M_UR50D()
     model = model.eval().to(device)
@@ -120,7 +149,7 @@ def stage_embed(args) -> None:
         if r.length > args.max_len:
             skipped.append(r.symbol)
             continue
-        emb[i] = embed_one(model, conv, r.sequence, device, layers, None)[0]
+        emb[i] = embed_mean(model, conv, r.sequence, device, layers)
         if (i + 1) % 50 == 0:
             print(f"  {i + 1}/{len(df)}  {time.time() - t0:.0f}s", flush=True)
     np.savez(out / "esm2_layers.npz", emb=emb.astype(np.float16), symbols=df.symbol.to_numpy(dtype=object))
@@ -173,7 +202,8 @@ def layer_stats(emb: np.ndarray, lab: np.ndarray, known: np.ndarray, n_perm: int
 
 
 def load_for_stats(out: Path, chip_def: str):
-    df = pd.read_csv(out / "proteins.tsv", sep="\t").fillna({"family": "", "v3_split": ""})
+    f = out / "proteins_annot.tsv" if (out / "proteins_annot.tsv").exists() else out / "proteins.tsv"
+    df = pd.read_csv(f, sep="\t").fillna("")
     z = np.load(out / "esm2_layers.npz", allow_pickle=True)
     emb = z["emb"].astype(np.float32)
     assert list(z["symbols"]) == list(df.symbol), "proteins.tsv and esm2_layers.npz differ, rerun the embed stage"
@@ -316,12 +346,23 @@ def kmer_str(i: int) -> str:
     return "".join("ACGU"[(int(i) >> (2 * (KM - 1 - p))) & 3] for p in range(KM))
 
 
-def load_kmer(out: Path):
+def load_kmer(out: Path, centre: bool = True):
     f = out / "kmer_profiles.npz"
     if not f.exists():
         return None
     z = np.load(f, allow_pickle=True)
-    return [str(k) for k in z["keys"]], z["profiles"].astype(np.float32)
+    keys, prof = [str(k) for k in z["keys"]], z["profiles"].astype(np.float32)
+    return keys, centre_by_assay(keys, prof) if centre else prof
+
+
+def centre_by_assay(keys: list[str], prof: np.ndarray) -> np.ndarray:
+    """Subtract the mean profile of the assay (ChIP-seq or eCLIP) so that the signature shared by all proteins of an assay,
+    for example the CpG-rich promoter context of ChIP-seq peaks, does not count as similarity."""
+    prof = prof.copy()
+    assay = np.array([k.split("|")[1] for k in keys])
+    for a in set(assay):
+        prof[assay == a] -= prof[assay == a].mean(0, keepdims=True)
+    return prof
 
 
 def rank_rho(a: np.ndarray, rb: np.ndarray) -> float:
@@ -422,14 +463,343 @@ def plot_kmer_stats(res: pd.DataFrame, path: Path) -> None:
     plt.close(fig)
 
 
+
+PFAM_GROUPS = {
+    "RRM": {"PF00076", "PF14259", "PF13893"},
+    "KH": {"PF00013", "PF07650"},
+    "C2H2 zinc finger": {"PF00096", "PF13912", "PF13465"},
+    "Homeobox": {"PF00046"},
+    "bHLH": {"PF00010"},
+    "bZIP": {"PF00170", "PF07716"},
+    "Forkhead": {"PF00250"},
+    "ETS": {"PF00178"},
+    "HMG box": {"PF00505", "PF09011"},
+    "Nuclear receptor": {"PF00104", "PF00105"},
+    "GATA": {"PF00320"},
+}
+GROUP_ORDER = list(PFAM_GROUPS)
+
+
+def domain_group(pfam: str) -> str:
+    ids = set(x for x in str(pfam).split(";") if x)
+    if not ids:
+        return "no Pfam entry"
+    for g in GROUP_ORDER:
+        if ids & PFAM_GROUPS[g]:
+            return g
+    return "other Pfam"
+
+
+def seq_features(seq: str) -> dict:
+    import re
+    n = len(seq)
+    c = {a: seq.count(a) for a in "GSYQNKRDE"}
+    return dict(zf_c2h2=len(re.findall(r"C.{2,4}C.{12}H.{3,5}H", seq)), rgg=seq.count("RGG"),
+                frac_gsyqn=round(sum(c[a] for a in "GSYQN") / n, 4), frac_kr=round((c["K"] + c["R"]) / n, 4),
+                frac_de=round((c["D"] + c["E"]) / n, 4), net_charge=round((c["K"] + c["R"] - c["D"] - c["E"]) / n, 4))
+
+
+def fetch_uniprot(accs: list[str], batch: int = 50) -> pd.DataFrame:
+    import urllib.parse
+    import urllib.request
+    rows = []
+    for i in range(0, len(accs), batch):
+        part = accs[i:i + batch]
+        url = "https://rest.uniprot.org/uniprotkb/stream?" + urllib.parse.urlencode(
+            {"format": "tsv", "fields": "accession,gene_primary,protein_name,keyword,xref_pfam,go_f,length",
+             "query": "accession:(" + " OR ".join(part) + ")"})
+        for attempt in range(6):
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "research-client/1.0"})
+                txt = urllib.request.urlopen(req, timeout=90).read().decode()
+                break
+            except Exception as e:
+                wait = 20 * (attempt + 1)
+                print(f"  batch {i // batch} failed ({e}), retry in {wait}s", flush=True)
+                time.sleep(wait)
+        else:
+            raise SystemExit("UniProt batch failed repeatedly")
+        lines = txt.strip().split("\n")
+        rows += [l.split("\t") for l in lines[1:]]
+        print(f"  UniProt {min(i + batch, len(accs))}/{len(accs)}", flush=True)
+        time.sleep(0.5)
+    return pd.DataFrame(rows, columns=["accession", "gene_primary", "up_protein_name", "up_keywords", "up_pfam", "up_go_f", "up_length"])
+
+
+def stage_annot(args) -> None:
+    out = resolve(args.out_dir)
+    df = pd.read_csv(out / "proteins.tsv", sep="\t").fillna({"family": "", "v3_split": ""})
+    cache = out / "uniprot_annotations.tsv"
+    if cache.exists() and not args.refresh:
+        up = pd.read_csv(cache, sep="\t", dtype=str).fillna("")
+    else:
+        up = fetch_uniprot(sorted(set(df.accession.dropna())))
+        up.to_csv(cache, sep="\t", index=False)
+    up = up.drop_duplicates("accession")
+    m = df.merge(up, on="accession", how="left").fillna({c: "" for c in up.columns if c != "accession"})
+    m["annot_missing"] = m.up_protein_name == ""
+    kw = m.up_keywords.str.split(";")
+    m["kw_rna"] = kw.apply(lambda k: "RNA-binding" in k)
+    m["kw_dna"] = kw.apply(lambda k: "DNA-binding" in k)
+    m["kw_tfreg"] = kw.apply(lambda k: "Transcription regulation" in k)
+    m["kw_zinc_finger"] = kw.apply(lambda k: "Zinc-finger" in k)
+    m["domain_group"] = m.up_pfam.apply(domain_group)
+    feats = pd.DataFrame([seq_features(s) for s in m.sequence])
+    m = pd.concat([m.drop(columns=["sequence"]), feats], axis=1)
+    for name, f, col in (("chip", args.chip_tsv, "chip"), ("eclip", args.eclip_tsv, "eclip")):
+        e = pd.read_csv(resolve(f), sep="\t")
+        e["target"] = e.target.str.upper()
+        g = e.groupby("target")
+        m[f"n_{col}_exp"] = m.symbol.map(g.size()).fillna(0).astype(int)
+        m[f"{col}_cells"] = m.symbol.map(g.cell.agg(lambda c: ";".join(sorted(set(c))))).fillna("")
+    m.to_csv(out / "proteins_annot.tsv", sep="\t", index=False)
+    print(f"{len(m)} proteins, UniProt entries missing for {int(m.annot_missing.sum())}; domain groups: {m.domain_group.value_counts().to_dict()}")
+
+
+def auroc_ci(y: np.ndarray, s: np.ndarray, rng, n_boot: int = 200):
+    from sklearn.metrics import roc_auc_score
+    a = roc_auc_score(y, s)
+    pos, neg = np.where(y == 1)[0], np.where(y == 0)[0]
+    bs = []
+    for _ in range(n_boot):
+        i = np.concatenate([rng.choice(pos, len(pos)), rng.choice(neg, len(neg))])
+        bs.append(roc_auc_score(y[i], s[i]))
+    return a, float(np.percentile(bs, 2.5)), float(np.percentile(bs, 97.5))
+
+
+def rbp_likeness(C: np.ndarray, is_rbp: np.ndarray, is_tf: np.ndarray) -> np.ndarray:
+    n = len(C)
+    C = C.copy()
+    np.fill_diagonal(C, 0)
+    nr = is_rbp.sum() - is_rbp.astype(int)
+    nt = is_tf.sum() - is_tf.astype(int)
+    return (C[:, is_rbp].sum(1) / np.maximum(nr, 1)) - (C[:, is_tf].sum(1) / np.maximum(nt, 1))
+
+
+def run_patterns(df: pd.DataFrame, emb: np.ndarray, kmer, layers: list[int], seed: int, n_perm: int):
+    from scipy.stats import fisher_exact
+    rng = np.random.default_rng(seed)
+    res = {}
+    cls = df.class_broad.to_numpy()
+    is_rbp, is_tf = cls == "rbp", cls == "tf"
+    eval_mask = (cls == "both") | is_tf
+    y = (cls[eval_mask] == "both").astype(int)
+    rows = []
+    for L in layers:
+        s = rbp_likeness(centred_cosine(emb[:, L]), is_rbp, is_tf)[eval_mask]
+        a, lo, hi = auroc_ci(y, s, rng)
+        rows.append(dict(layer=L, auroc=a, ci_lo=lo, ci_hi=hi))
+    res["rbp_likeness_auroc"] = pd.DataFrame(rows)
+    base = {}
+    for name, s in (("UniProt RNA-binding keyword", df.kw_rna.astype(float).to_numpy()), ("length", df.length.to_numpy().astype(float)),
+                    ("fraction G,S,Y,Q,N", df.frac_gsyqn.to_numpy()), ("fraction K,R", df.frac_kr.to_numpy())):
+        a, lo, hi = auroc_ci(y, s[eval_mask], rng)
+        base[name] = dict(auroc=a, ci_lo=lo, ci_hi=hi)
+    res["baselines_auroc"] = base
+    # dual-function test inside the RBPs: proteins with ChIP-seq (both) against RBPs without it
+    m2 = (cls == "both") | is_rbp
+    y2 = (cls[m2] == "both").astype(int)
+    rows2 = []
+    for L in layers:
+        s = (-rbp_likeness(centred_cosine(emb[:, L]), is_rbp, is_tf))[m2]
+        a, lo, hi = auroc_ci(y2, s, rng)
+        rows2.append(dict(layer=L, auroc=a, ci_lo=lo, ci_hi=hi))
+    res["tf_likeness_in_rbps_auroc"] = pd.DataFrame(rows2)
+    base2 = {}
+    for name, s in (("UniProt DNA-binding keyword", df.kw_dna.astype(float).to_numpy()), ("UniProt transcription regulation keyword", df.kw_tfreg.astype(float).to_numpy()),
+                    ("length", df.length.to_numpy().astype(float)), ("fraction G,S,Y,Q,N", df.frac_gsyqn.to_numpy())):
+        a, lo, hi = auroc_ci(y2, s[m2], rng)
+        base2[name] = dict(auroc=a, ci_lo=lo, ci_hi=hi)
+    res["baselines_in_rbps_auroc"] = base2
+    best = int(res["rbp_likeness_auroc"].sort_values("auroc").iloc[-1].layer)
+    sc = rbp_likeness(centred_cosine(emb[:, best]), is_rbp, is_tf)
+    cand = df[is_tf].assign(score=sc[is_tf]).sort_values("score", ascending=False).head(25)
+    res["candidates_layer"] = best
+    res["candidates"] = cand[["symbol", "score", "domain_group", "kw_rna", "kw_dna", "n_chip_exp", "n_eclip_exp", "up_protein_name"]]
+    ct = [[int(((cls == "both") & df.kw_rna).sum()), int(((cls == "both") & ~df.kw_rna).sum())],
+          [int((is_tf & df.kw_rna).sum()), int((is_tf & ~df.kw_rna).sum())]]
+    res["keyword_contingency"] = dict(both_rna=ct[0], tf_only_rna=ct[1], fisher_p=float(fisher_exact(ct)[1]), odds_ratio=float(fisher_exact(ct)[0]))
+    if kmer is not None:
+        keys, prof = kmer
+        R, J = kmer_similarity(prof)
+        sym = {s: i for i, s in enumerate(df.symbol)}
+        it = [(k.split("|")[0], k.split("|")[1], t) for t, k in enumerate(keys) if k.split("|")[0] in sym]
+        ts = np.array([x[2] for x in it])
+        pi = np.array([sym[x[0]] for x in it])
+        asy = np.array([x[1] for x in it])
+        grp = df.domain_group.to_numpy()[pi]
+        known = ~np.isin(grp, ["no Pfam entry", "other Pfam"])
+        rows = []
+        for L in (0, best):
+            C = centred_cosine(emb[:, L])[np.ix_(pi, pi)]
+            Rm = R[np.ix_(ts, ts)]
+            iu = np.triu_indices(len(it), 1)
+            diff = pi[iu[0]] != pi[iu[1]]
+            same_g = (grp[iu[0]] == grp[iu[1]]) & known[iu[0]] & known[iu[1]]
+            c, r = C[iu], Rm[iu]
+            from scipy.stats import spearmanr
+            for name, m in (("same domain group", diff & same_g), ("different domain group", diff & ~same_g & known[iu[0]] & known[iu[1]])):
+                rows.append(dict(layer=L, pairs=name, n=int(m.sum()), mean_r5=float(r[m].mean()), spearman_cos_vs_r5=float(spearmanr(c[m], r[m])[0])))
+        res["family_profile"] = pd.DataFrame(rows)
+        # permutation of group labels over proteins for the mean-r5 gap (layer independent)
+        gap = lambda gl: float(Rm[iu][(diff & (gl[iu[0]] == gl[iu[1]]) & known[iu[0]] & known[iu[1]])].mean()
+                              - Rm[iu][(diff & (gl[iu[0]] != gl[iu[1]]) & known[iu[0]] & known[iu[1]])].mean())
+        og = gap(grp)
+        nl = []
+        for _ in range(n_perm):
+            pg = grp.copy()
+            kk = np.where(known)[0]
+            pg[kk] = pg[rng.permutation(kk)]
+            nl.append(gap(pg))
+        res["family_gap"] = dict(observed=og, null_mean=float(np.mean(nl)), p=(1 + sum(abs(x) >= abs(og) for x in nl)) / (n_perm + 1))
+        C = centred_cosine(emb[:, best])[np.ix_(pi, pi)]
+        Rm = R[np.ix_(ts, ts)]
+        iu = np.triu_indices(len(it), 1)
+        ok = pi[iu[0]] != pi[iu[1]]
+        c, r = C[iu][ok], Rm[iu][ok]
+        a0, a1 = iu[0][ok], iu[1][ok]
+        lo_cos = np.percentile(c, 25)
+        idx = np.where(c < lo_cos)[0]
+        top = idx[np.argsort(-r[idx])[:15]]
+        conv = pd.DataFrame(dict(a=[f"{it[a0[k]][0]} ({it[a0[k]][1]})" for k in top], b=[f"{it[a1[k]][0]} ({it[a1[k]][1]})" for k in top],
+                                 cos=c[top].round(3), r5=r[top].round(3), group_a=grp[a0[top]], group_b=grp[a1[top]]))
+        res["convergent_pairs"] = conv
+        res["convergent_layer"] = best
+    return res
+
+
+
+MOTIF_CONTROLS = {
+    "GATA1": ["TGATAA", "AGATAA", "TGATAG", "AGATAG"], "MAX": ["CACGTG"], "MYC": ["CACGTG"], "USF1": ["CACGTG"], "USF2": ["CACGTG"],
+    "JUN": ["TGACTCA"], "JUNB": ["TGACTCA"], "JUND": ["TGACTCA"], "FOS": ["TGACTCA"], "FOSL1": ["TGACTCA"],
+    "CEBPB": ["TTGCGCAA", "ATTGCGCAAT"], "CEBPA": ["TTGCGCAA"], "NFYA": ["CCAAT"], "NFYB": ["CCAAT"], "ELK1": ["CCGGAA"], "GABPA": ["CCGGAAGT"],
+    "ETS1": ["CCGGAAGT"], "SPI1": ["GAGGAAGTG"], "SP1": ["GGGGCGGGG"], "YY1": ["GCCATCTT", "GCCATGTT"], "NRF1": ["GCGCATGCGC"],
+    "ATF3": ["TGACGTCA"], "CREB1": ["TGACGTCA"], "TCF7L2": ["CTTTGAA"], "ZBTB33": ["CTGCGCGC"], "RFX5": ["GTTGCC"], "IRF1": ["AAGTGA"],
+}
+
+
+def revcomp(s: str) -> str:
+    return s.translate(str.maketrans("ACGU", "UGCA"))[::-1]
+
+
+def motif_controls(keys: list[str], ctr: np.ndarray, topn: int = 20) -> pd.DataFrame:
+    rows = []
+    for sym, cons in MOTIF_CONTROLS.items():
+        k = f"{sym}|chip"
+        if k not in keys:
+            continue
+        kms = set()
+        for c in cons:
+            c = c.replace("T", "U")
+            for s in (c, revcomp(c)):
+                kms |= {s[i:i + KM] for i in range(len(s) - KM + 1)}
+        order = np.argsort(-ctr[keys.index(k)])
+        ranks = {kmer_str(j): r + 1 for r, j in enumerate(order)}
+        best = min(ranks[x] for x in kms)
+        rows.append(dict(tf=sym, consensus=cons[0], best_rank_of_consensus_5mer=best, in_top20=best <= topn, top5=" ".join(kmer_str(j) for j in order[:5])))
+    return pd.DataFrame(rows)
+
+
+def predict_profiles(emb: np.ndarray, df: pd.DataFrame, keys, prof: np.ndarray, assay: str, layers: list[int], seed: int, n_perm: int = 100, alpha: float = 1000.0):
+    from sklearn.linear_model import Ridge
+    from sklearn.model_selection import KFold, LeaveOneGroupOut
+    sym = {s: i for i, s in enumerate(df.symbol)}
+    it = [(k.split("|")[0], t) for t, k in enumerate(keys) if k.endswith("|" + assay) and k.split("|")[0] in sym]
+    pi = np.array([sym[s] for s, _ in it])
+    Y = prof[[t for _, t in it]]
+    grp = df.domain_group.to_numpy()[pi]
+    cnt = pd.Series(grp).value_counts()
+    keep_groups = set(cnt[cnt >= 5].index) - {"no Pfam entry"}
+    rng = np.random.default_rng(seed)
+
+    def per_protein_r(P, Yt):
+        a = P - P.mean(1, keepdims=True)
+        b = Yt - Yt.mean(1, keepdims=True)
+        return (a * b).sum(1) / np.maximum(np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1), 1e-9)
+
+    def cv(X, Yt, splits):
+        pred = np.zeros_like(Yt)
+        got = np.zeros(len(Yt), dtype=bool)
+        for tr, te in splits:
+            mu, sd = X[tr].mean(0), X[tr].std(0) + 1e-6
+            m = Ridge(alpha=alpha).fit((X[tr] - mu) / sd, Yt[tr])
+            pred[te] = m.predict((X[te] - mu) / sd)
+            got[te] = True
+        return per_protein_r(pred[got], Yt[got]).mean(), got.sum()
+
+    rows = []
+    for L in layers:
+        X = emb[pi, L]
+        rnd = list(KFold(5, shuffle=True, random_state=seed).split(X))
+        logo = [(tr, te) for tr, te in LeaveOneGroupOut().split(X, groups=grp) if grp[te[0]] in keep_groups]
+        r_rnd, n_rnd = cv(X, Y, rnd)
+        r_grp, n_grp = cv(X, Y, logo)
+        null = [cv(X, Y[rng.permutation(len(Y))], logo)[0] for _ in range(n_perm)]
+        rows.append(dict(assay=assay, layer=L, mean_r_random_5fold=r_rnd, mean_r_leave_domain_group_out=r_grp, n_heldout_groups=len(keep_groups),
+                         null_mean=float(np.mean(null)), null_p95=float(np.percentile(null, 95)), p=(1 + sum(x >= r_grp for x in null)) / (n_perm + 1)))
+    return pd.DataFrame(rows)
+
+
+def stage_predict(args) -> None:
+    out = resolve(args.out_dir)
+    ann = pd.read_csv(out / "proteins_annot.tsv", sep="\t").fillna("")
+    z = np.load(out / "esm2_layers.npz", allow_pickle=True)
+    assert list(z["symbols"]) == list(ann.symbol)
+    emb = z["emb"].astype(np.float32)
+    keys, prof = load_kmer(out)
+    res = pd.concat([predict_profiles(emb, ann, keys, prof, a, list(range(0, NL, args.layer_step)), args.seed, args.n_perm) for a in ("chip", "eclip")])
+    res.to_csv(out / "predict_profiles.tsv", sep="\t", index=False)
+    for a, d in res.groupby("assay"):
+        b = d.loc[d.mean_r_leave_domain_group_out.idxmax()]
+        l0 = d[d.layer == 0].iloc[0]
+        print(f"{a}: random 5-fold r layer 0 {l0.mean_r_random_5fold:.3f}, best {d.mean_r_random_5fold.max():.3f} | leave-domain-group-out r layer 0 {l0.mean_r_leave_domain_group_out:.3f}, best layer {int(b.layer)} {b.mean_r_leave_domain_group_out:.3f} (null {b.null_mean:.3f}, 95th pct {b.null_p95:.3f}, p {b.p:.3f})")
+    ctr = prof
+    mc = motif_controls(keys, ctr)
+    mc.to_csv(out / "motif_controls.tsv", sep="\t", index=False)
+    print(f"motif controls: {len(mc)} TFs with a known consensus, consensus 5-mer in top 20: {int(mc.in_top20.sum())}")
+    print(mc.to_string(index=False))
+
+
+def stage_patterns(args) -> None:
+    out = resolve(args.out_dir)
+    if not (out / "proteins_annot.tsv").exists():
+        raise SystemExit("proteins_annot.tsv not found, run the annot stage first")
+    ann = pd.read_csv(out / "proteins_annot.tsv", sep="\t").fillna({"family": "", "v3_split": "", "up_pfam": "", "up_keywords": "", "up_protein_name": ""})
+    z = np.load(out / "esm2_layers.npz", allow_pickle=True)
+    assert list(z["symbols"]) == list(ann.symbol), "annotation and embedding tables differ"
+    emb = z["emb"].astype(np.float32)
+    kmer = load_kmer(out)
+    res = run_patterns(ann, emb, kmer, list(range(NL)), args.seed, args.n_perm)
+    res["rbp_likeness_auroc"].to_csv(out / "patterns_rbp_likeness_auroc.tsv", sep="\t", index=False)
+    res["tf_likeness_in_rbps_auroc"].to_csv(out / "patterns_tf_likeness_in_rbps_auroc.tsv", sep="\t", index=False)
+    res["candidates"].to_csv(out / "patterns_tf_candidates.tsv", sep="\t", index=False)
+    if "family_profile" in res:
+        res["family_profile"].to_csv(out / "patterns_family_profile.tsv", sep="\t", index=False)
+        res["convergent_pairs"].to_csv(out / "patterns_convergent_pairs.tsv", sep="\t", index=False)
+    summary = {k: v for k, v in res.items() if isinstance(v, (dict, int, float))}
+    (out / "patterns_summary.json").write_text(json.dumps(summary, indent=1, default=float))
+    a = res["rbp_likeness_auroc"]
+    b = a.loc[a.auroc.idxmax()]
+    print(f"RBP-likeness AUROC (both vs TF-only): layer 0 {a[a.layer == 0].auroc.iloc[0]:.3f}, best layer {int(b.layer)} {b.auroc:.3f} [{b.ci_lo:.3f}, {b.ci_hi:.3f}], layer 33 {a[a.layer == 33].auroc.iloc[0]:.3f}")
+    print("baselines:", {k: round(v["auroc"], 3) for k, v in res["baselines_auroc"].items()})
+    a2 = res["tf_likeness_in_rbps_auroc"]
+    b2 = a2.loc[a2.auroc.idxmax()]
+    print(f"TF-likeness AUROC (both vs RBP-only): layer 0 {a2[a2.layer == 0].auroc.iloc[0]:.3f}, best layer {int(b2.layer)} {b2.auroc:.3f} [{b2.ci_lo:.3f}, {b2.ci_hi:.3f}], layer 33 {a2[a2.layer == 33].auroc.iloc[0]:.3f}")
+    print("baselines in RBPs:", {k: round(v["auroc"], 3) for k, v in res["baselines_in_rbps_auroc"].items()})
+    print("keyword contingency:", res["keyword_contingency"])
+    if "family_gap" in res:
+        print("domain group gap in mean r5:", res["family_gap"])
+    print("saved patterns_*.tsv and patterns_summary.json")
+
+
 def coords(emb_l: np.ndarray, seed: int, dim: int = 3) -> np.ndarray:
     from sklearn.decomposition import PCA
     from sklearn.manifold import TSNE
     x = emb_l - emb_l.mean(0, keepdims=True)
     x = x / np.maximum(np.linalg.norm(x, axis=1, keepdims=True), 1e-9)
     x = PCA(n_components=min(50, x.shape[0] - 1, x.shape[1]), random_state=seed).fit_transform(x)
-    perp = max(5, min(30, (len(x) - 1) // 3))
-    return TSNE(n_components=dim, perplexity=perp, init="pca", random_state=seed).fit_transform(x)
+    perp = max(5, min(20, (len(x) - 1) // 3))
+    return TSNE(n_components=dim, perplexity=perp, init="pca", random_state=seed, learning_rate="auto", early_exaggeration=24.0).fit_transform(x)
 
 
 def build_neighbors(df: pd.DataFrame, emb: np.ndarray, layers: list[int], kmer, k_near: int = 20, k_far: int = 8):
@@ -492,9 +862,9 @@ tr.r{cursor:pointer}tr.r:hover{background:var(--bg)}
 __BANNER__
 <header><h1>ENCODE proteins in ESM-2 space</h1>
 <label>Layer <select id="layer"></select></label>
-<label>Colour by <select id="by"><option value="cls">class (TF / RBP / both)</option><option value="split">v3b split</option><option value="family">family</option></select></label>
-<label><input type="checkbox" id="auto" checked> auto-rotate</label><button id="reset">reset view</button><button id="clear">clear selection</button>
-<input id="q" placeholder="symbol, e.g. SFPQ"><span id="info" class="m"></span></header>
+<label>Colour by <select id="by"><option value="cls">class (TF / RBP / both)</option><option value="split">v3b split</option><option value="grp">domain group (Pfam)</option><option value="kw">UniProt keywords (DNA / RNA-binding)</option><option value="len">length</option><option value="zf">C2H2 zinc-finger motifs</option><option value="rl">RBP-likeness (embedding, continuous)</option><option value="gs">fraction G,S,Y,Q,N (continuous)</option><option value="family">v3b family</option></select></label>
+<label><input type="checkbox" id="auto" checked> auto-rotate</label><span class="m">view</span><button id="v3d">3D</button><button id="vxy">XY</button><button id="vxz">XZ</button><button id="vyz">YZ</button><button id="reset">reset</button><button id="clear">clear selection</button>
+<label>size <input type="range" id="psz" min="0.6" max="3" step="0.1" value="1.4"></label><label>opacity <input type="range" id="pop" min="0.2" max="1" step="0.05" value="0.8"></label><label>spread <input type="range" id="spr" min="0.8" max="2.2" step="0.1" value="1.4"></label><label><input type="checkbox" id="ftf" checked>TF</label><label><input type="checkbox" id="frbp" checked>RBP</label><label><input type="checkbox" id="fboth" checked>both</label><label>domain <select id="fgrp"><option value="">all</option></select></label><label><input type="checkbox" id="glab" checked> group labels</label><label><input type="checkbox" id="blab" checked> label proteins with both assays</label><input id="q" placeholder="symbol, e.g. SFPQ"><span id="info" class="m"></span></header>
 <main><canvas id="cv"></canvas><aside id="side"></aside></main><div id="tip"></div>
 <script>
 var D=__DATA__,P=D.proteins,IDX={};P.forEach(function(p,i){IDX[p.symbol]=i});
@@ -503,37 +873,67 @@ var pal=["#2458a6","#b4531c","#2d7a4f","#8a4fa3","#c9a227","#2a9d9f","#a33a54","
 var cv=document.getElementById("cv"),ctx=cv.getContext("2d"),tip=document.getElementById("tip"),ls=document.getElementById("layer"),side=document.getElementById("side");
 D.layers.forEach(function(L){var o=document.createElement("option");o.value=L;o.textContent=L;ls.appendChild(o)});
 var yaw=0.6,pitch=0.35,zoom=1,drag=false,lx=0,ly=0,proj=[],dpr=window.devicePixelRatio||1,moved=false,sel=-1,N=null,curL=null,pmap={};
-function val(p,by){return by=="cls"?p.cls:(by=="split"?(p.split||"none"):(p.family||"unknown"))}
-function norm(L){var C=D.coords[L],m=[0,0,0];C.forEach(function(c){for(var k=0;k<3;k++)m[k]+=c[k]/C.length});var r=0;C.forEach(function(c){var d=Math.hypot(c[0]-m[0],c[1]-m[1],c[2]-m[2]);if(d>r)r=d});return C.map(function(c){return[(c[0]-m[0])/r,(c[1]-m[1])/r,(c[2]-m[2])/r]})}
+function val(p,by){if(by=="cls")return p.cls;if(by=="split")return p.split||"none";if(by=="family")return p.family||"unknown";if(by=="grp")return p.grp||"none";if(by=="kw")return p.kw||"none";
+ if(by=="len")return p.len<300?"<300 aa":(p.len<600?"300-599 aa":(p.len<1000?"600-999 aa":">=1000 aa"));if(by=="zf")return p.zf==0?"0 motifs":(p.zf<5?"1-4 motifs":(p.zf<10?"5-9 motifs":">=10 motifs"));return ""}
+var NUM={rl:"RBP-likeness at layer "+D.rl_layer+" (mean cosine to RBP-only proteins minus mean cosine to TF-only proteins)",gs:"fraction of G, S, Y, Q, N"};
+function numv(p,by){return by=="rl"?p.rl:p.gs}
+function numRange(by){var a=1e9,b=-1e9;P.forEach(function(p){var v=numv(p,by);if(v<a)a=v;if(v>b)b=v});return[a,b]}
+function colorOf(p,by,vals,rg){if(by=="cls")return CLS[p.cls].c;if(NUM[by]){var f=(numv(p,by)-rg[0])/((rg[1]-rg[0])||1);return "hsl("+Math.round(220-210*f)+",70%,"+(48)+"%)"}return pal[vals.indexOf(val(p,by))%pal.length]}
+function med(a){var b=a.slice().sort(function(x,y){return x-y});return b[Math.floor(b.length/2)]}
+function norm(L){var C=D.coords[L],m=[0,1,2].map(function(k){return med(C.map(function(c){return c[k]}))});var ds=C.map(function(c){return Math.hypot(c[0]-m[0],c[1]-m[1],c[2]-m[2])}).sort(function(x,y){return x-y});var r=ds[Math.floor(ds.length*0.95)]||1;
+ return C.map(function(c){var v=[(c[0]-m[0])/r,(c[1]-m[1])/r,(c[2]-m[2])/r],d=Math.hypot(v[0],v[1],v[2]);if(d>1.2){v=[v[0]*1.2/d,v[1]*1.2/d,v[2]*1.2/d]}return v})}
 function shape(x,y,r,s){ctx.beginPath();if(s=="c")ctx.arc(x,y,r,0,6.2832);else if(s=="q")ctx.rect(x-r,y-r,2*r,2*r);else{ctx.moveTo(x,y-r*1.35);ctx.lineTo(x+r*1.35,y);ctx.lineTo(x,y+r*1.35);ctx.lineTo(x-r*1.35,y);ctx.closePath()}}
 function nb(){return D.nbr[ls.value]}
+var AX=[{n:"dim 1",c:"#c0392b",a:[1,0,0]},{n:"dim 2",c:"#1e8449",a:[0,1,0]},{n:"dim 3",c:"#2471a3",a:[0,0,1]}];
+function line(a,b,col,w,al){ctx.globalAlpha=al;ctx.strokeStyle=col;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}
+function scene(pr,W,H){var st=getComputedStyle(document.body),ink=st.color,mute=getComputedStyle(document.documentElement).getPropertyValue("--line")||"#999";
+ var e=[-1,1],i,j,k,a,b;
+ for(i=0;i<2;i++)for(j=0;j<2;j++){line(pr(-1,e[i],e[j]),pr(1,e[i],e[j]),ink,1,0.25);line(pr(e[i],-1,e[j]),pr(e[i],1,e[j]),ink,1,0.25);line(pr(e[i],e[j],-1),pr(e[i],e[j],1),ink,1,0.25)}
+ for(k=-0.5;k<1;k+=0.5){line(pr(-1,-1,k),pr(1,-1,k),ink,1,0.1);line(pr(k,-1,-1),pr(k,-1,1),ink,1,0.1)}
+ ctx.font="12px system-ui";ctx.textBaseline="middle";
+ AX.forEach(function(x){a=pr(-1*(1-x.a[0]),-1*(1-x.a[1]),-1*(1-x.a[2]));b=pr(-1*(1-x.a[0])+2*x.a[0],-1*(1-x.a[1])+2*x.a[1],-1*(1-x.a[2])+2*x.a[2]);
+  line(a,b,x.c,2.4,0.95);ctx.globalAlpha=1;ctx.fillStyle=x.c;ctx.font="bold 13px system-ui";ctx.fillText(x.n+" (+)",b.x+6,b.y);
+  [-1,-0.5,0,0.5,1].forEach(function(v){var q=pr(-1*(1-x.a[0])+(v+1)*x.a[0],-1*(1-x.a[1])+(v+1)*x.a[1],-1*(1-x.a[2])+(v+1)*x.a[2]);
+   ctx.globalAlpha=0.9;ctx.beginPath();ctx.arc(q.x,q.y,2.2,0,6.2832);ctx.fillStyle=x.c;ctx.fill();if(v==-1||v==0||v==1){ctx.font="11px system-ui";ctx.fillStyle=ink;ctx.globalAlpha=0.75;ctx.fillText(v,q.x+5,q.y+9)}})});
+ ctx.globalAlpha=1;ctx.textBaseline="alphabetic"}
 function draw(){var L=ls.value;if(L!==curL){N=norm(L);curL=L;panel()}
  var by=document.getElementById("by").value,q=document.getElementById("q").value.trim().toUpperCase();
+ var psz=+document.getElementById("psz").value,pop=+document.getElementById("pop").value,spr=+document.getElementById("spr").value,fg=document.getElementById("fgrp").value,glab=document.getElementById("glab").checked,blab=document.getElementById("blab").checked,show={tf:document.getElementById("ftf").checked,rbp:document.getElementById("frbp").checked,both:document.getElementById("fboth").checked};
  var W=cv.clientWidth,H=cv.clientHeight;if(cv.width!==W*dpr||cv.height!==H*dpr){cv.width=W*dpr;cv.height=H*dpr}
  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
  var vals=[];P.forEach(function(p){var v=val(p,by);if(vals.indexOf(v)<0)vals.push(v)});vals.sort();
- var cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch),S=Math.min(W,H)*0.36*zoom;proj=[];var byI={};
- N.forEach(function(c,i){var x1=c[0]*cy+c[2]*sy,z1=-c[0]*sy+c[2]*cy,y2=c[1]*cp-z1*sp,z2=c[1]*sp+z1*cp,f=3/(3-z2),o={i:i,x:W/2+x1*f*S,y:H/2+y2*f*S,z:z2,f:f};proj.push(o);byI[i]=o});
+ var rg=NUM[by]?numRange(by):null;
+ var cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch),S=Math.min(W,H)*0.34*zoom;proj=[];var byI={};
+ function pr(x,y,z){var x1=x*cy+z*sy,z1=-x*sy+z*cy,y2=y*cp-z1*sp,z2=y*sp+z1*cp,f=3/(3-z2);return{x:W/2+x1*f*S,y:H/2-y2*f*S,z:z2,f:f}}
+ scene(pr,W,H);
+ N.forEach(function(c,i){var o=pr(c[0]*spr,c[1]*spr,c[2]*spr);o.i=i;proj.push(o);byI[i]=o});
  var nset={};if(sel>=0){nb().near[sel].slice(0,10).forEach(function(e){nset[e[0]]=e[1]});ctx.lineWidth=1.2;nb().near[sel].slice(0,10).forEach(function(e){var a=byI[sel],b=byI[e[0]];ctx.globalAlpha=0.35+0.65*Math.max(0,e[1]);ctx.strokeStyle="#c9a227";ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()})}
  proj.sort(function(a,b){return a.z-b.z});
- proj.forEach(function(o){var p=P[o.i],hit=q&&p.symbol.indexOf(q)>=0,isSel=o.i==sel,isN=nset.hasOwnProperty(o.i),dim=(q&&!hit)||(sel>=0&&!isSel&&!isN),base=p.cls=="both"?6.5:(p.cls=="rbp"?4.2:3.6);
-  var r=((hit||isSel)?10:(isN?7:base))*o.f*Math.min(1.4,zoom+0.3);ctx.globalAlpha=dim?0.12:Math.max(0.35,Math.min(1,0.55+o.z*0.45));
-  ctx.fillStyle=by=="cls"?CLS[p.cls].c:pal[vals.indexOf(val(p,by))%pal.length];shape(o.x,o.y,r,CLS[p.cls].s);ctx.fill();
+ proj.forEach(function(o){var p=P[o.i];if(!show[p.cls]||(fg&&p.grp!=fg))return;var hit=q&&p.symbol.indexOf(q)>=0,isSel=o.i==sel,isN=nset.hasOwnProperty(o.i),dim=(q&&!hit)||(sel>=0&&!isSel&&!isN),base=(p.cls=="both"?6.5:(p.cls=="rbp"?4.6:3.8))*psz;
+  var r=((hit||isSel)?10:(isN?7:base))*o.f*Math.min(1.4,zoom+0.3);ctx.globalAlpha=dim?0.1:Math.min(1,pop*(0.7+o.z*0.3));
+  ctx.fillStyle=colorOf(p,by,vals,rg);shape(o.x,o.y,r,CLS[p.cls].s);ctx.fill();
   if(p.cls=="both"||hit||isSel||isN){ctx.globalAlpha=dim?0.12:1;ctx.lineWidth=isSel?2.2:1.3;ctx.strokeStyle=isSel?"#c9a227":"#000";ctx.stroke()}
-  if(hit||isSel||isN){ctx.globalAlpha=1;ctx.fillStyle=getComputedStyle(document.body).color;ctx.font=(isSel?"bold ":"")+"12px system-ui";ctx.fillText(p.symbol,o.x+10,o.y-7)}});
+  if(hit||isSel||isN||(blab&&p.cls=="both"&&!dim)){ctx.globalAlpha=1;ctx.fillStyle=getComputedStyle(document.body).color;ctx.font=(isSel?"bold ":"")+"12px system-ui";ctx.fillText(p.symbol,o.x+10,o.y-7)}});
+ if(glab)groupLabels(byI,pr,spr,show,fg);
  ctx.globalAlpha=1;document.getElementById("info").textContent=P.length+" proteins, layer "+L}
 function f3(x){return x==null?"-":x.toFixed(2)}
 function row(e){var p=P[e[0]];return '<tr class="r" data-i="'+e[0]+'"><td>'+CLS[p.cls].g+" "+p.symbol+"</td><td>"+f3(e[1])+"</td><td>"+f3(e[2])+"</td><td>"+f3(e[3])+"</td><td class='m'>"+(e[4]||"")+"</td></tr>"}
 function legend(){var by=document.getElementById("by").value,cnt={tf:0,rbp:0,both:0};P.forEach(function(p){cnt[p.cls]++});
  var h="<b>Class (shape)</b>"+Object.keys(CLS).map(function(k){var d=CLS[k];return '<div class="k"><span class="sh '+d.s+'" style="background:'+d.c+';'+(k=="both"?"outline:1px solid #000":"")+'"></span>'+d.n+" ("+cnt[k]+")</div>"}).join("");
- if(by!="cls"){var vals=[];P.forEach(function(p){var v=val(p,by);if(vals.indexOf(v)<0)vals.push(v)});vals.sort();h+="<b>Colour: "+by+"</b>"+vals.map(function(v){return '<div class="k"><span class="sh c" style="background:'+pal[vals.indexOf(v)%pal.length]+'"></span>'+v+" ("+P.filter(function(p){return val(p,by)==v}).length+")</div>"}).join("")}return h}
+ if(NUM[by]){var rr=numRange(by);h+="<b>Colour: "+NUM[by]+"</b><div class='m'>blue = low ("+rr[0].toFixed(2)+"), red = high ("+rr[1].toFixed(2)+")</div>"}
+ else if(by!="cls"){var vals=[];P.forEach(function(p){var v=val(p,by);if(vals.indexOf(v)<0)vals.push(v)});vals.sort();h+="<b>Colour: "+by+"</b>"+vals.map(function(v){return '<div class="k"><span class="sh c" style="background:'+pal[vals.indexOf(v)%pal.length]+'"></span>'+v+" ("+P.filter(function(p){return val(p,by)==v}).length+")</div>"}).join("")}return h}
 function panel(){var h=legend();
- if(sel<0){h+='<p class="m">Click a protein to list its nearest and farthest proteins. <b>cos</b>: centred cosine of ESM-2 mean embeddings at the chosen layer. <b>r5</b>: Pearson correlation of the 5-mer enrichment profiles (log2 positive windows over GC-matched negatives). <b>J</b>: Jaccard index of the 50 most enriched 5-mers. r5 and J exist only where both proteins have a ChIP-seq or eCLIP window table.</p>'}
+ if(sel<0){h+='<p class="m">Click a protein to list its nearest and farthest proteins. <b>cos</b>: centred cosine of ESM-2 mean embeddings at the chosen layer. <b>r5</b>: Pearson correlation of the 5-mer enrichment profiles (log2 positive windows over GC-matched negatives). <b>J</b>: Jaccard index of the 50 most enriched 5-mers. r5 and J exist only where both proteins have a ChIP-seq or eCLIP window table.</p><p class="m"><b>Axes</b>: the three t-SNE dimensions (no physical unit, scaled to [-1, 1]). Red dim 1, green dim 2, blue dim 3, ticks every 0.5. Distances inside a group are meaningful, distances between far groups and the orientation are not. Use the XY, XZ and YZ buttons for flat views.</p>'}
  else{var p=P[sel],b=nb();h+="<h3>"+p.symbol+" <span class='m'>"+CLS[p.cls].n+"</span></h3><div class='m'>family: "+(p.family||"unknown")+", v3b split: "+(p.split||"none")+"</div>";
+  h+="<div class='m'><b>"+(p.nm||"")+"</b></div><div class='m'>length "+p.len+" aa | domain group: "+(p.grp||"none")+" | Pfam: "+(p.pf||"none")+"</div><div class='m'>UniProt keywords: "+(p.kw||"none")+" | C2H2 zinc-finger motifs: "+p.zf+" | RGG: "+p.rgg+" | G,S,Y,Q,N: "+(100*p.gs).toFixed(0)+"% | net charge/res: "+p.ch.toFixed(2)+"</div><div class='m'>ENCODE ChIP-seq: "+p.nc+" exp. ("+(p.cc||"none")+") | eCLIP: "+p.ne+" exp. ("+(p.ec||"none")+")</div>";
   var tp=D.top[p.symbol];if(tp)h+="<div class='m'>top 5-mers: "+Object.keys(tp).map(function(a){return a+" <code>"+tp[a].slice(0,5).join(" ")+"</code>"}).join(" ; ")+"</div>";else h+="<div class='m'>no 5-mer profile for this protein</div>";
   h+="<h3>Nearest (layer "+ls.value+")</h3><table><tr><th>protein</th><th>cos</th><th>r5</th><th>J</th><th>data</th></tr>"+b.near[sel].map(row).join("")+"</table>";
   h+="<h3>Farthest</h3><table><tr><th>protein</th><th>cos</th><th>r5</th><th>J</th><th>data</th></tr>"+b.far[sel].map(row).join("")+"</table>"}
  side.innerHTML=h;[].forEach.call(side.querySelectorAll("tr.r"),function(tr){tr.addEventListener("click",function(){sel=+tr.getAttribute("data-i");panel()})})}
+function groupLabels(byI,pr,spr,show,fg){var g={};P.forEach(function(p,i){if(!p.grp||p.grp=="other Pfam"||p.grp=="no Pfam entry"||!show[p.cls]||(fg&&p.grp!=fg))return;var a=g[p.grp]||(g[p.grp]={n:0,s:[0,0,0]});a.n++;for(var k=0;k<3;k++)a.s[k]+=N[i][k]});
+ ctx.font="bold 13px system-ui";ctx.textAlign="center";var bg=getComputedStyle(document.documentElement).getPropertyValue("--card")||"#fff";
+ Object.keys(g).forEach(function(k){var a=g[k];if(a.n<8)return;var q=pr(a.s[0]/a.n*spr,a.s[1]/a.n*spr,a.s[2]/a.n*spr),w=ctx.measureText(k).width+10;ctx.globalAlpha=0.85;ctx.fillStyle=bg;ctx.fillRect(q.x-w/2,q.y-10,w,20);ctx.globalAlpha=1;ctx.fillStyle="#8a4fa3";ctx.fillText(k+" ("+a.n+")",q.x,q.y+4)});
+ ctx.textAlign="start"}
 function pick(mx,my){var best=null,bd=14;for(var k=proj.length-1;k>=0;k--){var d=Math.hypot(proj[k].x-mx,proj[k].y-my);if(d<bd){bd=d;best=proj[k]}}return best}
 function loop(){if(document.getElementById("auto").checked&&!drag)yaw+=0.004;draw();requestAnimationFrame(loop)}
 cv.addEventListener("mousedown",function(e){drag=true;moved=false;lx=e.clientX;ly=e.clientY;cv.style.cursor="grabbing"});
@@ -542,21 +942,37 @@ window.addEventListener("mousemove",function(e){if(drag){var dx=e.clientX-lx,dy=
  if(e.target!==cv){tip.style.display="none";return}var r=cv.getBoundingClientRect(),best=pick(e.clientX-r.left,e.clientY-r.top);
  if(best){var p=P[best.i];tip.style.display="block";tip.style.left=e.clientX+12+"px";tip.style.top=e.clientY+12+"px";tip.textContent=p.symbol+" | "+CLS[p.cls].n+" | "+(p.family||"family unknown")+" | click for neighbours"}else tip.style.display="none"});
 cv.addEventListener("wheel",function(e){e.preventDefault();zoom=Math.max(0.4,Math.min(4,zoom*(e.deltaY<0?1.1:0.9)))},{passive:false});
+function setView(y,p){yaw=y;pitch=p;document.getElementById("auto").checked=false}
 document.getElementById("reset").addEventListener("click",function(){yaw=0.6;pitch=0.35;zoom=1});
+document.getElementById("v3d").addEventListener("click",function(){yaw=0.6;pitch=0.35;document.getElementById("auto").checked=true});
+document.getElementById("vxy").addEventListener("click",function(){setView(0,0)});
+document.getElementById("vxz").addEventListener("click",function(){setView(0,1.5707)});
+document.getElementById("vyz").addEventListener("click",function(){setView(1.5707,0)});
 document.getElementById("clear").addEventListener("click",function(){sel=-1;panel()});
 document.getElementById("by").addEventListener("change",panel);
 document.getElementById("q").addEventListener("keydown",function(e){if(e.key=="Enter"){var s=this.value.trim().toUpperCase();if(IDX.hasOwnProperty(s)){sel=IDX[s];panel()}}});
 ls.addEventListener("change",function(){curL=null});
+var fgs=document.getElementById("fgrp");Object.keys(P.reduce(function(a,p){if(p.grp)a[p.grp]=1;return a},{})).sort().forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=k;fgs.appendChild(o)});
 ls.value=D.layers[D.layers.length-1];loop();
 </script></body></html>"""
 
 
-def build_html(df: pd.DataFrame, emb: np.ndarray, layers: list[int], chip_def: str, seed: int, path: Path, demo: bool, kmer=None) -> None:
+def build_html(df: pd.DataFrame, emb: np.ndarray, layers: list[int], chip_def: str, seed: int, path: Path, demo: bool, kmer=None, rl_layer: int = 21) -> None:
     cl = {str(L): np.round(coords(emb[:, L], seed), 3).tolist() for L in layers}
     nbr, top = build_neighbors(df, emb, layers, kmer)
-    prot = [dict(symbol=r.symbol, cls=getattr(r, "class_" + chip_def), split=r.v3_split or "", family=r.family or "") for r in df.itertuples()]
-    banner = '<div class="banner">SYNTHETIC DEMO DATA: planted structure, not ESM-2 embeddings or 5-mer profiles of ENCODE proteins</div>' if demo else ""
-    html = HTML.replace("__BANNER__", banner).replace("__DATA__", json.dumps(dict(layers=layers, coords=cl, proteins=prot, nbr=nbr, top=top), separators=(",", ":")))
+    ann = "domain_group" in df.columns
+    rl = rbp_likeness(centred_cosine(emb[:, rl_layer]), (df["class_" + chip_def] == "rbp").to_numpy(), (df["class_" + chip_def] == "tf").to_numpy()) if ann else None
+    prot = []
+    for i, r in enumerate(df.itertuples()):
+        d = dict(symbol=r.symbol, cls=getattr(r, "class_" + chip_def), split=r.v3_split or "", family=r.family or "")
+        if ann:
+            kw = "RNA + DNA-binding" if (r.kw_rna and r.kw_dna) else "RNA-binding" if r.kw_rna else "DNA-binding" if r.kw_dna else "neither keyword"
+            d.update(len=int(r.length), grp=r.domain_group, kw=kw, nm=str(r.up_protein_name)[:90], pf=str(r.up_pfam).strip(";").replace(";", ", "), zf=int(r.zf_c2h2),
+                     rgg=int(r.rgg), gs=float(r.frac_gsyqn), ch=float(r.net_charge), nc=int(r.n_chip_exp), cc=str(r.chip_cells).replace(";", ", "),
+                     ne=int(r.n_eclip_exp), ec=str(r.eclip_cells).replace(";", ", "), rl=round(float(rl[i]), 3))
+        prot.append(d)
+    banner = '<div class="banner">SYNTHETIC DEMO DATA: the classes are separated by construction to test the code. These are not ESM-2 embeddings or 5-mer profiles of real proteins, and the separation says nothing about real TFs and RBPs</div>' if demo else ""
+    html = HTML.replace("__BANNER__", banner).replace("__DATA__", json.dumps(dict(layers=layers, coords=cl, proteins=prot, nbr=nbr, top=top, rl_layer=rl_layer), separators=(",", ":")))
     path.write_text(html)
 
 
@@ -585,7 +1001,14 @@ def stage_map(args) -> None:
     kmer = load_kmer(out)
     if kmer is None:
         print("kmer_profiles.npz not found: the page has cosine neighbours only (run the kmer stage for r5 and Jaccard)")
-    build_html(df, emb, args.layers, args.chip_def, args.seed, out / "encode_protein_map.html", demo=False, kmer=kmer)
+    rl_layer = 18
+    f = out / "patterns_rbp_likeness_auroc.tsv"
+    if f.exists():
+        a = pd.read_csv(f, sep="\t")
+        rl_layer = int(a.loc[a.auroc.idxmax(), "layer"])
+        if rl_layer not in args.layers:
+            args.layers = sorted(args.layers + [rl_layer])
+    build_html(df, emb, args.layers, args.chip_def, args.seed, out / "encode_protein_map.html", demo=False, kmer=kmer, rl_layer=rl_layer)
     print("saved maps and", out / "encode_protein_map.html")
 
 
@@ -600,7 +1023,41 @@ def stage_selftest(args) -> None:
         for i, c in enumerate(cls):
             emb[i, L] = rng.normal(size=1280) + sig * grp[c]
     fam = np.array(rng.choice(["RRM", "KH", "C2H2", ""], size=n))
-    df = pd.DataFrame(dict(symbol=[f"P{i}" for i in range(n)], class_tf=cls, class_broad=cls, v3_split="", family=fam))
+    zfseq = "AAC" + "AA" + "C" + "A" * 12 + "H" + "AAAA" + "H" + "AAA"
+    f = seq_features("M" + "RGG" * 2 + zfseq + "GGSYQN")
+    assert f["zf_c2h2"] == 1 and f["rgg"] == 2, "sequence features wrong"
+    assert domain_group("PF00096;PF00076;") == "RRM" and domain_group("") == "no Pfam entry" and domain_group("PF99999;") == "other Pfam"
+    cb = centre_by_assay(["A|chip", "B|chip", "C|eclip"], np.array([[1.0, 3.0], [3.0, 5.0], [7.0, 9.0]]))
+    assert np.allclose(cb[0], [-1, -1]) and np.allclose(cb[2], [0, 0]), "assay centring wrong"
+    nm = [f"DEMO_{c.upper()}_{i}" for i, c in enumerate(cls)]
+    df = pd.DataFrame(dict(symbol=nm, class_tf=cls, class_broad=cls, v3_split="", family=fam))
+    import torch
+
+    class FakeModel:
+        def __call__(self, tok, repr_layers):
+            base = tok[0].float()[None, :, None] * torch.ones(1, 1, 1280)
+            pos = torch.arange(tok.shape[1]).float()[None, :, None]
+            return {"representations": {L: base * (L + 1) + pos for L in repr_layers}}
+
+    def fake_conv(batch):
+        w = batch[0][1]
+        tok = torch.tensor([[0] + [ord(c) for c in w] + [0]])
+        return None, None, tok
+
+    seq = "".join(rng.choice(list("ACDEFGHIKLMNPQRSTVWY"), size=2600))
+    got = embed_mean(FakeModel(), fake_conv, seq, "cpu", [0, 3])
+    starts = list(range(0, max(1, len(seq) - WINDOW) + 1, STRIDE))
+    if starts[-1] + WINDOW < len(seq):
+        starts.append(len(seq) - WINDOW)
+    acc = np.zeros((2, len(seq)))
+    cn = np.zeros(len(seq))
+    for s in starts:
+        w = seq[s:s + WINDOW]
+        for k, L in enumerate([0, 3]):
+            acc[k, s:s + len(w)] += np.array([ord(c) * (L + 1) + 1 + j for j, c in enumerate(w)])
+        cn[s:s + len(w)] += 1
+    ref = (acc / cn).mean(axis=1)
+    assert np.allclose(got[:, 0], ref, rtol=1e-4), "sliding-window mean differs from the reference"
     res = run_stats(df, emb, "tf", 100, 0, [0, 17, 33])
     assert res.nn_class.iloc[-1] > res.nn_class.iloc[0] + 0.2 and res.nn_class_p.iloc[-1] < 0.05, "planted class structure not recovered"
     assert res.both_cohesion_z.iloc[-1] > 3, "planted cohesion not recovered"
@@ -622,10 +1079,10 @@ def stage_selftest(args) -> None:
     base = {c: rng.normal(size=NK) for c in grp}
     keys, prof = [], []
     for i in list(range(0, 90)) + list(range(240, 260)):
-        keys.append(f"P{i}|chip")
+        keys.append(f"{nm[i]}|chip")
         prof.append(base[cls[i]] + rng.normal(size=NK) * 1.5)
     for i in list(range(120, 200)) + list(range(240, 260)):
-        keys.append(f"P{i}|eclip")
+        keys.append(f"{nm[i]}|eclip")
         prof.append(base[cls[i]] + rng.normal(size=NK) * 1.5)
     kmer = (keys, np.stack(prof).astype(np.float32))
     ks = kmer_stats(df, emb, kmer, [0, 33], 100, 0)
@@ -634,6 +1091,13 @@ def stage_selftest(args) -> None:
     assert r33 > r0 + 0.05 and ks[(ks.layer == 33)].p.min() < 0.05, "planted profile similarity not recovered"
     d = dual_test(keys, kmer_similarity(kmer[1])[0], 200, 0)
     assert d["n_both"] == 20 and d["z"] > 3, "planted dual-protein similarity not recovered"
+    dfp = df.assign(domain_group=cls)
+    pr_ = predict_profiles(emb, dfp, keys, kmer[1], "chip", [33], 0, n_perm=5)
+    assert pr_.mean_r_random_5fold.iloc[0] > 0.15, "ridge prediction of the planted profile failed"
+    pk = np.zeros((1, NK), dtype=np.float32)
+    pk[0, [int(np.where(np.array([kmer_str(j) for j in range(NK)]) == "GAUAA")[0][0])]] = 5.0
+    mc = motif_controls(["GATA1|chip"], pk)
+    assert len(mc) == 1 and bool(mc.in_top20.iloc[0]), "known-consensus control failed"
     with tempfile.TemporaryDirectory() as td:
         build_html(df, emb, [0, 33], "tf", 0, Path(td) / "m.html", demo=True, kmer=kmer)
         assert (Path(td) / "m.html").stat().st_size > 20000
@@ -648,7 +1112,7 @@ def stage_selftest(args) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", choices=["proteins", "embed", "kmer", "stats", "kmerstats", "map", "selftest"])
+    ap.add_argument("stage", choices=["proteins", "embed", "kmer", "annot", "stats", "kmerstats", "patterns", "predict", "map", "selftest"])
     ap.add_argument("--out_dir", default=OUT_DEFAULT)
     ap.add_argument("--tf_fasta", default="share_tf/final/encode_tf_chipseq_proteins.fasta")
     ap.add_argument("--rbp_tsv", default="data/raw/eclip_skipper/manifests/encode_eclip_rbp_id_best_acc_seq.tsv")
@@ -664,9 +1128,11 @@ def main() -> None:
     ap.add_argument("--n_perm", type=int, default=500)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--demo_html", default="")
+    ap.add_argument("--layer_step", type=int, default=3, help="predict: evaluate every n-th layer")
+    ap.add_argument("--refresh", action="store_true", help="annot: fetch UniProt again")
     args = ap.parse_args()
-    {"proteins": stage_proteins, "embed": stage_embed, "kmer": stage_kmer, "stats": stage_stats, "kmerstats": stage_kmerstats,
-     "map": stage_map, "selftest": stage_selftest}[args.stage](args)
+    {"proteins": stage_proteins, "embed": stage_embed, "kmer": stage_kmer, "annot": stage_annot, "stats": stage_stats, "kmerstats": stage_kmerstats,
+     "patterns": stage_patterns, "predict": stage_predict, "map": stage_map, "selftest": stage_selftest}[args.stage](args)
 
 
 if __name__ == "__main__":

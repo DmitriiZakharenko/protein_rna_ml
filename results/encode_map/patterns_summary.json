@@ -1,0 +1,65 @@
+{
+ "baselines_auroc": {
+  "UniProt RNA-binding keyword": {
+   "auroc": 0.8532206190434038,
+   "ci_lo": 0.7885282965979169,
+   "ci_hi": 0.9190780738249092
+  },
+  "length": {
+   "auroc": 0.5040866306689092,
+   "ci_lo": 0.40882682718125757,
+   "ci_hi": 0.5853445605027883
+  },
+  "fraction G,S,Y,Q,N": {
+   "auroc": 0.6471629636186599,
+   "ci_lo": 0.5197202059543832,
+   "ci_hi": 0.7590263639314272
+  },
+  "fraction K,R": {
+   "auroc": 0.6088342037709127,
+   "ci_lo": 0.5126460564751704,
+   "ci_hi": 0.7156464843173704
+  }
+ },
+ "baselines_in_rbps_auroc": {
+  "UniProt DNA-binding keyword": {
+   "auroc": 0.6876456876456877,
+   "ci_lo": 0.6025641025641026,
+   "ci_hi": 0.7762529137529138
+  },
+  "UniProt transcription regulation keyword": {
+   "auroc": 0.6841491841491841,
+   "ci_lo": 0.6175407925407925,
+   "ci_hi": 0.7622377622377623
+  },
+  "length": {
+   "auroc": 0.4755244755244756,
+   "ci_lo": 0.37197193831809217,
+   "ci_hi": 0.5581316119777658
+  },
+  "fraction G,S,Y,Q,N": {
+   "auroc": 0.7453828223058993,
+   "ci_lo": 0.6490339788416712,
+   "ci_hi": 0.8118432849202081
+  }
+ },
+ "candidates_layer": 21,
+ "keyword_contingency": {
+  "both_rna": [
+   28,
+   11
+  ],
+  "tf_only_rna": [
+   10,
+   859
+  ],
+  "fisher_p": 4.8562160378550036e-36,
+  "odds_ratio": 218.65454545454546
+ },
+ "family_gap": {
+  "observed": 0.019556377083063126,
+  "null_mean": 2.867799252271652e-06,
+  "p": 0.001996007984031936
+ },
+ "convergent_layer": 21
+}

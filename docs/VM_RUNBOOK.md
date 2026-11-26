@@ -231,7 +231,9 @@ python scripts/82_encode_protein_map.py map --chip_def broad
 python -m http.server 8765 --bind 127.0.0.1 --directory results/encode_map   # then open http://127.0.0.1:8765/encode_protein_map.html
 ```
 
-Run times of `embed` and `kmer` are not recorded. Expected end of `embed`: a line `saved N proteins x 34 layers`. The columns of the two input tables (`protein_name`, `rna_sequence`, `binding_label`, `neg_type`) are read from the code and not verified on the VM.
+The stages `annot` (UniProt, network), `stats`, `kmerstats`, `patterns`, `predict` and `map` run locally after the two files are copied: `python scripts/82_encode_protein_map.py annot`, then `stats`, `kmerstats`, `patterns`, `predict` and `map`. Results and interpretation: `docs/ENCODE_MAP.md`.
+
+Run times on the VM: `embed` 293 s for 1,051 proteins and 34 layers, `kmer` about 35 s. Run times of the local stages are not recorded. Expected end of `embed`: a line `saved N proteins x 34 layers`. The columns of the two input tables (`protein_name`, `rna_sequence`, `binding_label`, `neg_type`) are read from the code and not verified on the VM.
 
 ## 6. Collecting results
 

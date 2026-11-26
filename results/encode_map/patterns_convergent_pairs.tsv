@@ -1,0 +1,16 @@
+a	b	cos	r5	group_a	group_b
+ARNT (chip)	ZNF282 (chip)	-0.151	0.858	bHLH	C2H2 zinc finger
+SOX6 (chip)	ZNF282 (chip)	-0.263	0.842	HMG box	C2H2 zinc finger
+PHB2 (chip)	SOX6 (chip)	-0.158	0.842	other Pfam	HMG box
+IKZF1 (chip)	YBX1 (chip)	-0.232	0.833	C2H2 zinc finger	other Pfam
+IKZF1 (chip)	TRIM22 (chip)	-0.309	0.83	C2H2 zinc finger	other Pfam
+IKZF1 (chip)	PHB2 (chip)	-0.242	0.824	C2H2 zinc finger	other Pfam
+SOX6 (chip)	TRIM22 (chip)	-0.289	0.815	HMG box	other Pfam
+PHB2 (chip)	TSC22D4 (chip)	-0.1	0.775	other Pfam	other Pfam
+SOX6 (chip)	YBX1 (chip)	-0.098	0.754	HMG box	other Pfam
+IKZF1 (chip)	ZNF282 (chip)	-0.202	0.751	C2H2 zinc finger	C2H2 zinc finger
+ARHGAP35 (chip)	ZNF282 (chip)	-0.141	0.668	other Pfam	C2H2 zinc finger
+BCLAF1 (chip)	TRIM22 (chip)	-0.135	0.634	other Pfam	other Pfam
+BCLAF1 (chip)	ZNF282 (chip)	-0.135	0.628	other Pfam	C2H2 zinc finger
+CEBPZ (chip)	NFYA (chip)	-0.1	0.623	other Pfam	other Pfam
+BCLAF1 (chip)	PHB2 (chip)	-0.125	0.615	other Pfam	other Pfam
