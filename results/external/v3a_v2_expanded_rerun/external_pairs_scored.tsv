@@ -1,0 +1,541 @@
+pair_id	protein_name	label	rna_len	prot_len	example_class	neg_strategy	parent_pair_id	prob_v2
+curated_0000	HNRNPL	1	1184	589	curated_positive		curated_0000	0.6627688407897949
+curated_0002	SLBP	1	494	270	curated_positive		curated_0002	0.49105483293533325
+curated_0003	HNRNPR	1	331	632	curated_positive		curated_0003	0.4191732704639435
+curated_0005	IGF2BP3	1	177	579	curated_positive		curated_0005	0.4468589723110199
+curated_0006	IGF2BP3	1	121	579	curated_positive		curated_0006	0.5621895790100098
+curated_0007	IGF2BP3	1	228	579	curated_positive		curated_0007	0.452940434217453
+curated_0009	IGF2BP1	1	54	158	curated_positive		curated_0009	0.48645487427711487
+curated_0010	IGF2BP1	1	28	158	curated_positive		curated_0010	0.5498849153518677
+curated_0014	IGF2BP1	1	26	158	curated_positive		curated_0014	0.5241808891296387
+curated_0015	IGF2BP1	1	24	158	curated_positive		curated_0015	0.49089112877845764
+curated_0021	IGF2BP1	1	28	158	curated_positive		curated_0021	0.5885983109474182
+curated_0022	HsPUM1	1	19	318	curated_positive		curated_0022	0.6030741930007935
+curated_0023	HsPUM1	1	14	318	curated_positive		curated_0023	0.46803468465805054
+curated_0024	HsPUM1	1	10	318	curated_positive		curated_0024	0.09890537708997726
+curated_0025	SRSF1 RRM1 E87N	1	6	86	curated_positive		curated_0025	0.33490586280822754
+curated_0026	IGF2BP2	1	1174	599	curated_positive		curated_0026	0.6223628520965576
+curated_0030	PCBP2	1	3978	365	curated_positive		curated_0030	0.7546436786651611
+curated_0031	METTL3	1	3978	580	curated_positive		curated_0031	0.72691410779953
+curated_0032	METTL14	1	150	456	curated_positive		curated_0032	0.4480539560317993
+curated_0033	WTAP	1	150	396	curated_positive		curated_0033	0.5385195016860962
+curated_0034	YTHDF2	1	150	579	curated_positive		curated_0034	0.5407282114028931
+curated_0036	PTB1 (RBD1)	1	6	115	curated_positive		curated_0036	0.1626821607351303
+curated_0037	PTB1 (RBD2)	1	6	145	curated_positive		curated_0037	0.22360962629318237
+curated_0038	PTB1 (RBD3)	1	6	208	curated_positive		curated_0038	0.09988458454608917
+curated_0039	PTB1 (RBD4)	1	6	208	curated_positive		curated_0039	0.09988458454608917
+curated_0040	PTB1 (RBD34)	1	17	208	curated_positive		curated_0040	0.08931359648704529
+curated_0041	PTB1 (RBD34)	1	22	208	curated_positive		curated_0041	0.05011061206459999
+curated_0042	PTB1 (RBD34)	1	27	208	curated_positive		curated_0042	0.04802243411540985
+curated_0043	PTB1 (RBD34)	1	33	208	curated_positive		curated_0043	0.048022426664829254
+curated_0044	PTB1 (RBD34)	1	39	208	curated_positive		curated_0044	0.04802240431308746
+curated_0045	PTB1 (RBD34)	1	44	208	curated_positive		curated_0045	0.04802240431308746
+curated_0046	PTB1 (RBD34)	1	6	208	curated_positive		curated_0046	0.09988458454608917
+curated_0048	PTB1	1	6	531	curated_positive		curated_0048	0.1937067210674286
+curated_0049	FBF-1	1	37	494	curated_positive		curated_0049	0.36001497507095337
+curated_0050	FBF-2	1	37	632	curated_positive		curated_0050	0.40078070759773254
+curated_0055	HNRNPM	1	17918	729	curated_positive		curated_0055	0.9740875363349915
+curated_0056	HNRNPU	1	17918	800	curated_positive		curated_0056	0.9259255528450012
+curated_0057	HNRNPK	1	17918	463	curated_positive		curated_0057	0.767781138420105
+curated_0058	MYEF2	1	17918	591	curated_positive		curated_0058	0.9786428213119507
+curated_0059	SPEN	1	17918	3644	curated_positive		curated_0059	0.9730592966079712
+curated_0060	RBMXL1	1	17918	388	curated_positive		curated_0060	0.9447585940361023
+curated_0061	HNRNPAB	1	17918	285	curated_positive		curated_0061	0.858124852180481
+curated_0062	HNRNPD	1	17918	355	curated_positive		curated_0062	0.7639040350914001
+curated_0063	HNRNPC	1	17918	313	curated_positive		curated_0063	0.8542612791061401
+curated_0064	TARDBP	1	17918	414	curated_positive		curated_0064	0.9667569398880005
+curated_0065	IGF2BP1	1	17918	577	curated_positive		curated_0065	0.6999529600143433
+curated_0066	DDX39B	1	17918	428	curated_positive		curated_0066	0.9257305264472961
+curated_0067	RBM15	1	17918	962	curated_positive		curated_0067	0.9049019813537598
+curated_0068	HNRNPUL2	1	17918	745	curated_positive		curated_0068	0.9601141810417175
+curated_0069	RBM14	1	17918	669	curated_positive		curated_0069	0.9651546478271484
+curated_0070	SAFB	1	17918	937	curated_positive		curated_0070	0.9460961818695068
+curated_0071	CIZ1	1	17918	898	curated_positive		curated_0071	0.9671024680137634
+curated_0072	HNRNPA0	1	17918	305	curated_positive		curated_0072	0.9254871606826782
+curated_0073	YTHDC1	1	17918	736	curated_positive		curated_0073	0.9293771386146545
+curated_0074	SRSF7	1	17918	267	curated_positive		curated_0074	0.9398553967475891
+curated_0075	RALY	1	17918	312	curated_positive		curated_0075	0.913893461227417
+curated_0076	DDX17	1	17918	650	curated_positive		curated_0076	0.9353189468383789
+curated_0077	RNF2	1	17918	336	curated_positive		curated_0077	0.8943848609924316
+curated_0078	THOC4	1	17918	255	curated_positive		curated_0078	0.9526500105857849
+curated_0079	SARNP	1	17918	210	curated_positive		curated_0079	0.9437201023101807
+curated_0080	ELAVL1	1	17918	326	curated_positive		curated_0080	0.8708431124687195
+curated_0081	HNRPDL	1	17918	301	curated_positive		curated_0081	0.9090256690979004
+curated_0082	SRSF3	1	17918	164	curated_positive		curated_0082	0.6716718673706055
+curated_0083	SRSF2	1	17918	221	curated_positive		curated_0083	0.9439331293106079
+curated_0084	TRIM6	1	17918	488	curated_positive		curated_0084	0.9126712679862976
+curated_0085	RBM4	1	17918	361	curated_positive		curated_0085	0.856387734413147
+curated_0086	RBFOX2	1	17918	449	curated_positive		curated_0086	0.9076299071311951
+curated_0087	RBM3	1	17918	153	curated_positive		curated_0087	0.9627822637557983
+curated_0088	SRSF9	1	17918	222	curated_positive		curated_0088	0.9590277671813965
+curated_0089	POLDIP3	1	17918	420	curated_positive		curated_0089	0.8274197578430176
+curated_0090	SRSF10	1	17918	262	curated_positive		curated_0090	0.9511195421218872
+curated_0091	ZFR	1	17918	1074	curated_positive		curated_0091	0.8996559381484985
+curated_0092	WTAP	1	17918	396	curated_positive		curated_0092	0.9514373540878296
+curated_0093	CELF1	1	17918	486	curated_positive		curated_0093	0.9891442656517029
+curated_0094	ERH	1	17918	104	curated_positive		curated_0094	0.9260890483856201
+curated_0095	LIN28A	1	17918	209	curated_positive		curated_0095	0.9882042407989502
+curated_0096	PCGF5	1	17918	256	curated_positive		curated_0096	0.9579579830169678
+curated_0097	RYBP	1	17918	228	curated_positive		curated_0097	0.9051932692527771
+curated_0098	RNF20	1	17918	973	curated_positive		curated_0098	0.9064902067184448
+curated_0099	RNMT	1	17918	465	curated_positive		curated_0099	0.966539204120636
+curated_0100	PTBP2	1	17918	531	curated_positive		curated_0100	0.7374790906906128
+curated_0101	SAP18	1	17918	153	curated_positive		curated_0101	0.9411506056785583
+curated_0102	TRIM71	1	17918	855	curated_positive		curated_0102	0.9540358185768127
+curated_0103	IGF2BP3	1	17918	579	curated_positive		curated_0103	0.8928336501121521
+curated_0104	L1TD1	1	17918	782	curated_positive		curated_0104	0.8874480724334717
+curated_0105	MYBBP1A	1	17918	1344	curated_positive		curated_0105	0.9371808171272278
+curated_0106	YBX1	1	2362	324	curated_positive		curated_0106	0.6006215810775757
+curated_0107	CDK6	1	2362	326	curated_positive		curated_0107	0.7349288463592529
+curated_0108	TCTP	1	2362	172	curated_positive		curated_0108	0.7424388527870178
+curated_0109	LSD1 (KDM1A)	1	2362	852	curated_positive		curated_0109	0.5342788100242615
+curated_0110	EZH2	1	2362	746	curated_positive		curated_0110	0.7471134662628174
+curated_0111	AKT1	1	2362	480	curated_positive		curated_0111	0.670430064201355
+curated_0112	RSK1 (RPS6KA1)	1	2362	735	curated_positive		curated_0112	0.7269822359085083
+curated_0113	ERK1 (MAPK3)	1	2362	382	curated_positive		curated_0113	0.6415433883666992
+curated_0114	ERK2 (MAPK1)	1	2362	360	curated_positive		curated_0114	0.6316624879837036
+curated_0116	YBX1 (CSD domain)	1	2362	78	curated_positive		curated_0116	0.7206217646598816
+curated_0117	YBX1 (CSD domain)	1	10227	78	curated_positive		curated_0117	0.807044506072998
+curated_0119	FBF-1 (part)	1	28	494	curated_positive		curated_0119	0.6048029661178589
+curated_0121	FBF-1 (part)	1	30	494	curated_positive		curated_0121	0.4620230197906494
+curated_0123	FBF-2 (part)	1	28	631	curated_positive		curated_0123	0.5247769355773926
+curated_0124	FBF-2 (part)	1	30	631	curated_positive		curated_0124	0.3821161389350891
+curated_0129	Puf3	1	137	879	curated_positive		curated_0129	0.6117708086967468
+curated_0130	Puf3	1	101	879	curated_positive		curated_0130	0.6117708086967468
+curated_0131	Puf3	1	76	879	curated_positive		curated_0131	0.43116915225982666
+curated_0133	RBM5 (part)	1	10	117	curated_positive		curated_0133	0.146759495139122
+curated_0144	FMRP-NT	1	76	217	curated_positive		curated_0144	0.5107924342155457
+curated_0151	ASF/SF2	1	58	248	curated_positive		curated_0151	0.6466830372810364
+curated_0152	ASF/SF2	1	58	248	curated_positive		curated_0152	0.6350125074386597
+curated_0153	ASF/SF2	1	58	248	curated_positive		curated_0153	0.5927501320838928
+curated_0154	ASF/SF2	1	56	248	curated_positive		curated_0154	0.6759938597679138
+curated_0157	SC35	1	58	221	curated_positive		curated_0157	0.41708338260650635
+curated_0158	SC35	1	57	221	curated_positive		curated_0158	0.5782485604286194
+curated_0162	MCP (MS2 Coat Protein)	1	20	130	curated_positive		curated_0162	0.1264776587486267
+curated_0164	MCP (MS2 Coat Protein)	1	20	130	curated_positive		curated_0164	0.19201979041099548
+curated_0001	HNRNPL	0	1184	589	curated_negative	curated	nan	0.7004892826080322
+curated_0004	HNRNPR	0	331	632	curated_negative	curated	nan	0.49525025486946106
+curated_0008	IGF2BP3	0	1609	579	curated_negative	curated	nan	0.542361319065094
+curated_0011	IGF2BP1	0	26	158	curated_negative	curated	nan	0.41599225997924805
+curated_0012	IGF2BP1	0	21	158	curated_negative	curated	nan	0.5485183596611023
+curated_0013	IGF2BP1	0	40	158	curated_negative	curated	nan	0.4796837568283081
+curated_0016	IGF2BP1	0	22	158	curated_negative	curated	nan	0.4928895831108093
+curated_0017	IGF2BP1	0	20	158	curated_negative	curated	nan	0.443984717130661
+curated_0018	IGF2BP1	0	54	158	curated_negative	curated	nan	0.48098844289779663
+curated_0019	IGF2BP1	0	28	158	curated_negative	curated	nan	0.5755763649940491
+curated_0020	IGF2BP1	0	28	158	curated_negative	curated	nan	0.5003066062927246
+curated_0035	YTHDF1	0	3978	559	curated_negative	curated	nan	0.7408995032310486
+curated_0047	PTB1 (RBD34)	0	6	208	curated_negative	curated	nan	0.09970007836818695
+curated_0051	FBF-1	0	37	494	curated_negative	curated	nan	0.29965102672576904
+curated_0052	FBF-1	0	37	494	curated_negative	curated	nan	0.3779638409614563
+curated_0053	FBF-1	0	35	494	curated_negative	curated	nan	0.3282913267612457
+curated_0054	FBF-1	0	30	494	curated_negative	curated	nan	0.14731454849243164
+curated_0115	YBX1 (CTD domain)	0	2362	195	curated_negative	curated	nan	0.6140612363815308
+curated_0118	YBX1 (CTD domain)	0	10227	195	curated_negative	curated	nan	0.6190717220306396
+curated_0120	FBF-1 (part)	0	28	494	curated_negative	curated	nan	0.6383378505706787
+curated_0122	FBF-1 (part)	0	30	494	curated_negative	curated	nan	0.5176120400428772
+curated_0125	PUF-5	0	28	553	curated_negative	curated	nan	0.5832872986793518
+curated_0126	PUF-5	0	30	553	curated_negative	curated	nan	0.448759526014328
+curated_0127	FBF-1 (part)	0	38	494	curated_negative	curated	nan	0.5424357056617737
+curated_0128	FBF-1 (part)	0	32	494	curated_negative	curated	nan	0.2618216574192047
+curated_0134	RBM5 (part)	0	9	91	curated_negative	curated	nan	0.09212782233953476
+curated_0135	ZBP1 (part)	0	54	157	curated_negative	curated	nan	0.29823070764541626
+curated_0136	ZBP1 (part)	0	54	160	curated_negative	curated	nan	0.23623381555080414
+curated_0137	ZBP1 (part)	0	26	158	curated_negative	curated	nan	0.41599225997924805
+curated_0138	ZBP1 (part)	0	21	158	curated_negative	curated	nan	0.5485183596611023
+curated_0139	ZBP1 (part)	0	40	158	curated_negative	curated	nan	0.4796837568283081
+curated_0140	L7Ae	0	82	119	curated_negative	curated	nan	0.4361751675605774
+curated_0141	L7Ae	0	73	119	curated_negative	curated	nan	0.4576762616634369
+curated_0142	FMRP-KH1	0	152	76	curated_negative	curated	nan	0.45933669805526733
+curated_0143	FMRP-KH2	0	152	142	curated_negative	curated	nan	0.4846368432044983
+curated_0145	FMRP-NT	0	25	217	curated_negative	curated	nan	0.4428699016571045
+curated_0146	BSA	0	152	607	curated_negative	curated	nan	0.4769425094127655
+curated_0147	NusG	0	152	248	curated_negative	curated	nan	0.4789651036262512
+curated_0148	FMRP-NT	0	30	217	curated_negative	curated	nan	0.42988428473472595
+curated_0155	ASF/SF2	0	58	248	curated_negative	curated	nan	0.40193620324134827
+curated_0156	ASF/SF2	0	58	248	curated_negative	curated	nan	0.0360960029065609
+curated_0159	SC35	0	58	221	curated_negative	curated	nan	0.5632219910621643
+curated_0160	SC35	0	60	221	curated_negative	curated	nan	0.18945813179016113
+curated_0161	SC35	0	58	221	curated_negative	curated	nan	0.43261146545410156
+curated_0163	MCP (MS2 Coat Protein)	0	20	130	curated_negative	curated	nan	0.08535557240247726
+curated_0000__neg_shuffle_uniform_0	HNRNPL	0	1184	589	generated_negative	shuffle_uniform	curated_0000	0.8138591051101685
+curated_0000__neg_shuffle_dinucleotide_0	HNRNPL	0	1184	589	generated_negative	shuffle_dinucleotide	curated_0000	0.5981753468513489
+curated_0000__neg_cross_protein_0	MCP (MS2 Coat Protein)	0	1184	130	generated_negative	cross_protein	curated_0000	0.6760990023612976
+curated_0000__neg_cross_rna_0	HNRNPL	0	6	589	generated_negative	cross_rna	curated_0000	0.05889670550823212
+curated_0002__neg_shuffle_uniform_0	SLBP	0	494	270	generated_negative	shuffle_uniform	curated_0002	0.4818034768104553
+curated_0002__neg_shuffle_dinucleotide_0	SLBP	0	494	270	generated_negative	shuffle_dinucleotide	curated_0002	0.45546531677246094
+curated_0002__neg_cross_protein_0	PTB1 (RBD2)	0	494	145	generated_negative	cross_protein	curated_0002	0.535795271396637
+curated_0002__neg_cross_rna_0	SLBP	0	6	270	generated_negative	cross_rna	curated_0002	0.5425195097923279
+curated_0003__neg_shuffle_uniform_0	HNRNPR	0	331	632	generated_negative	shuffle_uniform	curated_0003	0.3635128438472748
+curated_0003__neg_shuffle_dinucleotide_0	HNRNPR	0	331	632	generated_negative	shuffle_dinucleotide	curated_0003	0.1863100826740265
+curated_0003__neg_cross_protein_0	ERH	0	331	104	generated_negative	cross_protein	curated_0003	0.5195486545562744
+curated_0003__neg_cross_rna_0	HNRNPR	0	6	632	generated_negative	cross_rna	curated_0003	0.3568849563598633
+curated_0005__neg_shuffle_uniform_0	IGF2BP3	0	177	579	generated_negative	shuffle_uniform	curated_0005	0.4591304361820221
+curated_0005__neg_shuffle_dinucleotide_0	IGF2BP3	0	177	579	generated_negative	shuffle_dinucleotide	curated_0005	0.4574776887893677
+curated_0005__neg_cross_protein_0	SRSF1 RRM1 E87N	0	177	86	generated_negative	cross_protein	curated_0005	0.46668267250061035
+curated_0005__neg_cross_rna_0	IGF2BP3	0	6	579	generated_negative	cross_rna	curated_0005	0.593993604183197
+curated_0006__neg_shuffle_uniform_0	IGF2BP3	0	121	579	generated_negative	shuffle_uniform	curated_0006	0.4736934006214142
+curated_0006__neg_shuffle_dinucleotide_0	IGF2BP3	0	121	579	generated_negative	shuffle_dinucleotide	curated_0006	0.4535198509693146
+curated_0006__neg_cross_protein_0	SRSF1 RRM1 E87N	0	121	86	generated_negative	cross_protein	curated_0006	0.4172368049621582
+curated_0006__neg_cross_rna_0	IGF2BP3	0	6	579	generated_negative	cross_rna	curated_0006	0.25266557931900024
+curated_0007__neg_shuffle_uniform_0	IGF2BP3	0	228	579	generated_negative	shuffle_uniform	curated_0007	0.5610409379005432
+curated_0007__neg_shuffle_dinucleotide_0	IGF2BP3	0	228	579	generated_negative	shuffle_dinucleotide	curated_0007	0.4514390528202057
+curated_0007__neg_cross_protein_0	SRSF1 RRM1 E87N	0	228	86	generated_negative	cross_protein	curated_0007	0.3165990710258484
+curated_0009__neg_shuffle_uniform_0	IGF2BP1	0	54	158	generated_negative	shuffle_uniform	curated_0009	0.5809056162834167
+curated_0009__neg_shuffle_dinucleotide_0	IGF2BP1	0	54	158	generated_negative	shuffle_dinucleotide	curated_0009	0.5205565094947815
+curated_0009__neg_cross_protein_0	SRSF1 RRM1 E87N	0	54	86	generated_negative	cross_protein	curated_0009	0.13809332251548767
+curated_0009__neg_cross_rna_0	IGF2BP1	0	6	158	generated_negative	cross_rna	curated_0009	0.5190174579620361
+curated_0010__neg_shuffle_uniform_0	IGF2BP1	0	28	158	generated_negative	shuffle_uniform	curated_0010	0.5191133618354797
+curated_0010__neg_shuffle_dinucleotide_0	IGF2BP1	0	28	158	generated_negative	shuffle_dinucleotide	curated_0010	0.45613959431648254
+curated_0010__neg_cross_protein_0	SRSF1 RRM1 E87N	0	28	86	generated_negative	cross_protein	curated_0010	0.18957890570163727
+curated_0010__neg_cross_rna_0	IGF2BP1	0	6	158	generated_negative	cross_rna	curated_0010	0.41967514157295227
+curated_0014__neg_shuffle_uniform_0	IGF2BP1	0	26	158	generated_negative	shuffle_uniform	curated_0014	0.5500175356864929
+curated_0014__neg_shuffle_dinucleotide_0	IGF2BP1	0	26	158	generated_negative	shuffle_dinucleotide	curated_0014	0.4914386570453644
+curated_0014__neg_cross_protein_0	SRSF1 RRM1 E87N	0	26	86	generated_negative	cross_protein	curated_0014	0.1719747930765152
+curated_0014__neg_cross_rna_0	IGF2BP1	0	10	158	generated_negative	cross_rna	curated_0014	0.41772332787513733
+curated_0015__neg_shuffle_uniform_0	IGF2BP1	0	24	158	generated_negative	shuffle_uniform	curated_0015	0.49337154626846313
+curated_0015__neg_shuffle_dinucleotide_0	IGF2BP1	0	24	158	generated_negative	shuffle_dinucleotide	curated_0015	0.47837498784065247
+curated_0015__neg_cross_protein_0	SRSF1 RRM1 E87N	0	24	86	generated_negative	cross_protein	curated_0015	0.1738574206829071
+curated_0021__neg_shuffle_uniform_0	IGF2BP1	0	28	158	generated_negative	shuffle_uniform	curated_0021	0.5271873474121094
+curated_0021__neg_shuffle_dinucleotide_0	IGF2BP1	0	28	158	generated_negative	shuffle_dinucleotide	curated_0021	0.4971635639667511
+curated_0021__neg_cross_protein_0	SRSF1 RRM1 E87N	0	28	86	generated_negative	cross_protein	curated_0021	0.2516869902610779
+curated_0022__neg_shuffle_uniform_0	HsPUM1	0	19	318	generated_negative	shuffle_uniform	curated_0022	0.4305572509765625
+curated_0022__neg_shuffle_dinucleotide_0	HsPUM1	0	19	318	generated_negative	shuffle_dinucleotide	curated_0022	0.5986795425415039
+curated_0022__neg_cross_protein_0	SRSF1 RRM1 E87N	0	19	86	generated_negative	cross_protein	curated_0022	0.2362833470106125
+curated_0022__neg_cross_rna_0	HsPUM1	0	6	318	generated_negative	cross_rna	curated_0022	0.10309212654829025
+curated_0023__neg_shuffle_uniform_0	HsPUM1	0	14	318	generated_negative	shuffle_uniform	curated_0023	0.26676639914512634
+curated_0023__neg_shuffle_dinucleotide_0	HsPUM1	0	14	318	generated_negative	shuffle_dinucleotide	curated_0023	0.8773074150085449
+curated_0023__neg_cross_protein_0	SRSF1 RRM1 E87N	0	14	86	generated_negative	cross_protein	curated_0023	0.21036596596240997
+curated_0023__neg_cross_rna_0	HsPUM1	0	6	318	generated_negative	cross_rna	curated_0023	0.01360288355499506
+curated_0024__neg_shuffle_uniform_0	HsPUM1	0	10	318	generated_negative	shuffle_uniform	curated_0024	0.23410733044147491
+curated_0024__neg_shuffle_dinucleotide_0	HsPUM1	0	10	318	generated_negative	shuffle_dinucleotide	curated_0024	0.3874320685863495
+curated_0024__neg_cross_protein_0	SRSF1 RRM1 E87N	0	10	86	generated_negative	cross_protein	curated_0024	0.2393135130405426
+curated_0024__neg_cross_rna_0	HsPUM1	0	17	318	generated_negative	cross_rna	curated_0024	0.16599898040294647
+curated_0025__neg_cross_protein_0	PTB1 (RBD1)	0	6	115	generated_negative	cross_protein	curated_0025	0.4976283013820648
+curated_0025__neg_cross_rna_0	SRSF1 RRM1 E87N	0	6	86	generated_negative	cross_rna	curated_0025	0.024739965796470642
+curated_0026__neg_shuffle_uniform_0	IGF2BP2	0	1174	599	generated_negative	shuffle_uniform	curated_0026	0.6918697357177734
+curated_0026__neg_shuffle_dinucleotide_0	IGF2BP2	0	1174	599	generated_negative	shuffle_dinucleotide	curated_0026	0.5135233402252197
+curated_0026__neg_cross_protein_0	SRSF1 RRM1 E87N	0	1174	86	generated_negative	cross_protein	curated_0026	0.6141798496246338
+curated_0026__neg_cross_rna_0	IGF2BP2	0	6	599	generated_negative	cross_rna	curated_0026	0.665991485118866
+curated_0030__neg_shuffle_uniform_0	PCBP2	0	3978	365	generated_negative	shuffle_uniform	curated_0030	0.6925002336502075
+curated_0030__neg_shuffle_dinucleotide_0	PCBP2	0	3978	365	generated_negative	shuffle_dinucleotide	curated_0030	0.6086088418960571
+curated_0030__neg_cross_protein_0	SRSF1 RRM1 E87N	0	3978	86	generated_negative	cross_protein	curated_0030	0.79866623878479
+curated_0030__neg_cross_rna_0	PCBP2	0	6	365	generated_negative	cross_rna	curated_0030	0.1286574751138687
+curated_0031__neg_shuffle_uniform_0	METTL3	0	3978	580	generated_negative	shuffle_uniform	curated_0031	0.5964488983154297
+curated_0031__neg_shuffle_dinucleotide_0	METTL3	0	3978	580	generated_negative	shuffle_dinucleotide	curated_0031	0.6114773154258728
+curated_0031__neg_cross_rna_0	METTL3	0	6	580	generated_negative	cross_rna	curated_0031	0.4256788492202759
+curated_0032__neg_shuffle_uniform_0	METTL14	0	150	456	generated_negative	shuffle_uniform	curated_0032	0.4011024236679077
+curated_0032__neg_shuffle_dinucleotide_0	METTL14	0	150	456	generated_negative	shuffle_dinucleotide	curated_0032	0.35896846652030945
+curated_0032__neg_cross_protein_0	PTB1 (RBD2)	0	150	145	generated_negative	cross_protein	curated_0032	0.6767817139625549
+curated_0032__neg_cross_rna_0	METTL14	0	6	456	generated_negative	cross_rna	curated_0032	0.40816426277160645
+curated_0033__neg_shuffle_uniform_0	WTAP	0	150	396	generated_negative	shuffle_uniform	curated_0033	0.726767897605896
+curated_0033__neg_shuffle_dinucleotide_0	WTAP	0	150	396	generated_negative	shuffle_dinucleotide	curated_0033	0.4039890468120575
+curated_0033__neg_cross_rna_0	WTAP	0	6	396	generated_negative	cross_rna	curated_0033	0.4388524889945984
+curated_0034__neg_shuffle_uniform_0	YTHDF2	0	150	579	generated_negative	shuffle_uniform	curated_0034	0.5260834693908691
+curated_0034__neg_shuffle_dinucleotide_0	YTHDF2	0	150	579	generated_negative	shuffle_dinucleotide	curated_0034	0.35780951380729675
+curated_0034__neg_cross_protein_0	YBX1 (CSD domain)	0	150	78	generated_negative	cross_protein	curated_0034	0.4426983594894409
+curated_0034__neg_cross_rna_0	YTHDF2	0	6	579	generated_negative	cross_rna	curated_0034	0.43718934059143066
+curated_0036__neg_shuffle_uniform_0	PTB1 (RBD1)	0	6	115	generated_negative	shuffle_uniform	curated_0036	0.23661352694034576
+curated_0036__neg_cross_protein_0	ERH	0	6	104	generated_negative	cross_protein	curated_0036	0.29082751274108887
+curated_0036__neg_cross_rna_0	PTB1 (RBD1)	0	54	115	generated_negative	cross_rna	curated_0036	0.25664016604423523
+curated_0037__neg_shuffle_uniform_0	PTB1 (RBD2)	0	6	145	generated_negative	shuffle_uniform	curated_0037	0.3740759491920471
+curated_0037__neg_cross_protein_0	RBM5 (part)	0	6	117	generated_negative	cross_protein	curated_0037	0.15994353592395782
+curated_0037__neg_cross_rna_0	PTB1 (RBD2)	0	54	145	generated_negative	cross_rna	curated_0037	0.3238722085952759
+curated_0038__neg_shuffle_uniform_0	PTB1 (RBD3)	0	6	208	generated_negative	shuffle_uniform	curated_0038	0.084189273416996
+curated_0038__neg_cross_rna_0	PTB1 (RBD3)	0	54	208	generated_negative	cross_rna	curated_0038	0.2745814919471741
+curated_0039__neg_shuffle_uniform_0	PTB1 (RBD4)	0	6	208	generated_negative	shuffle_uniform	curated_0039	0.09988139569759369
+curated_0039__neg_cross_rna_0	PTB1 (RBD4)	0	28	208	generated_negative	cross_rna	curated_0039	0.4419804513454437
+curated_0040__neg_shuffle_uniform_0	PTB1 (RBD34)	0	17	208	generated_negative	shuffle_uniform	curated_0040	0.4903488755226135
+curated_0040__neg_shuffle_dinucleotide_0	PTB1 (RBD34)	0	17	208	generated_negative	shuffle_dinucleotide	curated_0040	0.13938097655773163
+curated_0040__neg_cross_protein_0	RBM5 (part)	0	17	117	generated_negative	cross_protein	curated_0040	0.04431439936161041
+curated_0040__neg_cross_rna_0	PTB1 (RBD34)	0	19	208	generated_negative	cross_rna	curated_0040	0.2996615171432495
+curated_0041__neg_shuffle_uniform_0	PTB1 (RBD34)	0	22	208	generated_negative	shuffle_uniform	curated_0041	0.4814641773700714
+curated_0041__neg_shuffle_dinucleotide_0	PTB1 (RBD34)	0	22	208	generated_negative	shuffle_dinucleotide	curated_0041	0.047127615660429
+curated_0041__neg_cross_protein_0	RBM5 (part)	0	22	117	generated_negative	cross_protein	curated_0041	0.0388653427362442
+curated_0041__neg_cross_rna_0	PTB1 (RBD34)	0	14	208	generated_negative	cross_rna	curated_0041	0.23439866304397583
+curated_0042__neg_shuffle_uniform_0	PTB1 (RBD34)	0	27	208	generated_negative	shuffle_uniform	curated_0042	0.39177221059799194
+curated_0042__neg_shuffle_dinucleotide_0	PTB1 (RBD34)	0	27	208	generated_negative	shuffle_dinucleotide	curated_0042	0.0480956993997097
+curated_0042__neg_cross_protein_0	RBM5 (part)	0	27	117	generated_negative	cross_protein	curated_0042	0.03978399187326431
+curated_0042__neg_cross_rna_0	PTB1 (RBD34)	0	10	208	generated_negative	cross_rna	curated_0042	0.37656456232070923
+curated_0043__neg_shuffle_uniform_0	PTB1 (RBD34)	0	33	208	generated_negative	shuffle_uniform	curated_0043	0.301990270614624
+curated_0043__neg_shuffle_dinucleotide_0	PTB1 (RBD34)	0	33	208	generated_negative	shuffle_dinucleotide	curated_0043	0.048095669597387314
+curated_0043__neg_cross_protein_0	RBM5 (part)	0	33	117	generated_negative	cross_protein	curated_0043	0.03978395089507103
+curated_0043__neg_cross_rna_0	PTB1 (RBD34)	0	6	208	generated_negative	cross_rna	curated_0043	0.5703856945037842
+curated_0044__neg_shuffle_uniform_0	PTB1 (RBD34)	0	39	208	generated_negative	shuffle_uniform	curated_0044	0.44923439621925354
+curated_0044__neg_shuffle_dinucleotide_0	PTB1 (RBD34)	0	39	208	generated_negative	shuffle_dinucleotide	curated_0044	0.039313264191150665
+curated_0044__neg_cross_protein_0	RBM5 (part)	0	39	117	generated_negative	cross_protein	curated_0044	0.03978397324681282
+curated_0044__neg_cross_rna_0	PTB1 (RBD34)	0	28	208	generated_negative	cross_rna	curated_0044	0.5940471291542053
+curated_0045__neg_shuffle_uniform_0	PTB1 (RBD34)	0	44	208	generated_negative	shuffle_uniform	curated_0045	0.5401130318641663
+curated_0045__neg_shuffle_dinucleotide_0	PTB1 (RBD34)	0	44	208	generated_negative	shuffle_dinucleotide	curated_0045	0.039313290268182755
+curated_0045__neg_cross_protein_0	RBM5 (part)	0	44	117	generated_negative	cross_protein	curated_0045	0.03978397324681282
+curated_0046__neg_shuffle_uniform_0	PTB1 (RBD34)	0	6	208	generated_negative	shuffle_uniform	curated_0046	0.09811121970415115
+curated_0046__neg_cross_rna_0	PTB1 (RBD34)	0	26	208	generated_negative	cross_rna	curated_0046	0.4435677230358124
+curated_0048__neg_shuffle_uniform_0	PTB1	0	6	531	generated_negative	shuffle_uniform	curated_0048	0.3863327205181122
+curated_0048__neg_cross_rna_0	PTB1	0	54	531	generated_negative	cross_rna	curated_0048	0.30456283688545227
+curated_0049__neg_shuffle_uniform_0	FBF-1	0	37	494	generated_negative	shuffle_uniform	curated_0049	0.23913469910621643
+curated_0049__neg_shuffle_dinucleotide_0	FBF-1	0	37	494	generated_negative	shuffle_dinucleotide	curated_0049	0.3317354917526245
+curated_0049__neg_cross_protein_0	YBX1 (CSD domain)	0	37	78	generated_negative	cross_protein	curated_0049	0.4177095890045166
+curated_0049__neg_cross_rna_0	FBF-1	0	6	494	generated_negative	cross_rna	curated_0049	0.35667693614959717
+curated_0050__neg_shuffle_uniform_0	FBF-2	0	37	632	generated_negative	shuffle_uniform	curated_0050	0.3938014805316925
+curated_0050__neg_shuffle_dinucleotide_0	FBF-2	0	37	632	generated_negative	shuffle_dinucleotide	curated_0050	0.4396813213825226
+curated_0050__neg_cross_rna_0	FBF-2	0	6	632	generated_negative	cross_rna	curated_0050	0.43337368965148926
+curated_0055__neg_shuffle_uniform_0	HNRNPM	0	17918	729	generated_negative	shuffle_uniform	curated_0055	0.6905725002288818
+curated_0055__neg_shuffle_dinucleotide_0	HNRNPM	0	17918	729	generated_negative	shuffle_dinucleotide	curated_0055	0.7335014939308167
+curated_0055__neg_cross_rna_0	HNRNPM	0	6	729	generated_negative	cross_rna	curated_0055	0.46687155961990356
+curated_0056__neg_shuffle_uniform_0	HNRNPU	0	17918	800	generated_negative	shuffle_uniform	curated_0056	0.657937228679657
+curated_0056__neg_shuffle_dinucleotide_0	HNRNPU	0	17918	800	generated_negative	shuffle_dinucleotide	curated_0056	0.6011995077133179
+curated_0056__neg_cross_protein_0	YBX1 (CSD domain)	0	17918	78	generated_negative	cross_protein	curated_0056	0.9563274383544922
+curated_0056__neg_cross_rna_0	HNRNPU	0	6	800	generated_negative	cross_rna	curated_0056	0.4107168912887573
+curated_0057__neg_shuffle_uniform_0	HNRNPK	0	17918	463	generated_negative	shuffle_uniform	curated_0057	0.7231202721595764
+curated_0057__neg_shuffle_dinucleotide_0	HNRNPK	0	17918	463	generated_negative	shuffle_dinucleotide	curated_0057	0.7148666977882385
+curated_0057__neg_cross_rna_0	HNRNPK	0	6	463	generated_negative	cross_rna	curated_0057	0.20415149629116058
+curated_0058__neg_shuffle_uniform_0	MYEF2	0	17918	591	generated_negative	shuffle_uniform	curated_0058	0.8344443440437317
+curated_0058__neg_shuffle_dinucleotide_0	MYEF2	0	17918	591	generated_negative	shuffle_dinucleotide	curated_0058	0.7966171503067017
+curated_0058__neg_cross_protein_0	MCP (MS2 Coat Protein)	0	17918	130	generated_negative	cross_protein	curated_0058	0.9586362838745117
+curated_0058__neg_cross_rna_0	MYEF2	0	6	591	generated_negative	cross_rna	curated_0058	0.3079044222831726
+curated_0059__neg_shuffle_uniform_0	SPEN	0	17918	3644	generated_negative	shuffle_uniform	curated_0059	0.7319144010543823
+curated_0059__neg_shuffle_dinucleotide_0	SPEN	0	17918	3644	generated_negative	shuffle_dinucleotide	curated_0059	0.7771512866020203
+curated_0059__neg_cross_protein_0	SRSF1 RRM1 E87N	0	17918	86	generated_negative	cross_protein	curated_0059	0.9693580865859985
+curated_0059__neg_cross_rna_0	SPEN	0	6	3644	generated_negative	cross_rna	curated_0059	0.4679638743400574
+curated_0060__neg_shuffle_uniform_0	RBMXL1	0	17918	388	generated_negative	shuffle_uniform	curated_0060	0.7166225910186768
+curated_0060__neg_shuffle_dinucleotide_0	RBMXL1	0	17918	388	generated_negative	shuffle_dinucleotide	curated_0060	0.614513635635376
+curated_0060__neg_cross_rna_0	RBMXL1	0	6	388	generated_negative	cross_rna	curated_0060	0.3976033926010132
+curated_0061__neg_shuffle_uniform_0	HNRNPAB	0	17918	285	generated_negative	shuffle_uniform	curated_0061	0.8042951822280884
+curated_0061__neg_shuffle_dinucleotide_0	HNRNPAB	0	17918	285	generated_negative	shuffle_dinucleotide	curated_0061	0.826257050037384
+curated_0061__neg_cross_rna_0	HNRNPAB	0	6	285	generated_negative	cross_rna	curated_0061	0.1555875837802887
+curated_0062__neg_shuffle_uniform_0	HNRNPD	0	17918	355	generated_negative	shuffle_uniform	curated_0062	0.7407165765762329
+curated_0062__neg_shuffle_dinucleotide_0	HNRNPD	0	17918	355	generated_negative	shuffle_dinucleotide	curated_0062	0.7543232440948486
+curated_0062__neg_cross_rna_0	HNRNPD	0	6	355	generated_negative	cross_rna	curated_0062	0.4476585388183594
+curated_0063__neg_shuffle_uniform_0	HNRNPC	0	17918	313	generated_negative	shuffle_uniform	curated_0063	0.6545481085777283
+curated_0063__neg_shuffle_dinucleotide_0	HNRNPC	0	17918	313	generated_negative	shuffle_dinucleotide	curated_0063	0.7842718958854675
+curated_0063__neg_cross_rna_0	HNRNPC	0	6	313	generated_negative	cross_rna	curated_0063	0.6242758631706238
+curated_0064__neg_shuffle_uniform_0	TARDBP	0	17918	414	generated_negative	shuffle_uniform	curated_0064	0.7864639163017273
+curated_0064__neg_shuffle_dinucleotide_0	TARDBP	0	17918	414	generated_negative	shuffle_dinucleotide	curated_0064	0.8258783221244812
+curated_0064__neg_cross_rna_0	TARDBP	0	6	414	generated_negative	cross_rna	curated_0064	0.021752741187810898
+curated_0065__neg_shuffle_uniform_0	IGF2BP1	0	17918	577	generated_negative	shuffle_uniform	curated_0065	0.7044681310653687
+curated_0065__neg_shuffle_dinucleotide_0	IGF2BP1	0	17918	577	generated_negative	shuffle_dinucleotide	curated_0065	0.7568528652191162
+curated_0065__neg_cross_rna_0	IGF2BP1	0	6	577	generated_negative	cross_rna	curated_0065	0.5910188555717468
+curated_0066__neg_shuffle_uniform_0	DDX39B	0	17918	428	generated_negative	shuffle_uniform	curated_0066	0.666069507598877
+curated_0066__neg_shuffle_dinucleotide_0	DDX39B	0	17918	428	generated_negative	shuffle_dinucleotide	curated_0066	0.6994386315345764
+curated_0066__neg_cross_protein_0	RBM5 (part)	0	17918	117	generated_negative	cross_protein	curated_0066	0.9815441370010376
+curated_0066__neg_cross_rna_0	DDX39B	0	6	428	generated_negative	cross_rna	curated_0066	0.44492462277412415
+curated_0067__neg_shuffle_uniform_0	RBM15	0	17918	962	generated_negative	shuffle_uniform	curated_0067	0.5763884782791138
+curated_0067__neg_shuffle_dinucleotide_0	RBM15	0	17918	962	generated_negative	shuffle_dinucleotide	curated_0067	0.5663025975227356
+curated_0067__neg_cross_rna_0	RBM15	0	6	962	generated_negative	cross_rna	curated_0067	0.6486263275146484
+curated_0068__neg_shuffle_uniform_0	HNRNPUL2	0	17918	745	generated_negative	shuffle_uniform	curated_0068	0.6298754215240479
+curated_0068__neg_shuffle_dinucleotide_0	HNRNPUL2	0	17918	745	generated_negative	shuffle_dinucleotide	curated_0068	0.6068635582923889
+curated_0068__neg_cross_rna_0	HNRNPUL2	0	6	745	generated_negative	cross_rna	curated_0068	0.430074006319046
+curated_0069__neg_shuffle_uniform_0	RBM14	0	17918	669	generated_negative	shuffle_uniform	curated_0069	0.5782825946807861
+curated_0069__neg_shuffle_dinucleotide_0	RBM14	0	17918	669	generated_negative	shuffle_dinucleotide	curated_0069	0.5284626483917236
+curated_0069__neg_cross_rna_0	RBM14	0	6	669	generated_negative	cross_rna	curated_0069	0.37859439849853516
+curated_0070__neg_shuffle_uniform_0	SAFB	0	17918	937	generated_negative	shuffle_uniform	curated_0070	0.5738291144371033
+curated_0070__neg_shuffle_dinucleotide_0	SAFB	0	17918	937	generated_negative	shuffle_dinucleotide	curated_0070	0.588327169418335
+curated_0070__neg_cross_rna_0	SAFB	0	6	937	generated_negative	cross_rna	curated_0070	0.44333913922309875
+curated_0071__neg_shuffle_uniform_0	CIZ1	0	17918	898	generated_negative	shuffle_uniform	curated_0071	0.7347301244735718
+curated_0071__neg_shuffle_dinucleotide_0	CIZ1	0	17918	898	generated_negative	shuffle_dinucleotide	curated_0071	0.750864565372467
+curated_0071__neg_cross_rna_0	CIZ1	0	6	898	generated_negative	cross_rna	curated_0071	0.46259239315986633
+curated_0072__neg_shuffle_uniform_0	HNRNPA0	0	17918	305	generated_negative	shuffle_uniform	curated_0072	0.8046652674674988
+curated_0072__neg_shuffle_dinucleotide_0	HNRNPA0	0	17918	305	generated_negative	shuffle_dinucleotide	curated_0072	0.8623883128166199
+curated_0072__neg_cross_rna_0	HNRNPA0	0	6	305	generated_negative	cross_rna	curated_0072	0.23066310584545135
+curated_0073__neg_shuffle_uniform_0	YTHDC1	0	17918	736	generated_negative	shuffle_uniform	curated_0073	0.6765873432159424
+curated_0073__neg_shuffle_dinucleotide_0	YTHDC1	0	17918	736	generated_negative	shuffle_dinucleotide	curated_0073	0.5571488738059998
+curated_0073__neg_cross_rna_0	YTHDC1	0	6	736	generated_negative	cross_rna	curated_0073	0.43930208683013916
+curated_0074__neg_shuffle_uniform_0	SRSF7	0	17918	267	generated_negative	shuffle_uniform	curated_0074	0.6420950293540955
+curated_0074__neg_shuffle_dinucleotide_0	SRSF7	0	17918	267	generated_negative	shuffle_dinucleotide	curated_0074	0.6182909607887268
+curated_0074__neg_cross_protein_0	TCTP	0	17918	172	generated_negative	cross_protein	curated_0074	0.9575331211090088
+curated_0074__neg_cross_rna_0	SRSF7	0	6	267	generated_negative	cross_rna	curated_0074	0.34401935338974
+curated_0075__neg_shuffle_uniform_0	RALY	0	17918	312	generated_negative	shuffle_uniform	curated_0075	0.823529064655304
+curated_0075__neg_shuffle_dinucleotide_0	RALY	0	17918	312	generated_negative	shuffle_dinucleotide	curated_0075	0.8317696452140808
+curated_0075__neg_cross_rna_0	RALY	0	6	312	generated_negative	cross_rna	curated_0075	0.9520485401153564
+curated_0076__neg_shuffle_uniform_0	DDX17	0	17918	650	generated_negative	shuffle_uniform	curated_0076	0.6806740164756775
+curated_0076__neg_shuffle_dinucleotide_0	DDX17	0	17918	650	generated_negative	shuffle_dinucleotide	curated_0076	0.678831160068512
+curated_0076__neg_cross_rna_0	DDX17	0	6	650	generated_negative	cross_rna	curated_0076	0.36629050970077515
+curated_0077__neg_shuffle_uniform_0	RNF2	0	17918	336	generated_negative	shuffle_uniform	curated_0077	0.7506192326545715
+curated_0077__neg_shuffle_dinucleotide_0	RNF2	0	17918	336	generated_negative	shuffle_dinucleotide	curated_0077	0.6879168748855591
+curated_0077__neg_cross_rna_0	RNF2	0	6	336	generated_negative	cross_rna	curated_0077	0.46012362837791443
+curated_0078__neg_shuffle_uniform_0	THOC4	0	17918	255	generated_negative	shuffle_uniform	curated_0078	0.7864677906036377
+curated_0078__neg_shuffle_dinucleotide_0	THOC4	0	17918	255	generated_negative	shuffle_dinucleotide	curated_0078	0.6094462871551514
+curated_0078__neg_cross_rna_0	THOC4	0	6	255	generated_negative	cross_rna	curated_0078	0.39924466609954834
+curated_0079__neg_shuffle_uniform_0	SARNP	0	17918	210	generated_negative	shuffle_uniform	curated_0079	0.6445560455322266
+curated_0079__neg_shuffle_dinucleotide_0	SARNP	0	17918	210	generated_negative	shuffle_dinucleotide	curated_0079	0.7489681839942932
+curated_0079__neg_cross_rna_0	SARNP	0	6	210	generated_negative	cross_rna	curated_0079	0.45571330189704895
+curated_0080__neg_shuffle_uniform_0	ELAVL1	0	17918	326	generated_negative	shuffle_uniform	curated_0080	0.6251713633537292
+curated_0080__neg_shuffle_dinucleotide_0	ELAVL1	0	17918	326	generated_negative	shuffle_dinucleotide	curated_0080	0.7005358934402466
+curated_0080__neg_cross_rna_0	ELAVL1	0	6	326	generated_negative	cross_rna	curated_0080	0.8696812391281128
+curated_0081__neg_shuffle_uniform_0	HNRPDL	0	17918	301	generated_negative	shuffle_uniform	curated_0081	0.9316834807395935
+curated_0081__neg_shuffle_dinucleotide_0	HNRPDL	0	17918	301	generated_negative	shuffle_dinucleotide	curated_0081	0.8777592182159424
+curated_0081__neg_cross_rna_0	HNRPDL	0	6	301	generated_negative	cross_rna	curated_0081	0.09522384405136108
+curated_0082__neg_shuffle_uniform_0	SRSF3	0	17918	164	generated_negative	shuffle_uniform	curated_0082	0.7653428912162781
+curated_0082__neg_shuffle_dinucleotide_0	SRSF3	0	17918	164	generated_negative	shuffle_dinucleotide	curated_0082	0.6816168427467346
+curated_0082__neg_cross_rna_0	SRSF3	0	6	164	generated_negative	cross_rna	curated_0082	0.4060284197330475
+curated_0083__neg_shuffle_uniform_0	SRSF2	0	17918	221	generated_negative	shuffle_uniform	curated_0083	0.6534714698791504
+curated_0083__neg_shuffle_dinucleotide_0	SRSF2	0	17918	221	generated_negative	shuffle_dinucleotide	curated_0083	0.7404496669769287
+curated_0083__neg_cross_rna_0	SRSF2	0	6	221	generated_negative	cross_rna	curated_0083	0.27013537287712097
+curated_0084__neg_shuffle_uniform_0	TRIM6	0	17918	488	generated_negative	shuffle_uniform	curated_0084	0.6696725487709045
+curated_0084__neg_shuffle_dinucleotide_0	TRIM6	0	17918	488	generated_negative	shuffle_dinucleotide	curated_0084	0.5932589769363403
+curated_0084__neg_cross_rna_0	TRIM6	0	6	488	generated_negative	cross_rna	curated_0084	0.5544255971908569
+curated_0085__neg_shuffle_uniform_0	RBM4	0	17918	361	generated_negative	shuffle_uniform	curated_0085	0.6320255994796753
+curated_0085__neg_shuffle_dinucleotide_0	RBM4	0	17918	361	generated_negative	shuffle_dinucleotide	curated_0085	0.5633450150489807
+curated_0085__neg_cross_rna_0	RBM4	0	6	361	generated_negative	cross_rna	curated_0085	0.1521439403295517
+curated_0086__neg_shuffle_uniform_0	RBFOX2	0	17918	449	generated_negative	shuffle_uniform	curated_0086	0.811121940612793
+curated_0086__neg_shuffle_dinucleotide_0	RBFOX2	0	17918	449	generated_negative	shuffle_dinucleotide	curated_0086	0.7836768627166748
+curated_0086__neg_cross_rna_0	RBFOX2	0	6	449	generated_negative	cross_rna	curated_0086	0.2678713798522949
+curated_0087__neg_shuffle_uniform_0	RBM3	0	17918	153	generated_negative	shuffle_uniform	curated_0087	0.9211515784263611
+curated_0087__neg_shuffle_dinucleotide_0	RBM3	0	17918	153	generated_negative	shuffle_dinucleotide	curated_0087	0.7962275147438049
+curated_0087__neg_cross_protein_0	PTB1 (RBD1)	0	17918	115	generated_negative	cross_protein	curated_0087	0.9210702776908875
+curated_0087__neg_cross_rna_0	RBM3	0	6	153	generated_negative	cross_rna	curated_0087	0.3768443465232849
+curated_0088__neg_shuffle_uniform_0	SRSF9	0	17918	222	generated_negative	shuffle_uniform	curated_0088	0.8050839304924011
+curated_0088__neg_shuffle_dinucleotide_0	SRSF9	0	17918	222	generated_negative	shuffle_dinucleotide	curated_0088	0.8519750237464905
+curated_0088__neg_cross_rna_0	SRSF9	0	6	222	generated_negative	cross_rna	curated_0088	0.12754979729652405
+curated_0089__neg_shuffle_uniform_0	POLDIP3	0	17918	420	generated_negative	shuffle_uniform	curated_0089	0.6535248160362244
+curated_0089__neg_shuffle_dinucleotide_0	POLDIP3	0	17918	420	generated_negative	shuffle_dinucleotide	curated_0089	0.6433078050613403
+curated_0089__neg_cross_rna_0	POLDIP3	0	6	420	generated_negative	cross_rna	curated_0089	0.4277166426181793
+curated_0090__neg_shuffle_uniform_0	SRSF10	0	17918	262	generated_negative	shuffle_uniform	curated_0090	0.6960105299949646
+curated_0090__neg_shuffle_dinucleotide_0	SRSF10	0	17918	262	generated_negative	shuffle_dinucleotide	curated_0090	0.6784358024597168
+curated_0090__neg_cross_rna_0	SRSF10	0	6	262	generated_negative	cross_rna	curated_0090	0.2976242005825043
+curated_0091__neg_shuffle_uniform_0	ZFR	0	17918	1074	generated_negative	shuffle_uniform	curated_0091	0.7071712017059326
+curated_0091__neg_shuffle_dinucleotide_0	ZFR	0	17918	1074	generated_negative	shuffle_dinucleotide	curated_0091	0.6356222629547119
+curated_0091__neg_cross_rna_0	ZFR	0	6	1074	generated_negative	cross_rna	curated_0091	0.4975767135620117
+curated_0092__neg_shuffle_uniform_0	WTAP	0	17918	396	generated_negative	shuffle_uniform	curated_0092	0.5703147053718567
+curated_0092__neg_shuffle_dinucleotide_0	WTAP	0	17918	396	generated_negative	shuffle_dinucleotide	curated_0092	0.788634717464447
+curated_0092__neg_cross_protein_0	PTB1 (RBD2)	0	17918	145	generated_negative	cross_protein	curated_0092	0.794481635093689
+curated_0092__neg_cross_rna_0	WTAP	0	6	396	generated_negative	cross_rna	curated_0092	0.4251168370246887
+curated_0093__neg_shuffle_uniform_0	CELF1	0	17918	486	generated_negative	shuffle_uniform	curated_0093	0.9700860977172852
+curated_0093__neg_shuffle_dinucleotide_0	CELF1	0	17918	486	generated_negative	shuffle_dinucleotide	curated_0093	0.9567008018493652
+curated_0093__neg_cross_rna_0	CELF1	0	6	486	generated_negative	cross_rna	curated_0093	0.4407268464565277
+curated_0094__neg_shuffle_uniform_0	ERH	0	17918	104	generated_negative	shuffle_uniform	curated_0094	0.649108350276947
+curated_0094__neg_shuffle_dinucleotide_0	ERH	0	17918	104	generated_negative	shuffle_dinucleotide	curated_0094	0.5913654565811157
+curated_0094__neg_cross_rna_0	ERH	0	6	104	generated_negative	cross_rna	curated_0094	0.49549829959869385
+curated_0095__neg_shuffle_uniform_0	LIN28A	0	17918	209	generated_negative	shuffle_uniform	curated_0095	0.8861575722694397
+curated_0095__neg_shuffle_dinucleotide_0	LIN28A	0	17918	209	generated_negative	shuffle_dinucleotide	curated_0095	0.9163958430290222
+curated_0095__neg_cross_protein_0	HsPUM1	0	17918	318	generated_negative	cross_protein	curated_0095	0.9246721267700195
+curated_0095__neg_cross_rna_0	LIN28A	0	6	209	generated_negative	cross_rna	curated_0095	0.22028550505638123
+curated_0096__neg_shuffle_uniform_0	PCGF5	0	17918	256	generated_negative	shuffle_uniform	curated_0096	0.6303918361663818
+curated_0096__neg_shuffle_dinucleotide_0	PCGF5	0	17918	256	generated_negative	shuffle_dinucleotide	curated_0096	0.758038341999054
+curated_0096__neg_cross_rna_0	PCGF5	0	6	256	generated_negative	cross_rna	curated_0096	0.4789573848247528
+curated_0097__neg_shuffle_uniform_0	RYBP	0	17918	228	generated_negative	shuffle_uniform	curated_0097	0.7075170874595642
+curated_0097__neg_shuffle_dinucleotide_0	RYBP	0	17918	228	generated_negative	shuffle_dinucleotide	curated_0097	0.5691700577735901
+curated_0097__neg_cross_protein_0	IGF2BP1	0	17918	158	generated_negative	cross_protein	curated_0097	0.6904634237289429
+curated_0097__neg_cross_rna_0	RYBP	0	6	228	generated_negative	cross_rna	curated_0097	0.4403456151485443
+curated_0098__neg_shuffle_uniform_0	RNF20	0	17918	973	generated_negative	shuffle_uniform	curated_0098	0.615543782711029
+curated_0098__neg_shuffle_dinucleotide_0	RNF20	0	17918	973	generated_negative	shuffle_dinucleotide	curated_0098	0.6549278497695923
+curated_0098__neg_cross_rna_0	RNF20	0	6	973	generated_negative	cross_rna	curated_0098	0.4590650796890259
+curated_0099__neg_shuffle_uniform_0	RNMT	0	17918	465	generated_negative	shuffle_uniform	curated_0099	0.7205672264099121
+curated_0099__neg_shuffle_dinucleotide_0	RNMT	0	17918	465	generated_negative	shuffle_dinucleotide	curated_0099	0.700518786907196
+curated_0099__neg_cross_rna_0	RNMT	0	6	465	generated_negative	cross_rna	curated_0099	0.49317917227745056
+curated_0100__neg_shuffle_uniform_0	PTBP2	0	17918	531	generated_negative	shuffle_uniform	curated_0100	0.6649805307388306
+curated_0100__neg_shuffle_dinucleotide_0	PTBP2	0	17918	531	generated_negative	shuffle_dinucleotide	curated_0100	0.6618995666503906
+curated_0100__neg_cross_rna_0	PTBP2	0	6	531	generated_negative	cross_rna	curated_0100	0.8773611783981323
+curated_0101__neg_shuffle_uniform_0	SAP18	0	17918	153	generated_negative	shuffle_uniform	curated_0101	0.6964243650436401
+curated_0101__neg_shuffle_dinucleotide_0	SAP18	0	17918	153	generated_negative	shuffle_dinucleotide	curated_0101	0.6469262838363647
+curated_0101__neg_cross_rna_0	SAP18	0	6	153	generated_negative	cross_rna	curated_0101	0.3888741731643677
+curated_0102__neg_shuffle_uniform_0	TRIM71	0	17918	855	generated_negative	shuffle_uniform	curated_0102	0.786626935005188
+curated_0102__neg_shuffle_dinucleotide_0	TRIM71	0	17918	855	generated_negative	shuffle_dinucleotide	curated_0102	0.7315163612365723
+curated_0102__neg_cross_rna_0	TRIM71	0	6	855	generated_negative	cross_rna	curated_0102	0.6114230751991272
+curated_0103__neg_shuffle_uniform_0	IGF2BP3	0	17918	579	generated_negative	shuffle_uniform	curated_0103	0.6241719722747803
+curated_0103__neg_shuffle_dinucleotide_0	IGF2BP3	0	17918	579	generated_negative	shuffle_dinucleotide	curated_0103	0.5999456644058228
+curated_0103__neg_cross_rna_0	IGF2BP3	0	6	579	generated_negative	cross_rna	curated_0103	0.5293811559677124
+curated_0104__neg_shuffle_uniform_0	L1TD1	0	17918	782	generated_negative	shuffle_uniform	curated_0104	0.7708223462104797
+curated_0104__neg_shuffle_dinucleotide_0	L1TD1	0	17918	782	generated_negative	shuffle_dinucleotide	curated_0104	0.6792060732841492
+curated_0104__neg_cross_rna_0	L1TD1	0	6	782	generated_negative	cross_rna	curated_0104	0.47860974073410034
+curated_0105__neg_shuffle_uniform_0	MYBBP1A	0	17918	1344	generated_negative	shuffle_uniform	curated_0105	0.7145742177963257
+curated_0105__neg_shuffle_dinucleotide_0	MYBBP1A	0	17918	1344	generated_negative	shuffle_dinucleotide	curated_0105	0.5713778734207153
+curated_0105__neg_cross_rna_0	MYBBP1A	0	6	1344	generated_negative	cross_rna	curated_0105	0.43137916922569275
+curated_0106__neg_shuffle_uniform_0	YBX1	0	2362	324	generated_negative	shuffle_uniform	curated_0106	0.641517162322998
+curated_0106__neg_shuffle_dinucleotide_0	YBX1	0	2362	324	generated_negative	shuffle_dinucleotide	curated_0106	0.659125566482544
+curated_0106__neg_cross_protein_0	PTB1 (RBD2)	0	2362	145	generated_negative	cross_protein	curated_0106	0.680546760559082
+curated_0106__neg_cross_rna_0	YBX1	0	6	324	generated_negative	cross_rna	curated_0106	0.32059064507484436
+curated_0107__neg_shuffle_uniform_0	CDK6	0	2362	326	generated_negative	shuffle_uniform	curated_0107	0.6451998353004456
+curated_0107__neg_shuffle_dinucleotide_0	CDK6	0	2362	326	generated_negative	shuffle_dinucleotide	curated_0107	0.5776404142379761
+curated_0107__neg_cross_rna_0	CDK6	0	6	326	generated_negative	cross_rna	curated_0107	0.3956182897090912
+curated_0108__neg_shuffle_uniform_0	TCTP	0	2362	172	generated_negative	shuffle_uniform	curated_0108	0.6556792259216309
+curated_0108__neg_shuffle_dinucleotide_0	TCTP	0	2362	172	generated_negative	shuffle_dinucleotide	curated_0108	0.5641852617263794
+curated_0108__neg_cross_protein_0	SRSF10	0	2362	262	generated_negative	cross_protein	curated_0108	0.7513971328735352
+curated_0108__neg_cross_rna_0	TCTP	0	6	172	generated_negative	cross_rna	curated_0108	0.47727617621421814
+curated_0109__neg_shuffle_uniform_0	LSD1 (KDM1A)	0	2362	852	generated_negative	shuffle_uniform	curated_0109	0.5617067813873291
+curated_0109__neg_shuffle_dinucleotide_0	LSD1 (KDM1A)	0	2362	852	generated_negative	shuffle_dinucleotide	curated_0109	0.4975143373012543
+curated_0109__neg_cross_rna_0	LSD1 (KDM1A)	0	6	852	generated_negative	cross_rna	curated_0109	0.47925612330436707
+curated_0110__neg_shuffle_uniform_0	EZH2	0	2362	746	generated_negative	shuffle_uniform	curated_0110	0.7567525506019592
+curated_0110__neg_shuffle_dinucleotide_0	EZH2	0	2362	746	generated_negative	shuffle_dinucleotide	curated_0110	0.704505205154419
+curated_0110__neg_cross_protein_0	ERH	0	2362	104	generated_negative	cross_protein	curated_0110	0.626504123210907
+curated_0110__neg_cross_rna_0	EZH2	0	6	746	generated_negative	cross_rna	curated_0110	0.4367314875125885
+curated_0111__neg_shuffle_uniform_0	AKT1	0	2362	480	generated_negative	shuffle_uniform	curated_0111	0.6299965381622314
+curated_0111__neg_shuffle_dinucleotide_0	AKT1	0	2362	480	generated_negative	shuffle_dinucleotide	curated_0111	0.6355410218238831
+curated_0111__neg_cross_rna_0	AKT1	0	6	480	generated_negative	cross_rna	curated_0111	0.44605013728141785
+curated_0112__neg_shuffle_uniform_0	RSK1 (RPS6KA1)	0	2362	735	generated_negative	shuffle_uniform	curated_0112	0.6151371598243713
+curated_0112__neg_shuffle_dinucleotide_0	RSK1 (RPS6KA1)	0	2362	735	generated_negative	shuffle_dinucleotide	curated_0112	0.6249901652336121
+curated_0112__neg_cross_protein_0	RBM5 (part)	0	2362	117	generated_negative	cross_protein	curated_0112	0.8449380397796631
+curated_0112__neg_cross_rna_0	RSK1 (RPS6KA1)	0	6	735	generated_negative	cross_rna	curated_0112	0.4947287142276764
+curated_0113__neg_shuffle_uniform_0	ERK1 (MAPK3)	0	2362	382	generated_negative	shuffle_uniform	curated_0113	0.5998867750167847
+curated_0113__neg_shuffle_dinucleotide_0	ERK1 (MAPK3)	0	2362	382	generated_negative	shuffle_dinucleotide	curated_0113	0.5982047319412231
+curated_0113__neg_cross_rna_0	ERK1 (MAPK3)	0	6	382	generated_negative	cross_rna	curated_0113	0.4476586878299713
+curated_0114__neg_shuffle_uniform_0	ERK2 (MAPK1)	0	2362	360	generated_negative	shuffle_uniform	curated_0114	0.5878003835678101
+curated_0114__neg_shuffle_dinucleotide_0	ERK2 (MAPK1)	0	2362	360	generated_negative	shuffle_dinucleotide	curated_0114	0.6802785992622375
+curated_0114__neg_cross_protein_0	SRSF1 RRM1 E87N	0	2362	86	generated_negative	cross_protein	curated_0114	0.7703394889831543
+curated_0114__neg_cross_rna_0	ERK2 (MAPK1)	0	6	360	generated_negative	cross_rna	curated_0114	0.4453515410423279
+curated_0116__neg_shuffle_uniform_0	YBX1 (CSD domain)	0	2362	78	generated_negative	shuffle_uniform	curated_0116	0.7028290629386902
+curated_0116__neg_shuffle_dinucleotide_0	YBX1 (CSD domain)	0	2362	78	generated_negative	shuffle_dinucleotide	curated_0116	0.8009383678436279
+curated_0116__neg_cross_rna_0	YBX1 (CSD domain)	0	6	78	generated_negative	cross_rna	curated_0116	0.41074255108833313
+curated_0117__neg_shuffle_uniform_0	YBX1 (CSD domain)	0	10227	78	generated_negative	shuffle_uniform	curated_0117	0.7720547318458557
+curated_0117__neg_shuffle_dinucleotide_0	YBX1 (CSD domain)	0	10227	78	generated_negative	shuffle_dinucleotide	curated_0117	0.7170185446739197
+curated_0117__neg_cross_protein_0	ERH	0	10227	104	generated_negative	cross_protein	curated_0117	0.7240775227546692
+curated_0119__neg_shuffle_uniform_0	FBF-1 (part)	0	28	494	generated_negative	shuffle_uniform	curated_0119	0.4688989520072937
+curated_0119__neg_shuffle_dinucleotide_0	FBF-1 (part)	0	28	494	generated_negative	shuffle_dinucleotide	curated_0119	0.46373242139816284
+curated_0119__neg_cross_protein_0	YBX1 (CSD domain)	0	28	78	generated_negative	cross_protein	curated_0119	0.6171324253082275
+curated_0119__neg_cross_rna_0	FBF-1 (part)	0	6	494	generated_negative	cross_rna	curated_0119	0.05415439233183861
+curated_0121__neg_shuffle_uniform_0	FBF-1 (part)	0	30	494	generated_negative	shuffle_uniform	curated_0121	0.46236369013786316
+curated_0121__neg_shuffle_dinucleotide_0	FBF-1 (part)	0	30	494	generated_negative	shuffle_dinucleotide	curated_0121	0.42808932065963745
+curated_0121__neg_cross_protein_0	YBX1 (CSD domain)	0	30	78	generated_negative	cross_protein	curated_0121	0.5453087091445923
+curated_0123__neg_shuffle_uniform_0	FBF-2 (part)	0	28	631	generated_negative	shuffle_uniform	curated_0123	0.3281024694442749
+curated_0123__neg_shuffle_dinucleotide_0	FBF-2 (part)	0	28	631	generated_negative	shuffle_dinucleotide	curated_0123	0.40091854333877563
+curated_0123__neg_cross_rna_0	FBF-2 (part)	0	6	631	generated_negative	cross_rna	curated_0123	0.43337368965148926
+curated_0124__neg_shuffle_uniform_0	FBF-2 (part)	0	30	631	generated_negative	shuffle_uniform	curated_0124	0.21290184557437897
+curated_0124__neg_shuffle_dinucleotide_0	FBF-2 (part)	0	30	631	generated_negative	shuffle_dinucleotide	curated_0124	0.3388065695762634
+curated_0124__neg_cross_rna_0	FBF-2 (part)	0	6	631	generated_negative	cross_rna	curated_0124	0.13468998670578003
+curated_0129__neg_shuffle_uniform_0	Puf3	0	137	879	generated_negative	shuffle_uniform	curated_0129	0.48987534642219543
+curated_0129__neg_shuffle_dinucleotide_0	Puf3	0	137	879	generated_negative	shuffle_dinucleotide	curated_0129	0.5713279843330383
+curated_0129__neg_cross_protein_0	SRSF1 RRM1 E87N	0	137	86	generated_negative	cross_protein	curated_0129	0.3501570224761963
+curated_0129__neg_cross_rna_0	Puf3	0	6	879	generated_negative	cross_rna	curated_0129	0.5532776713371277
+curated_0130__neg_shuffle_uniform_0	Puf3	0	101	879	generated_negative	shuffle_uniform	curated_0130	0.4883183538913727
+curated_0130__neg_shuffle_dinucleotide_0	Puf3	0	101	879	generated_negative	shuffle_dinucleotide	curated_0130	0.5631645917892456
+curated_0130__neg_cross_protein_0	SRSF1 RRM1 E87N	0	101	86	generated_negative	cross_protein	curated_0130	0.3501570224761963
+curated_0130__neg_cross_rna_0	Puf3	0	6	879	generated_negative	cross_rna	curated_0130	0.07386942952871323
+curated_0131__neg_shuffle_uniform_0	Puf3	0	76	879	generated_negative	shuffle_uniform	curated_0131	0.4169696867465973
+curated_0131__neg_shuffle_dinucleotide_0	Puf3	0	76	879	generated_negative	shuffle_dinucleotide	curated_0131	0.5005021095275879
+curated_0131__neg_cross_protein_0	SRSF1 RRM1 E87N	0	76	86	generated_negative	cross_protein	curated_0131	0.2783567011356354
+curated_0133__neg_shuffle_uniform_0	RBM5 (part)	0	10	117	generated_negative	shuffle_uniform	curated_0133	0.28156253695487976
+curated_0133__neg_shuffle_dinucleotide_0	RBM5 (part)	0	10	117	generated_negative	shuffle_dinucleotide	curated_0133	0.12977884709835052
+curated_0133__neg_cross_protein_0	PTB1 (RBD2)	0	10	145	generated_negative	cross_protein	curated_0133	0.301721453666687
+curated_0133__neg_cross_rna_0	RBM5 (part)	0	54	117	generated_negative	cross_rna	curated_0133	0.24209921061992645
+curated_0144__neg_shuffle_uniform_0	FMRP-NT	0	76	217	generated_negative	shuffle_uniform	curated_0144	0.5496355891227722
+curated_0144__neg_shuffle_dinucleotide_0	FMRP-NT	0	76	217	generated_negative	shuffle_dinucleotide	curated_0144	0.48264020681381226
+curated_0144__neg_cross_protein_0	MCP (MS2 Coat Protein)	0	76	130	generated_negative	cross_protein	curated_0144	0.4189748764038086
+curated_0144__neg_cross_rna_0	FMRP-NT	0	6	217	generated_negative	cross_rna	curated_0144	0.45482340455055237
+curated_0151__neg_shuffle_uniform_0	ASF/SF2	0	58	248	generated_negative	shuffle_uniform	curated_0151	0.415589839220047
+curated_0151__neg_shuffle_dinucleotide_0	ASF/SF2	0	58	248	generated_negative	shuffle_dinucleotide	curated_0151	0.5965120196342468
+curated_0151__neg_cross_protein_0	PTB1 (RBD2)	0	58	145	generated_negative	cross_protein	curated_0151	0.39363619685173035
+curated_0151__neg_cross_rna_0	ASF/SF2	0	6	248	generated_negative	cross_rna	curated_0151	0.15002335608005524
+curated_0152__neg_shuffle_uniform_0	ASF/SF2	0	58	248	generated_negative	shuffle_uniform	curated_0152	0.5077950954437256
+curated_0152__neg_shuffle_dinucleotide_0	ASF/SF2	0	58	248	generated_negative	shuffle_dinucleotide	curated_0152	0.6191225647926331
+curated_0152__neg_cross_protein_0	PTB1 (RBD2)	0	58	145	generated_negative	cross_protein	curated_0152	0.4197242558002472
+curated_0153__neg_shuffle_uniform_0	ASF/SF2	0	58	248	generated_negative	shuffle_uniform	curated_0153	0.07456664741039276
+curated_0153__neg_shuffle_dinucleotide_0	ASF/SF2	0	58	248	generated_negative	shuffle_dinucleotide	curated_0153	0.18433263897895813
+curated_0153__neg_cross_protein_0	PTB1 (RBD2)	0	58	145	generated_negative	cross_protein	curated_0153	0.4073767066001892
+curated_0154__neg_shuffle_uniform_0	ASF/SF2	0	56	248	generated_negative	shuffle_uniform	curated_0154	0.45898523926734924
+curated_0154__neg_shuffle_dinucleotide_0	ASF/SF2	0	56	248	generated_negative	shuffle_dinucleotide	curated_0154	0.5156542658805847
+curated_0154__neg_cross_protein_0	PTB1 (RBD2)	0	56	145	generated_negative	cross_protein	curated_0154	0.44585785269737244
+curated_0157__neg_shuffle_uniform_0	SC35	0	58	221	generated_negative	shuffle_uniform	curated_0157	0.4542326033115387
+curated_0157__neg_shuffle_dinucleotide_0	SC35	0	58	221	generated_negative	shuffle_dinucleotide	curated_0157	0.3215576708316803
+curated_0157__neg_cross_protein_0	ERH	0	58	104	generated_negative	cross_protein	curated_0157	0.3674556314945221
+curated_0157__neg_cross_rna_0	SC35	0	6	221	generated_negative	cross_rna	curated_0157	0.18438927829265594
+curated_0158__neg_shuffle_uniform_0	SC35	0	57	221	generated_negative	shuffle_uniform	curated_0158	0.5260614156723022
+curated_0158__neg_shuffle_dinucleotide_0	SC35	0	57	221	generated_negative	shuffle_dinucleotide	curated_0158	0.4935571551322937
+curated_0158__neg_cross_protein_0	ERH	0	57	104	generated_negative	cross_protein	curated_0158	0.42984363436698914
+curated_0162__neg_shuffle_uniform_0	MCP (MS2 Coat Protein)	0	20	130	generated_negative	shuffle_uniform	curated_0162	0.43054479360580444
+curated_0162__neg_shuffle_dinucleotide_0	MCP (MS2 Coat Protein)	0	20	130	generated_negative	shuffle_dinucleotide	curated_0162	0.17825528979301453
+curated_0162__neg_cross_protein_0	SRSF1 RRM1 E87N	0	20	86	generated_negative	cross_protein	curated_0162	0.07900998741388321
+curated_0162__neg_cross_rna_0	MCP (MS2 Coat Protein)	0	26	130	generated_negative	cross_rna	curated_0162	0.3294856548309326
+curated_0164__neg_shuffle_uniform_0	MCP (MS2 Coat Protein)	0	20	130	generated_negative	shuffle_uniform	curated_0164	0.23303809762001038
+curated_0164__neg_shuffle_dinucleotide_0	MCP (MS2 Coat Protein)	0	20	130	generated_negative	shuffle_dinucleotide	curated_0164	0.08091572672128677
+curated_0164__neg_cross_protein_0	SRSF1 RRM1 E87N	0	20	86	generated_negative	cross_protein	curated_0164	0.24102535843849182
+curated_0164__neg_cross_rna_0	MCP (MS2 Coat Protein)	0	14	130	generated_negative	cross_rna	curated_0164	0.24748298525810242
