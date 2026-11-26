@@ -396,6 +396,39 @@ def stage_overlap_all(args) -> None:
     print("saved", out / "overlap_all_summary.json")
 
 
+
+def stage_cross_cell(args) -> None:
+    """Does a protein keep its peaks between two cell lines? Jaccard of the K562 set against the HepG2 sets, own protein against the others."""
+    out = resolve(args.out_dir)
+    dest = resolve(args.bed_dir)
+    t = pd.read_csv(out / "files_all.tsv", sep="\t").fillna("")
+    t = t[t.file != ""]
+    rows = []
+    c1, c2 = args.cells[0], args.cells[1]
+    for assay in ("eclip", "chip"):
+        sets = {}
+        for (tg, cell), g in t[t.assay == assay].groupby(["target", "cell"]):
+            arrs = [read_axis(dest / f"{r.target}_{r.assay}_{r.cell.replace(' ', '')}_{r.experiment}_{r.file}.bed.gz") for r in g.itertuples()]
+            sets[(tg, cell)] = PeakSet(np.vstack(arrs))
+        a = sorted(k[0] for k in sets if k[1] == c1)
+        b = sorted(k[0] for k in sets if k[1] == c2)
+        both = sorted(set(a) & set(b))
+        if len(both) < 5:
+            continue
+        J = np.array([[jaccard_fast(sets[(x, c1)], sets[(y, c2)]) for y in b] for x in a])
+        L = np.log(J + 1e-6)
+        R = L - L.mean(1, keepdims=True) - L.mean(0, keepdims=True) + L.mean()
+        for name, M in (("raw", J), ("size_adjusted", R)):
+            rs = rank_stats(M, a, b)
+            rows.append(dict(assay=assay, statistic=name, n_proteins_in_both=len(both), n_columns=len(b), own_rank1=int((rs["rank"] == 1).sum()),
+                             top5_fraction=float((rs["rank"] <= 5).mean()), median_rank=float(rs["rank"].median()), median_z=float(rs.z.median()),
+                             median_own_jaccard=float(rs.own.median()), median_other_jaccard=float(rs.others_mean.median())))
+            rs.assign(assay=assay, statistic=name).to_csv(out / f"cross_cell_{assay}_{name}.tsv", sep="\t", index=False)
+    res = pd.DataFrame(rows)
+    res.to_csv(out / "cross_cell_summary.tsv", sep="\t", index=False)
+    print(res.round(4).to_string(index=False))
+
+
 def stage_selftest(args) -> None:
     rng = np.random.default_rng(0)
     L = 200_000_000
@@ -437,7 +470,7 @@ def stage_selftest(args) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", choices=["files", "files_all", "download", "overlap", "overlap_all", "selftest"])
+    ap.add_argument("stage", choices=["files", "files_all", "download", "overlap", "overlap_all", "cross_cell", "selftest"])
     ap.add_argument("--out_dir", default="results/encode_peaks")
     ap.add_argument("--bed_dir", default="data/external/encode_chip_eclip")
     ap.add_argument("--chip_tsv", default="results/encode_map/encode_chip_grch38.tsv")
@@ -451,7 +484,7 @@ def main() -> None:
     ap.add_argument("--n_perm", type=int, default=500)
     ap.add_argument("--seed", type=int, default=0)
     args = ap.parse_args()
-    {"files": stage_files, "files_all": stage_files_all, "download": stage_download, "overlap": stage_overlap, "overlap_all": stage_overlap_all, "selftest": stage_selftest}[args.stage](args)
+    {"files": stage_files, "files_all": stage_files_all, "download": stage_download, "overlap": stage_overlap, "overlap_all": stage_overlap_all, "cross_cell": stage_cross_cell, "selftest": stage_selftest}[args.stage](args)
 
 
 if __name__ == "__main__":
