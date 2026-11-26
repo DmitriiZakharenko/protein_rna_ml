@@ -134,7 +134,7 @@ pip install -r requirements.txt
 
 ### Step 1.1 — Data Loading & EDA
 
-Script: `scripts/01_prepare_htr_selex.py`
+Script: `scripts/archive/01_prepare_htr_selex.py`
 
 - Load `ml_dataset_simple_clean.tsv`
 - Report class balance (target: 33% pos / 67% neg — ✅ confirmed)
@@ -340,7 +340,7 @@ ml_dataset_simple_clean.tsv
 
 - [ ] Rename `ml/` folder to `protein_rna_ml/`
 - [ ] Set up conda environment (`pip install -r requirements.txt`)
-- [ ] Run `scripts/01_prepare_htr_selex.py` → creates splits + encoded data
+- [ ] Run `scripts/archive/01_prepare_htr_selex.py` → creates splits + encoded data
 - [ ] Run `scripts/02_train_validation_model.py` → trains XGBoost baseline
 - [ ] Run `scripts/03_evaluate_validation.py` → generates full report
 - [ ] Review `results/htr_selex/metrics/validation_results.json`

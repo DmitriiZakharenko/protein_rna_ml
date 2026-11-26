@@ -88,7 +88,7 @@ python scripts/06_train_generalized_v2.py \
 
 ### Step 5 — ~~RNAcompete zero-shot benchmark~~ **INVALID after v3a training**
 
-Do **not** run `scripts/20` on `rnacompete_all.tsv` / `rnacompete_rbpzoo.tsv` for models
+Do **not** run `scripts/archive/20_evaluate_benchmark.py` on `rnacompete_all.tsv` / `rnacompete_rbpzoo.tsv` for models
 trained on `generalized_v3a`: Eukarya + RBPZoo full panels are already in training.
 
 Use instead:

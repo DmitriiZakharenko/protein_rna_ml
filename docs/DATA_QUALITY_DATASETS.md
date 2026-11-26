@@ -4,7 +4,7 @@
 **Goal**: Motif-level RBP–RNA binding (in vitro first, site-level in vivo second).  
 **Not in scope here**: NPInter/RPI catalogs, PRIM HuRPA interactome, starBase miRNA networks.
 
-**Related**: `DATA.md`, `DATA_SOURCES_AND_DOWNLOADS.md`, `DATA_CLIP_PRIM_INVENTORY.md`, `RESEARCH_ROADMAP.md` §7.
+**Related**: `DATA.md`, `DATA_SOURCES_AND_DOWNLOADS.md`, `DATA_CLIP_PRIM_INVENTORY.md`, `docs/archive/RESEARCH_ROADMAP.md` §7.
 
 ---
 
@@ -178,7 +178,7 @@ Manifest: `data/raw/new_assays/MANIFEST.json` · ProNAB request: `data/raw/new_a
 
 | Field | Value |
 |-------|--------|
-| **Roadmap** | `RESEARCH_ROADMAP.md` Phase 6 |
+| **Roadmap** | `docs/archive/RESEARCH_ROADMAP.md` Phase 6 |
 | **Use** | In vivo bridge for ALS-relevant RBPs; site-level if peaks + flanks extracted like eCLIP |
 | **Access** | ENCODE / GEO per study (review Xiang 2024 refs.) |
 

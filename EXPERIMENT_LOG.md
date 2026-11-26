@@ -1,11 +1,11 @@
 # Experiment Log
 
 **Project**: Protein–RNA Binding Prediction
-**Last updated**: 2026-09-01
+**Last updated**: 2026-11-26 (entries up to 2026-11-19)
 
 This file is the canonical record of every training run. Each entry documents what
 was run, what the results were, what failed, and what was learned. All Phase 2 results have been retrained with the double class-weighting bug fixed (2026-05-13).
-Numbers in this log reflect clean checkpoints unless otherwise noted.
+Numbers in this log reflect clean checkpoints unless otherwise noted. Result files of the V4 runs (3 seeds) are on the GPU VM and are not in this copy of the repository. Their numbers are recorded in `results/phase3b_summary.json`.
 
 ---
 
@@ -77,6 +77,8 @@ Without this, XGBoost trained for all 300 rounds with diverging val loss. Bug co
 | Test | 0.674 | 0.544 |
 
 **Result**: FAIL — Val AUROC peaked at epoch 1 then degraded monotonically.
+
+**Status of the run**: the result file `results/generalized/v1_mlp_results.json` is dated 2026-04-27. It was produced before the sampler was removed from `scripts/05` (V1 is not in the list of scripts affected in the Known Bugs table). The rerun of V1 after the fix is pending.
 
 **Root cause**: RNA k-mer frequency is length-dependent. RBNS sequences are 20 nt; HTR-SELEX
 are 40 nt. A 4-mer count over 20 nt has a different magnitude and distribution than over
@@ -251,10 +253,10 @@ Built expanded set with `scripts/31_build_external_benchmark.py` (shuffle + cros
 
 **Summary JSON**: `results/phase3a_summary.json`
 
-### Not yet run on v3a checkpoint
+### Not run on the v3a checkpoint
 
-- RNAcompete zero-shot (`scripts/20`) — compare to v2 median 0.549
-- Multi-seed variance (`scripts/18`) on v3a
+- Multi-seed V2 (`scripts/18`) on v3a: not run. V4 was run with 3 seeds (2026-08-30).
+- RNAcompete zero-shot (`scripts/archive/20_evaluate_benchmark.py`): not valid for v3a, because the Eukarya and RBPZoo panels are part of its training data.
 
 ---
 
@@ -264,16 +266,25 @@ Built expanded set with `scripts/31_build_external_benchmark.py` (shuffle + cros
 |-----|-----------|-----------------|----------|
 | Double class-weighting (WeightedRandomSampler + pos_weight) | 2026-05 audit | 06, 08, 09, 10 | 2026-05-13 |
 | Per-protein "dataset" column always "unknown" | 2026-05 audit | 06 | 2026-05-13 |
-| Broken script reference in run_pipeline.sh | 2026-05 audit | run_pipeline.sh | 2026-05-13 |
+| Broken script reference in run_pipeline.sh | 2026-05 audit | `scripts/archive/run_pipeline.sh` | 2026-05-13 |
 | Missing transformers/sentencepiece/openpyxl in requirements.txt | 2026-05 audit | requirements.txt | 2026-05-13 |
 | XGBoost early_stopping_rounds in constructor vs fit() | 2026-04 | 02_train_validation_model.py | 2026-04 |
 
 ---
 
-## Next Planned Experiments
+## Experiment status table (2026-11-26)
 
 | ID | Name | Purpose | Status | Result |
 |----|------|---------|--------|--------|
+| EXP-V2-CLEAN | V2 retrain with corrected weighting | Anchor baseline | **Done** | Test AUROC 0.690, AUPRC 0.580 |
+| EXP-RNACOMPETE-V2 | RNAcompete zero-shot on V2 (Phase 2 checkpoint) | Generalization test | **Done** | Median AUROC 0.549 |
+| EXP-PHASE3A | V2 on SELEX + RNAcompete data | Scale training | **Done** | Test AUROC 0.813 on v3a |
+| EXP-EXT-31 | Literature benchmark + generated negatives | External diagnostic | **Done** | Curated 0.763, expanded 0.688 |
+| EXP-V4-BILINEAR | V4 bilinear interaction (`scripts/21`) | Pairwise interaction layer | **Done** | 0.829 +- 0.009 (3 seeds), see 2026-08-30 |
+| EXP-V2-MULTISEED-V3A | V2 x 5 seeds on v3a | Variance | Not run | n/a |
+| EXP-RNACOMPETE-V3A | RNAcompete zero-shot on v3a checkpoint | Generalization test | Not valid | Panels are in v3a training |
+
+----|------|---------|--------|--------|
 | EXP-V2-CLEAN | V2 retrain with corrected weighting | Clean anchor baseline | **Done** | Test AUROC 0.690, AUPRC 0.580 |
 | EXP-RNACOMPETE-V2 | RNAcompete zero-shot on V2 | Generalization test | **Done** | Median AUROC 0.549 |
 | EXP-PHASE3A | V2 on SELEX+RNAcompete data | Scale training | **Done** | Test AUROC 0.813 on v3a |
@@ -299,10 +310,9 @@ Built expanded set with `scripts/31_build_external_benchmark.py` (shuffle + cros
 | `18_run_multiseed.py` | `--live` flag streams epoch logs to terminal while still writing `train.log` |
 | `18_run_multiseed.py` | Sets `PYTHONUNBUFFERED=1` in child process environment |
 
-### Multi-seed Status
+### Multi-seed status
 
-seed_0 checkpoint saved to `results/multiseed/v2_cnn/seed_0/checkpoints/best_model.pt`.
-Seeds 1-4 pending. Run command:
+Only `results/multiseed/v2_cnn/seed_0/checkpoints/best_model.pt` exists for V2 on `generalized_v2` (seeds 1-4 not run). The V4 multi-seed run on v3a (seeds 42, 0, 1) is described in the 2026-08-30 entry. Runner command (V2 on `generalized_v2`, not run beyond seed 0):
 
 ```bash
 python scripts/18_run_multiseed.py \
@@ -318,7 +328,7 @@ python scripts/18_run_multiseed.py \
 ## RNAcompete Zero-Shot Benchmark — V2 CNN (Clean Checkpoint)
 
 **Date**: 2026-05-13  
-**Script**: `scripts/20_evaluate_benchmark.py`  
+**Script**: `scripts/archive/20_evaluate_benchmark.py` (historical)  
 **Checkpoint**: `models/saved/generalized_v2/best_model.pt` (clean, bug fixed)  
 **Benchmark**: `data/benchmarks/rnacompete/rnacompete_all.tsv` (2M rows subsampled from 13.9M)
 
@@ -383,7 +393,7 @@ See STRATEGY.md §Next Steps for the full prioritized plan.
 
 ---
 
-## 2026-06-16 — RNAcompete intensity spectrum samples (scripts 27–28)
+## 2026-06-16 — RNAcompete intensity spectrum samples (scripts 27-28, archived in `scripts/archive/`)
 
 **Request**: 100 probes per protein, evenly sampled across log-intensity percentiles at modal
 probe length; top 3 RBPs by mean positive intensity; test protein length vs intensity correlation.
@@ -567,7 +577,7 @@ Caveats: single seed, one 60k sample, name-level (not MMseqs) protein novelty on
 - eCLIP track closed as an audit/negative-transfer result; headline benchmark becomes the cross-protein-negative probe.
 - Multi-seed probe done (see above): V4 > V2 confirmed.
 - MMseqs2 audit done (see below): probe signal is homology-driven.
-- Next: cluster-based test split (≤30% identity), Phase 3C (affinity).
+- Next (planned at the time): cluster-based test split (the threshold used in `scripts/58` is 40% identity at 50% coverage, see 2026-10-29), Phase 3C (affinity).
 
 ### Multi-seed in vitro probe (3 seeds each, 2026-10-29)
 
@@ -615,13 +625,13 @@ by close homologs. Caveats: only 6 no-hit proteins, no per-bin CI yet. Next: clu
 - A regex heuristic (RNP1/RNP2, KH, CCCH) was tried and rejected: RRM recall 0.4–0.75 with 10–20% false positives against
   curated labels. Domain families are therefore assigned with Pfam-A + `hmmscan` (script 56); Pfam is downloaded to
   `data/external/pfam/` (git-ignored).
-- Skipper Figshare enrichment/HOMER data (scripts 46–49): CLIPper signal vs HOMER motif PWM has Spearman median 0.03–0.04
+- Skipper Figshare enrichment/HOMER data (scripts 46-49, of which 46 and 48 are in `scripts/archive/`): CLIPper signal vs HOMER motif PWM has Spearman median 0.03–0.04
   (only 2.5% of experiments > 0.3), so enrichment is not a clean specificity target; kept as a secondary in vivo
   within-protein ranking test after k-mer/PWM baselines.
 
 ### Pfam family labels for v3a proteins (script 56, 2026-10-29)
 
-`hmmscan` against Pfam-A (E < 1e-3) on all 448 v3a proteins mapped to RNA-binding families. Agreement with curated
+`hmmscan` against Pfam-A (`-E 1e-3 --domE 1e-3`: the filter is the sequence E-value and the conditional E-value of each domain, while the stored column `domain_ievalue` is the independent i-Evalue; sensitivity on the 175 RBPZoo constructs: `docs/METHODS.md` section 10; not computed for the 448-protein table) on all 448 v3a proteins mapped to RNA-binding families. Agreement with curated
 `domain_class` on train proteins: RRM 51/56, KH 9/11, CCCH 3/3, CSD 2/2, PUF 1/1 (misses go to `other`; none are
 mislabelled across families). Probe test set (55 proteins): RRM 33, KH 5, multi 5, CCCH 2, CSD 1, La 1, PUF 1, CCHC 1,
 other 6; train (393): RRM 279, other 45, KH 37, CCCH 17, multi 9. The test set is RRM-dominated, so non-RRM families have
@@ -726,7 +736,7 @@ other than sequence similarity. Protein-bootstrap 95% CI in brackets; neural num
 | top-5 neighbours, k-mer LR (nn5) | 0.791 [0.74, 0.84] | 0.740 [0.69, 0.80] | 0.817 |
 | nearest protein, PWM (nn1) | 0.772 | 0.714 | 0.820 |
 | V2 (3 seeds) | ~0.81 | 0.686 ± 0.015 | 0.696 |
-| V4 concat_bi (3 seeds) | ~0.81 | 0.754 ± 0.001 | 0.759 |
+| V4 concat_bi (3 seeds) | ~0.83 | 0.754 ± 0.001 | 0.759 |
 
 By identity bin (v3a probe, nn1 k-mer LR vs V4 from script 55): <30% (incl. no hit) 0.45 vs 0.53; 30–50% 0.71 vs 0.70;
 50–70% 0.76 vs 0.70; 70–90% 0.84 vs 0.88; ≥90% 0.85 vs 0.87 (kNN column corrected: an earlier draft of script 59 shifted
@@ -1110,7 +1120,7 @@ not under-training or an evaluation bug.
 **Learning curve over the fraction of training clusters** (bilinear head, cross-protein negatives, probe AUROC):
 25% 0.521 (seed 0), 50% 0.541 (seed 0), 75% 0.549 (seed 42) / 0.538 (seed 0), 100% 0.570 (seed 42, earlier run).
 Slowly increasing with the number of clusters (+0.05 from 25% to 100%) but noisy (two seeds, differences ~0.01-0.02) and far from the
-nearest-protein baseline 0.627; the seed-42 runs for 25% and 50% produced no output (to be checked).
+nearest-protein baseline 0.627. The seed-42 runs for 25% and 50% are in the later learning-curve table below (0.535 and 0.554).
 
 ### v3b: three seeds of the frozen-embedding heads, hyper-parameter sweep and cluster learning curve (VM, 2026-10-30; seeds 42 / 0 / 1)
 Mean ± sd over seeds; probe AUROC (standard-test AUROC in brackets):
@@ -1157,14 +1167,14 @@ Reading: the model's top 5-mer for RBFOX2 is the measured GCAUG (Spearman 0.48);
 residue share, but based on one RNA per protein for the map and without a shuffled-protein control in this script. Illustration only; these proteins were in the training data.
 Fix: overlapping Pfam hits were double counted in the first run (TIA1 'coverage 1.90'); the share now uses the union of domain residues.
 
-## Ranking-only supervision of alternatives (planned, not yet run)
+## Ranking-only supervision of alternatives (script 67 `rank` modes; no result in the log)
 Hypothesis: replacing cross-protein negative labels by a pairwise ranking loss (observed pair must outscore the same pair with the protein replaced and with the RNA replaced; alternatives get no label 0) improves the v3b cross-protein probe over ordinary-label training (0.531 +- 0.027) and over cross-protein negatives (0.559 +- 0.010). Source idea: ReMatch (ICLR 2027 submission), BCE + bidirectional ranking.
 Implementation: scripts/67 modes `rank` (protein + RNA replacement) and `rank_prot` (protein replacement only); BCE on ordinary labelled rows plus ranking on positives, `--rank_weight` 1.0.
 Difference from `xneg`: xneg labels the alternatives 0 (BCE) and adds a protein-side ranking term.
 Run: `SEEDS="42 0 1" CONFIGS="bilinear:rank bilinear:rank_prot" bash scripts/run_v3b_frozen.sh`.
 Decision rule: supported if the three-seed mean probe AUROC exceeds 0.559 by more than the seed spread; nn1 reference 0.627.
 
-## TF ChIP-seq as extra labelled training data (script 76, built; not yet run on the VM)
+## TF ChIP-seq as extra labelled training data (script 76; design, then result below: hypothesis not supported)
 Hypothesis: adding transcription-factor ChIP-seq pairs with an explicit data-type label increases the number of distinct training proteins and improves transfer to new RNA-binding proteins (v3b cross-protein probe, eCLIP protein-disjoint test).
 Source: ENCODE TF ChIP-seq, GRCh38, K562 and HepG2, optimal IDR thresholded narrowPeak. Manifest: 310 experiments, 256 TFs (K562 175, HepG2 135; one experiment per TF and cell line, TF-annotated targets only). Files are small (about 0.2 GB).
 Rows: 151-nt window around the peak summit, random strand, DNA written with U. Label 1 = peak; label 0 `xtf` = same window with another TF of the cell line that has no peak there (cross-protein layout); label 0 `gc` = GC-matched genomic window without peak overlap. Column `data_type` = dna_chip.
@@ -1173,7 +1183,7 @@ Known caveats: only 5 TFs have the same name as v3b test proteins (FUBP1, FUBP3,
 Next: build pairs on the VM, train frozen heads with and without TF rows, decision rule: mean over three seeds above the reference by more than the seed spread (references: bilinear 0.531 +- 0.027, with cross-protein negatives 0.559 +- 0.010, nn1 0.627).
 
 TF ChIP-seq table built on the VM (script 76): 857,839 rows, 248 TFs (301 TF/cell experiments with a protein sequence), 297,250 positives, 297,234 cross-TF negatives, 263,355 GC-matched negatives.
-Training with the extra rows: script 67 `--extra_tsv` (TF rows appended to train; RNA vector gets a data-type flag column, 0 for in vitro, 1 for ChIP-seq; TF names present in v3b val/test/probe are dropped). Embeddings: script 66 `--tsv` into data/embeddings_tf. Runner: scripts/run_v3b_tf.sh (bilinear std and xneg, seeds 42 0 1). Results: pending.
+Training with the extra rows: script 67 `--extra_tsv` (TF rows appended to train; RNA vector gets a data-type flag column, 0 for in vitro, 1 for ChIP-seq; TF names present in v3b val/test/probe are dropped). Embeddings: script 66 `--tsv` into data/embeddings_tf. Runner: scripts/run_v3b_tf.sh (bilinear std and xneg, seeds 42 0 1). Results: see the next subsection.
 
 ### Result: TF ChIP-seq rows added to training (v3b cross-protein probe, test AUROC, frozen bilinear head)
 Seeds 0 / 1 / 42 (order of the sorted run directories).
@@ -1181,23 +1191,23 @@ Seeds 0 / 1 / 42 (order of the sorted run directories).
 |---|---|---|---|---|
 | ordinary labels | 0.5013 | 0.5418 | 0.5514 | 0.531 +- 0.027 |
 | ordinary labels + TF rows | 0.5466 | 0.5622 | 0.5306 | 0.547 +- 0.016 |
-| cross-protein negatives | 0.5531 | 0.5542 | 0.5701 | 0.559 +- 0.009 |
+| cross-protein negatives | 0.5531 | 0.5542 | 0.5701 | 0.559 +- 0.010 |
 | cross-protein negatives + TF rows | 0.5401 | 0.5525 | 0.5112 | 0.535 +- 0.021 |
 Paired differences (with TF minus without): ordinary labels +0.045, +0.020, -0.021; cross-protein negatives -0.013, -0.002, -0.059.
 Decision rule (mean above the reference by more than the seed spread): not met. Ordinary labels +0.016 against sd 0.027 (mixed sign across seeds); cross-protein negatives -0.024 (lower in all three seeds). Best configuration stays cross-protein negatives without TF rows (0.559), nn1 0.627.
 Verdict: hypothesis not supported. Adding 248 TFs (about 0.86 M ChIP-seq rows, data-type flag in the RNA vector) does not improve transfer to new RNA-binding proteins. Not tested: other ways to use the rows (separate head, pretraining then fine-tuning, a DNA-specific encoder), restriction to the 5 dual-function proteins.
 
-## Protein similarity vs similarity of measured binding preferences (script 77; planned, not yet run on real data)
+## Protein similarity vs similarity of measured binding preferences (script 77; design and synthetic check only, no result on real data in the log)
 Hypothesis: the correlation (Pearson) of the 5-mer profiles of two proteins rises with their sequence identity and with the cosine of their ESM-2 embeddings; sequence identity predicts profile similarity better than the embedding.
 Inputs: results/v3b_profile/profiles.npz (script 73, 1024-value log2 enrichment per protein), data/embeddings_v3b, pairwise local-alignment identity (Biopython, BLOSUM62; matches / length of the shorter protein), family labels from results/v3b/protein_split_map.tsv.
 Outputs: median profile Pearson per identity bin (all, same family, different family, bootstrap CI), Spearman identity vs Pearson and cosine vs Pearson with permutation p-values, nearest-neighbour table (identity / embedding / random / best possible), three figures.
 Check: synthetic data (40 proteins) reproduces the planted ordering. Pairs are not independent (proteins appear in many pairs); CIs are over pairs and optimistic.
 
-## Audit of the published CORAL benchmark folds (script 78; planned, not yet run on the real folds)
+## Audit of the published CORAL benchmark folds (script 78; design, then result for 10 of 25 folds below)
 Hypothesis: in the component-wise folds (same positives as in the ReMatch benchmark) scorers that see only one molecule, only sequence composition, or only the training positive rate of an id stay near AUROC 0.5; if they reach 0.6-0.8 the published AUROCs (CORAL 0.69, ReMatch 0.84 on the 50/30 component-wise folds) contain a shortcut component.
 Data: Zenodo 10.5281/zenodo.19730809, archive coral-benchmarks.tar.gz (743 MB), 25 folds (5 strategies x 5 folds), columns RNA_id, Protein_id, RNA_seqs, Prot_seqs plus a 0/1 label (label column name to be confirmed on the real files; the script detects it).
 Measured per fold: id and sequence overlap with train; share of validation rows with a training hit at >=30/50/70% (protein) and >=50/80% (RNA) identity (MMseqs2, query coverage >=0.5); AUROC train to validation of RNA-only, protein-only, concatenated (logistic regression and gradient boosting) k-mer scorers and of a per-id positive-rate scorer.
-Check: synthetic folds (random and component-wise) give the expected overlap and identity values and AUROC near 0.5. Fold-level numbers on the real data: pending.
+Check: synthetic folds (random and component-wise) give the expected overlap and identity values and AUROC near 0.5. Fold-level numbers on the real data: next subsection.
 
 ### Result: CORAL component-wise folds audited (script 78, local run with MMseqs2; 2 strategies x 5 folds = 10 of 25 folds)
 Data downloaded from Zenodo record 19730810 (742,791,323 bytes); label column is `labels`. Other three strategies (redundant, pairwise 30/50, pairwise 60/80) extracted but not audited. All validation sets are balanced (positive fraction 0.500); train 22.0-24.1 k rows, validation 3.7-4.3 k rows per fold.
@@ -1219,11 +1229,11 @@ AUROC train to validation (mean +- sd over 5 folds):
 Reading: the degree scorer sits at 0.5, so no id-level shortcut; RNA-only composition reaches 0.51-0.61 per fold. Gradient boosting on concatenated composition features (no learned pair model, 24 k training rows) reaches 0.62-0.73 per fold, i.e. composition of the two molecules carries signal about the re-paired labels. The 60/80 folds contain training homologs for about half of the validation proteins (>=30% identity); the 30/50 folds for about 16%.
 Not done: the same audit on the other 15 folds; comparison of these scorers with CORAL / ReMatch models on identical folds (script 79 writes the folds in the generalized layout for that).
 
-## ESM-2 layers vs RNAcompete binding-profile similarity (script 80; planned, not yet run on real data)
+## ESM-2 layers vs RNAcompete binding-profile similarity (script 80; design, then results for 175 proteins below)
 Hypothesis: the Spearman correlation between the cosine similarity of mean-pooled ESM-2 embeddings and the Pearson correlation of 7-mer Z-score vectors differs between layers; the layer with the highest value is the most informative about binding similarity.
 Inputs: published RNAcompete 7-mer Z-scores (RBPzoo matrix, one column per experiment, mean over experiments of the same protein sequence), experiment table with protein sequences from the pairs TSV, ESM-2 650M layers 0-33. Proteins longer than 1,022 residues: windows of 1,022 with stride 511, overlapping per-residue representations averaged.
 Output: per layer Spearman (raw cosine and cosine of embeddings centred over proteins) with Mantel permutation p-value (500 permutations), figure.
-Check: synthetic data with a planted latent structure gives a monotone increase over layers; window coverage checked for lengths 1022, 1023, 1500, 3000. Real data: pending. Local copies of the Z-score file are iCloud placeholders and hang when read, so the run is planned on the VM.
+Check: synthetic data with a planted latent structure gives a monotone increase over layers; window coverage checked for lengths 1022, 1023, 1500, 3000. Real data: next subsections. The local copy of the Z-score file is an iCloud placeholder that cannot be read here, so the run was done on the VM.
 Script 79 converts the 10 CORAL folds to the generalized layout (3,318 unique proteins, 7,506 unique RNAs).
 
 ### Result: ESM-2 650M layers vs RNAcompete 7-mer Z-score similarity (script 80, VM, 175 proteins, 16,382 7-mers)
@@ -1248,19 +1258,19 @@ Layer 33 (last): raw 0.050-0.129, centred 0.054-0.162. Layer 32: raw 0.086-0.180
 Difference to layer 33 (interval): layer 32 raw +0.018 to +0.069, centred 0.000 to +0.048; layer 31 raw +0.011 to +0.070, centred +0.014 to +0.075; layer 30 raw +0.002 to +0.066, centred +0.014 to +0.084; layer 29 raw -0.012 to +0.057, centred +0.008 to +0.086.
 Difference to layer 0 (composition): all intervals for layers 29-33 include 0 (for example layer 32 raw -0.023 to +0.058, centred -0.039 to +0.051).
 Reading: layers 30-32 are above the last layer in most intervals; none of the layers shown is distinguishable from layer 0. Intervals for layers 0-28 not yet seen. No correction for the number of layers compared; layer 33 as reference chosen after seeing the curve.
-Next: frozen bilinear heads with protein embeddings from layers 0, 22, 26, 32 (script 66 `--prot_layer`, runner scripts/run_v3b_layers.sh, modes std and xneg, seeds 42 0 1); references with layer 33: std 0.531 +- 0.027, xneg 0.559 +- 0.009. Decision rule: mean over seeds above the layer-33 value by more than the seed spread.
+Next: frozen bilinear heads with protein embeddings from layers 0, 22, 26, 32 (script 66 `--prot_layer`, runner scripts/run_v3b_layers.sh, modes std and xneg, seeds 42 0 1); references with layer 33: std 0.531 +- 0.027, xneg 0.559 +- 0.010. Decision rule: mean over seeds above the layer-33 value by more than the seed spread.
 
 Full bootstrap table (all 34 layers; results/esm_layer_profile/layer_bootstrap.tsv, copied from the VM output). Layers whose interval of the difference to layer 33 excludes 0 (layer above 33): raw 30, 31, 32; centred 22, 24, 25, 26, 28, 29, 30, 31, 32 (lower bounds 0.0001-0.014). No layer is below layer 33.
 Difference to layer 0: no layer is above layer 0 with an interval excluding 0 (raw or centred); raw layers 1, 2, 3, 4, 8, 9, 10 are below layer 0; centred none.
 Layer 22 centred 0.158 [0.097, 0.221], layer 32 raw 0.132 [0.086, 0.180], layer 33 raw 0.087 [0.050, 0.129], centred 0.100 [0.054, 0.162]. Intervals of the individual layers overlap widely; the differences to layer 33 are small (0.02-0.07) and are not corrected for the number of layers.
 reports/esm_layer_similarity.html rebuilt with the intervals (bands, differences to layers 33 and 0).
 
-## ESM-2 pooling over RNA-binding domains and outside them (script 80 stages domains/embed/analyze --pool; planned, not yet run on the VM)
+## ESM-2 pooling over RNA-binding domains and outside them (script 80 stages domains/embed/analyze --pool; domain annotation done, correlations not run)
 Hypothesis: pooling ESM-2 residue embeddings over the RNA-binding Pfam domains only follows the RNAcompete binding-profile similarity better than pooling over the whole construct; pooling over the residues outside the domains is the control (if it follows the profiles as well, the signal is general protein similarity).
-Domains: Pfam-A hmmscan (E < 1e-3) on the 175 constructs, RNA-binding families only (script 56 list): all 175 have a hit (RRM 145, KH 24, CCCH 6, CCHC 3, DEAD 1; families counted per protein); domains cover a median 64% of the construct (quartiles 49-72%); 169 of 175 have at least 10 residues outside the domains. Output: results/esm_layer_profile/domains.tsv (env coordinates).
+Domains: Pfam-A hmmscan (`-E 1e-3 --domE 1e-3`, conditional E-value as filter, i-Evalue stored; with an additional `domain_ievalue < 1e-3` filter 174 proteins keep a domain and median coverage is 54.5% instead of 64.1%, see `docs/METHODS.md` section 10) on the 175 constructs, RNA-binding families only (script 56 list): all 175 have a hit (RRM 145, KH 24, CCCH 6, CCHC 3, DEAD 1; families counted per protein); domains cover a median 64% of the construct (quartiles 49-72%); 169 of 175 have at least 10 residues outside the domains. Output: results/esm_layer_profile/domains.tsv (env coordinates).
 Comparison: per layer Spearman for domain pooling and for whole-sequence pooling on the same proteins (`layer_correlation_domain.tsv`, `layer_correlation_outside.tsv`). Previous work on domains in this project: domain-class conditioning of V2 (null), Pfam family labels, domain share of mutagenesis and integrated gradients; pooling restricted to domain residues had not been done.
 
-## RNA-FM layers vs probe binding patterns (script 81; planned, subset built locally, embeddings not yet run)
+## RNA-FM layers vs probe binding patterns (script 81; subset built locally, embeddings not run, no result in the log)
 Counterpart of the ESM-2 layer test on the RNA side. 1,000 random RNAcompete probes (30-40 nt, SetA and SetB; of 241,357 probes 226,313 have complete data in all 176 experiments) with binding vector = normalised intensity in each of the 175 proteins (protein column standardised over probes, mean over experiments of the same sequence). Binding similarity = Pearson between probe vectors; RNA-FM hidden states 0-12 (mean over nucleotides), cosine raw and centred; Spearman per layer with 100 bootstrap resamples over probes; control = cosine of 3-mer frequency vectors and the difference to it.
 Check: synthetic embeddings with planted structure give a monotone increase over layers; 3-mer control on the real binding matrix: Spearman 0.157 (raw cosine of 3-mer frequencies), see the first real run for the layers.
 Files: results/rna_layer_profile/probes.tsv, profiles.npz.

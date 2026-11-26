@@ -1,7 +1,7 @@
 # Skipper / eCLIP benchmark data (Dropbox + Figshare)
 
 Processed ENCODE eCLIP pos/neg sets and protein domain annotations for
-train-in-vitro → test-eCLIP evaluation and domain masking / attribution (scripts 39–41).
+train-in-vitro → test-eCLIP evaluation and domain masking / attribution (scripts 41 to 52, see the pipeline list below).
 
 **Sources**
 - Dropbox (lab): pos/neg FASTA/BED, RBD annotations on eCLIP protein sequences
@@ -69,17 +69,34 @@ Full Skipper ENCODE3 panel: `reproducible_enriched_windows`, `background_windows
 `extracted/fixlen_151_fasta/` — 528 FASTA files (pos + neg per experiment) unpacked from
 `eclip_various_pos_neg_sets.hg38.tar.xz` for fast iteration without full tar extract.
 
+## Pipeline order
+
+| Step | Script | Output |
+|------|--------|--------|
+| 1 | `41_build_skipper_eclip_benchmark.py` | `fixlen_151_all.tsv`, `fixlen_151_protein_disjoint_v3a.tsv` |
+| 2 | `41b_split_skipper_eclip_protein_disjoint.py` | `protein_disjoint/` |
+| 3 | `41c_split_skipper_eclip_rna_disjoint.py --mode protein_and_rna` (or `--mode rna`, output `rna/`) | `protein_and_rna/` |
+| 4 | `42_build_skipper_eclip_cross_protein_neg.py --write_splits` | `fixlen_151_cross_protein_neg_all.tsv`, `cross_protein_neg/` |
+| 5 | `51_eclip_eval_suite.py` | `results/skipper_eclip/step1*/` |
+| 6 | `52_eclip_per_protein_baseline.py` | per-protein k-mer baseline json |
+
+Scripts 41, 41b, 41c, 41d, 42, 51 and 52 abort when `protein_sequence` equals `ok` (stale build).
+The benchmark TSVs are capped at 200 positives and 200 negatives per eCLIP experiment
+(`--max_per_class_per_experiment 200` in 41, 41b, 41c and `--max_pos_per_experiment 200` in 42).
+The raw bundle holds 736,347 positive and 736,347 negative fixlen_151 windows.
+Scripts 46, 48 and 50 are in `scripts/archive/`.
+
 ## Scripts 41 / 41b / 41c / 41d
 
 ### 41 — pair TSV + cross-assay holdout (in vitro train → eCLIP test)
 
 ```bash
-python scripts/41_build_skipper_eclip_benchmark.py \\
-  --max_per_class_per_experiment 200 \\
+python scripts/41_build_skipper_eclip_benchmark.py \
+  --max_per_class_per_experiment 200 \
   --train_tsv data/sanitized/generalized_v3a/train.tsv
 
-python scripts/11_evaluate_external.py \\
-  --benchmark_tsv data/benchmarks/skipper_eclip/fixlen_151_protein_disjoint_v3a.tsv \\
+python scripts/11_evaluate_external.py \
+  --benchmark_tsv data/benchmarks/skipper_eclip/fixlen_151_protein_disjoint_v3a.tsv \
   --v2_dir models/saved/generalized_v2 --rna_max 151 --prot_max 700
 ```
 
@@ -88,10 +105,10 @@ python scripts/11_evaluate_external.py \\
 ```bash
 python scripts/41b_split_skipper_eclip_protein_disjoint.py
 
-python scripts/06_train_generalized_v2.py \\
-  --data_dir data/benchmarks/skipper_eclip/protein_disjoint \\
-  --rna_max 151 --prot_max 700 \\
-  --model_dir models/saved/skipper_eclip_v2_rna151 \\
+python scripts/06_train_generalized_v2.py \
+  --data_dir data/benchmarks/skipper_eclip/protein_disjoint \
+  --rna_max 151 --prot_max 700 \
+  --model_dir models/saved/skipper_eclip_v2_rna151 \
   --out_dir results/skipper_eclip/protein_disjoint_v2_train
 ```
 
@@ -107,11 +124,11 @@ python scripts/41c_split_skipper_eclip_rna_disjoint.py --mode rna
 # Protein-disjoint + drop test RNAs seen in train
 python scripts/41c_split_skipper_eclip_rna_disjoint.py --mode protein_and_rna
 
-python scripts/06_train_generalized_v2.py \\
-  --data_dir data/benchmarks/skipper_eclip/rna_disjoint \\
-  --rna_max 151 --prot_max 700 \\
-  --model_dir models/saved/skipper_eclip_v2_rna151_rna_disjoint \\
-  --out_dir results/skipper_eclip/rna_disjoint_v2_train
+python scripts/06_train_generalized_v2.py \
+  --data_dir data/benchmarks/skipper_eclip/rna \
+  --rna_max 151 --prot_max 700 \
+  --model_dir models/saved/skipper_eclip_v2_rna151_rna \
+  --out_dir results/skipper_eclip/rna_v2_train
 ```
 
 ### 45–49 — Enrichment BED6 + CLIPper QC
@@ -119,9 +136,9 @@ python scripts/06_train_generalized_v2.py \\
 | Script | Role |
 |--------|------|
 | `45_skipper_enrichment_homer_qc.py` | Figshare `enrichment_l2or` vs Dropbox BED col5; HOMER motif vs col5 |
-| `46_skipper_bed6_enrichment_export_and_plot.py` | Export Skipper BED6; col5 vs l2or figure |
+| `archive/46_skipper_bed6_enrichment_export_and_plot.py` | Export Skipper BED6; col5 vs l2or figure |
 | `47_clipper_encode_vs_skipper_enrichment.py` | ENCODE CLIPper IDR `signalValue` vs Skipper l2or |
-| `48_clipper_motif_vs_enrichment.py` | CLIPper vs motif on fixlen_151 windows (overlap) |
+| `archive/48_clipper_motif_vs_enrichment.py` | CLIPper vs motif on fixlen_151 windows (overlap) |
 | **`49_clipper_peak_motif_pipeline.py`** | **CLIPper peak-centric: 75 nt summit BED6 (col5 = signalValue), Ensembl seq, motif QC** |
 
 ```bash
@@ -133,10 +150,10 @@ python scripts/49_clipper_peak_motif_pipeline.py --export-skipper-bed6
 #       results/skipper_eclip/bed6/skipper_figshare_l2or/*.bed6
 ```
 
-### 50 — Skipper REW → BED10 (CLIPper-style)
+### 50 — Skipper REW → BED10 (CLIPper-style, archived)
 
 ```bash
-python scripts/50_export_skipper_rew_bed10.py
+python scripts/archive/50_export_skipper_rew_bed10.py
 # → results/skipper_eclip/bed10/skipper_rew/{SYMBOL}_{CELL}_Skipper_REW.bed
 # → results/skipper_eclip/bed10/skipper_rew_bed10.zip
 ```
@@ -150,10 +167,10 @@ Compare against published eCLIP protein-disjoint baselines (~0.72 AUROC).
 ```bash
 python scripts/42_build_skipper_eclip_cross_protein_neg.py --write_splits
 
-python scripts/06_train_generalized_v2.py \\
-  --data_dir data/benchmarks/skipper_eclip/cross_protein_neg \\
-  --rna_max 151 --prot_max 700 \\
-  --model_dir models/saved/skipper_eclip_v2_cross_protein_neg \\
+python scripts/06_train_generalized_v2.py \
+  --data_dir data/benchmarks/skipper_eclip/cross_protein_neg \
+  --rna_max 151 --prot_max 700 \
+  --model_dir models/saved/skipper_eclip_v2_cross_protein_neg \
   --out_dir results/skipper_eclip/cross_protein_neg_v2_train
 ```
 
@@ -161,17 +178,17 @@ python scripts/06_train_generalized_v2.py \\
 
 ```bash
 # No GPU — composition baselines only
-python scripts/41d_eval_eclip_diagnostics.py \\
-  --train_tsv data/benchmarks/skipper_eclip/protein_disjoint/train.tsv \\
-  --test_tsv data/benchmarks/skipper_eclip/protein_disjoint/test.tsv \\
+python scripts/41d_eval_eclip_diagnostics.py \
+  --train_tsv data/benchmarks/skipper_eclip/protein_disjoint/train.tsv \
+  --test_tsv data/benchmarks/skipper_eclip/protein_disjoint/test.tsv \
   --out_dir results/skipper_eclip/protein_disjoint_diagnostics
 
 # With trained protein-disjoint checkpoint
-python scripts/41d_eval_eclip_diagnostics.py \\
-  --train_tsv data/benchmarks/skipper_eclip/protein_disjoint/train.tsv \\
-  --test_tsv data/benchmarks/skipper_eclip/protein_disjoint/test.tsv \\
-  --checkpoint models/saved/skipper_eclip_v2_rna151/best_model.pt \\
-  --rna_max 151 --prot_max 700 \\
+python scripts/41d_eval_eclip_diagnostics.py \
+  --train_tsv data/benchmarks/skipper_eclip/protein_disjoint/train.tsv \
+  --test_tsv data/benchmarks/skipper_eclip/protein_disjoint/test.tsv \
+  --checkpoint models/saved/skipper_eclip_v2_rna151/best_model.pt \
+  --rna_max 151 --prot_max 700 \
   --out_dir results/skipper_eclip/protein_disjoint_diagnostics
 ```
 

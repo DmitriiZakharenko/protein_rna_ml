@@ -1,418 +1,102 @@
-# Protein–RNA Binding Prediction
+# Protein-RNA Binding Prediction
 
-Machine learning pipeline for predicting whether an RNA-binding protein (RBP) binds a given RNA sequence. Training data come from large-scale **in vitro** assays (HTR-SELEX, RBNS, RNAcompete). Evaluation spans held-out protein splits, literature external pairs, and cross-protocol transfer for matched RBPs.
+Machine learning pipeline that predicts whether an RNA-binding protein (RBP) binds a given RNA sequence. Training data come from in vitro assays (HTR-SELEX, RBNS, RNAcompete). Evaluation uses protein-disjoint splits, a protein-cluster split (v3b), a cross-protein-negative probe, literature external pairs, in vivo eCLIP benchmarks and cross-protocol transfer for matched RBPs.
 
 ```
 Input:  protein amino acid sequence + RNA nucleotide sequence
-Output: binding probability ∈ [0, 1]
+Output: binding probability in [0, 1]
 ```
 
-**Metrics up to Phase 3B**: [`results/phase3b_summary.json`](results/phase3b_summary.json) · **Run history (all later work, v3b onwards)**: [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) · **File inventory**: [`INVENTORY.md`](INVENTORY.md)
+Run history with hypotheses, decision rules and results: [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md). Script map: [`SCRIPTS.md`](SCRIPTS.md). VM commands: [`docs/VM_RUNBOOK.md`](docs/VM_RUNBOOK.md). Plan and open checks: [`NEXT_STEPS.md`](NEXT_STEPS.md). File inventory: [`INVENTORY.md`](INVENTORY.md). Metrics up to Phase 3B: [`results/phase3b_summary.json`](results/phase3b_summary.json).
 
 ---
 
-## Current Status
+## Current status
 
-| Phase | Status | Headline result |
+AUROC is the area under the ROC curve on the test proteins of the named split. "Probe" is the cross-protein-negative probe (the same RNA paired with another protein of the same assay, so RNA composition carries no information and RNA-only models score 0.500).
+
+| Phase | Status | Result |
 |---|---|---|
-| Phase 1 — Per-dataset validation | **Complete** | All 3 SELEX datasets pass (val AUROC > 0.70) |
-| Phase 2 — Generalized V1–V3c | **Complete** | V2 CNN anchor: test AUROC **0.690** on `generalized_v2` (169 proteins) |
-| Phase 3A — V2 on `generalized_v3a` | **Complete** | Test AUROC **0.813**, AUPRC **0.713** (494 proteins, 2.66M pairs) |
-| Phase 3B — V4 bilinear on v3a | **Complete** | Test AUROC **0.829 ± 0.009** (3 seeds); +0.016 vs V2 in-distribution |
-| Phase 3B — Literature external | **Complete** | Curated AUROC **0.763** (V2) vs **0.737** (V4) — V2 better OOD |
-| Cross-protocol in-vitro | **Complete** | k=4 LR transfer mean AUROC **0.791** vs within **0.974** (84 matched RBPs) |
-| Domain-aware V2 | **Closed (null)** | `scripts/38`: `domain_shuffle` (0.855) ≥ baseline (0.847) ≥ conditioned (0.842) — coarse `domain_class` is not a useful bias |
-| Skipper eCLIP benchmark (41–53) | **Closed (negative transfer)** | Genomic-negative splits are composition-solvable (RNA-only k-mer LR 0.81); on `cross_protein_neg` no model beats chance within protein. In vitro probe (3 seeds): V2 0.686 ± 0.015, V4 0.754 ± 0.001, but homology-driven (no-hit proteins: ≈0.5) — see [Skipper eCLIP](#skipper-eclip-benchmark-audit) |
-| RNAcompete `rnacompete_all` zero-shot | **Historical only** | Valid for **V2 + `generalized_v2` only** — panels are **in v3a training** |
-| Homology audit and cluster split `generalized_v3b` (55–58, 62) | **Complete** | Share of test proteins with ≥ 50% identity to training: 62% (v3a) → 3% (v3b); see [v3b](#generalized_v3b-and-the-honest-test) |
-| Nearest-protein baseline, frozen ESM-2 / RNA-FM heads (59, 66, 67, 69–71) | **Complete (negative)** | v3b cross-protein probe: nearest-protein baseline **0.627** [0.57, 0.68] vs best frozen head **0.559 ± 0.009** (3 seeds) |
-| Shortcut audit of RPI benchmarks, PaRPI, CORAL (60, 63, 64, 78, 79) | **Complete (10 of 25 CORAL folds)** | One molecule explains most of the signal in RPI369/488/1446/2241; CORAL component-wise folds: composition-only gradient boosting 0.65–0.71 AUROC |
-| Mechanistic checks (61, 68, 75) | **Complete (illustration)** | RBFOX2 top 5-mer GCAUG recovered (Spearman 0.48); proteins were in the training data |
-| ENCODE TF ChIP-seq as extra training rows (76) | **Closed (not supported)** | 248 TFs, 857,839 rows: 0.535 ± 0.021 with vs 0.559 ± 0.009 without (cross-protein negatives) |
-| ESM-2 layers vs RNAcompete binding-profile similarity (80) | **Result for 175 proteins; follow-ups pending** | Spearman 0.07–0.16 for all layers; no layer distinguishable from layer 0; domain pooling, RNA-FM layers (81) and frozen heads with layers 0/22/26/32 not yet logged |
+| 1. Per-dataset validation | Complete | All 3 datasets pass on validation (val AUROC 0.758-0.825, threshold 0.70) with k-mer LR/RF/XGBoost on protein-disjoint splits |
+| 2. Generalized V1-V3c on `generalized_v2` | Complete | V2 CNN test AUROC 0.690, AUPRC 0.580 (24 test proteins). V3, V3b, V3c with frozen ESM-2: 0.634, 0.666, 0.685 |
+| 3A. V2 on `generalized_v3a` | Complete | Test AUROC 0.813, AUPRC 0.713 (55 test proteins, 494 proteins in total, 2,658,999 pairs, 1 seed) |
+| 3B. V4 bilinear on v3a | Complete | Test AUROC 0.829 +- 0.009, AUPRC 0.732 +- 0.011 (3 seeds), +0.016 over V2 on the same test set |
+| 3B. Literature external pairs | Complete | Curated (159 pairs) AUROC 0.763 (V2) and 0.737 (V4). Expanded (540 pairs) 0.688 and 0.666 |
+| Cross-protocol in vitro | Complete | 84 matched RBPs, k=4 LR: within-protocol mean AUROC 0.974, cross-protocol mean 0.791 (196 and 284 evaluations) |
+| Domain-aware V2 | Closed (null) | `scripts/38`, sanitized v3a with known domains: domain-label shuffle 0.855, baseline 0.847, domain-conditioned 0.842 |
+| Homology audit and `generalized_v3b` (55-58, 62) | Complete | Test proteins with a training protein at >= 50% identity: 62% (v3a) and 3% (v3b) |
+| Nearest-protein baseline and frozen ESM-2 / RNA-FM heads on v3b (59, 65-67, 69-71) | Complete | Probe AUROC: nearest-protein baseline 0.627 [0.57, 0.68], best frozen head 0.559 +- 0.010 (3 seeds), V4 0.559 and V2 0.527 (seed 42) |
+| RPI benchmark audit, PaRPI, CORAL (60, 63, 64, 78, 79) | Complete (10 of 25 CORAL folds) | RPI369: protein-only AUROC 0.964 against 0.974 with both molecules (random 5-fold). CORAL component-wise folds: gradient boosting on composition features 0.654 (30/50) and 0.710 (60/80) |
+| Skipper eCLIP benchmark (41-54) | Closed (no transfer from in vitro) | Genomic-negative splits: RNA-only k-mer LR 0.808. `cross_protein_neg`: no tested model above 0.53 GC-matched within protein |
+| Mechanistic checks (61, 68, 75) | Complete | RBFOX2 top 5-mer GCAUG recovered by V2 (Spearman 0.48 over 5-mer profile, protein seen in training) |
+| ENCODE TF ChIP-seq rows as extra training data (76) | Complete | 248 TFs, 857,839 rows. Probe AUROC with cross-protein negatives 0.535 +- 0.021 with and 0.559 +- 0.010 without TF rows |
+| ESM-2 layers against RNAcompete profile similarity (80) | Result for 175 proteins | Spearman 0.07-0.16 between embedding cosine and 7-mer Z-score correlation. Follow-ups (domain pooling, RNA-FM layers, frozen heads with layers 0/22/26/32) not run |
 
-<details>
-<summary>Documentation map</summary>
+Notes on sources. The V4 numbers (0.829 +- 0.009 over 3 seeds, external 0.737 and 0.666) are taken from `results/phase3b_summary.json`. The per-run result files of these V4 runs are on the GPU VM and are not in this copy of the repository. The V1 result file (`results/generalized/v1_mlp_results.json`) is dated 2026-04-27, before the sampler fix of `scripts/05`, and its rerun is pending. V2, V3, V3b and V3c were rerun on 2026-05-13 after the double class-weighting fix ([`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md), section Known Bugs).
 
-| Doc | Purpose |
-|---|---|
-| [`INVENTORY.md`](INVENTORY.md) | File inventory, status of every document, problems found, proposed reorganisation |
-| [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) | Chronological run record (hypothesis, decision rule, result) |
-| [`PHASE3B_STATUS.md`](docs/archive/PHASE3B_STATUS.md) | Latest VM commands & sync steps |
-| [`PHASE3A_PLAN.md`](docs/archive/PHASE3A_PLAN.md) | v3a dataset build (complete) |
-| [`NEXT_STEPS.md`](NEXT_STEPS.md) | Sequenced plan: integrity checks → baselines → motif/mutation tests → new models |
-| [`CROSS_ASSAY_PLAN.md`](docs/archive/CROSS_ASSAY_PLAN.md) | Cross-protocol → domain strategy |
-| [`DATA_SOURCES_AND_DOWNLOADS.md`](DATA_SOURCES_AND_DOWNLOADS.md) | Sibling-repo paths & integrity checks |
-| [`DATA.md`](DATA.md) | Provenance, leakage, negatives |
-| [`DATA_QUALITY_DATASETS.md`](DATA_QUALITY_DATASETS.md) | Dataset hunt: tiers, new assays, acquisition order |
-| [`DATA_CLIP_PRIM_INVENTORY.md`](DATA_CLIP_PRIM_INVENTORY.md) | CLIP review + PRIM-seq/HuRPA inventory |
-| [`data/raw/eclip_skipper/README.md`](data/raw/eclip_skipper/README.md) | Skipper eCLIP layout and scripts 41–50 |
-| [`METHODS.md`](METHODS.md) | Splits, metrics, references |
-| [`STRATEGY.md`](STRATEGY.md) | Lessons learned, what not to repeat |
-| [`strategy_dashboard.html`](docs/archive/strategy_dashboard.html) | Architecture & queue (HTML) |
-
-Legacy: [`dashboard.html`](docs/archive/dashboard.html) (Phase 1–2 only). Planning documents `PROJECT_PLAN.md`, `RESEARCH_ROADMAP.md`, `PHASE3A_PLAN.md`, `PHASE3B_STATUS.md`, `CROSS_ASSAY_PLAN.md` and `DOMAIN_AWARE_PLAN.md` are archived in [`docs/archive/`](docs/archive/); `STRATEGY.md` (header numbers) describe the state of 2026-04 to 2026-09 and are listed in `INVENTORY.md` with their status.
-
-</details>
-
-### Headline takeaways (2026-09, before the homology audit; see the v3b section for the current reading)
-
-1. **In-distribution (v3a test)**: V4 bilinear + source embedding beats V2 CNN (**0.829 ± 0.009** vs **0.813**).
-2. **OOD (literature long-RNA)**: V2 still wins; V4 does not improve external generalization.
-3. **Cross-assay**: For the same RBP, k-mer binding models transfer across HTR-SELEX / RBNS / RNAcompete with ~0.18 AUROC drop vs within-assay; RNAcompete panels transfer almost perfectly to each other.
+Documents: [`docs/METHODS.md`](docs/METHODS.md) (splits, metrics, models, result tables), [`docs/DATA.md`](docs/DATA.md) (provenance, leakage, dataset versions), [`docs/DATA_SOURCES_AND_DOWNLOADS.md`](docs/DATA_SOURCES_AND_DOWNLOADS.md), [`docs/DATA_QUALITY_DATASETS.md`](docs/DATA_QUALITY_DATASETS.md), [`docs/DATA_CLIP_PRIM_INVENTORY.md`](docs/DATA_CLIP_PRIM_INVENTORY.md), [`docs/STRATEGY.md`](docs/STRATEGY.md). Completed plans and legacy dashboards: [`docs/archive/`](docs/archive/).
 
 ---
 
-## generalized_v3b and the honest test
+## generalized_v3b and the cluster split
 
-`generalized_v3a` has a test set in which 62% of the proteins have a training protein with at least 50% identity. `scripts/55` (all-vs-all MMseqs2) showed that transfer follows this similarity, and `scripts/58` re-split the same 2,658,999 pairs by protein cluster (single linkage, 40% identity at 50% coverage): 160 clusters, train 375 / val 55 / test 64 proteins, and 3% of the test proteins with ≥ 50% identity to training. The cross-protein-negative probe (`scripts/53`, the same RNA paired with another protein, so RNA composition is uninformative) is the test of protein-specific signal.
+`generalized_v3a` splits the 494 proteins by protein name (train 393, val 49, test 55). Homology to training is measured in the audit of `scripts/55` (all-vs-all MMseqs2): 62% of the 55 v3a test proteins have a training protein at >= 50% identity, and probe AUROC rises with that identity (V4: 0.525 without hit, 0.699 at 30-50%, 0.884 at 70-90%, 0.874 at >= 90%). `scripts/58` re-splits the same 2,658,999 pairs by protein cluster (single linkage: 40% identity at 50% coverage, or 70% identity at 10% coverage): 160 clusters, train 375, val 55, test 64 proteins, and 3% of the test proteins have a training protein at >= 50% identity.
 
-| Question | Result | Where |
+| Question | Result (subset, seeds) | Log entry |
 |---|---|---|
-| Do V2/V4 learn the protein × RNA interaction? | On v3a V4 0.754 ± 0.001 and V2 0.686 ± 0.015, but with no detectable homolog in training both are at about 0.5 | log 2026-10-28 |
-| Does a simple baseline match them? | Nearest-protein baseline (RNA-only k-mer models of the most similar training proteins) 0.627 [0.57, 0.68] on the v3b probe | log "Nearest-protein baseline on v3b" |
-| Do frozen language-model embeddings help? | ESM-2 650M layer 33 + RNA-FM bilinear head: 0.531 ± 0.027 (ordinary labels), 0.559 ± 0.009 (cross-protein negatives), 3 seeds | log "frozen-embedding heads" |
-| Do TF ChIP-seq rows help? | No: 0.547 ± 0.016 vs 0.531 ± 0.027 (ordinary labels), 0.535 ± 0.021 vs 0.559 ± 0.009 (cross-protein negatives) | log "TF ChIP-seq" |
-| Are published benchmarks informative? | Protein-only AUROC 0.964 vs 0.974 with both molecules on RPI369; CORAL component-wise folds have training homologs for 16% (30/50) and 46% (60/80) of validation proteins at ≥ 30% identity | log, `scripts/60`, `scripts/78` |
-| Which ESM-2 layer follows measured RNAcompete profile similarity? | Spearman 0.07–0.16 for all 34 layers over 175 proteins; best layers (22–32) above the last layer, none distinguishable from the token-embedding layer 0 (protein bootstrap) | [`reports/esm_layer_similarity.html`](reports/esm_layer_similarity.html) |
+| Do V2 and V4 separate the probe on v3a? | V4 0.754 +- 0.001, V2 0.686 +- 0.015 (v3a probe, 3 seeds). With no detectable homolog in training both are at 0.48-0.53 | 2026-10-28, 2026-10-29 |
+| Nearest-protein baseline (RNA-only k-mer LR of the most similar training protein, MMseqs2 identity) | v3b probe 0.627 [0.57, 0.68], v3b standard test 0.676 [0.61, 0.74]. On the v3a probe 0.724-0.746 | "Nearest-protein baseline" |
+| V2 and V4 trained on v3b (seed 42) | Probe 0.527 (V2) and 0.559 (V4). Standard test 0.677 and 0.676 | "v3b (cluster split) first neural results" |
+| Frozen ESM-2 650M layer 33 + RNA-FM heads (3 seeds, v3b) | Bilinear head: probe 0.531 +- 0.027 (ordinary labels), 0.559 +- 0.010 (cross-protein negatives). RNA-only head: standard test 0.651, probe 0.500 | "three seeds of the frozen-embedding heads" |
+| Stacking nearest-protein score and frozen head (seed 42) | Probe 0.630 against 0.627 for the baseline alone | "held-out stacking" |
+| Seen proteins with the same head | Probe 0.827-0.828 on held-out RNAs of training proteins | "diagnostics of the frozen head" |
+| TF ChIP-seq rows added to training | 0.547 +- 0.016 against 0.531 +- 0.027 (ordinary labels), 0.535 +- 0.021 against 0.559 +- 0.010 (cross-protein negatives) | "TF ChIP-seq rows" |
+| Reverse transfer, eCLIP-trained k-mer LR scored on the same protein in vitro (50 proteins) | Mean AUROC 0.670 [0.611, 0.723], RNA prior 0.579, own-data ceiling 0.947 | "Reverse transfer" |
+| ESM-2 layers against RNAcompete profile similarity | Spearman 0.07-0.16 over 175 proteins, best layers 22-32, no layer separated from layer 0 by the protein bootstrap | [`reports/esm_layer_similarity.html`](reports/esm_layer_similarity.html) |
 
-Reports: [`reports/results.html`](reports/results.html) (summary page), [`reports/esm_layer_similarity.html`](reports/esm_layer_similarity.html) (layer analysis). Embeddings and checkpoints are on the GPU VM and are not in git.
-
----
-
-## Phase 1 — Dataset Validation (Complete)
-
-Three datasets validated independently with protein-aware train/test splits.
-Baseline: LR / RF / XGBoost on k-mer features. A dataset passes if val AUROC > 0.70
-on entirely unseen proteins.
-
-| Dataset | Source | RBPs | Examples | Best val AUROC | Status |
-|---|---|---|---|---|---|
-| HTR-SELEX PRJEB25907 | Ray et al., *Genome Res.* 2019 | 93 | 279,000 | 0.825 (XGB) | Pass |
-| RBNS | Lambert et al., *Nature* 2020 | 96 | 284,642 | 0.758 (RF) | Pass |
-| HTR-SELEX PRJEB47428 | Laverty et al., *NAR* 2022 | 23 | 69,000 | 0.817 (LR) | Pass |
-
-All splits are **protein-aware**: no RBP appears in both train and test. Combined training pool: 632,642 examples · 168 unique proteins.
-
-![Phase 1 validation results](figures/phase1_validation.png)
+Reports: [`reports/results.html`](reports/results.html) (state of 2026-10-30, before the TF, CORAL and layer sections) and [`reports/esm_layer_similarity.html`](reports/esm_layer_similarity.html). Embeddings and checkpoints are on the GPU VM and are not in git.
 
 ---
 
-## Phase 2 — Generalized Models (Complete)
+## Phase tables
 
-All numbers from **clean checkpoints** retrained after fixing the double class-weighting bug (2026-05-13). Data: `generalized_v2` (HTR-SELEX + RBNS only).
+Phase 1 (k-mer LR/RF/XGBoost, protein-disjoint splits, 75/11/14% of proteins):
 
-| Model | Encoding | Val AUROC | Test AUROC | Test AUPRC | pp-median AUROC | Note |
-|---|---|---|---|---|---|---|
-| V1 MLP | RNA 4-mer + Prot 3-mer | 0.716 | 0.674 | 0.544 | 0.689 | |
-| **V2 CNN** | One-hot sequences | **0.746** | **0.690** | **0.580** | **0.714** | **anchor architecture** |
-| V3 ESM-2 mean-pool | Frozen ESM-2 1280-d + RNA CNN | 0.715 | 0.634 | 0.547 | 0.633 | worse than V2 |
-| V3b CNN + ESM-2 | One-hot + frozen ESM-2 concat | 0.770 | 0.666 | 0.568 | 0.676 | |
-| V3c ESM-2 residue | Per-residue ESM-2 → Conv1D | 0.745 | 0.685 | 0.595 | 0.711 | |
-
-**Key finding**: frozen ESM-2 does not beat one-hot CNN. Bottleneck is interaction modeling and data scale, not protein representation alone.
-
-![Phase 2 model comparison](figures/phase2_model_comparison.png)
-
----
-
-## Phase 3A — Scaled Training (Complete)
-
-Merged HTR-SELEX + RBNS + RNAcompete (Eukarya + RBPZoo full; ucRBP 23 only) into
-`data/generalized_v3a/` with homology-aware protein splits. Retrained **V2 CNN**
-(`prot_max=700`, same architecture as Phase 2).
-
-| Split | Rows | Proteins |
-|---|---|---|
-| train | 2,037,593 | 393 |
-| val | 299,131 | 49 |
-| test | 322,275 | 55 |
-| **Total** | **2,658,999** | **494** |
-
-### V2 CNN on `generalized_v3a`
-
-| Metric | `generalized_v2` (169 prot) | **`generalized_v3a` (494 prot)** |
-|---|---|---|
-| Val AUROC / AUPRC | 0.746 / — | **0.818 / 0.693** |
-| Test AUROC / AUPRC | 0.690 / 0.580 | **0.813 / 0.713** |
-| Per-protein median test AUROC | 0.714 | **0.817** (55 test proteins) |
-
-![Phase 3A scale comparison](figures/phase3a_v2_scale_comparison.png) · ![Per-protein test AUROC](figures/phase3a_per_protein_auroc.png)
-
-```bash
-python scripts/22a_prepare_rnacompete_training.py
-python scripts/22_build_phase3a_dataset.py \
-    --selex_dir data/generalized_v2 \
-    --rnacompete data/benchmarks/rnacompete/rnacompete_training_phase3a.tsv \
-    --homology_tsv results/homology/train_vs_rnacompete.tsv \
-    --out_dir data/generalized_v3a
-
-python scripts/06_train_generalized_v2.py \
-    --data_dir data/generalized_v3a --prot_max 700 --epochs 60
-python scripts/06_eval_generalized_v2_test.py \
-    --data_dir data/generalized_v3a \
-    --checkpoint models/saved/generalized_v2/best_model.pt \
-    --prot_max 700
-```
-
----
-
-## Phase 3B — Interaction Model, External Eval, Cross-Protocol
-
-### 3B.1 V4 bilinear CNN (`generalized_v3a`)
-
-V4 adds a bilinear protein–RNA interaction layer and per-assay source embeddings on top of the V2 dual-branch CNN (`scripts/21`).
-
-| Model | Test AUROC | Test AUPRC | Notes |
-|---|---|---|---|
-| V2 CNN (v3a, seed 42) | 0.813 | 0.713 | Phase 3A anchor |
-| V4 concat_bi (seed 42) | 0.829 | 0.735 | P100 GPU |
-| **V4 concat_bi (3 seeds)** | **0.829 ± 0.009** | **0.732 ± 0.011** | seeds 42, 0, 1 |
-
-```bash
-python scripts/21_train_generalized_v4_interaction.py \
-    --data_dir data/generalized_v3a \
-    --interaction concat_bi --use_source_emb \
-    --prot_max 700 --batch_size 512
-
-python scripts/18_run_multiseed.py \
-    --script scripts/21_train_generalized_v4_interaction.py \
-    --n_seeds 3 --output_dir results/multiseed/v4_concat_bi_v3a \
-    --extra_args "--data_dir data/generalized_v3a --interaction concat_bi --use_source_emb --prot_max 700 --batch_size 512"
-```
-
-### 3B.2 Literature external validation
-
-Manually curated pairs from literature Excel (159 usable curated; 540 expanded with generated negatives). **Not comparable to v3a test AUROC** — different RNA lengths, labels, and negative semantics. See `DATA.md §2.2`.
-
-| Benchmark | V2 AUROC | V4 AUROC | V2 AUPRC | V4 AUPRC |
+| Dataset | RBPs | Examples | Best val AUROC | Test AUROC |
 |---|---|---|---|---|
-| Curated (159) | **0.763** | 0.737 | 0.915 | 0.890 |
-| Expanded (540) | **0.688** | 0.666 | 0.488 | 0.341 |
+| HTR-SELEX PRJEB25907 (Ray et al. 2019) | 93 | 279,000 | 0.825 (XGB) | 0.796 (13 proteins) |
+| RBNS (Lambert et al. 2020) | 96 | 284,642 | 0.758 (RF) | 0.632 (13 proteins) |
+| HTR-SELEX PRJEB47428 (Laverty et al. 2022) | 23 | 69,000 | 0.817 (LR) | 0.628 (4 proteins) |
 
-![External validation](figures/external_eval_comparison.png)
+Combined pool: 632,642 examples and 168 proteins. `generalized_v2` adds 26,362 eCLIP training rows (659,004 rows, 169 proteins in the log).
 
-```bash
-python scripts/31_build_external_benchmark.py \
-    --xlsx data/external/dataset_without_affinities.xlsx \
-    --train_tsv data/generalized_v3a/train.tsv
+Phase 2 (`generalized_v2`, retrained 2026-05-13 after the double class-weighting fix, except V1, see notes above):
 
-python scripts/11_evaluate_external.py \
-    --benchmark_tsv data/external/external_benchmark_curated.tsv \
-    --v2_dir models/saved/generalized_v2 --prot_max 700
-
-python scripts/21b_evaluate_external_v4.py \
-    --checkpoint models/saved/generalized_v4_phase3a/best_model.pt \
-    --benchmark_tsv data/external/external_benchmark_curated.tsv \
-    --prot_max 700
-```
-
-### 3B.3 Cross-protocol in-vitro comparison
-
-For **84 proteins** present in ≥2 of four in vitro protocols (HTR-SELEX, RBNS, RNAcompete Eukarya/RBPZoo), scripts 33–36 build a matched roster, fit k=4 logistic regression within and across protocols, and compare motif concordance.
-
-| Metric | Value |
-|---|---|
-| Within-protocol mean AUROC | **0.974** |
-| Cross-protocol transfer mean AUROC | **0.791** |
-| Transfer pairs AUROC < 0.55 | 24 / 284 |
-| Strongest cross-assay (zero RNA overlap) | RNAcompete RBPZoo → RBNS, median **0.961** |
-| Weakest pair | RBNS → HTR-SELEX, median **0.703** |
-
-Config: `configs/cross_protocol_invitro.yaml` (no eCLIP). Outputs: `results/cross_protocol_invitro/`, figures `figures/cross_protocol_*.png`.
-
-![Cross-protocol transfer heatmap](figures/cross_protocol_transfer_heatmap.png)
-
-```bash
-# Requires sibling clean TSVs — see DATA_SOURCES_AND_DOWNLOADS.md
-python scripts/33_build_cross_protocol_roster.py --config configs/cross_protocol_invitro.yaml
-python scripts/34_cross_protocol_classifiers.py --config configs/cross_protocol_invitro.yaml
-python scripts/35_cross_protocol_motif_concordance.py --config configs/cross_protocol_invitro.yaml
-python scripts/36_visualize_cross_protocol.py --config configs/cross_protocol_invitro.yaml
-```
-
-**Domain track**: domain-conditioned V2 (`scripts/38`) gave a null result (see [`DOMAIN_AWARE_PLAN.md`](docs/archive/DOMAIN_AWARE_PLAN.md)).
-
----
-
-## Skipper eCLIP Benchmark Audit
-
-Skipper eCLIP windows (`fixlen_151`, 173 proteins, 264 experiments; Boyle et al. 2023) provide an in vivo, long-RNA benchmark. Scripts 41–50 build and split it; script 51 evaluates it.
-
-| Split (`data/benchmarks/skipper_eclip/`) | Negatives | Protein-disjoint | Purpose |
-|---|---|---|---|
-| `protein_disjoint` | genomic non-peak windows | yes | peak vs background |
-| `protein_and_rna` | genomic non-peak windows | yes, and no test RNA in train | leakage-free variant |
-| `cross_protein_neg` | other proteins' positives (GC-matched) | yes | protein-specific signal |
-
-Baselines on the rebuilt data (test sets, composition only — no protein input):
-
-| Split | GC fraction | RNA k-mer LR (k≤4) | k-mer LR, GC-matched |
-|---|---|---|---|
-| `protein_disjoint` | 0.744 | 0.808 | 0.680 |
-| `protein_and_rna` | 0.746 | 0.808 | 0.680 |
-| `cross_protein_neg` | 0.544 | 0.435 | 0.441 |
-
-Takeaways: with genomic-background negatives a protein-agnostic RNA model already reaches AUROC ≈ 0.81 (0.68 GC-matched), so that benchmark measures "is this a CLIP-peak-like region", not RBP specificity. With composition-neutral `cross_protein_neg` negatives no tested model (V2/V4 trained from scratch, V2 fine-tuned from v3a, v3a zero-shot) separates positives from negatives above chance inside a protein (GC-matched AUROC 0.50–0.53), although per-protein k-mer LR on seen proteins reaches a median 0.74. In vitro, by contrast, the same models transfer to test proteins in proportion to their sequence similarity to training proteins (MMseqs2 audit: AUROC 0.84–0.87 at ≥90% identity, 0.61–0.70 at 30–50%, ≈0.5 with no detectable homolog; `scripts/53` probe, 3 seeds: V2 0.686 ± 0.015, V4 0.754 ± 0.001 AUROC with identical RNA marginals; V4 > V2 in every seed, +0.068 on average; protein shuffling costs 0.18–0.25 AUROC). Full tables: [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) (2026-10-28).
-
-> **Data fix**: eCLIP TSVs built before the "validate reason" fix carry `protein_sequence == "ok"`. Scripts 41/41b/41c/42 now abort on such data and script 51 refuses to score it — rebuild with `scripts/run_eclip_step1.sh`.
-
-```bash
-# rebuild splits, baselines, in-domain V2 training, evaluation suite (VM)
-bash scripts/run_eclip_step1.sh
-# or a subset of stages: STAGES="baselines" bash scripts/run_eclip_step1.sh
-```
-
----
-
-## Per-Assay Analysis Pipelines
-
-These scripts characterize individual protocols and support cross-protocol work. They are **not** the main CNN training path.
-
-### Top/bottom RNA examples (`scripts/24`, `29`)
-
-5 motif-anchored positives + 5 motif-negative examples per RBP per protocol → `results/top_bottom_examples/all_protocols_summary.tsv`.
-
-### RNA-only per-protein classifiers (`scripts/25`, `26`)
-
-One RNA 4-mer model per protein (LR/RF). Honest 60/20/20 split. Median test AUROC ~0.95–0.99 within assay — expected for in vitro data.
-
-| Dataset | Proteins | Median Test AUROC |
-|---|---|---|
-| HTR-SELEX | 93 | 0.949 |
-| RBNS | 96 | 0.995 |
-| RNAcompete Eukarya | 200 | 0.993 |
-| RNAcompete RBPZoo | 174 | 0.990 |
-
-Results: `results/rna_only_per_protein_honest/`
-
-### RNAcompete intensity spectrum (`scripts/27`, `28`)
-
-100 probes per protein across log-intensity percentiles. No significant correlation between protein length and mean positive intensity (Eukarya r = −0.05, RBPZoo r = −0.04).
-
-<details>
-<summary>Commands for per-assay pipelines</summary>
-
-```bash
-# Top/bottom (example: RNAcompete Eukarya)
-python scripts/24_extract_top_bottom_examples.py --protocol rnacompete \
-  --data_file ../rnacompete_analysis/eukarya/results/ml_dataset_eukarya_clean.tsv.gz \
-  --kmer_dir ../rnacompete_analysis/eukarya/data/kmers \
-  --dataset_label RNAcompete_Eukarya
-python scripts/29_annotate_top_bottom_experiment_ids.py
-
-# RNA-only per protein
-python scripts/25_train_rna_only_per_protein.py \
-    --data_file ../htr_selex_analysis/results/ml_dataset_simple_clean.tsv \
-    --dataset htr_selex
-python scripts/26_visualize_rna_only_results.py
-
-# Intensity spectrum
-python scripts/27_sample_rnacompete_intensity_spectrum.py \
-    --data_file ../rnacompete_analysis/eukarya/results/ml_dataset_eukarya_clean.tsv.gz \
-    --dataset rnacompete_eukarya --n_proteins 3
-python scripts/28_visualize_intensity_spectrum.py
-```
-
-</details>
-
----
-
-## RNAcompete Zero-Shot Benchmark (Historical — V2 only)
-
-> **Do not use this section for v3a or V4 checkpoints.** Eukarya and RBPZoo full panels are included in `generalized_v3a` training. Evaluating `rnacompete_all` on v3a/V4 is **not** zero-shot.
-
-For the **Phase 2 V2 checkpoint** trained on `generalized_v2` (169 proteins, SELEX + RBNS only), RNAcompete (~1,087 experiments, ~13.9M pairs) was used as a true held-out benchmark:
-
-| Metric | V2 on `generalized_v2` |
-|---|---|
-| Overall AUROC | 0.571 |
-| Per-protein median (715 unseen) | 0.549 |
-| % proteins AUROC > 0.7 | 17.3% |
-
-This motivated Phase 3A (add RNAcompete to training). See [`docs/archive/PHASE3A_PLAN.md`](docs/archive/PHASE3A_PLAN.md).
-
-```bash
-python scripts/17_prepare_rnacompete_benchmark.py \
-    --rnacompete_dir /path/to/rnacompete_analysis \
-    --output_dir data/benchmarks/rnacompete
-
-python scripts/20_evaluate_benchmark.py \
-    --checkpoint models/saved/generalized_v2/best_model.pt \
-    --benchmark data/benchmarks/rnacompete/rnacompete_all.tsv \
-    --output_dir results/benchmarks/rnacompete_v2
-```
-
----
-
-## Reference Models
-
-| Model | Method | Training data | Test AUROC | Test AUPRC | Split |
+| Model | Encoding | Val AUROC | Test AUROC | Test AUPRC | Per-protein median |
 |---|---|---|---|---|---|
-| **V4 concat_bi (v3a)** | CNN + bilinear + source_emb | SELEX + RBNS + RNAcompete | **0.829 ± 0.009** | **0.732 ± 0.011** | Protein-aware, 494 prot |
-| **V2 CNN (v3a)** | Dual-branch one-hot CNN | SELEX + RBNS + RNAcompete | **0.813** | **0.713** | Protein-aware, 494 prot |
-| V2 CNN (v2) | Dual-branch one-hot CNN | HTR-SELEX + RBNS | 0.690 | 0.580 | Protein-aware, 169 prot |
-| ZHMolGraph | RNA-FM + ProtTrans + GNN | NPInter2 / RPI7317 | 0.798 | 0.820 | Hard (NPInter5) |
+| V1 MLP | RNA 4-mer + protein 3-mer | 0.716 | 0.674 | 0.544 | 0.689 |
+| **V2 CNN** | One-hot sequences | 0.746 | 0.690 | 0.580 | 0.714 |
+| V3 | Frozen ESM-2 mean-pool + RNA CNN | 0.715 | 0.634 | 0.547 | 0.633 |
+| V3b | One-hot CNN + frozen ESM-2 concatenation | 0.770 | 0.666 | 0.568 | 0.676 |
+| V3c | Per-residue ESM-2 + Conv1D | 0.745 | 0.685 | 0.595 | 0.711 |
 
-> ZHMolGraph trains on literature interaction databases; our models train on in vitro binding assays. AUROC numbers are aspirational references, not directly comparable tasks.
+Phase 3A and 3B (`generalized_v3a`, protein-name split, `prot_max=700`):
 
----
+| Model | Val AUROC | Test AUROC | Test AUPRC | Per-protein median AUROC |
+|---|---|---|---|---|
+| V2 CNN (seed 42) | 0.818 | 0.813 | 0.713 | 0.817 |
+| V4 concat_bi + source embedding (seed 42) | 0.852 | 0.829 | 0.735 | 0.851 |
+| V4 concat_bi (seeds 42, 0, 1) | not in summary | 0.829 +- 0.009 | 0.732 +- 0.011 | 0.854 +- 0.004 |
 
-## Repository Structure
+External literature pairs (V2 and V4 trained on v3a, sliding-window maximum for RNAs above 60 nt): curated 159 pairs AUROC 0.763 and 0.737, AUPRC 0.915 and 0.890 (positive rate 0.717). Expanded 540 pairs AUROC 0.688 and 0.666, AUPRC 0.488 and 0.341 (positive rate 0.211). The external set differs from the v3a test set in RNA length, labels and negative definition, see `docs/DATA.md` section 2.2.
 
-```
-protein_rna_ml/
-├── configs/
-│   ├── generalized_model.yaml
-│   ├── cross_protocol.yaml / cross_protocol_invitro.yaml
-│   ├── htr_selex_validation.yaml, rbns_validation.yaml
-│   └── rnacompete_benchmark.yaml
-│
-├── scripts/
-│   ├── 01–03   Phase 1 validation
-│   ├── 04–10   Phase 2 generalized V1–V3c
-│   ├── 11, 21b Literature external eval (V2 / V4)
-│   ├── 17, 20  RNAcompete benchmark prep + eval (V2 historical)
-│   ├── 18        Multi-seed runner
-│   ├── 21–22     V4 training + v3a dataset build
-│   ├── 24–29     Top/bottom examples, RNA-only baselines
-│   ├── 31–32     External benchmark build + Phase 3A figures
-│   ├── 33–36     Cross-protocol roster, classifiers, motifs, figures
-│   ├── 37–38     Domain annotation + domain-conditioned V2
-│   ├── 40        Protein sequence sanitization QC
-│   ├── 41–41d, 42, 51  Skipper eCLIP build, splits, diagnostics, evaluation suite
-│   ├── 42b–44    New assays: download/normalize, sequence enrichment, overlap QC
-│   ├── 45–50     CLIPper/Skipper enrichment + motif QC, BED exports
-│   ├── 52–54     eCLIP per-protein baseline, in vitro cross-protein-negative probe
-│   ├── 55–58, 62 MMseqs2 homology audit, Pfam family audit/inventory, v3b cluster split, split integrity check
-│   ├── 59, 65–67, 69–71  nearest-protein baseline, V4 with cross-protein negatives, frozen ESM-2/RNA-FM heads, scores with CI, hybrid
-│   ├── 60, 63, 64, 78, 79  RPI benchmark shortcut audit, PaRPI audit, CORAL fold audit and converter
-│   ├── 61, 68, 75  motif recovery, in silico mutagenesis, attribution maps
-│   ├── 72, 73, 77  affinity-style probe, motif-profile regression, profile similarity
-│   ├── 74, 76    eCLIP → in vitro reverse transfer, ENCODE TF ChIP-seq pairs
-│   ├── 80, 81    ESM-2 and RNA-FM layers vs RNAcompete binding profiles
-│   ├── build_*.py, summarize_v3b_runs.py  HTML reports and run summaries
-│   └── run_*.sh  unattended VM pipelines (eCLIP step 1, v3b overnight/frozen/layers/TF, multi-seed, probes)
-│
-├── src/          data loaders, models (V2 CNN, V4 interaction)
-├── reports/      results.html, esm_layer_similarity.html
-├── results/
-│   ├── phase3a_summary.json, phase3b_summary.json, v3b/ (split map)
-│   ├── cross_protocol_invitro/     Cross-protocol metrics (3B)
-│   ├── generalized/, external/, multiseed/
-│   └── rna_only_per_protein_honest/, top_bottom_examples/
-│
-├── README.md, INVENTORY.md, EXPERIMENT_LOG.md, NEXT_STEPS.md
-├── DATA*.md, METHODS.md, STRATEGY.md
-├── docs/archive/  completed plans and legacy dashboards (PROJECT_PLAN, RESEARCH_ROADMAP, PHASE3A/3B, CROSS_ASSAY, DOMAIN_AWARE, *.html)
-└── run_pipeline.sh  (Phase 1–2 only)
-```
-
-Upstream data-processing repositories (own git repositories, ignored by this one): `htr_selex_analysis/`, `htr_selex_prjeb47428/`, `rbns_analysis/`, `rnacompete_analysis/`. On the Mac they sit inside this folder, in the documents and defaults they are addressed as `../<name>/`; see [`DATA_SOURCES_AND_DOWNLOADS.md`](DATA_SOURCES_AND_DOWNLOADS.md). External programs: MMseqs2 and HMMER (Pfam-A) for 11 scripts.
+Cross-protocol in vitro (`configs/cross_protocol_invitro.yaml`, results in `results/cross_protocol_invitro/`): within-protocol median AUROC HTR-SELEX 0.950, RBNS 0.993, RNAcompete Eukarya 0.992, RNAcompete RBPZoo 0.985. Cross-protocol mean 0.791, 24 of 284 evaluations below 0.55. Strongest pair RNAcompete RBPZoo to RBNS (median 0.961, no RNA overlap), weakest RBNS to HTR-SELEX (0.703). The earlier run with eCLIP in the roster is in `results/cross_protocol/` (within mean 0.963, transfer mean 0.779, 204 and 322 evaluations). More tables (Skipper eCLIP, per-assay RNA-only models, RNAcompete zero-shot of the Phase 2 V2 checkpoint): [`docs/METHODS.md`](docs/METHODS.md) section 9.
 
 ---
 
-## Quick Start
+## Quick start
+
+Data are not in git. Dataset versions and paths: [`docs/DATA.md`](docs/DATA.md) section 6 and [`docs/DATA_SOURCES_AND_DOWNLOADS.md`](docs/DATA_SOURCES_AND_DOWNLOADS.md).
 
 ```bash
 pip install -r requirements.txt
@@ -421,39 +105,79 @@ pip install -r requirements.txt
 python scripts/02_train_validation_model.py --config configs/rbns_validation.yaml
 python scripts/03_evaluate_validation.py --config configs/rbns_validation.yaml --model xgboost
 
-# Phase 2 V2 on generalized_v2
+# Phase 2: V2 on generalized_v2
 python scripts/04_build_generalized_dataset.py
 python scripts/06_train_generalized_v2.py --data_dir data/generalized_v2 --epochs 50
 
-# Phase 3A: build v3a + train V2 (data not in git — see docs/archive/PHASE3A_PLAN.md)
-# NB: scripts 41/51 read `data/sanitized/generalized_v3a/`; older docs use `data/generalized_v3a/`
-# Phase 3B: V4 + cross-protocol (see sections above)
+# Phase 3A: build generalized_v3a and train V2
+python scripts/22a_prepare_rnacompete_training.py
+python scripts/22_build_phase3a_dataset.py --selex_dir data/generalized_v2 \
+    --rnacompete data/benchmarks/rnacompete/rnacompete_training_phase3a.tsv \
+    --homology_tsv results/homology/train_vs_rnacompete.tsv --out_dir data/generalized_v3a
+python scripts/06_train_generalized_v2.py --data_dir data/generalized_v3a --prot_max 700 --epochs 60
 
-# Regenerate committed figures from JSON
+# Phase 3B: V4 with 3 seeds, literature external evaluation
+python scripts/18_run_multiseed.py --script scripts/21_train_generalized_v4_interaction.py \
+    --n_seeds 3 --output_dir results/multiseed/v4_concat_bi_v3a \
+    --extra_args "--data_dir data/generalized_v3a --interaction concat_bi --use_source_emb --prot_max 700 --batch_size 512"
+python scripts/31_build_external_benchmark.py --xlsx data/external/dataset_without_affinities.xlsx \
+    --train_tsv data/generalized_v3a/train.tsv
+python scripts/21b_evaluate_external_v4.py --checkpoint models/saved/generalized_v4_phase3a/best_model.pt \
+    --benchmark_tsv data/external/external_benchmark_curated.tsv --prot_max 700
+
+# Cross-protocol in vitro (needs the upstream clean TSVs, see DATA_SOURCES_AND_DOWNLOADS.md)
+python scripts/33_build_cross_protocol_roster.py --config configs/cross_protocol_invitro.yaml
+python scripts/34_cross_protocol_classifiers.py --config configs/cross_protocol_invitro.yaml
+
+# v3b split (cluster map is written once, `build` reads it) and figures from the JSON summaries
+python scripts/58_build_v3b_cluster_split.py build
 python scripts/32_visualize_phase3a_results.py
-python scripts/19_compare_models.py --results_dir results/generalized
 ```
+
+Historical, valid for the Phase 2 V2 checkpoint only: `scripts/archive/17_prepare_rnacompete_benchmark.py` and `scripts/archive/20_evaluate_benchmark.py` (RNAcompete `rnacompete_all` zero-shot, median per-protein AUROC 0.549 on 715 proteins not in `generalized_v2`). The Eukarya and RBPZoo panels are part of `generalized_v3a` training, so the same evaluation on v3a or V4 checkpoints is not zero-shot.
+
+Scripts 41-54 (Skipper eCLIP and probe) and the VM runners (`scripts/run_*.sh`) are described in [`SCRIPTS.md`](SCRIPTS.md) and [`docs/VM_RUNBOOK.md`](docs/VM_RUNBOOK.md). `data/generalized_v3a/` is the output of `scripts/22`. `data/sanitized/generalized_v3a/` is its copy with cleaned protein sequences (`scripts/40`) read by scripts 38, 41, 51 and 53, see `docs/DATA.md` section 6.
 
 ---
 
-## Key Design Decisions
+## Repository layout
 
-- **Protein-aware split**: no RBP in more than one split. See `METHODS.md §3`.
-- **Primary metric: AUPRC** under ~1:2 class imbalance; AUROC reported for comparability.
-- **CNN over k-mer MLP**: global max pooling is length-agnostic (RBNS 20 nt vs HTR-SELEX 40 nt).
-- **Frozen ESM-2 does not help** on 169-protein v2 data (V3/V3b/V3c) nor on v3b (frozen heads 0.531–0.559 vs nearest-protein baseline 0.627).
-- **Evaluation on v3b, not v3a**: v3a test proteins have close training homologs; use the cluster split and the cross-protein-negative probe for claims about new proteins.
-- **RNAcompete in training (v3a)**: Eukarya + RBPZoo full panels + ucRBP 23; homology-aware splits. Full-panel `rnacompete_all` eval is invalid for v3a/V4 checkpoints.
-- **Cross-protocol matching**: representative native name per protocol, exact equality only — constructs never pooled (`scripts/33–34`).
+```
+protein_rna_ml/
+  configs/        YAML for validation, cross-protocol and benchmark runs
+  scripts/        numbered scripts 01-81, run_*.sh runners, report builders (see SCRIPTS.md)
+  scripts/archive/ superseded or one-off scripts
+  src/            data loaders, splits, negative sampling, models (V2 CNN, V4 interaction)
+  results/        metrics (JSON, TSV), logs, score tables
+  figures/        figures of Phases 1-3 and cross-protocol
+  reports/        results.html, esm_layer_similarity.html
+  docs/           METHODS, DATA*, STRATEGY, VM_RUNBOOK, archive/
+  README.md, EXPERIMENT_LOG.md, NEXT_STEPS.md, INVENTORY.md, SCRIPTS.md
+```
+
+The upstream data-processing repositories `htr_selex_analysis`, `htr_selex_prjeb47428`, `rbns_analysis` and `rnacompete_analysis` are separate git repositories with their own `.git`, ignored by this repository. Configs address them as `../<name>/` (next to this folder). In the present working copy they are inside the folder, so the `../` paths resolve after moving them one level up. They are needed only to rebuild the data from scratch. External programs: MMseqs2 and HMMER (Pfam-A) for 11 scripts.
+
+---
+
+## Design decisions
+
+- Protein-disjoint splits: no protein name appears in more than one split (`docs/METHODS.md` section 3). Homology between splits is controlled in v3b only.
+- Primary metric AUPRC under a class ratio of about 1:2, AUROC reported for comparability.
+- CNN with global max pooling: independent of RNA length (RBNS 20 nt, HTR-SELEX 40 nt).
+- Frozen ESM-2 representations: below one-hot V2 on `generalized_v2` (V3, V3b, V3c), and 0.531-0.559 probe AUROC on v3b against 0.627 for the nearest-protein baseline.
+- Claims about new proteins use the v3b split and the cross-protein-negative probe. The v3a test set contains proteins with close training homologs.
+- RNAcompete in v3a training: Eukarya and RBPZoo full panels and ucRBP 23, so full-panel `rnacompete_all` evaluation of v3a or V4 checkpoints is not zero-shot.
+- Cross-protocol matching: representative native name per protocol, exact equality, constructs are not pooled (`scripts/33-34`).
 
 ---
 
 ## References
 
-- Ray et al. (2019). *Genome Research* — HTR-SELEX PRJEB25907
-- Lambert et al. (2020). *Nature* — RBNS
-- Laverty et al. (2022). *Nucleic Acids Research* — HTR-SELEX PRJEB47428
-- Sasse et al. (2025). *Nature Biotechnology* — RBPZoo / EuPRI RNAcompete
-- Ray et al. (2013). *Nature* — RNAcompete eukarya panel
-- Liu et al. (2025). *Communications Biology* — ZHMolGraph
-- Lin et al. (2023). *Science* — ESM-2
+- Ray et al. (2019). *Genome Research*. HTR-SELEX PRJEB25907
+- Lambert et al. (2020). *Nature*. RBNS
+- Laverty et al. (2022). *Nucleic Acids Research*. HTR-SELEX PRJEB47428
+- Sasse et al. (2025). *Nature Biotechnology*. RBPZoo / EuPRI RNAcompete
+- Ray et al. (2013). *Nature*. RNAcompete Eukarya panel
+- Boyle et al. (2023). *Cell Genomics*. Skipper eCLIP
+- Liu et al. (2025). *Communications Biology*. ZHMolGraph (reported AUROC 0.798 on its NPInter5 hard split, a literature-interaction task that differs from in vitro binding assays)
+- Lin et al. (2023). *Science*. ESM-2

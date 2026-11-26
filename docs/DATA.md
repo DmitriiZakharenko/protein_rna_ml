@@ -1,6 +1,6 @@
 # Data Provenance, Leakage Risks, and Negative Sampling
 
-**Last updated**: 2026-07-11
+**Last updated**: 2026-11-26
 
 This document describes all datasets used in training and evaluation,
 their known biases, their leakage risks, and the negative sampling strategy
@@ -106,8 +106,7 @@ create a task where val/test labels have a different meaning than training label
 **Negative quality**: HIGH. Flanking regions are real expressed RNA sequences with
 matched GC content. This is the most biologically grounded negative set in the project.
 
-**Current limitation**: Only 4% of the total training data. Not yet confirmed whether
-the eCLIP examples are helping or hurting SELEX/RBNS generalization.
+**Scope**: 26,362 rows, 4% of the 659,004 rows of `generalized_v2`. An ablation of these rows was not run.
 
 ---
 
@@ -118,20 +117,19 @@ the eCLIP examples are helping or hurting SELEX/RBNS generalization.
 | Dataset | Rows | Proteins | Role |
 |---------|------|----------|------|
 | `generalized_v2` test | 98,662 | 169 (24 in test) | Phase 2 primary benchmark |
-| **`generalized_v3a` test** | **322,275** | **494 (55 in test)** | **Phase 3A primary benchmark** |
+| `generalized_v3a` test | 322,275 | 494 (55 in test) | Phase 3A test set, protein-name split |
+| `generalized_v3b` test | 321,027 | 494 (64 in test) | same pairs split by protein cluster, test set for claims about new proteins |
+| v3a / v3b cross-protein probe | about 80,000 pairs (v3a), 63 proteins (v3b) | test proteins | same RNA paired with another protein of the same assay, built by `scripts/53` |
 
 Same negative quality as training (SELEX/RBNS pool negs + eCLIP flanking in train only).
 
 ### 2.2 External Literature Dataset (`dataset_without_affinities.xlsx`)
 
 - 159 pairs, 96 proteins, manually curated from literature
-- 72% positive rate; 88% of proteins single-class (no per-protein AUROC possible)
-- 57% of RNAs exceed 60 nt (scored by window-max, inflates AUPRC for long lncRNAs)
-- 159 pairs, 96 proteins, manually curated from literature
 - 72% positive rate; 88% of proteins single-class (no per-protein AUROC on curated alone)
-- 57% of RNAs exceed 60 nt (scored by window-max, inflates AUPRC for long lncRNAs)
+- 51-57% of RNAs exceed 60 nt (the count differs between `results/phase2_summary.json`, METHODS and this file, not re-counted), scored by window-max, which raises scores of long RNAs
 - V2 (v3a checkpoint): AUROC **0.763**, AUPRC 0.915 (random AUPRC baseline = 0.717)
-- **DO NOT** compare these numbers to SELEX/v3a test metrics
+- These numbers are not comparable with SELEX or v3a test metrics (different RNA length, labels and negatives)
 
 ### 2.3 Expanded External Benchmark (`external_benchmark_expanded.tsv`)
 
@@ -170,7 +168,7 @@ For each positive RNA sequence in the SELEX/RBNS pool:
    ensuring the negative is not a near-duplicate of the positive.
 
 This is implemented conceptually in `scripts/12_download_eclip.py` for eCLIP.
-Equivalent logic needs to be added for SELEX/RBNS in a new script `scripts/15_generate_hard_negatives.py`.
+The same procedure for SELEX and RBNS is not implemented (the script name `15_generate_hard_negatives.py` used in an earlier plan does not exist). The in vitro cross-protein probe (`scripts/53`) is the negative set that removes RNA composition as a signal.
 
 ---
 
@@ -183,24 +181,9 @@ No protein appears in more than one of train/val/test.
 Implementation: `src/data/splits.py:protein_aware_split`.
 Verified with assertion checks.
 
-### 4.2 Homology-Aware (NOT implemented — required before publication)
+### 4.2 Homology-aware (implemented as `generalized_v3b`)
 
-**Problem**: Two proteins with >30% sequence identity may have nearly identical
-binding specificities. If one is in training and the other in test, the model
-can transfer knowledge via homology.
-
-**Known affected pairs** (not exhaustive):
-- RBM4 / RBM4B (confirmed paralogs in RBNS, split across train/test)
-- hnRNP family members (multiple constructs)
-- SR protein family (SRSF1–SRSF9 have similar RRM domains)
-
-**Required action**:
-1. Run MMseqs2 `easy-cluster` at 30% identity, 80% coverage on all 169 protein sequences.
-2. Assign entire clusters to the same split.
-3. Report metrics separately for "clean" test proteins (no training-set homolog) and
-   "contaminated" test proteins (training-set homolog exists).
-
-Until this is done, val/test AUROC numbers may overestimate true generalization.
+Two proteins with more than 30% sequence identity can have similar binding specificities. The v2 and v3a splits are by protein name, so homologs can fall on both sides. The homology audit (`scripts/55`, MMseqs2) gives for the 55 v3a test proteins: no hit 6, 30-50% identity 15, 50-70% 14, 70-90% 13, >= 90% 7, so 62% have a training protein at >= 50% identity (examples: ESRP1-construct3 against ESRP1, RBM4 against RBM4B). Probe AUROC follows this identity (V4: 0.525 without hit, 0.884 at 70-90%). `generalized_v3b` (`scripts/58`) assigns whole protein clusters (40% identity at 50% coverage, or 70% identity at 10% coverage) to one split, and 3% of its 64 test proteins have a training protein at >= 50% identity. Details: `EXPERIMENT_LOG.md` (2026-10-29) and `docs/METHODS.md` section 3.4. Not implemented: an MMseqs2 audit of the 24 `generalized_v2` test proteins, and a threshold of 30% (it joins all RRM proteins into one cluster).
 
 ### 4.3 RNA-Aware (NOT implemented — required for fair comparison to ZHMolGraph)
 
@@ -232,20 +215,21 @@ The `dataset_source` name in `data/generalized/` is legacy and should not be rep
 
 ---
 
-## 6. Data Files On Disk vs In-Repo
+## 6. Data files, dataset versions and upstream repositories
 
-| File | In repo | Notes |
-|------|---------|-------|
-| `data/generalized_v2/train.tsv` | Yes | ~490k rows, use this for all training |
-| `data/generalized_v2/val.tsv` | Yes | ~71k rows |
-| `data/generalized_v2/test.tsv` | Yes | ~99k rows |
-| `data/embeddings/esm2_protein_embeddings.npz` | Yes | 168 proteins × 1280-d, mean-pool |
-| `data/embeddings/esm2_residue_embeddings.npz` | Yes | 168 proteins × 300 aa × 1280-d, fp16 |
-| `data/external/*.tsv` | Yes | eCLIP per-protein output |
-| Raw SELEX/RBNS TSVs | **NO** | Live in sibling repo dirs (`../htr_selex_analysis/`, `../rbns_analysis/`) |
-| `data/generalized/` (legacy) | Yes (small files) | Generated by scripts/04. Legacy. Use `generalized_v2` instead. |
+`data/` is not tracked in git (`.gitignore`), apart from small files. Files are rebuilt with the scripts or copied from the GPU VM.
 
-**Reproducibility gap**: A fresh clone of this repository cannot reproduce the
-generalized dataset from scratch without access to the raw SELEX/RBNS TSVs which
-live outside this repo. The `data/generalized_v2/` TSVs are committed and are the
-canonical starting point for all Phase 2 training.
+| Path | Content | Built by |
+|---|---|---|
+| `data/generalized_v2/{train,val,test}.tsv` | Phase 2 pool, 659,004 rows (about 490k / 71k / 99k), 169 proteins | `scripts/04`, `scripts/14` |
+| `data/embeddings/esm2_*_embeddings.npz` | ESM-2 mean-pool (168 proteins x 1280) and residue embeddings (fp16) | `scripts/07`, `07b` |
+| `data/generalized_v3a/{train,val,test}.tsv` | 2,658,999 pairs, 494 proteins | `scripts/22` |
+| `data/sanitized/generalized_v3a/` | the same TSVs with cleaned `protein_sequence` | `scripts/40 --apply` |
+| `data/generalized_v3b/` | v3a pairs split by protein cluster | `scripts/58 build` |
+| `data/external/` | literature pairs (`dataset_without_affinities.xlsx`, expanded benchmark) | `scripts/31` |
+| `data/benchmarks/` | RNAcompete benchmark, Skipper eCLIP splits, probes | scripts 17, 41-42, 53 |
+| `data/generalized/` | legacy pool of `scripts/04` | superseded by `generalized_v2` |
+
+**Sanitization (`scripts/40`)**: audit-only by default. With `--apply` it writes `*.sanitized.tsv` (or a copy under `data/sanitized/`, or in place with `.bak`). `src/data/protein_sequence.py` strips a trailing `*`, removes embedded digits (for example residue numbers in RBM38) and other non-amino-acid characters, and rows whose sequence becomes empty are dropped. Scripts 38, 41, 51, 53 and `scripts/run_eclip_step1.sh` read `data/sanitized/generalized_v3a/`. Scripts 55, 58 and the Phase 3A training read `data/generalized_v3a/`. Row counts of the two copies were not compared here.
+
+**Upstream repositories**: the raw SELEX, RBNS and RNAcompete tables are produced by `htr_selex_analysis`, `htr_selex_prjeb47428`, `rbns_analysis` and `rnacompete_analysis`, which are separate git repositories (configs address them as `../<name>/`, next to this folder; in the present working copy they are inside the project folder). They are needed to rebuild the pools from scratch (see `docs/DATA_SOURCES_AND_DOWNLOADS.md`).

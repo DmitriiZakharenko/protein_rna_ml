@@ -1,9 +1,13 @@
 # Data Sources & Download Instructions
 
-**Last updated**: 2026-07-21  
+**Last updated**: 2026-11-26  
 **Purpose**: Every cross-protocol / domain step must be traceable to a primary source.
 Do not invent tables. If a file is missing, download it with the steps below and
 record the path in `configs/cross_protocol.yaml`.
+
+**Upstream repositories.** `htr_selex_analysis`, `htr_selex_prjeb47428`, `rbns_analysis` and `rnacompete_analysis` are separate git repositories (own `.git`, ignored by this repository). The paths below and in `configs/*.yaml` are written as `../<name>/`, which resolves when the four folders sit next to `protein_rna_ml`. In the present working copy they are inside the project folder, so these paths resolve only after the folders are moved one level up. They are needed only to rebuild the data from scratch. Scripts 80 and 81 additionally read two published RNAcompete tables: `rnacompete_analysis/data/raw/Zscores_RNAcompete2025.txt.gz` (7-mer Z-scores, script 80) and `rnacompete_analysis/data/raw/norm_probe_scores.txt.gz` (normalised probe scores, script 81). The default `--zscores` and `--scores` arguments are relative to the project root and match the present layout (folders inside the project). After moving the folders one level up, the paths `../rnacompete_analysis/data/raw/...` are passed explicitly. A copy of the Z-score file is also in `results/esm_layer_profile/`.
+
+**Cross-protocol runs.** `configs/cross_protocol_invitro.yaml` (four in vitro protocols, output `results/cross_protocol_invitro/`) produced the quoted within-protocol mean AUROC 0.974 and transfer mean 0.791. `configs/cross_protocol.yaml` (with eCLIP in the roster, output `results/cross_protocol/`) is the earlier run (0.963 and 0.779). The integrity-check snippet below applies to either config.
 
 ---
 
@@ -102,7 +106,7 @@ architectures, script 33 flags `domain_match_status=ambiguous_architectures`.
 | `RBFOX1` | `A2BP1` |
 | `PUM1` | `PUM` |
 
-Wired in `scripts/37_annotate_protein_domains.py` (`TABLE_S1_JOIN_ALIASES`).
+Wired in `scripts/archive/37_annotate_protein_domains.py` (historical) (`TABLE_S1_JOIN_ALIASES`).
 
 ---
 
@@ -128,7 +132,7 @@ curl -fsSL -o data/raw/uniprot/roster_missing_domains.tsv \
 Then rebuild annotations (Table S1 first, then this TSV):
 
 ```bash
-python scripts/37_annotate_protein_domains.py \
+python scripts/archive/37_annotate_protein_domains.py \
   --uniprot_tsv data/raw/uniprot/roster_missing_domains.tsv
 ```
 

@@ -1,10 +1,10 @@
 # Methods & Model Tracking
 
 **Project**: Protein–RNA Binding Prediction  
-**Last updated**: 2026-06-12  
+**Last updated**: 2026-11-26  
 **Language**: English  
 
-This document records every methodological choice made in the project — encoding strategies, splitting decisions, model architectures, and training configurations — together with the rationale for each choice and literature references. It is updated each time a new method is introduced or an existing one is modified.
+This document records the methodological choices of the project: encodings, splits, model architectures, training configurations and the result tables of Phases 1-3, with the rationale and literature references. Results of the later work (v3b, probe, frozen-embedding heads, audits) are recorded in `EXPERIMENT_LOG.md`, and section 3.3 and section 9 summarise them.
 
 ---
 
@@ -15,8 +15,11 @@ This document records every methodological choice made in the project — encodi
 3. [Dataset Splitting Strategy](#3-dataset-splitting-strategy)
 4. [Baseline Models](#4-baseline-models)
 5. [Literature Benchmarks](#5-literature-benchmarks)
-6. [Planned Methods — Phase 2](#6-planned-methods--phase-2)
+6. [Methods planned at the start of Phase 2](#6-methods-planned-at-the-start-of-phase-2)
 7. [Results Summary Table](#7-results-summary-table)
+8. [Methodological limitations](#8-methodological-limitations)
+9. [Additional result tables](#9-additional-result-tables)
+10. [Domain annotation](#10-domain-annotation)
 
 ---
 
@@ -110,6 +113,24 @@ This design is stricter than the standard random split used in older RBP predict
 
 ---
 
+### 3.3 Dataset versions and naming
+
+| Name | Path | Build | Split |
+|---|---|---|---|
+| `generalized_v2` | `data/generalized_v2/` | `scripts/04`, `scripts/14` | by protein name, 24 test proteins, 98,662 test rows |
+| `generalized_v3a` | `data/generalized_v3a/` | `scripts/22` (HTR-SELEX + RBNS + RNAcompete Eukarya/RBPZoo + ucRBP 23) | by protein name, train 393 / val 49 / test 55 proteins, 2,658,999 pairs |
+| sanitized v3a | `data/sanitized/generalized_v3a/` | `scripts/40 --apply` | built from the v3a TSVs (row counts of the two copies were not compared). `protein_sequence` is cleaned: trailing `*` removed, digits and non-amino-acid characters removed (`src/data/protein_sequence.py`), rows with an empty sequence dropped |
+| v3a, known domains | `known_domains_only` option of `scripts/38` | filter on sanitized v3a | 465 of 619 protein variants kept (variants with a known domain class) |
+| `generalized_v3b` | `data/generalized_v3b/` | `scripts/58 build` from `results/v3b/protein_split_map.tsv` | same 2,658,999 pairs split by protein cluster: train 375 / val 55 / test 64 proteins |
+
+`scripts/55`, `scripts/58` and `scripts/40` read `data/generalized_v3a/`. Scripts 38, 41, 51, 53 and `scripts/run_eclip_step1.sh` read the sanitized copy by default. Which copy the Phase 3A checkpoints of V2 (0.813) and V4 (0.829) were trained on is recorded in neither the log nor the summary JSON files. Domain-aware V2 numbers (baseline 0.847) are on the filtered sanitized copy and are not comparable with 0.813.
+
+### 3.4 Homology between splits
+
+The v3a and v2 splits assign proteins by name or construct name, so paralogs can fall on different sides. The homology audit (`scripts/55`, MMseqs2 all-vs-all, best local identity of each test protein to any training protein) gives, for the 55 v3a test proteins: no hit 6, 30-50% 15, 50-70% 14, 70-90% 13, >= 90% 7 (62% at >= 50%). Probe AUROC rises with this identity (log, 2026-10-29). `scripts/58` links two proteins when identity is >= 40% at >= 50% coverage or >= 70% at >= 10% coverage (single linkage, 160 clusters, largest 220 proteins), assigns whole clusters to train, val or test stratified by Pfam family (seed 42) and gives 3% of the 64 test proteins a training protein at >= 50% identity. The 30% identity threshold joins all RRM proteins into one cluster of more than 400 proteins, so 40% is the lowest usable threshold. Domain-level similarity at 30-50% remains for most v3b test proteins.
+
+---
+
 ### 3.2 Class Balance
 
 **Current ratio**: ~1 positive : 2 negatives (33% positive rate) in all three datasets.
@@ -183,8 +204,8 @@ A 1:1 ratio would oversample positives or undersample negatives, potentially inf
 **Important note on early stopping**: In XGBoost ≥ 2.0, `early_stopping_rounds` must be passed to the constructor, not to `fit()`. This was corrected in the codebase after observing diverging validation logloss (0.623 → 0.830 over 300 rounds on RBNS).
 
 **Observed performance (best model)**:
-- HTR-SELEX PRJEB25907: AUROC = **0.844**, AUPRC = **0.765** → **PASS ✅**
-- RBNS: AUROC = 0.661 (without early stopping; **overfitting confirmed**) → being rerun
+- HTR-SELEX PRJEB25907: validation AUROC 0.825, AUPRC 0.742, test AUROC 0.796, AUPRC 0.693 (`results/phase1_summary.json`).
+- RBNS: validation AUROC 0.661 without early stopping (overfitting), see section 7 for the corrected runs. An earlier note listed HTR-SELEX AUROC 0.844 and AUPRC 0.765. These values do not appear in the result files, which give the values above.
 
 **Reference**: [Chen & Guestrin (2016), KDD](https://doi.org/10.1145/2939672.2939785) — original XGBoost paper
 
@@ -200,15 +221,15 @@ The following published models are tracked as reference points. All numbers are 
 | RPITER | Iterative feature refinement + random forest | Random | 0.727 | 0.774 | 2019 | [Peng et al., Int. J. Mol. Sci.](https://doi.org/10.3390/ijms20225543) |
 | IPMiner | Deep learning (auto-encoder + deep belief network) | Random | 0.664 | 0.742 | 2016 | [Pan et al., BMC Bioinformatics](https://doi.org/10.1186/s12859-016-1334-2) |
 | NPI-GNN | Graph neural network | Random | 0.511 | 0.520 | 2021 | [Yu et al., Briefings in Bioinformatics](https://doi.org/10.1093/bib/bbab255) |
-| **Our XGBoost (k-mer)** | XGBoost on k-mer frequency vectors | Protein-aware | 0.844 | 0.765 | 2025 | This project — HTR-SELEX only |
+| **Our XGBoost (k-mer)** | XGBoost on k-mer frequency vectors | Protein-disjoint | 0.796 (test) | 0.693 (test) | 2026 | This project, HTR-SELEX PRJEB25907 only (`results/phase1_summary.json`) |
 
 **Note on comparability**: Direct numerical comparison across models is not valid. ZHMolGraph was trained on NPInter2 + RPI7317 (curated literature-derived RPI databases) and evaluated on NPInter5 / TheNovel (entirely unseen protein–RNA pairs from database curation). Our project trains and evaluates on in vitro assay data (HTR-SELEX, RBNS). These are fundamentally different tasks: database RPI prediction vs. in vitro binding specificity prediction. ZHMolGraph AUROC 0.798 is cited as an aspirational performance target, not a directly comparable number.
 
 ---
 
-## 6. Planned Methods — Phase 2
+## 6. Methods planned at the start of Phase 2
 
-The following methods will be implemented after all datasets pass Phase 1 validation. Listed in order of increasing complexity and expected performance.
+This section was written before Phase 2. Sections 6.1-6.3 were implemented (V1, V2, V3, V3b, V3c, results in section 7), and V4 (bilinear interaction, `scripts/21`) was added in Phase 3B. Sections 6.4-6.7 describe designs that were not implemented as stated, apart from frozen RNA-FM embeddings in the v3b heads (`scripts/66-67`). The "expected AUROC" figures in this section are expectations written before the experiments.
 
 ### 6.1 MLP on k-mer Features
 
@@ -237,9 +258,9 @@ The following methods will be implemented after all datasets pass Phase 1 valida
 
 **Implemented variants** (see §7 for actual results):
 
-- **V3 — frozen mean-pool**: average over all residues → 1280-d vector. Fast. Tested and **failed** to beat V2 CNN (test AUROC 0.634 vs 0.703).
-- **V3b — frozen mean-pool as auxiliary**: concatenate ESM-2 mean-pool (128-d projection) with V2 CNN branches. Tested and **failed** (test AUROC 0.666 vs 0.703).
-- **V3c — frozen residue Conv1D**: Linear(1280→64) per position, then Conv1D + global max pool. Tested and **partially addressed** mean-pool dilution issue but still **failed** to beat V2 (test AUROC 0.685 vs 0.703).
+- **V3 — frozen mean-pool**: average over all residues → 1280-d vector. Test AUROC 0.634 against 0.690 for V2.
+- **V3b — frozen mean-pool as auxiliary**: concatenate ESM-2 mean-pool (128-d projection) with V2 CNN branches. Test AUROC 0.666 against 0.690 for V2.
+- **V3c — frozen residue Conv1D**: Linear(1280→64) per position, then Conv1D + global max pool. Test AUROC 0.685 against 0.690 for V2, above V3b (0.666) and V3 (0.634).
 
 **Why mean-pool fails**: The RNA-binding domain is ~20–50 residues in a protein of 300 aa. Averaging over all residues dilutes the domain signal by 6–15×. Conv1D + max pool (V3c) partially recovers positional selectivity but is insufficient when trained on only 169 proteins.
 
@@ -328,6 +349,8 @@ Updated after each experiment. Phase 1 numbers are on the **test set** (unseen p
 | HTR-SELEX PRJEB47428 | Logistic Regression | **0.817** | **0.736** | 0.590 | — | ✅ PASS | 2026-04 |
 | HTR-SELEX PRJEB47428 | XGBoost | 0.629 | 0.454 | 0.628 | 0.436 | ✅ PASS | 2026-04 |
 
+The Status column refers to the validation threshold (val AUROC > 0.70 for the best model). On the test proteins `results/phase1_summary.json` marks RBNS (0.632, 13 proteins) and PRJEB47428 (0.628, 4 proteins) as WARN, and PRJEB25907 (0.796, 13 proteins) as PASS.
+
 **Flagged proteins** (test AUROC < 0.70, hard biological cases, not data quality issues):
 - RBNS: RBM4 (0.345), RBM4B (0.323) — closely related paralogs with near-identical binding profiles; XRCC6 (0.496) — atypical non-canonical RBP
 - HTR-SELEX PRJEB25907: PCBP1 (0.436) — poly-C binding with structured recognition mode; LARP6 (0.693), RBM6 (0.683), RBMS2 (0.656) — marginal
@@ -335,15 +358,17 @@ Updated after each experiment. Phase 1 numbers are on the **test set** (unseen p
 
 ### Phase 2 — Generalized model (cross-dataset, 168 proteins, 632k examples)
 
+The pool of the three datasets has 632,642 examples and 168 proteins. `generalized_v2` adds 26,362 eCLIP rows used for training only (659,004 rows, 169 proteins in `EXPERIMENT_LOG.md`). V2, V3, V3b and V3c were rerun on 2026-05-13 after the double class-weighting fix (section 8.1). V1 (`results/generalized/v1_mlp_results.json`, dated 2026-04-27) was produced before the sampler was removed from `scripts/05`, and its rerun is pending.
+
 | Model | Architecture | Val AUROC | Val AUPRC | Test AUROC | Test AUPRC | Best epoch | Date |
 |---|---|---|---|---|---|---|---|
 | V1 MLP | k-mer 8262-d → MLP [512,256,128] | 0.716 | 0.636 | 0.674 | 0.544 | 1 (then degraded) | 2026-04 |
-| V2 CNN | One-hot → dual CNN → MLP | **0.811** | **0.734** | **0.703** | **0.599** | 20 / 28 | 2026-05 |
+| V2 CNN | One-hot → dual CNN → MLP | **0.746** | — | **0.690** | **0.580** | 13 / 13 | 2026-05-13 |
 | V3 ESM-2 (frozen mean-pool) | ESM-2(1280) mean-pool → Linear(256) + RNA CNN | 0.715 | 0.675 | 0.634 | 0.547 | 17 / 25 | 2026-05 |
 | V3b ESM-2 + CNN concat | RNA CNN(256) + Prot CNN(256) + ESM-2(1280→128) concat | 0.770 | 0.704 | 0.666 | 0.568 | — | 2026-05 |
-| V3c ESM-2 residue CNN (planned) | RNA CNN(256) + ESM-2 residue Conv1D → max pool(256) | — | — | — | — | — | — |
+| V3c ESM-2 residue CNN | RNA CNN(256) + ESM-2 residue Conv1D → max pool(256) | 0.745 | 0.683 | 0.685 | 0.595 | 18 | 2026-05-13 |
 
-**V2 CNN per-protein test results** (24 proteins, median AUROC=0.718):
+**V2 CNN per-protein test results** (24 proteins, median AUROC 0.714, `results/phase2_summary.json`; the table below is from an earlier V2 run and differs by up to 0.01 per protein, for example ESRP1-construct3 0.980 and PUF60 0.934 in the 2026-05-13 run):
 
 | Protein | Dataset | AUROC | AUPRC |
 |---|---|---|---|
@@ -376,7 +401,7 @@ Updated after each experiment. Phase 1 numbers are on the **test set** (unseen p
 
 **V3 ESM-2 frozen mean-pool failure**: Mean-pooling over all residues dilutes the binding domain signal. Proteins with strong position-specific motifs (PUM2, LARP7, TRA2A) lost 0.15–0.41 AUROC vs V2. Proteins without clear motifs (UNK, TAF15, IGF2BP3) gained 0.06–0.25 AUROC — ESM-2 provides useful family context for these. Key lesson: V2 CNN and ESM-2 encode *complementary* information. V3b was designed to concatenate both.
 
-**V3b ESM-2 + CNN concat failure**: Adding ESM-2 mean-pool as an auxiliary signal alongside the proven V2 CNN branches still degraded performance (test AUROC 0.666 vs 0.703). This confirms that the failure mode is fundamental to mean-pooling, not to the architecture or weight of the ESM-2 branch. Two independent experiments (V3 and V3b) both degraded relative to pure one-hot CNN — the mean-pool ESM-2 representation is actively harmful for motif-rich proteins even when the CNN branch is present. V3c addresses this by replacing mean-pool with a residue-level Conv1D branch, letting the model focus on binding-relevant positions via learned filters.
+**V3b ESM-2 + CNN concat failure**: Adding ESM-2 mean-pool as an auxiliary signal alongside the proven V2 CNN branches still degraded performance (test AUROC 0.666 vs 0.690). This confirms that the failure mode is fundamental to mean-pooling, not to the architecture or weight of the ESM-2 branch. Two independent experiments (V3 and V3b) both degraded relative to pure one-hot CNN — the mean-pool ESM-2 representation is actively harmful for motif-rich proteins even when the CNN branch is present. V3c replaces mean-pool with a residue-level Conv1D branch, letting the model focus on binding-relevant positions via learned filters.
 
 ### External Validation — Preliminary Assessment
 
@@ -451,7 +476,7 @@ Motif score columns (protocol-specific):
 - **RBNS / HTR-SELEX** (`kmer_enrichment_score`): pos/neg pool k-mer enrichment ratio.
   The master TSV carries both columns; each is populated only for the relevant protocol.
 
-### RNAcompete intensity spectrum sampling (scripts 27–28, 2026-06)
+### RNAcompete intensity spectrum sampling (scripts 27-28, archived in `scripts/archive/`, 2026-06)
 
 Probe set for structural / intensity follow-up: **100 modal-length probes per RBP**,
 evenly spaced across log₁₀(`probe_intensity`) percentiles, for the **top 3 RBPs by mean
@@ -475,7 +500,7 @@ Figure: `figures/rnacompete_length_vs_intensity.png`.
 **Note**: log transform is `log10(intensity − Smin + 1)` per protein (Smin = minimum raw
 intensity in the modal-length pool). Probes at Smin map to log 0.
 
-### Top/bottom example experiment IDs (script 29, 2026-06)
+### Top/bottom example experiment IDs (script 29, archived in `scripts/archive/`, 2026-06)
 
 Adds `experiment_id` to `all_protocols_summary.tsv` and exports
 `all_protocols_proteins.fasta` (headers `>experiment_id,protein_name`):
@@ -488,50 +513,78 @@ Adds `experiment_id` to `all_protocols_summary.tsv` and exports
 
 ---
 
-## 8. Known Methodological Limitations
+## 8. Methodological limitations
 
-This section documents limitations that affect the validity of reported results.
-Updated: 2026-05-13.
+Scope of the reported numbers, stated per item.
 
-### 8.1 Double Class-Weighting Bug (Fixed 2026-05-13)
+### 8.1 Double class-weighting (fixed 2026-05-13)
 
-**Affected models**: V2, V3, V3b, V3c.
+`WeightedRandomSampler` (about 50/50 batches) was used together with `BCEWithLogitsLoss(pos_weight = n_neg / n_pos, about 2.0)` in scripts 06, 08, 09 and 10, which corresponds to an effective positive weight of about 4. The sampler was removed on 2026-05-13 and `pos_weight` is the only class-imbalance correction. V2, V3, V3b and V3c were retrained and all numbers in this document and in `EXPERIMENT_LOG.md` come from the retrained checkpoints. Script 05 (V1) also had the sampler removed. The V1 result file is dated 2026-04-27 and its rerun is pending.
 
-`WeightedRandomSampler` (which creates ~50/50 pos:neg batches) was used simultaneously
-with `BCEWithLogitsLoss(pos_weight = n_neg / n_pos ≈ 2.0)`. The combined effect is
-equivalent to applying pos_weight ≈ 4× in a standard unsampled setting. This biases
-the model toward recall at the cost of precision and shifts probability calibration.
+### 8.2 Homology between splits
 
-**All existing checkpoints are affected.** Fix applied to scripts on 2026-05-13 (removed
-WeightedRandomSampler; pos_weight retained as the sole class-imbalance correction).
-All models should be retrained with the fixed scripts before results are cited.
+Splits in v2 and v3a are by protein name or construct name. The audit of section 3.4 measures the resulting overlap: 62% of the v3a test proteins have a training protein at >= 50% identity, and v3a probe AUROC is 0.52-0.53 (V4) without a detectable homolog and 0.87-0.88 at >= 70% identity. `generalized_v3b` controls homology (3% of test proteins at >= 50%). The v2 split (24 test proteins, for example RBM4 and RBM4B on different sides) was not audited with MMseqs2.
 
-### 8.2 Protein Splits Are Not Homology-Aware
+### 8.3 Negatives
 
-Proteins are split by gene symbol / construct ID. Paralogs (e.g. RBM4 and RBM4B, confirmed)
-can land in different splits. ESM-2 embeddings for paralogs are similar; the model can
-effectively "see" the binding profile of a test protein through its training-set homolog.
-The magnitude of this effect has not been measured. A homology audit is required before
-any generalization claim is made.
+SELEX and RBNS negatives are non-enriched or shuffled sequences of the same library. The in vitro cross-protein probe (`scripts/53`) uses the same RNA paired with another protein of the same assay, so RNA composition carries no information (GC and k-mer LR score 0.500). eCLIP negatives of `generalized_v2` (flanking regions, GC and length matched, 26,362 rows) are training-only. The Skipper benchmarks use genomic windows (`protein_disjoint`, `protein_and_rna`) or other proteins' positives (`cross_protein_neg`).
 
-### 8.3 Negative Samples Are Artificial
+### 8.4 Validation-test gap
 
-SELEX/RBNS negatives are either shuffled sequences from the same library or non-cognate
-pairings. They do not represent the distribution of naturally non-binding RNA sequences.
-A model trained exclusively on these negatives may fail on real transcriptome scans.
-eCLIP negatives (flanking, GC/length-matched) are biologically grounded but currently
-represent only 4% of training data and are excluded from val/test.
+Validation AUROC exceeds test AUROC by 0.05-0.06 for V2 on `generalized_v2` (0.746 and 0.690) and by 0.04-0.10 in the other Phase 2 runs (V1 0.042, V3 0.081, V3b 0.104, V3c 0.060). Possible contributors that were not separated: RNA length distributions of RBNS and HTR-SELEX, family composition of the validation and test proteins, and early stopping on validation AUPRC.
 
-### 8.4 Val/Test Gap is Unexplained
+### 8.5 Seeds
 
-Systematic val AUROC - test AUROC ≈ +0.08–0.11 across all models.
-Root cause is unknown. Possible contributors: dataset-level distribution shift (RBNS vs
-HTR-SELEX RNA length distributions), protein family imbalance between val and test,
-early stopping on val AUPRC amplifying split-specific overfitting. Until this is
-explained, val AUPRC is an unreliable optimization target.
+Phase 1, Phase 2 and V2 on v3a use seed 42. Three seeds (42, 0, 1) are used for V4 on v3a (test AUROC 0.829 +- 0.009, sample SD), the in vitro probe (V2 0.686 +- 0.015, V4 0.754 +- 0.001), the frozen-embedding heads and the TF ChIP-seq comparison. V2 and V4 on v3b rest on seed 42, and the seed 0 and 1 runs on v3b were not completed. Standard deviations are sample SDs over 3 seeds.
 
-### 8.5 Single-Seed Results Only
+### 8.6 Result files of the V4 runs
 
-All reported test metrics are single-seed (seed=42). Variance is unquantified.
-A difference of ±0.02 AUROC between models is within plausible random seed variation.
+The V4 numbers (3-seed test AUROC 0.829 +- 0.009, AUPRC 0.732 +- 0.011, external curated 0.737 and expanded 0.666) are recorded in `results/phase3b_summary.json`. The per-run result files (`results/multiseed/v4_concat_bi_v3a/`, `results/generalized/v4_phase3a/` and the V4 external JSON files) are on the GPU VM and are not in this copy of the repository.
 
+---
+
+## 9. Additional result tables
+
+Tables moved from the README. Sources are the log entries and result files named in each item.
+
+### 9.1 Skipper eCLIP benchmark (scripts 41-54)
+
+Skipper eCLIP windows `fixlen_151` (173 gene symbols, 264 experiments, Boyle et al. 2023) form an in vivo long-RNA benchmark. Splits are in `data/benchmarks/skipper_eclip/`.
+
+| Split | Negatives | Protein-disjoint | Purpose |
+|---|---|---|---|
+| `protein_disjoint` | genomic non-peak windows | yes | peak against background |
+| `protein_and_rna` | genomic non-peak windows | yes, and no test RNA in train | variant without RNA overlap |
+| `cross_protein_neg` | other proteins' positives, GC matched | yes | protein-specific signal |
+
+RNA-only baselines on the test sets (no protein input):
+
+| Split | GC fraction | RNA k-mer LR (k <= 4) | k-mer LR, GC-matched subset |
+|---|---|---|---|
+| `protein_disjoint` | 0.744 | 0.808 | 0.680 |
+| `protein_and_rna` | 0.746 | 0.808 | 0.680 |
+| `cross_protein_neg` | 0.544 | 0.435 | 0.441 |
+
+On `cross_protein_neg` the tested models (V2 and V4 trained from scratch, V2 fine-tuned from v3a, v3a zero-shot) reach GC-matched AUROC 0.50-0.53, while per-protein k-mer LR on proteins seen in training reaches a median 0.737. On the in vitro probe the same models follow sequence identity to training proteins (MMseqs2 audit, V2 and V4: 0.85-0.87 at >= 90% identity, 0.61-0.70 at 30-50%, 0.48-0.53 with no detectable homolog). Source: `EXPERIMENT_LOG.md`, entries of 2026-10-28 and 2026-10-29. eCLIP TSVs built before the "validate reason" fix carry `protein_sequence == "ok"`. Scripts 41, 41b, 41c and 42 abort on such data and script 51 refuses to score it. Rebuild: `scripts/run_eclip_step1.sh` (`STAGES="baselines"` selects a subset).
+
+### 9.2 RNA-only per-protein classifiers (scripts 25-26)
+
+One RNA 4-mer model (LR or RF) per protein, 60/20/20 split per protein after removing duplicate RNAs. Median test AUROC per protein (`results/rna_only_per_protein_honest/all_datasets_summary.tsv`): HTR-SELEX 0.949 (93 proteins), RBNS 0.995 (96), RNAcompete Eukarya 0.993 (200), RNAcompete RBPZoo 0.990 (174). The task is within-protein, so the numbers are not comparable with protein-disjoint results.
+
+### 9.3 RNAcompete intensity spectrum (scripts 27-28, archived)
+
+100 probes per protein across log-intensity percentiles (`scripts/archive/27_sample_rnacompete_intensity_spectrum.py`, `scripts/archive/28_visualize_intensity_spectrum.py`). Pearson correlation of protein length with mean positive intensity: Eukarya r = -0.050 (p = 0.49), RBPZoo r = -0.036 (p = 0.63).
+
+### 9.4 RNAcompete zero-shot, Phase 2 V2 checkpoint (historical)
+
+V2 trained on `generalized_v2` (169 proteins), evaluated with `scripts/archive/20_evaluate_benchmark.py` on `rnacompete_all` (2M pairs sampled from 13.9M, 742 proteins): overall AUROC 0.571, per-protein median 0.551 (0.549 for 715 proteins not in training, 0.629 for 27 seen), 17.3% of proteins above 0.7. Valid for this checkpoint only, since the Eukarya and RBPZoo panels are part of `generalized_v3a` training.
+
+### 9.5 Cross-protocol in vitro runs
+
+`results/cross_protocol_invitro/` (config `configs/cross_protocol_invitro.yaml`, no eCLIP in the roster) holds the quoted numbers: 196 within-protocol and 284 transfer evaluations, mean AUROC 0.974 and 0.791. `results/cross_protocol/` (config `configs/cross_protocol.yaml`) is the earlier run with eCLIP in the roster (9 eCLIP proteins): 204 and 322 evaluations, mean AUROC 0.963 and 0.779.
+
+---
+
+## 10. Domain annotation
+
+Pfam family labels (`scripts/56`, also `scripts/80` and `scripts/68`) come from `hmmscan` against Pfam-A with `-E 1e-3 --domE 1e-3`. The filter therefore applies to the sequence E-value and the conditional (per-domain) E-value of `--domE`. The stored column `domain_ievalue` is the independent E-value (i-Evalue) of the domain table, which is a different quantity from the conditional E-value used for the filter. Sensitivity on the 175 RNAcompete RBPZoo constructs of `results/esm_layer_profile/domains.tsv`: 471 of the 924 domain rows have `domain_ievalue` above 1e-3. With the logged default (conditional E-value only) 175 proteins have a domain and the families are RRM 145, KH 24, CCCH 6, CCHC 3, DEAD 1, with a median domain coverage of 0.641 of the construct (quartiles 0.489-0.724). With an additional filter `domain_ievalue < 1e-3` (453 rows) 174 proteins have a domain, the families are RRM 145, KH 24, CCCH 5, CCHC 2, DEAD 1, and the median coverage is 0.545 (quartiles 0.370-0.644). Scripts 61 and 80 have an optional argument for this filter (default off), so the logged results use the conditional E-value only. The sensitivity of the 448-protein family table of script 56 to the same filter was not computed.

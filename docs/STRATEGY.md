@@ -1,15 +1,15 @@
 # Research Strategy
 
-> **Status (2026-11-26)**: the header numbers describe the state of 2026-09-01 (before the homology audit); sections on lessons and what not to repeat remain valid. Current results: README and EXPERIMENT_LOG. See `INVENTORY.md`.
+> **Status (2026-11-26)**: sections 1-2 and 5-7 record the lessons of Phase 2 and the RNAcompete zero-shot diagnosis (2026-05). Sections 3, 4, 6 and 8 were updated on 2026-11-26 to the state after the homology audit and v3b. Current results: `README.md` and `EXPERIMENT_LOG.md`. Current plan: `NEXT_STEPS.md`.
 
 **Project**: Protein–RNA Binding Prediction
-**Last updated**: 2026-09-01
+**Last updated**: 2026-11-26
 **Current best in-distribution model**: V4 concat_bi on `generalized_v3a` — test AUROC=**0.829 ± 0.009** AUPRC=**0.732 ± 0.011** (3 seeds, P100)
 **V2 anchor on v3a**: test AUROC=**0.813** AUPRC=**0.713** (single seed)
 **Phase 2 baseline (v2 data)**: test AUROC=0.690 AUPRC=0.580 (169 proteins)
 **Cross-protocol transfer (k=4 LR, in-vitro)**: mean AUROC **0.791** vs within **0.974** — see `results/phase3b_summary.json`
 **Benchmark target**: ZHMolGraph — AUROC=0.798 AUPRC=0.820 (hard split, unseen proteins AND RNAs).
-**Note on comparability**: our protein-aware-only test is NOT equivalent to ZHMolGraph's hard split.
+**Note on comparability**: our protein-disjoint test is not equivalent to ZHMolGraph's hard split.
 
 ---
 
@@ -31,12 +31,11 @@ This is not evidence that ESM-2 is uninformative. It is evidence that:
 (c) the gains from ESM-2 (motif-poor proteins: UNK +0.25, TAF15 +0.06) are real
     but outweighed by losses on motif-rich proteins (PUM2 −0.25, LARP7 −0.20).
 
-**Implication**: the next gain will NOT come from yet another frozen ESM-2 pooling variant.
-It requires either (a) fine-tuning, (b) explicit interaction modeling, or (c) better data.
+**Implication drawn in 2026-05**: further frozen mean-pool variants were not pursued, and the options named were either (a) fine-tuning, (b) explicit interaction modeling, or (c) better data.
 
-### 1.2 Val/test gap is systematic and unexplained
+### 1.2 Validation-test gap (systematic, causes not separated)
 
-All models show val AUROC ≈ test AUROC + 0.05–0.08 (clean runs). This is NOT model-specific noise.
+All models show val AUROC ≈ test AUROC + 0.05–0.08 (clean runs). The gap is present in all models.
 Root causes not yet analyzed:
 - HTR-SELEX vs RBNS distribution shift (RNA length, selection protocol)
 - Protein family imbalance between val and test splits (not verified)
@@ -77,7 +76,7 @@ but `dataset` in `data/generalized_v2/` splits. The script read the wrong column
 **Status**: Fix applied. Re-run script 06 to get correctly labelled breakdowns.
 
 ### Bug 3 — Broken pipeline runner (MEDIUM)
-**File**: run_pipeline.sh
+**File**: `scripts/archive/run_pipeline.sh` (moved from the repository root)
 **Description**: `phase1_htr()` called non-existent `scripts/02b_train_htr_selex_validation.py`.
 **Fix**: Corrected to `scripts/02_train_validation_model.py --config configs/htr_selex_validation.yaml`.
 
@@ -89,47 +88,24 @@ All ESM-2 scripts and the external evaluation script would fail on a fresh insta
 
 ---
 
-## 3. Current Decision Tree
+## 3. State of the work (2026-11-26)
 
-```
-WHERE WE ARE (2026-07-11):
-  ✓ Phase 3A dataset built: generalized_v3a, 2.66M pairs, 494 proteins
-  ✓ V2 CNN retrained on v3a: test AUROC=0.813, AUPRC=0.713 (single seed)
-  ✓ External curated validation: AUROC=0.763 (159 literature pairs)
-  ✓ External expanded benchmark: scripts/31 + eval (540 pairs, diagnostic only)
-  ✓ V3/V3b/V3c on v2 data: all frozen ESM-2 variants worse than V2
-
-IMMEDIATE NEXT STEPS:
-
-  Step 1 — Multi-seed V2 on v3a [NEXT]
-    python scripts/18_run_multiseed.py --script scripts/06_train_generalized_v2.py \
-        --n_seeds 5 --output_dir results/multiseed/v3a_v2 \
-        --extra_args "--data_dir data/generalized_v3a --prot_max 700 --epochs 60"
-
-  Step 2 — RNAcompete zero-shot on v3a checkpoint
-    python scripts/20_evaluate_benchmark.py \
-        --checkpoint models/saved/generalized_v2/best_model.pt \
-        --benchmark data/benchmarks/rnacompete/rnacompete_all.tsv
-
-  Step 3 — Phase 3B: V4 bilinear on v3a
-    python scripts/21_train_generalized_v4_interaction.py \
-        --data_dir data/generalized_v3a --interaction concat_bi --use_source_emb
-
-  Step 4 — Homology audit (publication blocker, measurement)
-    MMseqs2 on full 494-protein panel; report clean vs contaminated test proteins
-```
+- `generalized_v3a` built (2,658,999 pairs, 494 proteins). V2 test AUROC 0.813 (1 seed), V4 concat_bi 0.829 +- 0.009 (3 seeds).
+- External curated literature pairs: V2 0.763, V4 0.737 (159 pairs).
+- Homology audit (`scripts/55`) and cluster split `generalized_v3b` (`scripts/58`): test proteins with a training protein at >= 50% identity 62% (v3a) and 3% (v3b).
+- Cross-protein-negative probe on v3b: nearest-protein baseline 0.627, V2 0.527 and V4 0.559 (seed 42), frozen ESM-2 + RNA-FM bilinear head 0.559 +- 0.010 (3 seeds).
+- Zero-shot RNAcompete evaluation applies to the Phase 2 V2 checkpoint only. The Eukarya and RBPZoo panels are part of v3a training.
+- Open items: `NEXT_STEPS.md`, section Open checks.
 
 ---
 
-## 4. What NOT To Do Next
+## 4. Lessons from the experiments
 
-- **Do NOT** run another frozen ESM-2 mean-pool variant. Three experiments confirm this fails.
-- **Do NOT** claim V2 AUROC=0.690 is directly comparable to ZHMolGraph AUROC=0.798.
-  The task definitions differ (protein-aware only vs protein+RNA held-out).
-- **Do NOT** cite external validation AUROC=0.763 without the caveats in §5 below.
-- **Do NOT** tune hyperparameters on the test set or add models until multi-seed
-  variance on V2 is established.
-- **Do NOT** add eCLIP data to val or test splits (domain shift from in vitro labels).
+- Frozen ESM-2 mean-pool variants (V3, V3b) were below V2 on `generalized_v2`, and a frozen residue Conv1D (V3c) was 0.005 AUROC below V2. Frozen ESM-2 and RNA-FM heads on v3b gave 0.531-0.559 probe AUROC against 0.627 for the nearest-protein baseline.
+- ZHMolGraph AUROC 0.798 is measured on NPInter5 with unseen proteins and RNAs. The in vitro protein-disjoint tests are different tasks and the numbers are not compared directly.
+- External validation AUROC 0.763 is read together with the caveats of section 5 (159 pairs, 72% positives, window-max scoring).
+- Hyperparameters are not tuned on the test set. Differences below about 0.02 AUROC lie within the seed spread of 3-seed runs.
+- eCLIP data are used for training only in `generalized_v2` because the positive definition differs from in vitro enrichment.
 
 ---
 
@@ -152,28 +128,24 @@ V2 CNN (v3a checkpoint) evaluated on literature Excel + expanded TSV from `scrip
 |--------|--------------|
 | AUROC = 0.688 | 114 pos + 426 neg (381 generated + 45 curated neg) |
 | AUPRC = 0.488 | Positive rate = **21%**. Random baseline = **0.211**. Gain = **+0.28** |
-| Do NOT compare 0.488 to 0.915 | Different class balance; compare gain over random or use stratified `curated_pos_vs_generated_neg` |
+| 0.488 and 0.915 are not comparable | Different class balance; the gain over random is compared or use stratified `curated_pos_vs_generated_neg` |
 
 **Valid use**: sanity check on literature pairs; diagnostic decoy rejection (shuffle / cross-pair).  
 **Invalid use**: numeric comparison to SELEX test AUROC (0.813) or ZHMolGraph without caveats.
 
 ---
 
-## 6. Publication Readiness
+## 6. Status of the evidence for a publication
 
-Not ready for a main-track ML or bioinformatics paper. Blockers:
+Measured so far:
 
-1. Splits are protein-aware but NOT homology-aware. Paralog leakage is unquantified.
-2. All negatives in SELEX/RBNS are artificial shuffles.
-3. Val/test gap (~0.05–0.08 AUROC) is unexplained.
-4. Single-seed results only — no variance estimates.
-5. External benchmark is statistically too small for strong claims.
-6. Zero-shot generalization fails (median AUROC 0.549 on RNAcompete).
+1. Splits: protein-disjoint (v3a), plus a cluster split with 3% of test proteins at >= 50% identity to training (v3b). Homology is quantified (`scripts/55`).
+2. Negatives: SELEX and RBNS negatives are non-enriched or shuffled sequences, and the cross-protein probe removes RNA composition as a signal.
+3. Seeds: 3 seeds for V4 on v3a, the probe and the frozen heads. V2 and V4 on v3b rest on seed 42.
+4. External benchmark: 159 curated pairs, small and diagnostic.
+5. RNAcompete zero-shot (Phase 2 V2 checkpoint): per-protein median 0.549 on 715 proteins not in training.
 
-Potential path to a short paper (workshop / methods letter):
-- Run homology audit; report results honestly.
-- Improve negatives; retrain; show AUROC changes.
-- This becomes a benchmark/dataset contribution, not a methods paper.
+Candidate framings in `NEXT_STEPS.md`: a benchmark and audit contribution (homology-stratified evaluation, RNA-only and nearest-protein baselines, cross-protein negatives), and a method contribution if a model exceeds the nearest-protein baseline in the identity bins below 50% on v3b.
 
 ---
 
@@ -237,45 +209,17 @@ In order of expected impact:
 
 ---
 
-## 8. Prioritized Next Steps (Post-Benchmark)
+## 8. Steps listed in 2026-05 to 2026-09 and their outcome
 
-### Immediate (this week — no new training required)
+| Step | Outcome |
+|---|---|
+| Fix benchmark organism names (`scripts/archive/17_prepare_rnacompete_benchmark.py`) | Done |
+| Retrain V2 after the weighting fix | Done, test AUROC 0.690 |
+| RNAcompete zero-shot of V2 (`scripts/archive/20_evaluate_benchmark.py`) | Done, per-protein median 0.549 (715 unseen proteins) |
+| Homology audit | Done on v3a (`scripts/55`) and applied in v3b (`scripts/58`) |
+| Interaction layer V4 | Done: 0.829 +- 0.009 on v3a (3 seeds), probe on v3a 0.754 +- 0.001 |
+| RNAcompete in training with homology-aware split | Done as `generalized_v3a` (name split, then audited) |
+| Multi-seed V2 on v3a | Not run (V4: 3 seeds) |
+| iCLIP acquisition (TDP-43, FUS), affinity regression head | Not started. Affinity-style test on RNAcompete intensities was run (`scripts/72`) |
 
-| Task | Action | Status |
-|---|---|---|
-| Fix benchmark organism names | Fixed in `17_prepare_rnacompete_benchmark.py` | **Done** |
-| Retrain V2-CLEAN | `scripts/06_train_generalized_v2.py` | **Done** — AUROC 0.690 |
-| Re-run RNAcompete on V2 | `scripts/20_evaluate_benchmark.py` | **Done** — median 0.549 |
-| Multi-seed V2 (5 seeds) | `scripts/18_run_multiseed.py` | Next |
-
-### Short-term (in progress)
-
-1. **Homology audit** — run MMseqs2 between training proteins and RNAcompete proteins at 30%
-   identity. Identify how many of the 27 overlaps are true sequence matches vs name matches.
-   Determines whether RNAcompete can be used as a training source without leakage.
-
-2. **Interaction layer V4** — add a bilinear interaction layer between V2's 256-d RNA and
-   protein branch outputs. No new encoders. Expected to improve both in-distribution test
-   AUROC and zero-shot generalization. This is the highest-priority architecture change.
-
-3. **iCLIP data acquisition** — prepare TDP-43 and FUS iCLIP datasets. These two proteins
-   appear in RNAcompete training overlap (TARDBP = TDP-43, FUS = EWSR1 family) and provide
-   in vivo context for the proteins the model already partially handles.
-
-See `RESEARCH_ROADMAP.md` for Phases 3C–8 (affinity, localization, variants, in vivo bridge).
-
-### Medium-term
-
-4. **RNAcompete → Training (Phase 3)** — after homology audit and interaction layer V4:
-   merge RNAcompete sub-datasets into training with homology-aware split. Re-run zero-shot
-   benchmark on held-out organisms (non-human organisms absent from any training set).
-
-5. **Affinity regression head** — add a parallel regression output trained on
-   `probe_intensity` from RNAcompete and `R_max` from RBNS. Multi-task training on
-   both classification and affinity may learn better-calibrated motif representations.
-
-### Do Not Do
-
-- Do not try more frozen ESM-2 variants (three experiments, conclusively worse).
-- Do not report RNAcompete median AUROC 0.551 as a success metric; it is a baseline.
-- Do not compare to ZHMolGraph AUROC 0.798 — different dataset, different task.
+Later phases (affinity, localization, variants, in vivo bridge) are in `docs/archive/RESEARCH_ROADMAP.md`. The current plan is `NEXT_STEPS.md`.
