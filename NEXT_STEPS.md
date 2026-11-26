@@ -96,6 +96,17 @@ Rule: a new source is first an evaluation-only set split by cluster, and is used
 
 Reverse transfer (`scripts/74`): k-mer LR trained on eCLIP of a protein scores the same protein in vitro at mean AUROC 0.670 (RNA prior 0.579, own-data ceiling 0.947, 50 proteins).
 
+## ENCODE map follow-ups (2026-11-26)
+
+Result of the protein map: middle layers of ESM-2 (about 18 to 22) carry more class and domain-family information than the last layer ([`docs/ENCODE_MAP.md`](docs/ENCODE_MAP.md)). Planned checks:
+
+| # | Task | Decision rule |
+|---|---|---|
+| E1 | Frozen bilinear heads with protein embeddings from ESM-2 layers 18 and 21 (`scripts/run_v3b_layers.sh`, `LAYERS="18 21"`, 3 seeds, modes std and xneg) | Supported if the 3-seed mean probe AUROC exceeds the layer-33 reference by more than the seed spread (std 0.531 +- 0.027, xneg 0.559 +- 0.010) |
+| E2 | 5-mer profiles without windows that contain tandem repeats (`kmer --mask_repeats`) and the correlation with the centred cosine again | Supported if the Spearman correlation of the TF-TF pairs stays above 0.05 at some layer after masking |
+| E3 | Profiles per cell line and reproducibility of one protein between K562 and HepG2 (`kmer --by_cell`, `reproducibility`) | Upper bound for any profile prediction, no threshold |
+| E4 | Verification of the literature claims about the flagged proteins in the primary papers | Only claims with a verified identifier go into texts |
+
 ## Open checks
 
 | Item | State | Needed |

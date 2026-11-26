@@ -292,12 +292,30 @@ def profile_from_counts(cnt, nseq, min_pos: int):
     return np.log2(p / q).astype(np.float32), int(npos), float(pos_b[keep].sum() / npos)
 
 
-def accumulate(acc: dict, df: pd.DataFrame, assay: str) -> None:
-    for name, seq, lab in zip(df.protein_name.to_numpy(), df.rna_sequence.to_numpy(), df.binding_label.to_numpy()):
+import re
+
+REPEAT_RES = [re.compile(r"(.{%d})\1{%d,}" % (p, -(-16 // p) - 1)) for p in range(1, 7)]
+
+
+def has_repeat(seq: str) -> bool:
+    """Tandem repeat of a 1 to 6 nt unit that covers at least 16 nt (microsatellite, poly-A, satellite units such as GGAAU)."""
+    return any(r.search(seq) for r in REPEAT_RES)
+
+
+def accumulate(acc: dict, df: pd.DataFrame, assay: str, mask: bool = False, cells=None, stats=None) -> None:
+    cells = cells if cells is not None else [None] * len(df)
+    for name, seq, lab, cell in zip(df.protein_name.to_numpy(), df.rna_sequence.to_numpy(), df.binding_label.to_numpy(), cells):
+        if mask:
+            rep_ = has_repeat(seq.upper())
+            if stats is not None:
+                stats[0] += 1
+                stats[1] += int(rep_)
+            if rep_:
+                continue
         c, gc = kmer_counts(seq)
         if c is None:
             continue
-        key = (str(name).upper(), assay)
+        key = (str(name).upper(), assay if cell is None else f"{assay}|{cell}")
         if key not in acc:
             acc[key] = (np.zeros((2, NGC, NK), np.float32), np.zeros((2, NGC), np.float64))
         b = min(int(gc * NGC), NGC - 1)
@@ -310,12 +328,13 @@ def stage_kmer(args) -> None:
     out = resolve(args.out_dir)
     acc: dict = {}
     t0 = time.time()
-    for chunk in pd.read_csv(resolve(args.tf_pairs), sep="\t", usecols=["protein_name", "rna_sequence", "binding_label", "neg_type"], chunksize=200000):
+    stats = [0, 0]
+    for chunk in pd.read_csv(resolve(args.tf_pairs), sep="\t", usecols=["protein_name", "rna_sequence", "binding_label", "neg_type", "dataset_source"], chunksize=200000):
         chunk = chunk[(chunk.binding_label == 1) | (chunk.neg_type == "gc")]
-        accumulate(acc, chunk, "chip")
+        accumulate(acc, chunk, "chip", args.mask_repeats, chunk.dataset_source.str.replace("chip_", "", regex=False).to_numpy() if args.by_cell else None, stats)
         print(f"  chip rows so far, {len(acc)} keys, {time.time() - t0:.0f}s", flush=True)
-    for chunk in pd.read_csv(resolve(args.eclip_pairs), sep="\t", usecols=["protein_name", "rna_sequence", "binding_label"], chunksize=100000):
-        accumulate(acc, chunk, "eclip")
+    for chunk in pd.read_csv(resolve(args.eclip_pairs), sep="\t", usecols=["protein_name", "rna_sequence", "binding_label", "cell_line"], chunksize=100000):
+        accumulate(acc, chunk, "eclip", args.mask_repeats, chunk.cell_line.to_numpy() if args.by_cell else None, stats)
         print(f"  eclip rows so far, {len(acc)} keys, {time.time() - t0:.0f}s", flush=True)
     keys, prof, npos, cover = [], [], [], []
     for (name, assay), (cnt, ns) in sorted(acc.items()):
@@ -327,9 +346,11 @@ def stage_kmer(args) -> None:
         npos.append(r[1])
         cover.append(r[2])
     out.mkdir(parents=True, exist_ok=True)
-    np.savez(out / "kmer_profiles.npz", keys=np.array(keys, dtype=object), profiles=np.stack(prof), npos=np.array(npos), coverage=np.array(cover))
-    n_chip = sum(k.endswith("|chip") for k in keys)
-    print(f"saved {len(keys)} profiles: chip {n_chip}, eclip {len(keys) - n_chip}, min positives {args.min_pos}")
+    if args.mask_repeats:
+        print(f"windows with a tandem repeat removed: {stats[1]} of {stats[0]} ({100 * stats[1] / max(stats[0], 1):.1f}%)")
+    np.savez(out / args.out_name, keys=np.array(keys, dtype=object), profiles=np.stack(prof), npos=np.array(npos), coverage=np.array(cover))
+    n_chip = sum(k.split("|")[1] == "chip" for k in keys)
+    print(f"saved {out / args.out_name}: {len(keys)} profiles, chip {n_chip}, eclip {len(keys) - n_chip}, min positives {args.min_pos}")
 
 
 def kmer_similarity(prof: np.ndarray):
@@ -346,8 +367,8 @@ def kmer_str(i: int) -> str:
     return "".join("ACGU"[(int(i) >> (2 * (KM - 1 - p))) & 3] for p in range(KM))
 
 
-def load_kmer(out: Path, centre: bool = True):
-    f = out / "kmer_profiles.npz"
+def load_kmer(out: Path, centre: bool = True, name: str = "kmer_profiles.npz"):
+    f = out / name
     if not f.exists():
         return None
     z = np.load(f, allow_pickle=True)
@@ -359,7 +380,7 @@ def centre_by_assay(keys: list[str], prof: np.ndarray) -> np.ndarray:
     """Subtract the mean profile of the assay (ChIP-seq or eCLIP) so that the signature shared by all proteins of an assay,
     for example the CpG-rich promoter context of ChIP-seq peaks, does not count as similarity."""
     prof = prof.copy()
-    assay = np.array([k.split("|")[1] for k in keys])
+    assay = np.array(["|".join(k.split("|")[1:]) for k in keys])
     for a in set(assay):
         prof[assay == a] -= prof[assay == a].mean(0, keepdims=True)
     return prof
@@ -431,17 +452,17 @@ def dual_test(keys, kmer_r, n_perm: int, seed: int) -> dict:
 def stage_kmerstats(args) -> None:
     out = resolve(args.out_dir)
     df, emb = load_for_stats(out, args.chip_def)
-    kmer = load_kmer(out)
+    kmer = load_kmer(out, name=args.kmer_file)
     if kmer is None:
-        raise SystemExit("kmer_profiles.npz not found, run the kmer stage first")
+        raise SystemExit(f"{args.kmer_file} not found, run the kmer stage first")
     res = kmer_stats(df, emb, kmer, list(range(NL)), args.n_perm, args.seed)
-    res.to_csv(out / "kmer_layer_stats.tsv", sep="\t", index=False)
+    res.to_csv(out / f"kmer_layer_stats{args.suffix}.tsv", sep="\t", index=False)
     R, _ = kmer_similarity(kmer[1])
     d = dual_test(kmer[0], R, 1000, args.seed)
-    (out / "kmer_dual_test.json").write_text(json.dumps(d, indent=1))
+    (out / f"kmer_dual_test{args.suffix}.json").write_text(json.dumps(d, indent=1))
     print("dual test (same protein, ChIP profile against eCLIP profile):", d)
-    plot_kmer_stats(res, out / "kmer_layer_stats.png")
-    print("saved", out / "kmer_layer_stats.tsv")
+    plot_kmer_stats(res, out / f"kmer_layer_stats{args.suffix}.png")
+    print("saved", out / f"kmer_layer_stats{args.suffix}.tsv")
 
 
 def plot_kmer_stats(res: pd.DataFrame, path: Path) -> None:
@@ -746,7 +767,7 @@ def stage_predict(args) -> None:
     z = np.load(out / "esm2_layers.npz", allow_pickle=True)
     assert list(z["symbols"]) == list(ann.symbol)
     emb = z["emb"].astype(np.float32)
-    keys, prof = load_kmer(out)
+    keys, prof = load_kmer(out, name=args.kmer_file)
     res = pd.concat([predict_profiles(emb, ann, keys, prof, a, list(range(0, NL, args.layer_step)), args.seed, args.n_perm) for a in ("chip", "eclip")])
     res.to_csv(out / "predict_profiles.tsv", sep="\t", index=False)
     for a, d in res.groupby("assay"):
@@ -760,6 +781,37 @@ def stage_predict(args) -> None:
     print(mc.to_string(index=False))
 
 
+def reproducibility(keys: list[str], prof: np.ndarray, cells=("K562", "HepG2")) -> pd.DataFrame:
+    """Profile of a protein in one cell line against its profile in the other cell line, with the other proteins as null."""
+    rows = []
+    for assay in ("chip", "eclip"):
+        idx = {c: {k.split("|")[0]: i for i, k in enumerate(keys) if k.split("|")[1:] == [assay, c]} for c in cells}
+        both = sorted(set(idx[cells[0]]) & set(idx[cells[1]]))
+        if len(both) < 5:
+            continue
+        a = prof[[idx[cells[0]][p] for p in both]]
+        b = prof[[idx[cells[1]][p] for p in both]]
+        a = (a - a.mean(1, keepdims=True)) / np.maximum(np.linalg.norm(a - a.mean(1, keepdims=True), axis=1, keepdims=True), 1e-9)
+        b = (b - b.mean(1, keepdims=True)) / np.maximum(np.linalg.norm(b - b.mean(1, keepdims=True), axis=1, keepdims=True), 1e-9)
+        R = a @ b.T
+        own = np.diag(R)
+        off = R[~np.eye(len(both), dtype=bool)]
+        rank = 1 + (R > own[:, None]).sum(1)
+        rows.append(dict(assay=assay, n_proteins=len(both), median_r_same_protein=float(np.median(own)), median_r_other_proteins=float(np.median(off)),
+                         top1=int((rank == 1).sum()), median_rank=float(np.median(rank)), top5_fraction=float((rank <= 5).mean())))
+    return pd.DataFrame(rows)
+
+
+def stage_reproducibility(args) -> None:
+    out = resolve(args.out_dir)
+    kmer = load_kmer(out, name=args.kmer_file)
+    if kmer is None:
+        raise SystemExit(f"{args.kmer_file} not found, run the kmer stage with --by_cell first")
+    res = reproducibility(*kmer)
+    res.to_csv(out / f"reproducibility{args.suffix}.tsv", sep="\t", index=False)
+    print(res.to_string(index=False))
+
+
 def stage_patterns(args) -> None:
     out = resolve(args.out_dir)
     if not (out / "proteins_annot.tsv").exists():
@@ -768,7 +820,7 @@ def stage_patterns(args) -> None:
     z = np.load(out / "esm2_layers.npz", allow_pickle=True)
     assert list(z["symbols"]) == list(ann.symbol), "annotation and embedding tables differ"
     emb = z["emb"].astype(np.float32)
-    kmer = load_kmer(out)
+    kmer = load_kmer(out, name=args.kmer_file)
     res = run_patterns(ann, emb, kmer, list(range(NL)), args.seed, args.n_perm)
     res["rbp_likeness_auroc"].to_csv(out / "patterns_rbp_likeness_auroc.tsv", sep="\t", index=False)
     res["tf_likeness_in_rbps_auroc"].to_csv(out / "patterns_tf_likeness_in_rbps_auroc.tsv", sep="\t", index=False)
@@ -840,125 +892,180 @@ def build_neighbors(df: pd.DataFrame, emb: np.ndarray, layers: list[int], kmer, 
     return nbr, top
 
 
-HTML = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+HTML = r"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ENCODE protein map</title><style>
 :root{--bg:#f7f7f4;--card:#fff;--ink:#1c2230;--mute:#5d6678;--line:#dcdfe6}
 @media (prefers-color-scheme:dark){:root{--bg:#12151c;--card:#1a1f2a;--ink:#e8ebf2;--mute:#9aa3b5;--line:#2c3342}}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif}
-header{padding:10px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;border-bottom:1px solid var(--line)}
+header{padding:8px 14px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;border-bottom:1px solid var(--line)}
 h1{font-size:17px;margin:0}select,input,button{font:inherit;padding:3px 8px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px}
+input[type=range]{padding:0;width:90px}label{white-space:nowrap}
 .banner{background:#b4531c;color:#fff;padding:6px 16px;font-weight:600}
 main{display:grid;grid-template-columns:1fr 430px}
-canvas{width:100%;height:calc(100vh - 92px);background:var(--card);cursor:grab;display:block}
-aside{padding:10px 14px;border-left:1px solid var(--line);font-size:13.5px;overflow:auto;height:calc(100vh - 92px)}
+canvas{width:100%;height:calc(100vh - 118px);background:var(--card);cursor:grab;display:block}
+aside{padding:10px 14px;border-left:1px solid var(--line);font-size:13.5px;overflow:auto;height:calc(100vh - 118px)}
 .k{display:flex;align-items:center;gap:8px;margin:5px 0}.sh{width:13px;height:13px;display:inline-block}
 .c{border-radius:50%}.d{transform:rotate(45deg) scale(.85)}
 table{border-collapse:collapse;width:100%;font-size:12.5px}th,td{padding:3px 5px;text-align:left;border-bottom:1px solid var(--line)}th{color:var(--mute);font-weight:600}
 tr.r{cursor:pointer}tr.r:hover{background:var(--bg)}
 #tip{position:fixed;pointer-events:none;background:var(--card);border:1px solid var(--line);padding:4px 8px;border-radius:6px;display:none;font-size:13px}
 .m{color:var(--mute);font-size:12.5px}h3{margin:10px 0 4px;font-size:14px}code{background:var(--bg);padding:0 4px;border-radius:4px}
+.only3{display:none}
 @media (max-width:900px){main{grid-template-columns:1fr}aside{height:auto;border-left:0}}
 </style></head><body>
 __BANNER__
 <header><h1>ENCODE proteins in ESM-2 space</h1>
+<label>View <select id="mode"><option value="2d">2D map</option><option value="3d">3D (rotate)</option></select></label>
 <label>Layer <select id="layer"></select></label>
-<label>Colour by <select id="by"><option value="cls">class (TF / RBP / both)</option><option value="split">v3b split</option><option value="grp">domain group (Pfam)</option><option value="kw">UniProt keywords (DNA / RNA-binding)</option><option value="len">length</option><option value="zf">C2H2 zinc-finger motifs</option><option value="rl">RBP-likeness (embedding, continuous)</option><option value="gs">fraction G,S,Y,Q,N (continuous)</option><option value="family">v3b family</option></select></label>
-<label><input type="checkbox" id="auto" checked> auto-rotate</label><span class="m">view</span><button id="v3d">3D</button><button id="vxy">XY</button><button id="vxz">XZ</button><button id="vyz">YZ</button><button id="reset">reset</button><button id="clear">clear selection</button>
-<label>size <input type="range" id="psz" min="0.6" max="3" step="0.1" value="1.4"></label><label>opacity <input type="range" id="pop" min="0.2" max="1" step="0.05" value="0.8"></label><label>spread <input type="range" id="spr" min="0.8" max="2.2" step="0.1" value="1.4"></label><label><input type="checkbox" id="ftf" checked>TF</label><label><input type="checkbox" id="frbp" checked>RBP</label><label><input type="checkbox" id="fboth" checked>both</label><label>domain <select id="fgrp"><option value="">all</option></select></label><label><input type="checkbox" id="glab" checked> group labels</label><label><input type="checkbox" id="blab" checked> label proteins with both assays</label><input id="q" placeholder="symbol, e.g. SFPQ"><span id="info" class="m"></span></header>
+<label>Colour by <select id="by"><option value="cls">class (TF / RBP / both)</option><option value="grp">domain group (Pfam)</option><option value="kw">UniProt keywords (DNA / RNA-binding)</option><option value="len">length</option><option value="zf">C2H2 zinc-finger motifs</option><option value="rl">RBP-likeness (continuous)</option><option value="gs">fraction G,S,Y,Q,N (continuous)</option><option value="split">v3b split</option><option value="family">v3b family</option></select></label>
+<label>size <input type="range" id="psz" min="0.6" max="3" step="0.1" value="1.3"></label>
+<label>opacity <input type="range" id="pop" min="0.2" max="1" step="0.05" value="0.85"></label>
+<label title="pushes apart points that overlap, the layout stays the same">declutter <input type="range" id="dcl" min="0" max="0.05" step="0.005" value="0.02"></label>
+<label><input type="checkbox" id="ftf" checked>TF</label><label><input type="checkbox" id="frbp" checked>RBP</label><label><input type="checkbox" id="fboth" checked>both</label>
+<label>domain <select id="fgrp"><option value="">all</option></select></label>
+<label><input type="checkbox" id="glab" checked> group labels</label><label><input type="checkbox" id="blab" checked> label proteins with both assays</label>
+<span class="only3"><label><input type="checkbox" id="auto"> auto-rotate</label> <button id="vxy">XY</button><button id="vxz">XZ</button><button id="vyz">YZ</button></span>
+<button id="reset">reset view</button><button id="clear">clear selection</button>
+<input id="q" placeholder="symbol, e.g. SFPQ"><span id="info" class="m"></span></header>
 <main><canvas id="cv"></canvas><aside id="side"></aside></main><div id="tip"></div>
 <script>
 var D=__DATA__,P=D.proteins,IDX={};P.forEach(function(p,i){IDX[p.symbol]=i});
-var CLS={tf:{c:"#2458a6",n:"TF only (ChIP-seq)",s:"c",g:"●"},rbp:{c:"#b4531c",n:"RBP only (eCLIP)",s:"q",g:"■"},both:{c:"#2d7a4f",n:"Both assays",s:"d",g:"◆"}};
-var pal=["#2458a6","#b4531c","#2d7a4f","#8a4fa3","#c9a227","#2a9d9f","#a33a54","#6b7a8f","#7d5a3c","#4c8f3a"];
-var cv=document.getElementById("cv"),ctx=cv.getContext("2d"),tip=document.getElementById("tip"),ls=document.getElementById("layer"),side=document.getElementById("side");
+var CLS={tf:{c:"#2458a6",n:"TF only (ChIP-seq)",s:"c",g:"●"},rbp:{c:"#c0562a",n:"RBP only (eCLIP)",s:"q",g:"■"},both:{c:"#1f9d55",n:"Both assays",s:"d",g:"◆"}};
+var pal=["#2458a6","#c0562a","#1f9d55","#8a4fa3","#c9a227","#2a9d9f","#a33a54","#6b7a8f","#7d5a3c","#4c8f3a"];
+var $=function(id){return document.getElementById(id)};
+var cv=$("cv"),ctx=cv.getContext("2d"),tip=$("tip"),ls=$("layer"),side=$("side");
 D.layers.forEach(function(L){var o=document.createElement("option");o.value=L;o.textContent=L;ls.appendChild(o)});
-var yaw=0.6,pitch=0.35,zoom=1,drag=false,lx=0,ly=0,proj=[],dpr=window.devicePixelRatio||1,moved=false,sel=-1,N=null,curL=null,pmap={};
+var yaw=0.6,pitch=0.35,zoom=1,drag=false,lx=0,ly=0,proj=[],dpr=window.devicePixelRatio||1,moved=false,sel=-1,curL=null,N3=null,N2=null,POS2=null,dirty=true;
+var V2={cx:0,cy:0,k:1};
 function val(p,by){if(by=="cls")return p.cls;if(by=="split")return p.split||"none";if(by=="family")return p.family||"unknown";if(by=="grp")return p.grp||"none";if(by=="kw")return p.kw||"none";
- if(by=="len")return p.len<300?"<300 aa":(p.len<600?"300-599 aa":(p.len<1000?"600-999 aa":">=1000 aa"));if(by=="zf")return p.zf==0?"0 motifs":(p.zf<5?"1-4 motifs":(p.zf<10?"5-9 motifs":">=10 motifs"));return ""}
+ if(by=="len")return p.len==null?"no annotation":p.len<300?"<300 aa":(p.len<600?"300-599 aa":(p.len<1000?"600-999 aa":">=1000 aa"));if(by=="zf")return p.zf==null?"no annotation":p.zf==0?"0 motifs":(p.zf<5?"1-4 motifs":(p.zf<10?"5-9 motifs":">=10 motifs"));return ""}
 var NUM={rl:"RBP-likeness at layer "+D.rl_layer+" (mean cosine to RBP-only proteins minus mean cosine to TF-only proteins)",gs:"fraction of G, S, Y, Q, N"};
-function numv(p,by){return by=="rl"?p.rl:p.gs}
+function numv(p,by){var v=by=="rl"?p.rl:p.gs;return v==null?0:v}
 function numRange(by){var a=1e9,b=-1e9;P.forEach(function(p){var v=numv(p,by);if(v<a)a=v;if(v>b)b=v});return[a,b]}
-function colorOf(p,by,vals,rg){if(by=="cls")return CLS[p.cls].c;if(NUM[by]){var f=(numv(p,by)-rg[0])/((rg[1]-rg[0])||1);return "hsl("+Math.round(220-210*f)+",70%,"+(48)+"%)"}return pal[vals.indexOf(val(p,by))%pal.length]}
+function colorOf(p,by,vals,rg){if(by=="cls")return CLS[p.cls].c;if(NUM[by]){var f=(numv(p,by)-rg[0])/((rg[1]-rg[0])||1);return "hsl("+Math.round(220-210*f)+",70%,48%)"}return pal[vals.indexOf(val(p,by))%pal.length]}
 function med(a){var b=a.slice().sort(function(x,y){return x-y});return b[Math.floor(b.length/2)]}
-function norm(L){var C=D.coords[L],m=[0,1,2].map(function(k){return med(C.map(function(c){return c[k]}))});var ds=C.map(function(c){return Math.hypot(c[0]-m[0],c[1]-m[1],c[2]-m[2])}).sort(function(x,y){return x-y});var r=ds[Math.floor(ds.length*0.95)]||1;
- return C.map(function(c){var v=[(c[0]-m[0])/r,(c[1]-m[1])/r,(c[2]-m[2])/r],d=Math.hypot(v[0],v[1],v[2]);if(d>1.2){v=[v[0]*1.2/d,v[1]*1.2/d,v[2]*1.2/d]}return v})}
-function shape(x,y,r,s){ctx.beginPath();if(s=="c")ctx.arc(x,y,r,0,6.2832);else if(s=="q")ctx.rect(x-r,y-r,2*r,2*r);else{ctx.moveTo(x,y-r*1.35);ctx.lineTo(x+r*1.35,y);ctx.lineTo(x,y+r*1.35);ctx.lineTo(x-r*1.35,y);ctx.closePath()}}
+function robust(C,dim,lim){var m=[],k;for(k=0;k<dim;k++)m.push(med(C.map(function(c){return c[k]})));
+ var ds=C.map(function(c){var s=0;for(var k=0;k<dim;k++)s+=(c[k]-m[k])*(c[k]-m[k]);return Math.sqrt(s)}).sort(function(x,y){return x-y});var r=ds[Math.floor(ds.length*0.95)]||1;
+ return C.map(function(c){var v=[],d=0,k;for(k=0;k<dim;k++){v.push((c[k]-m[k])/r);d+=v[k]*v[k]}d=Math.sqrt(d);v=v.map(function(x){return Math.max(-lim,Math.min(lim,x*0.9))});return v})}
+function relax(pts,dmin){var out=pts.map(function(p){return[p[0],p[1]]});if(dmin<=0)return out;var it,i,j,n=out.length;
+ for(it=0;it<60;it++){var g={},moved2=0;for(i=0;i<n;i++){var key=Math.floor(out[i][0]/dmin)+","+Math.floor(out[i][1]/dmin);(g[key]||(g[key]=[])).push(i)}
+  var dx=new Array(n).fill(0),dy=new Array(n).fill(0);
+  for(i=0;i<n;i++){var cx=Math.floor(out[i][0]/dmin),cy=Math.floor(out[i][1]/dmin);for(var a=-1;a<=1;a++)for(var b=-1;b<=1;b++){var cell=g[(cx+a)+","+(cy+b)];if(!cell)continue;
+    for(var q=0;q<cell.length;q++){j=cell[q];if(j<=i)continue;var x=out[j][0]-out[i][0],y=out[j][1]-out[i][1],d=Math.sqrt(x*x+y*y);
+     if(d<dmin){if(d<1e-9){x=((i*7919)%13-6)/60;y=((j*104729)%11-5)/60;d=Math.sqrt(x*x+y*y)||1e-3}var f=(dmin-d)/2/d;dx[i]-=x*f;dy[i]-=y*f;dx[j]+=x*f;dy[j]+=y*f;moved2++}}}}
+  for(i=0;i<n;i++){out[i][0]+=dx[i]*0.8;out[i][1]+=dy[i]*0.8}if(!moved2)break}
+ return out}
+function prepare(){var L=ls.value;N3=robust(D.coords[L],3,1);N2=robust(D.coords2[L],2,1);POS2=relax(N2,+$("dcl").value);curL=L;dirty=false}
 function nb(){return D.nbr[ls.value]}
+function shape(x,y,r,s){ctx.beginPath();if(s=="c")ctx.arc(x,y,r,0,6.2832);else if(s=="q")ctx.rect(x-r,y-r,2*r,2*r);else{ctx.moveTo(x,y-r*1.35);ctx.lineTo(x+r*1.35,y);ctx.lineTo(x,y+r*1.35);ctx.lineTo(x-r*1.35,y);ctx.closePath()}}
+function ink(){return getComputedStyle(document.body).color}
+function cardc(){return (getComputedStyle(document.documentElement).getPropertyValue("--card")||"#fff").trim()||"#fff"}
+function halo(txt,x,y,font,col,bold){ctx.font=(bold?"bold ":"")+font;ctx.lineJoin="round";ctx.lineWidth=4;ctx.strokeStyle=cardc();ctx.globalAlpha=0.9;ctx.strokeText(txt,x,y);ctx.globalAlpha=1;ctx.fillStyle=col;ctx.fillText(txt,x,y)}
+var placed=[];
+function free(x,y,w,h){for(var i=0;i<placed.length;i++){var r=placed[i];if(x<r[0]+r[2]&&x+w>r[0]&&y<r[1]+r[3]&&y+h>r[1])return false}return true}
+function putLabel(txt,x,y,font,col,bold,must){ctx.font=(bold?"bold ":"")+font;var w=ctx.measureText(txt).width,h=14,spots=[[10,-6],[-w-10,-6],[-w/2,-14],[-w/2,18],[10,12],[-w-10,12]];
+ for(var i=0;i<spots.length;i++){var X=x+spots[i][0],Y=y+spots[i][1];if(must||free(X,Y-h+3,w,h)){placed.push([X,Y-h+3,w,h]);halo(txt,X,Y,font,col,bold);return true}}return false}
+function visible(p,show,fg){return show[p.cls]&&(!fg||p.grp==fg)}
+function groupLabels2(sx,sy,show,fg){var g={};P.forEach(function(p,i){if(!p.grp||p.grp=="other Pfam"||p.grp=="no Pfam entry"||!visible(p,show,fg))return;(g[p.grp]||(g[p.grp]=[])).push(i)});
+ var names=Object.keys(g).sort(function(a,b){return g[b].length-g[a].length});
+ names.forEach(function(k){var ids=g[k];if(ids.length<8)return;var mx=med(ids.map(function(i){return POS2[i][0]})),my=med(ids.map(function(i){return POS2[i][1]}));
+  var near=ids.filter(function(i){return Math.hypot(POS2[i][0]-mx,POS2[i][1]-my)<0.45}).length/ids.length;if(near<0.5)return;
+  var x=sx(mx),y=sy(my);ctx.globalAlpha=0.9;ctx.fillStyle="#8a4fa3";ctx.beginPath();ctx.arc(x,y,3.5,0,6.2832);ctx.fill();ctx.strokeStyle=cardc();ctx.lineWidth=1.5;ctx.stroke();ctx.globalAlpha=1;
+  putLabel(k+" ("+ids.length+")",x,y,"13px system-ui","#6d2f87",true,false)})}
+function niceStep(){return V2.k<1.6?0.5:(V2.k<3.2?0.25:(V2.k<7?0.1:0.05))}
+function axes2(W,H,S,sx,sy){var st=niceStep(),x0=V2.cx-W/2/(V2.k*S),x1=V2.cx+W/2/(V2.k*S),y0=V2.cy-H/2/(V2.k*S),y1=V2.cy+H/2/(V2.k*S),v;
+ ctx.font="11px system-ui";ctx.fillStyle=ink();ctx.strokeStyle=ink();ctx.lineWidth=1;
+ for(v=Math.ceil(x0/st)*st;v<=x1;v+=st){var X=sx(v);ctx.globalAlpha=Math.abs(v)<1e-9?0.35:0.1;ctx.beginPath();ctx.moveTo(X,0);ctx.lineTo(X,H);ctx.stroke();ctx.globalAlpha=0.7;ctx.fillText(v.toFixed(2).replace(/\.?0+$/,"")||"0",X+3,H-5)}
+ for(v=Math.ceil(y0/st)*st;v<=y1;v+=st){var Y=sy(v);ctx.globalAlpha=Math.abs(v)<1e-9?0.35:0.1;ctx.beginPath();ctx.moveTo(0,Y);ctx.lineTo(W,Y);ctx.stroke();ctx.globalAlpha=0.7;ctx.fillText(v.toFixed(2).replace(/\.?0+$/,"")||"0",4,Y-3)}
+ ctx.globalAlpha=0.9;ctx.font="bold 12px system-ui";ctx.fillText("dim 1 (t-SNE, scaled)",W-150,H-18);ctx.save();ctx.translate(14,90);ctx.rotate(-1.5708);ctx.fillText("dim 2 (t-SNE, scaled)",0,0);ctx.restore();ctx.globalAlpha=1}
+function draw2(W,H,by,q,psz,pop,fg,glab,blab,show,vals,rg){var S=Math.min(W,H)*0.40;
+ function sx(x){return W/2+(x-V2.cx)*V2.k*S}function sy(y){return H/2-(y-V2.cy)*V2.k*S}
+ axes2(W,H,S,sx,sy);ctx.globalAlpha=0.8;ctx.strokeStyle=ink();ctx.lineWidth=1.5;ctx.strokeRect(sx(-1),sy(1),sx(1)-sx(-1),sy(-1)-sy(1));ctx.globalAlpha=1;proj=[];var byI={};
+ POS2.forEach(function(c,i){var o={i:i,x:sx(c[0]),y:sy(c[1]),z:0,f:1};proj.push(o);byI[i]=o});
+ var nset={};if(sel>=0){nb().near[sel].slice(0,10).forEach(function(e){nset[e[0]]=e[1]});ctx.lineWidth=1.3;ctx.strokeStyle="#c9a227";nb().near[sel].slice(0,10).forEach(function(e){var a=byI[sel],b=byI[e[0]];ctx.globalAlpha=0.35+0.65*Math.max(0,e[1]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()})}
+ var order=proj.slice().sort(function(a,b){return (P[a.i].cls=="both"?2:(P[a.i].cls=="rbp"?1:0))-(P[b.i].cls=="both"?2:(P[b.i].cls=="rbp"?1:0))});
+ var zs=Math.min(1.8,0.7+0.3*V2.k);
+ order.forEach(function(o){var p=P[o.i];if(!visible(p,show,fg))return;var hit=q&&p.symbol.indexOf(q)>=0,isSel=o.i==sel,isN=nset.hasOwnProperty(o.i),dim=(q&&!hit)||(sel>=0&&!isSel&&!isN);
+  var base=(p.cls=="both"?6.5:(p.cls=="rbp"?4.6:3.8))*psz*zs,r=(hit||isSel)?base*1.8:(isN?base*1.4:base);ctx.globalAlpha=dim?0.1:pop;
+  ctx.fillStyle=colorOf(p,by,vals,rg);shape(o.x,o.y,r,CLS[p.cls].s);ctx.fill();
+  if(p.cls=="both"||hit||isSel||isN){ctx.globalAlpha=dim?0.1:1;ctx.lineWidth=isSel?2.4:1.2;ctx.strokeStyle=isSel?"#c9a227":"#111";ctx.stroke()}});
+ ctx.globalAlpha=1;placed=[];
+ if(glab)groupLabels2(sx,sy,show,fg);
+ if(sel>=0)putLabel(P[sel].symbol,byI[sel].x,byI[sel].y,"13px system-ui",ink(),true,true);
+ Object.keys(nset).forEach(function(k){var o=byI[k];putLabel(P[k].symbol,o.x,o.y,"12px system-ui",ink(),false,false)});
+ order.forEach(function(o){var p=P[o.i];if(!visible(p,show,fg))return;var hit=q&&p.symbol.indexOf(q)>=0;if(hit)putLabel(p.symbol,o.x,o.y,"13px system-ui",ink(),true,true);else if(blab&&p.cls=="both"&&sel<0&&!q)putLabel(p.symbol,o.x,o.y,"11px system-ui",ink(),false,false)})}
 var AX=[{n:"dim 1",c:"#c0392b",a:[1,0,0]},{n:"dim 2",c:"#1e8449",a:[0,1,0]},{n:"dim 3",c:"#2471a3",a:[0,0,1]}];
 function line(a,b,col,w,al){ctx.globalAlpha=al;ctx.strokeStyle=col;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}
-function scene(pr,W,H){var st=getComputedStyle(document.body),ink=st.color,mute=getComputedStyle(document.documentElement).getPropertyValue("--line")||"#999";
- var e=[-1,1],i,j,k,a,b;
- for(i=0;i<2;i++)for(j=0;j<2;j++){line(pr(-1,e[i],e[j]),pr(1,e[i],e[j]),ink,1,0.25);line(pr(e[i],-1,e[j]),pr(e[i],1,e[j]),ink,1,0.25);line(pr(e[i],e[j],-1),pr(e[i],e[j],1),ink,1,0.25)}
- for(k=-0.5;k<1;k+=0.5){line(pr(-1,-1,k),pr(1,-1,k),ink,1,0.1);line(pr(k,-1,-1),pr(k,-1,1),ink,1,0.1)}
- ctx.font="12px system-ui";ctx.textBaseline="middle";
+function scene3(pr){var col=ink(),e=[-1,1],i,j,k,a,b;
+ for(i=0;i<2;i++)for(j=0;j<2;j++){line(pr(-1,e[i],e[j]),pr(1,e[i],e[j]),col,1,0.25);line(pr(e[i],-1,e[j]),pr(e[i],1,e[j]),col,1,0.25);line(pr(e[i],e[j],-1),pr(e[i],e[j],1),col,1,0.25)}
+ for(k=-0.5;k<1;k+=0.5){line(pr(-1,-1,k),pr(1,-1,k),col,1,0.1);line(pr(k,-1,-1),pr(k,-1,1),col,1,0.1)}
+ ctx.textBaseline="middle";
  AX.forEach(function(x){a=pr(-1*(1-x.a[0]),-1*(1-x.a[1]),-1*(1-x.a[2]));b=pr(-1*(1-x.a[0])+2*x.a[0],-1*(1-x.a[1])+2*x.a[1],-1*(1-x.a[2])+2*x.a[2]);
   line(a,b,x.c,2.4,0.95);ctx.globalAlpha=1;ctx.fillStyle=x.c;ctx.font="bold 13px system-ui";ctx.fillText(x.n+" (+)",b.x+6,b.y);
   [-1,-0.5,0,0.5,1].forEach(function(v){var q=pr(-1*(1-x.a[0])+(v+1)*x.a[0],-1*(1-x.a[1])+(v+1)*x.a[1],-1*(1-x.a[2])+(v+1)*x.a[2]);
-   ctx.globalAlpha=0.9;ctx.beginPath();ctx.arc(q.x,q.y,2.2,0,6.2832);ctx.fillStyle=x.c;ctx.fill();if(v==-1||v==0||v==1){ctx.font="11px system-ui";ctx.fillStyle=ink;ctx.globalAlpha=0.75;ctx.fillText(v,q.x+5,q.y+9)}})});
+   ctx.globalAlpha=0.9;ctx.beginPath();ctx.arc(q.x,q.y,2.2,0,6.2832);ctx.fillStyle=x.c;ctx.fill();if(v==-1||v==0||v==1){ctx.font="11px system-ui";ctx.fillStyle=ink();ctx.globalAlpha=0.75;ctx.fillText(v,q.x+5,q.y+9)}})});
  ctx.globalAlpha=1;ctx.textBaseline="alphabetic"}
-function draw(){var L=ls.value;if(L!==curL){N=norm(L);curL=L;panel()}
- var by=document.getElementById("by").value,q=document.getElementById("q").value.trim().toUpperCase();
- var psz=+document.getElementById("psz").value,pop=+document.getElementById("pop").value,spr=+document.getElementById("spr").value,fg=document.getElementById("fgrp").value,glab=document.getElementById("glab").checked,blab=document.getElementById("blab").checked,show={tf:document.getElementById("ftf").checked,rbp:document.getElementById("frbp").checked,both:document.getElementById("fboth").checked};
+function draw3(W,H,by,q,psz,pop,fg,glab,blab,show,vals,rg){var spr=1,cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch),S=Math.min(W,H)*0.34*zoom;proj=[];var byI={};
+ function pr(x,y,z){var x1=x*cy+z*sy,z1=-x*sy+z*cy,y2=y*cp-z1*sp,z2=y*sp+z1*cp,f=3/(3-z2);return{x:W/2+x1*f*S,y:H/2-y2*f*S,z:z2,f:f}}
+ scene3(pr);N3.forEach(function(c,i){var o=pr(c[0]*spr,c[1]*spr,c[2]*spr);o.i=i;proj.push(o);byI[i]=o});
+ var nset={};if(sel>=0){nb().near[sel].slice(0,10).forEach(function(e){nset[e[0]]=e[1]});ctx.lineWidth=1.2;nb().near[sel].slice(0,10).forEach(function(e){var a=byI[sel],b=byI[e[0]];ctx.globalAlpha=0.35+0.65*Math.max(0,e[1]);ctx.strokeStyle="#c9a227";ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()})}
+ proj.sort(function(a,b){return a.z-b.z});placed=[];
+ proj.forEach(function(o){var p=P[o.i];if(!visible(p,show,fg))return;var hit=q&&p.symbol.indexOf(q)>=0,isSel=o.i==sel,isN=nset.hasOwnProperty(o.i),dim=(q&&!hit)||(sel>=0&&!isSel&&!isN),base=(p.cls=="both"?6.5:(p.cls=="rbp"?4.6:3.8))*psz;
+  var r=((hit||isSel)?10:(isN?7:base))*o.f*Math.min(1.4,zoom+0.3);ctx.globalAlpha=dim?0.1:Math.min(1,pop*(0.7+o.z*0.3));ctx.fillStyle=colorOf(p,by,vals,rg);shape(o.x,o.y,r,CLS[p.cls].s);ctx.fill();
+  if(p.cls=="both"||hit||isSel||isN){ctx.globalAlpha=dim?0.1:1;ctx.lineWidth=isSel?2.2:1.2;ctx.strokeStyle=isSel?"#c9a227":"#111";ctx.stroke()}
+  if(hit||isSel||isN||(blab&&p.cls=="both"&&!dim&&sel<0)){ctx.globalAlpha=1;putLabel(p.symbol,o.x,o.y,(isSel?"bold ":"")+"12px system-ui",ink(),isSel,hit||isSel)}});
+ ctx.globalAlpha=1}
+function draw(){if(dirty||ls.value!==curL){prepare();panel()}
+ var by=$("by").value,q=$("q").value.trim().toUpperCase(),mode=$("mode").value,psz=+$("psz").value,pop=+$("pop").value,fg=$("fgrp").value,glab=$("glab").checked,blab=$("blab").checked,show={tf:$("ftf").checked,rbp:$("frbp").checked,both:$("fboth").checked};
  var W=cv.clientWidth,H=cv.clientHeight;if(cv.width!==W*dpr||cv.height!==H*dpr){cv.width=W*dpr;cv.height=H*dpr}
  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
- var vals=[];P.forEach(function(p){var v=val(p,by);if(vals.indexOf(v)<0)vals.push(v)});vals.sort();
- var rg=NUM[by]?numRange(by):null;
- var cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch),S=Math.min(W,H)*0.34*zoom;proj=[];var byI={};
- function pr(x,y,z){var x1=x*cy+z*sy,z1=-x*sy+z*cy,y2=y*cp-z1*sp,z2=y*sp+z1*cp,f=3/(3-z2);return{x:W/2+x1*f*S,y:H/2-y2*f*S,z:z2,f:f}}
- scene(pr,W,H);
- N.forEach(function(c,i){var o=pr(c[0]*spr,c[1]*spr,c[2]*spr);o.i=i;proj.push(o);byI[i]=o});
- var nset={};if(sel>=0){nb().near[sel].slice(0,10).forEach(function(e){nset[e[0]]=e[1]});ctx.lineWidth=1.2;nb().near[sel].slice(0,10).forEach(function(e){var a=byI[sel],b=byI[e[0]];ctx.globalAlpha=0.35+0.65*Math.max(0,e[1]);ctx.strokeStyle="#c9a227";ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()})}
- proj.sort(function(a,b){return a.z-b.z});
- proj.forEach(function(o){var p=P[o.i];if(!show[p.cls]||(fg&&p.grp!=fg))return;var hit=q&&p.symbol.indexOf(q)>=0,isSel=o.i==sel,isN=nset.hasOwnProperty(o.i),dim=(q&&!hit)||(sel>=0&&!isSel&&!isN),base=(p.cls=="both"?6.5:(p.cls=="rbp"?4.6:3.8))*psz;
-  var r=((hit||isSel)?10:(isN?7:base))*o.f*Math.min(1.4,zoom+0.3);ctx.globalAlpha=dim?0.1:Math.min(1,pop*(0.7+o.z*0.3));
-  ctx.fillStyle=colorOf(p,by,vals,rg);shape(o.x,o.y,r,CLS[p.cls].s);ctx.fill();
-  if(p.cls=="both"||hit||isSel||isN){ctx.globalAlpha=dim?0.12:1;ctx.lineWidth=isSel?2.2:1.3;ctx.strokeStyle=isSel?"#c9a227":"#000";ctx.stroke()}
-  if(hit||isSel||isN||(blab&&p.cls=="both"&&!dim)){ctx.globalAlpha=1;ctx.fillStyle=getComputedStyle(document.body).color;ctx.font=(isSel?"bold ":"")+"12px system-ui";ctx.fillText(p.symbol,o.x+10,o.y-7)}});
- if(glab)groupLabels(byI,pr,spr,show,fg);
- ctx.globalAlpha=1;document.getElementById("info").textContent=P.length+" proteins, layer "+L}
+ var vals=[];P.forEach(function(p){var v=val(p,by);if(vals.indexOf(v)<0)vals.push(v)});vals.sort();var rg=NUM[by]?numRange(by):null;
+ if(mode=="2d")draw2(W,H,by,q,psz,pop,fg,glab,blab,show,vals,rg);else draw3(W,H,by,q,psz,pop,fg,glab,blab,show,vals,rg);
+ $("info").textContent=P.length+" proteins, layer "+ls.value}
 function f3(x){return x==null?"-":x.toFixed(2)}
 function row(e){var p=P[e[0]];return '<tr class="r" data-i="'+e[0]+'"><td>'+CLS[p.cls].g+" "+p.symbol+"</td><td>"+f3(e[1])+"</td><td>"+f3(e[2])+"</td><td>"+f3(e[3])+"</td><td class='m'>"+(e[4]||"")+"</td></tr>"}
-function legend(){var by=document.getElementById("by").value,cnt={tf:0,rbp:0,both:0};P.forEach(function(p){cnt[p.cls]++});
+function legend(){var by=$("by").value,cnt={tf:0,rbp:0,both:0};P.forEach(function(p){cnt[p.cls]++});
  var h="<b>Class (shape)</b>"+Object.keys(CLS).map(function(k){var d=CLS[k];return '<div class="k"><span class="sh '+d.s+'" style="background:'+d.c+';'+(k=="both"?"outline:1px solid #000":"")+'"></span>'+d.n+" ("+cnt[k]+")</div>"}).join("");
  if(NUM[by]){var rr=numRange(by);h+="<b>Colour: "+NUM[by]+"</b><div class='m'>blue = low ("+rr[0].toFixed(2)+"), red = high ("+rr[1].toFixed(2)+")</div>"}
  else if(by!="cls"){var vals=[];P.forEach(function(p){var v=val(p,by);if(vals.indexOf(v)<0)vals.push(v)});vals.sort();h+="<b>Colour: "+by+"</b>"+vals.map(function(v){return '<div class="k"><span class="sh c" style="background:'+pal[vals.indexOf(v)%pal.length]+'"></span>'+v+" ("+P.filter(function(p){return val(p,by)==v}).length+")</div>"}).join("")}return h}
 function panel(){var h=legend();
- if(sel<0){h+='<p class="m">Click a protein to list its nearest and farthest proteins. <b>cos</b>: centred cosine of ESM-2 mean embeddings at the chosen layer. <b>r5</b>: Pearson correlation of the 5-mer enrichment profiles (log2 positive windows over GC-matched negatives). <b>J</b>: Jaccard index of the 50 most enriched 5-mers. r5 and J exist only where both proteins have a ChIP-seq or eCLIP window table.</p><p class="m"><b>Axes</b>: the three t-SNE dimensions (no physical unit, scaled to [-1, 1]). Red dim 1, green dim 2, blue dim 3, ticks every 0.5. Distances inside a group are meaningful, distances between far groups and the orientation are not. Use the XY, XZ and YZ buttons for flat views.</p>'}
- else{var p=P[sel],b=nb();h+="<h3>"+p.symbol+" <span class='m'>"+CLS[p.cls].n+"</span></h3><div class='m'>family: "+(p.family||"unknown")+", v3b split: "+(p.split||"none")+"</div>";
-  h+="<div class='m'><b>"+(p.nm||"")+"</b></div><div class='m'>length "+p.len+" aa | domain group: "+(p.grp||"none")+" | Pfam: "+(p.pf||"none")+"</div><div class='m'>UniProt keywords: "+(p.kw||"none")+" | C2H2 zinc-finger motifs: "+p.zf+" | RGG: "+p.rgg+" | G,S,Y,Q,N: "+(100*p.gs).toFixed(0)+"% | net charge/res: "+p.ch.toFixed(2)+"</div><div class='m'>ENCODE ChIP-seq: "+p.nc+" exp. ("+(p.cc||"none")+") | eCLIP: "+p.ne+" exp. ("+(p.ec||"none")+")</div>";
+ if(sel<0){h+='<p class="m">Click a protein to list its nearest and farthest proteins. <b>cos</b>: centred cosine of ESM-2 mean embeddings at the chosen layer. <b>r5</b>: Pearson correlation of the 5-mer enrichment profiles (centred over proteins within the assay). <b>J</b>: Jaccard index of the 50 most enriched 5-mers. r5 and J exist only where both proteins have a ChIP-seq or eCLIP window table.</p><p class="m"><b>Map</b>: 2D view with pan (drag) and zoom (wheel, towards the cursor). Axes are t-SNE dimensions without physical unit, scaled so that all points lie inside the frame [-1, 1]. <b>declutter</b> pushes apart points that overlap and keeps the layout. A group label is drawn only where at least half of the group lies within one compact cluster, at the median of the group.</p>'}
+ else{var p=P[sel],b=nb();h+="<h3>"+p.symbol+" <span class='m'>"+CLS[p.cls].n+"</span></h3>";
+  if(p.len!=null)h+="<div class='m'><b>"+(p.nm||"")+"</b></div><div class='m'>length "+p.len+" aa | domain group: "+(p.grp||"none")+" | Pfam: "+(p.pf||"none")+"</div><div class='m'>UniProt keywords: "+(p.kw||"none")+" | C2H2 zinc-finger motifs: "+p.zf+" | RGG: "+p.rgg+" | G,S,Y,Q,N: "+(100*p.gs).toFixed(0)+"% | net charge/res: "+p.ch.toFixed(2)+"</div><div class='m'>ENCODE ChIP-seq: "+p.nc+" exp. ("+(p.cc||"none")+") | eCLIP: "+p.ne+" exp. ("+(p.ec||"none")+")</div>";
   var tp=D.top[p.symbol];if(tp)h+="<div class='m'>top 5-mers: "+Object.keys(tp).map(function(a){return a+" <code>"+tp[a].slice(0,5).join(" ")+"</code>"}).join(" ; ")+"</div>";else h+="<div class='m'>no 5-mer profile for this protein</div>";
   h+="<h3>Nearest (layer "+ls.value+")</h3><table><tr><th>protein</th><th>cos</th><th>r5</th><th>J</th><th>data</th></tr>"+b.near[sel].map(row).join("")+"</table>";
   h+="<h3>Farthest</h3><table><tr><th>protein</th><th>cos</th><th>r5</th><th>J</th><th>data</th></tr>"+b.far[sel].map(row).join("")+"</table>"}
  side.innerHTML=h;[].forEach.call(side.querySelectorAll("tr.r"),function(tr){tr.addEventListener("click",function(){sel=+tr.getAttribute("data-i");panel()})})}
-function groupLabels(byI,pr,spr,show,fg){var g={};P.forEach(function(p,i){if(!p.grp||p.grp=="other Pfam"||p.grp=="no Pfam entry"||!show[p.cls]||(fg&&p.grp!=fg))return;var a=g[p.grp]||(g[p.grp]={n:0,s:[0,0,0]});a.n++;for(var k=0;k<3;k++)a.s[k]+=N[i][k]});
- ctx.font="bold 13px system-ui";ctx.textAlign="center";var bg=getComputedStyle(document.documentElement).getPropertyValue("--card")||"#fff";
- Object.keys(g).forEach(function(k){var a=g[k];if(a.n<8)return;var q=pr(a.s[0]/a.n*spr,a.s[1]/a.n*spr,a.s[2]/a.n*spr),w=ctx.measureText(k).width+10;ctx.globalAlpha=0.85;ctx.fillStyle=bg;ctx.fillRect(q.x-w/2,q.y-10,w,20);ctx.globalAlpha=1;ctx.fillStyle="#8a4fa3";ctx.fillText(k+" ("+a.n+")",q.x,q.y+4)});
- ctx.textAlign="start"}
-function pick(mx,my){var best=null,bd=14;for(var k=proj.length-1;k>=0;k--){var d=Math.hypot(proj[k].x-mx,proj[k].y-my);if(d<bd){bd=d;best=proj[k]}}return best}
-function loop(){if(document.getElementById("auto").checked&&!drag)yaw+=0.004;draw();requestAnimationFrame(loop)}
+function pick(mx,my){var best=null,bd=12;for(var k=proj.length-1;k>=0;k--){var p=P[proj[k].i];if(!$("f"+(p.cls=="rbp"?"rbp":p.cls)).checked)continue;var d=Math.hypot(proj[k].x-mx,proj[k].y-my);if(d<bd){bd=d;best=proj[k]}}return best}
+function loop(){if($("mode").value=="3d"&&$("auto").checked&&!drag)yaw+=0.004;draw();requestAnimationFrame(loop)}
+function setMode(){var m3=$("mode").value=="3d";[].forEach.call(document.querySelectorAll(".only3"),function(e){e.style.display=m3?"inline":"none"});cv.style.cursor="grab"}
 cv.addEventListener("mousedown",function(e){drag=true;moved=false;lx=e.clientX;ly=e.clientY;cv.style.cursor="grabbing"});
 window.addEventListener("mouseup",function(e){if(drag&&!moved&&e.target===cv){var r=cv.getBoundingClientRect(),b=pick(e.clientX-r.left,e.clientY-r.top);if(b){sel=b.i;panel()}}drag=false;cv.style.cursor="grab"});
-window.addEventListener("mousemove",function(e){if(drag){var dx=e.clientX-lx,dy=e.clientY-ly;if(Math.abs(dx)+Math.abs(dy)>2)moved=true;yaw+=dx*0.008;pitch=Math.max(-1.5,Math.min(1.5,pitch+dy*0.008));lx=e.clientX;ly=e.clientY;tip.style.display="none";return}
+window.addEventListener("mousemove",function(e){if(drag){var dx=e.clientX-lx,dy=e.clientY-ly;if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
+  if($("mode").value=="2d"){var S=Math.min(cv.clientWidth,cv.clientHeight)*0.40;V2.cx-=dx/(V2.k*S);V2.cy+=dy/(V2.k*S)}else{yaw+=dx*0.008;pitch=Math.max(-1.5,Math.min(1.5,pitch+dy*0.008))}
+  lx=e.clientX;ly=e.clientY;tip.style.display="none";return}
  if(e.target!==cv){tip.style.display="none";return}var r=cv.getBoundingClientRect(),best=pick(e.clientX-r.left,e.clientY-r.top);
- if(best){var p=P[best.i];tip.style.display="block";tip.style.left=e.clientX+12+"px";tip.style.top=e.clientY+12+"px";tip.textContent=p.symbol+" | "+CLS[p.cls].n+" | "+(p.family||"family unknown")+" | click for neighbours"}else tip.style.display="none"});
-cv.addEventListener("wheel",function(e){e.preventDefault();zoom=Math.max(0.4,Math.min(4,zoom*(e.deltaY<0?1.1:0.9)))},{passive:false});
-function setView(y,p){yaw=y;pitch=p;document.getElementById("auto").checked=false}
-document.getElementById("reset").addEventListener("click",function(){yaw=0.6;pitch=0.35;zoom=1});
-document.getElementById("v3d").addEventListener("click",function(){yaw=0.6;pitch=0.35;document.getElementById("auto").checked=true});
-document.getElementById("vxy").addEventListener("click",function(){setView(0,0)});
-document.getElementById("vxz").addEventListener("click",function(){setView(0,1.5707)});
-document.getElementById("vyz").addEventListener("click",function(){setView(1.5707,0)});
-document.getElementById("clear").addEventListener("click",function(){sel=-1;panel()});
-document.getElementById("by").addEventListener("change",panel);
-document.getElementById("q").addEventListener("keydown",function(e){if(e.key=="Enter"){var s=this.value.trim().toUpperCase();if(IDX.hasOwnProperty(s)){sel=IDX[s];panel()}}});
-ls.addEventListener("change",function(){curL=null});
-var fgs=document.getElementById("fgrp");Object.keys(P.reduce(function(a,p){if(p.grp)a[p.grp]=1;return a},{})).sort().forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=k;fgs.appendChild(o)});
-ls.value=D.layers[D.layers.length-1];loop();
+ if(best){var p=P[best.i];tip.style.display="block";tip.style.left=e.clientX+12+"px";tip.style.top=e.clientY+12+"px";tip.textContent=p.symbol+" | "+CLS[p.cls].n+" | "+(p.grp||"no domain group")+" | click for neighbours"}else tip.style.display="none"});
+cv.addEventListener("wheel",function(e){e.preventDefault();var f=e.deltaY<0?1.15:1/1.15;
+ if($("mode").value=="2d"){var r=cv.getBoundingClientRect(),W=cv.clientWidth,H=cv.clientHeight,S=Math.min(W,H)*0.40,mx=e.clientX-r.left,my=e.clientY-r.top;
+  var wx=V2.cx+(mx-W/2)/(V2.k*S),wy=V2.cy-(my-H/2)/(V2.k*S);V2.k=Math.max(0.6,Math.min(14,V2.k*f));V2.cx=wx-(mx-W/2)/(V2.k*S);V2.cy=wy+(my-H/2)/(V2.k*S)}
+ else zoom=Math.max(0.4,Math.min(4,zoom*f))},{passive:false});
+function setView(y,p){yaw=y;pitch=p;$("auto").checked=false}
+$("reset").addEventListener("click",function(){yaw=0.6;pitch=0.35;zoom=1;V2.cx=0;V2.cy=0;V2.k=1});
+$("clear").addEventListener("click",function(){sel=-1;panel()});
+$("vxy").addEventListener("click",function(){setView(0,0)});$("vxz").addEventListener("click",function(){setView(0,1.5707)});$("vyz").addEventListener("click",function(){setView(1.5707,0)});
+$("by").addEventListener("change",panel);$("mode").addEventListener("change",setMode);
+var dt=null;$("dcl").addEventListener("input",function(){clearTimeout(dt);dt=setTimeout(function(){dirty=true},120)});
+$("q").addEventListener("keydown",function(e){if(e.key=="Enter"){var s=this.value.trim().toUpperCase();if(IDX.hasOwnProperty(s)){sel=IDX[s];panel()}}});
+ls.addEventListener("change",function(){dirty=true});
+var fgs=$("fgrp");Object.keys(P.reduce(function(a,p){if(p.grp)a[p.grp]=1;return a},{})).sort().forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=k;fgs.appendChild(o)});
+ls.value=D.layers[D.layers.length-1];setMode();loop();
 </script></body></html>"""
 
 
 def build_html(df: pd.DataFrame, emb: np.ndarray, layers: list[int], chip_def: str, seed: int, path: Path, demo: bool, kmer=None, rl_layer: int = 21) -> None:
     cl = {str(L): np.round(coords(emb[:, L], seed), 3).tolist() for L in layers}
+    cl2 = {str(L): np.round(coords(emb[:, L], seed, dim=2), 3).tolist() for L in layers}
     nbr, top = build_neighbors(df, emb, layers, kmer)
     ann = "domain_group" in df.columns
     rl = rbp_likeness(centred_cosine(emb[:, rl_layer]), (df["class_" + chip_def] == "rbp").to_numpy(), (df["class_" + chip_def] == "tf").to_numpy()) if ann else None
@@ -972,7 +1079,7 @@ def build_html(df: pd.DataFrame, emb: np.ndarray, layers: list[int], chip_def: s
                      ne=int(r.n_eclip_exp), ec=str(r.eclip_cells).replace(";", ", "), rl=round(float(rl[i]), 3))
         prot.append(d)
     banner = '<div class="banner">SYNTHETIC DEMO DATA: the classes are separated by construction to test the code. These are not ESM-2 embeddings or 5-mer profiles of real proteins, and the separation says nothing about real TFs and RBPs</div>' if demo else ""
-    html = HTML.replace("__BANNER__", banner).replace("__DATA__", json.dumps(dict(layers=layers, coords=cl, proteins=prot, nbr=nbr, top=top, rl_layer=rl_layer), separators=(",", ":")))
+    html = HTML.replace("__BANNER__", banner).replace("__DATA__", json.dumps(dict(layers=layers, coords=cl, coords2=cl2, proteins=prot, nbr=nbr, top=top, rl_layer=rl_layer), separators=(",", ":")))
     path.write_text(html)
 
 
@@ -998,9 +1105,9 @@ def stage_map(args) -> None:
         fig.tight_layout()
         fig.savefig(out / f"map_layer{L}.png", dpi=160)
         plt.close(fig)
-    kmer = load_kmer(out)
+    kmer = load_kmer(out, name=args.kmer_file)
     if kmer is None:
-        print("kmer_profiles.npz not found: the page has cosine neighbours only (run the kmer stage for r5 and Jaccard)")
+        print("kmer profile file not found: the page has cosine neighbours only (run the kmer stage for r5 and Jaccard)")
     rl_layer = 18
     f = out / "patterns_rbp_likeness_auroc.tsv"
     if f.exists():
@@ -1076,6 +1183,11 @@ def stage_selftest(args) -> None:
     pr = profile_from_counts(cnt, ns, 100)
     assert pr is not None and kmer_str(int(np.argmax(pr[0]))) == "GCAUG", "planted 5-mer motif not recovered"
     assert profile_from_counts(cnt, ns, 5000) is None, "minimum positives not enforced"
+    assert has_repeat("ACGT" + "CA" * 9 + "GGTT") and has_repeat("A" * 17) and has_repeat("GGAAU" * 4) and not has_repeat("ACGTTGCAAGCTTCGAGGCATCCAGT"), "repeat detector wrong"
+    kk = [f"{n}|chip|{c}" for n in ("A", "B", "C", "D", "E", "F") for c in ("K562", "HepG2")]
+    pf = np.stack([np.random.default_rng(i // 2).normal(size=NK) + 0.3 * np.random.default_rng(100 + i).normal(size=NK) for i in range(len(kk))])
+    rp = reproducibility(kk, pf)
+    assert rp.top1.iloc[0] == 6 and rp.median_r_same_protein.iloc[0] > 0.8, "reproducibility statistic wrong"
     base = {c: rng.normal(size=NK) for c in grp}
     keys, prof = [], []
     for i in list(range(0, 90)) + list(range(240, 260)):
@@ -1112,7 +1224,7 @@ def stage_selftest(args) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", choices=["proteins", "embed", "kmer", "annot", "stats", "kmerstats", "patterns", "predict", "map", "selftest"])
+    ap.add_argument("stage", choices=["proteins", "embed", "kmer", "annot", "stats", "kmerstats", "patterns", "predict", "reproducibility", "map", "selftest"])
     ap.add_argument("--out_dir", default=OUT_DEFAULT)
     ap.add_argument("--tf_fasta", default="share_tf/final/encode_tf_chipseq_proteins.fasta")
     ap.add_argument("--rbp_tsv", default="data/raw/eclip_skipper/manifests/encode_eclip_rbp_id_best_acc_seq.tsv")
@@ -1122,6 +1234,11 @@ def main() -> None:
     ap.add_argument("--tf_pairs", default="data/benchmarks/tf_chipseq/pairs.tsv")
     ap.add_argument("--eclip_pairs", default="data/benchmarks/skipper_eclip/fixlen_151_all.tsv")
     ap.add_argument("--min_pos", type=int, default=100)
+    ap.add_argument("--mask_repeats", action="store_true", help="kmer: drop windows with a tandem repeat of a 1-6 nt unit covering 16 nt or more")
+    ap.add_argument("--by_cell", action="store_true", help="kmer: one profile per protein, assay and cell line")
+    ap.add_argument("--out_name", default="kmer_profiles.npz", help="kmer: output file in out_dir")
+    ap.add_argument("--kmer_file", default="kmer_profiles.npz", help="profile file in out_dir used by kmerstats, patterns, predict, map, reproducibility")
+    ap.add_argument("--suffix", default="", help="suffix of the result file names of kmerstats and reproducibility")
     ap.add_argument("--chip_def", choices=["tf", "broad"], default="broad")
     ap.add_argument("--layers", type=int, nargs="+", default=[0, 18, 22, 26, 33])
     ap.add_argument("--max_len", type=int, default=6000)
@@ -1132,7 +1249,7 @@ def main() -> None:
     ap.add_argument("--refresh", action="store_true", help="annot: fetch UniProt again")
     args = ap.parse_args()
     {"proteins": stage_proteins, "embed": stage_embed, "kmer": stage_kmer, "annot": stage_annot, "stats": stage_stats, "kmerstats": stage_kmerstats,
-     "patterns": stage_patterns, "predict": stage_predict, "map": stage_map, "selftest": stage_selftest}[args.stage](args)
+     "patterns": stage_patterns, "predict": stage_predict, "reproducibility": stage_reproducibility, "map": stage_map, "selftest": stage_selftest}[args.stage](args)
 
 
 if __name__ == "__main__":

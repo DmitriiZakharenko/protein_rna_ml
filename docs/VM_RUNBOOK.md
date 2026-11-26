@@ -233,6 +233,15 @@ python -m http.server 8765 --bind 127.0.0.1 --directory results/encode_map   # t
 
 The stages `annot` (UniProt, network), `stats`, `kmerstats`, `patterns`, `predict` and `map` run locally after the two files are copied: `python scripts/82_encode_protein_map.py annot`, then `stats`, `kmerstats`, `patterns`, `predict` and `map`. Results and interpretation: `docs/ENCODE_MAP.md`.
 
+Repeat-masked profiles and profiles per cell line (script 82 has to be copied to the VM again with `scp`, then on the VM):
+
+```bash
+python scripts/82_encode_protein_map.py kmer --mask_repeats --out_name kmer_profiles_masked.npz
+python scripts/82_encode_protein_map.py kmer --by_cell --out_name kmer_profiles_cell.npz
+```
+
+After copying the two files to `results/encode_map/`, locally: `python scripts/82_encode_protein_map.py kmerstats --kmer_file kmer_profiles_masked.npz --suffix _masked` and `python scripts/82_encode_protein_map.py reproducibility --kmer_file kmer_profiles_cell.npz`. The columns `dataset_source` of the TF table and `cell_line` of the eCLIP table are read from the code and not verified on the VM.
+
 Run times on the VM: `embed` 293 s for 1,051 proteins and 34 layers, `kmer` about 35 s. Run times of the local stages are not recorded. Expected end of `embed`: a line `saved N proteins x 34 layers`. The columns of the two input tables (`protein_name`, `rna_sequence`, `binding_label`, `neg_type`) are read from the code and not verified on the VM.
 
 ## 6. Collecting results

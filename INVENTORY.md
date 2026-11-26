@@ -7,13 +7,13 @@ State of the repository on 2026-11-26. The inventory is based on a full read of 
 | Path | In git | Content |
 |---|---|---|
 | `README.md`, `SCRIPTS.md`, `INVENTORY.md`, `EXPERIMENT_LOG.md`, `NEXT_STEPS.md`, `requirements.txt`, `LICENSE` | yes | entry documents |
-| `docs/` | yes | `METHODS.md`, `DATA.md`, `DATA_SOURCES_AND_DOWNLOADS.md`, `DATA_QUALITY_DATASETS.md`, `DATA_CLIP_PRIM_INVENTORY.md`, `STRATEGY.md`, `VM_RUNBOOK.md` |
+| `docs/` | yes | `METHODS.md`, `DATA.md`, `DATA_SOURCES_AND_DOWNLOADS.md`, `DATA_QUALITY_DATASETS.md`, `DATA_CLIP_PRIM_INVENTORY.md`, `STRATEGY.md`, `VM_RUNBOOK.md`, `ENCODE_MAP.md` |
 | `docs/archive/` | yes | completed plans (`PROJECT_PLAN`, `RESEARCH_ROADMAP`, `PHASE3A_PLAN`, `PHASE3B_STATUS`, `CROSS_ASSAY_PLAN`, `DOMAIN_AWARE_PLAN`), legacy dashboards, five figures that no document cites |
-| `scripts/` | yes | 78 Python scripts (numbered 01-81, chronological) and 11 runners `run_*.sh` |
+| `scripts/` | yes | 80 Python scripts (numbered 01-83, chronological) and 11 runners `run_*.sh` |
 | `scripts/archive/` | yes | 23 scripts and runners that are superseded, one-off or invalid for the current data (reason per file in `SCRIPTS.md`) |
 | `src/` | yes | data loaders, splits, negative sampling, models |
 | `configs/` | yes | 8 YAML and list files |
-| `results/` | metrics, small tables and summaries | final and intermediate result files. Logs, per-protein example tables and smoke runs are ignored |
+| `results/` | metrics, small tables and summaries (`encode_map/` protein table, profiles and statistics of script 82, `encode_peaks/` overlap tables of script 83) | final and intermediate result files. Logs, per-protein example tables and smoke runs are ignored |
 | `figures/`, `reports/` | yes | README figures, `results.html` (built 2026-10-30), `esm_layer_similarity.html` |
 | `data/` | 21 small files | raw, sanitized and benchmark data (2.7 GB shown, larger on disk because of iCloud-evicted files), rebuilt by scripts |
 | `docs/local/` | no (ignored) | literature tracker and meeting update (local notes) |

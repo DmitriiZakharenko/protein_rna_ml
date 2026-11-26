@@ -119,3 +119,6 @@ reports/encode_protein_map_demo.html
 
 # Generated interactive map (about 6 MB, rebuilt by script 82 map)
 results/encode_map/encode_protein_map.html
+
+# Downloaded ENCODE peak files (not tracked)
+data/external/encode_chip_eclip/

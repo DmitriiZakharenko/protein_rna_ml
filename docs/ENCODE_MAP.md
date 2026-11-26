@@ -34,6 +34,55 @@ Script `scripts/82_encode_protein_map.py`, results in `results/encode_map/`, int
 4. Ridge prediction of the profile of a protein from a held-out domain group gives per-protein r of 0.05 to 0.07, above the permutation null, below any practical use.
 5. The 5-mer profiles are valid: the consensus control passes for 21 of 24 TFs. The weak association is therefore not caused by empty profiles.
 
+## Genomic overlap of ChIP-seq and eCLIP peaks (script 83)
+
+Files: ENCODE GRCh38 ChIP-seq "IDR thresholded peaks" (89 experiments) and eCLIP "peaks" (CLIPper, 68 experiments) of the 39 proteins that have both assays, 156 files of 157 experiments (one experiment had no file of this type), 149 MB, not tracked in git. Intervals were merged without strand. Jaccard index (base pairs) of every ChIP-seq set against every eCLIP set of the same cell line. Own-protein pair against the other proteins of the same cell line as null, because a random shift of intervals ignores that eCLIP peaks lie in expressed genes. The Jaccard index depends on the number and width of the peaks, so log Jaccard was also centred over rows and columns (size-adjusted).
+
+| Question | HepG2 (26 ChIP sets, 33 eCLIP sets, 22 own pairs) | K562 (34 ChIP sets, 32 eCLIP sets, 28 own pairs) |
+|---|---|---|
+| Own-protein Jaccard against the Jaccard with other proteins (median) | 0.0083 against 0.0109 | 0.0034 against 0.0057 |
+| Own pair ranks first (raw, size-adjusted) | 1 of 22, 1 of 22 | 0 of 28, 1 of 28 |
+| Median rank of the own pair among all eCLIP sets (size-adjusted) | 18 of 33 | 13 of 32 |
+| Spearman of Jaccard with centred cosine, layer 21 (raw, size-adjusted) | -0.073 (p 0.09), -0.027 (p 0.41) | -0.202 (p 0.003), -0.069 (p 0.037) |
+| Highest size-adjusted own-pair overlap | TARDBP z 3.5 (rank 1 of 33), SRSF1 1.7, HNRNPK 1.6 | KHSRP 1.8 (rank 1), HNRNPK 1.6, TARDBP 1.5 |
+
+Reading: the ChIP-seq peaks of an RBP do not overlap its own eCLIP peaks more than the eCLIP peaks of other RBPs in the same cell line (median rank in the middle). The negative raw correlation with the embedding cosine in K562 is a set-size effect and falls to -0.06 to -0.07 after adjustment. TARDBP (HepG2), HNRNPK, KHSRP, SRSF1 and U2AF2 stand out as single cases with 22 and 28 own pairs and no correction for multiple tests, so they are hypotheses and not results. The eCLIP files are CLIPper peaks as deposited and were not filtered by reproducibility or enrichment, and the 156 files are the preferred or largest file per experiment. Tables: `results/encode_peaks/`.
+
+### All TF and RBP pairs of a cell line (script 83, stage overlap_all)
+
+Files: 1,413 ENCODE GRCh38 peak files (TF-annotated ChIP-seq IDR-thresholded peaks and eCLIP peaks of K562 and HepG2, 728 MB, not tracked in git), one file per experiment, sets of the same protein, cell line and assay merged. Pairs of the same protein were excluded. Statistic: Spearman correlation between the centred cosine of the ESM-2 embeddings and the Jaccard index of two peak sets, raw and after removing the row and column effect of log Jaccard (size-adjusted). Null: protein labels permuted (200 permutations, smallest possible p 0.005).
+
+| Cell line | Pairs | Layer 0 | Layer 18 | Layer 21 | Layer 33 |
+|---|---|---|---|---|---|
+| K562, 352 ChIP-seq sets x 139 eCLIP sets | 48,926 | raw +0.047, adjusted +0.007 (p 0.11) | +0.028, +0.018 (p 0.005) | +0.035, +0.013 (p 0.010) | +0.073, +0.027 (p 0.005) |
+| HepG2, 552 x 105 | 57,955 | raw -0.019, adjusted +0.018 (p 0.005) | -0.021, +0.031 (p 0.005) | -0.043, +0.020 (p 0.005) | -0.009, +0.025 (p 0.005) |
+
+Reading: the size-adjusted correlations are between +0.007 and +0.031. They differ from zero statistically because of the number of pairs, but explain under 0.1% of the rank variance. Similarity of ESM-2 embeddings of a TF and an RBP does not predict how much their peaks overlap in the genome. Layer 0 (composition) is not clearly lower than the contextual layers. Raw correlations change sign between the cell lines, as expected from a set-size effect. Pairs of proteins from the same domain group give inconsistent means (K562 168 pairs, residual -0.10 against -0.002 for other pairs, HepG2 301 pairs, +0.046 against -0.001). A first version of the script also compared the overlap of TFs with the RNA-binding keyword and the RBP-likeness score, but this was computed on row means that are zero after the adjustment and was removed. Tables: `results/encode_peaks/jaccard_all_*.tsv.gz`, `overlap_all_summary.json`.
+
+## Literature check of the flagged proteins (search snippets only)
+
+The check was made with a web search and reading of snippets, not of full texts. Part of the identifiers were recalled and are not verified. Statements must be checked against the primary papers before use.
+
+| Protein | RNA binding | DNA or chromatin | Reading |
+|---|---|---|---|
+| TARDBP | strong (CLIP-seq) | locus-level ChIP and single-stranded TG repeats, no genome-wide ChIP-seq paper found | the HepG2 own-pair overlap (z 3.5) is a hypothesis, not a documented effect |
+| HNRNPK | strong | single-stranded C-rich element of c-myc, ChIP-seq at 3' ends of immediate-early genes reported | documented dual binder |
+| KHSRP | strong | no evidence found | no support for chromatin binding |
+| SRSF1 | strong | ChIP-seq at promoters reported, linked to nascent RNA and Pol II | chromatin association mainly through RNA |
+| U2AF2 | strong | ChIP signal depends on nascent RNA, no direct DNA binding found | same |
+| FUBP1 | medium (KH domains) | strong (single-stranded FUSE upstream of c-myc, structure solved) | flagged RBP-like TF, consistent with the literature |
+| YBX1 | strong | claimed at promoters, specificity contested | flagged, supported for RNA |
+| CDC5L | medium (splicing complex) | medium-low (Myb-like domain) | flagged, partly supported |
+| AGO2 | strong | contested in human cells, antibody artefacts reported | flagged, RNA supported |
+| CEBPZ | medium (rRNA processing, no direct RNA assay) | medium-low | flagged, partly supported |
+| ZGPAT, GPBP1L1, PREB, CC2D1A, EED | no experimental evidence, or weak and disputed (EED) | annotated or single promoters | flagged, not supported |
+
+Of the 10 TF-labelled proteins among the 25 highest RBP-likeness scores that were checked here, 5 have published RNA-binding evidence of at least medium strength (YBX1, FUBP1, AGO2, CDC5L, CEBPZ) and 5 have none or weak evidence. The ENCODE-wide study of chromatin interactions of RBPs by Xiao and colleagues (2019, Cell, identifier recalled and not verified) is the natural reference for the finding that RBP ChIP-seq peaks do not coincide with the eCLIP sites of the same protein.
+
+## Checks prepared and not yet run
+
+`scripts/82_encode_protein_map.py kmer --mask_repeats` removes windows with a tandem repeat of a 1 to 6 nt unit that covers 16 nt or more, and `kmer --by_cell` writes one profile per protein, assay and cell line. The stages `kmerstats --kmer_file ... --suffix ...` and `reproducibility` evaluate them. Both runs need the window tables on the GPU VM (`docs/VM_RUNBOOK.md`, section 5a).
+
 ## Findings that limit the interpretation
 
 - Pairs of TFs with the highest profile similarity and distant embeddings (ARNT, SOX6, ZNF282, IKZF1, PHB2, TRIM22, YBX1, r5 0.75 to 0.86, cosine -0.31 to -0.10) share the repeats CACAC, GUGUG and AUGGA, UCCAU. Their peaks are probably in repeats and microsatellites. Windows were not repeat-masked and not filtered with the ENCODE blacklist. Before centring over proteins the similarity of unrelated promoter TFs was even higher because of a shared CpG-rich context.
@@ -42,6 +91,6 @@ Script `scripts/82_encode_protein_map.py`, results in `results/encode_map/`, int
 
 ## Open checks
 
-Repeat masking and blacklist filtering of the windows, profiles per cell line, comparison with JASPAR matrices, peak-overlap Jaccard with a null that keeps the genomic region (needs the narrowPeak files), control by sequence identity (MMseqs2) next to Pfam groups, held-out evaluation by protein clusters instead of Pfam groups, correction for the number of layers.
+Repeat masking and blacklist filtering of the windows, profiles per cell line, comparison with JASPAR matrices, peak-overlap Jaccard for all TF and RBP pairs of a cell line (done here for the 39 proteins with both assays), control by sequence identity (MMseqs2) next to Pfam groups, held-out evaluation by protein clusters instead of Pfam groups, correction for the number of layers.
 
 Tables: `results/encode_map/layer_stats_broad.tsv`, `kmer_layer_stats.tsv`, `kmer_dual_test.json`, `patterns_*.tsv`, `patterns_summary.json`, `predict_profiles.tsv`, `motif_controls.tsv`.

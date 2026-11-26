@@ -1,0 +1,90 @@
+{
+ "K562": {
+  "n_tf": 352,
+  "n_rbp": 139,
+  "n_pairs": 48926,
+  "own_pairs": 2,
+  "own_rank1": 0,
+  "own_median_rank": 72.5,
+  "own_median_z_size_adjusted": -0.04816158617565025,
+  "spearman_cos_layer0_raw": [
+   0.046613346714742966,
+   0.004975124378109453
+  ],
+  "spearman_cos_layer0_size_adjusted": [
+   0.006991722303604246,
+   0.11442786069651742
+  ],
+  "spearman_cos_layer18_raw": [
+   0.028427233218850403,
+   0.009950248756218905
+  ],
+  "spearman_cos_layer18_size_adjusted": [
+   0.018490491087197025,
+   0.004975124378109453
+  ],
+  "spearman_cos_layer21_raw": [
+   0.034776322756466506,
+   0.004975124378109453
+  ],
+  "spearman_cos_layer21_size_adjusted": [
+   0.01306439041437421,
+   0.009950248756218905
+  ],
+  "spearman_cos_layer33_raw": [
+   0.07303834403108064,
+   0.004975124378109453
+  ],
+  "spearman_cos_layer33_size_adjusted": [
+   0.026624520511535996,
+   0.004975124378109453
+  ],
+  "same_domain_group_pairs": 168,
+  "mean_residual_same_group": -0.10363311054089044,
+  "mean_residual_different_group": -0.002357399363646006
+ },
+ "HepG2": {
+  "n_tf": 552,
+  "n_rbp": 105,
+  "n_pairs": 57955,
+  "own_pairs": 5,
+  "own_rank1": 0,
+  "own_median_rank": 23.0,
+  "own_median_z_size_adjusted": 0.9149311938516181,
+  "spearman_cos_layer0_raw": [
+   -0.018606835190626055,
+   0.004975124378109453
+  ],
+  "spearman_cos_layer0_size_adjusted": [
+   0.018126298352455213,
+   0.004975124378109453
+  ],
+  "spearman_cos_layer18_raw": [
+   -0.02147758749107406,
+   0.05472636815920398
+  ],
+  "spearman_cos_layer18_size_adjusted": [
+   0.030655656054695855,
+   0.004975124378109453
+  ],
+  "spearman_cos_layer21_raw": [
+   -0.04308905042202354,
+   0.004975124378109453
+  ],
+  "spearman_cos_layer21_size_adjusted": [
+   0.020418786718673528,
+   0.004975124378109453
+  ],
+  "spearman_cos_layer33_raw": [
+   -0.009172709195411277,
+   0.31840796019900497
+  ],
+  "spearman_cos_layer33_size_adjusted": [
+   0.02490229413872463,
+   0.004975124378109453
+  ],
+  "same_domain_group_pairs": 301,
+  "mean_residual_same_group": 0.045597687756506605,
+  "mean_residual_different_group": -0.0007772469248753795
+ }
+}
