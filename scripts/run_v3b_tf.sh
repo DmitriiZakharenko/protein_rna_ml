@@ -12,7 +12,7 @@ for s in $SEEDS; do
   for c in $CONFIGS; do
     h=${c%%:*}; m=${c##*:}
     d=results/v3b_frozen_tf/${h}_${m}_s${s}
-    [ -f $d/scores_probe.tsv.gz ] && continue
+    [ -f $d/results.json ] && continue
     echo "=== $h $m +TF seed $s $(date +%H:%M)"
     $PYTHON -u scripts/67_frozen_embedding_baselines.py --head $h --train_mode $m --seed $s --out_dir $d \
       --extra_tsv data/benchmarks/tf_chipseq/pairs.tsv --extra_emb_dir data/embeddings_tf --extra_frac $EXTRA_FRAC \

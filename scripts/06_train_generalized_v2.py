@@ -5,7 +5,7 @@ This is a significant step up from k-mer MLP:
   - Learns position-sensitive motif filters instead of bag-of-words
   - Separate convolutional branches for RNA and protein
   - First layer ≈ learned position weight matrix (PWM)
-  - Expected AUROC gain: ~0.04–0.08 over MLP
+  - Measured test AUROC on data/generalized: V2 0.690 vs V1 MLP 0.674
 
 Usage (from protein_rna_ml/):
     python scripts/06_train_generalized_v2.py
@@ -218,7 +218,7 @@ def main():
         if is_best:
             best_auprc, best_auroc, best_epoch, no_improve = val_m["auprc"], val_m["auroc"], epoch, 0
             torch.save({"epoch": epoch, "model_state": model.state_dict(),
-                        "val_metrics": val_m, "args": vars(args)},
+                        "val_metrics": {k: v for k, v in val_m.items() if k != "probs"}, "args": vars(args)},
                        os.path.join(args.model_dir, "best_model.pt"))
         else:
             no_improve += 1
@@ -229,7 +229,7 @@ def main():
     print(f"\n  Best val AUPRC: {best_auprc:.4f}  AUROC: {best_auroc:.4f}  at epoch {best_epoch}")
 
     # ── Test evaluation ───────────────────────────────────────────────────────
-    ckpt = torch.load(os.path.join(args.model_dir, "best_model.pt"), map_location=device)
+    ckpt = torch.load(os.path.join(args.model_dir, "best_model.pt"), map_location=device, weights_only=False)
     model.load_state_dict(ckpt["model_state"])
     test_m = evaluate(model, test_loader, device)
     print(f"\n=== Test set ===")

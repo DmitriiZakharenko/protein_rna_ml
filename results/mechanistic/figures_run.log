@@ -1,5 +1,0 @@
-RBFOX2: Spearman 0.48; domains [(25, 91)]; share of |IG| in domain 0.86 (domain covers 0.71)
-HNRNPC: Spearman 0.28; domains [(18, 80)]; share of |IG| in domain 0.36 (domain covers 0.22)
-PCBP2: Spearman 0.33; domains [(15, 76), (99, 162), (290, 352), (16, 49), (81, 132), (298, 323), (14, 39), (285, 316), (24, 49), (297, 323), (298, 348)]; share of |IG| in domain 0.70 (domain covers 1.54)
-TIA1: Spearman 0.10; domains [(9, 77), (108, 178), (9, 33), (107, 154), (7, 78), (7, 70)]; share of |IG| in domain 0.85 (domain covers 1.90)
-wrote /Users/zahalae/Desktop/protein_rna_ml/results/mechanistic/figures

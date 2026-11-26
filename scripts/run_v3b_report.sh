@@ -1,10 +1,12 @@
 #!/bin/bash
 # Comparison tables with CIs for the v3b probe and the v3b standard test; picks up whatever score files exist.
-# Usage: bash scripts/run_v3b_report.sh   (PYTHON=... N_BOOT=...)
+# Usage: bash scripts/run_v3b_report.sh   (PYTHON=... N_BOOT=... OUT_PREFIX=)
+# OUT_PREFIX (default empty) is put before the output names, so a run with fewer score files keeps its own table.
 set -u
 cd "$(dirname "$0")/.."
 PYTHON=${PYTHON:-python3}
 N_BOOT=${N_BOOT:-300}
+OUT_PREFIX=${OUT_PREFIX:-}
 
 add() { [ -f "${2%%:*}" ] && SC+=(--scorer "$1=$2"); }
 
@@ -18,7 +20,7 @@ for h in rna_std protein_std concat_std bilinear_std bilinear_xneg; do
 done
 add hybrid_joint results/v3b_hybrid/hybrid_s42/scores_probe.tsv.gz
 add stack        results/v3b_hybrid/stack_s42/scores_probe_stack.tsv.gz
-$PYTHON scripts/69_score_table_with_ci.py --name v3b_probe "${SC[@]}" --n_boot "$N_BOOT" | cut -c1-400
+$PYTHON scripts/69_score_table_with_ci.py --name v3b_probe "${SC[@]}" --n_boot "$N_BOOT" --out_prefix "$OUT_PREFIX" | cut -c1-400
 
 SC=()
 add nn1        results/knn_baseline/v3b_standard_scores.tsv.gz:nn1_lr
@@ -28,4 +30,4 @@ for h in rna_std protein_std concat_std bilinear_std bilinear_xneg; do
 done
 add hybrid_joint results/v3b_hybrid/hybrid_s42/scores_test_standard.tsv.gz
 add stack        results/v3b_hybrid/stack_s42/scores_test_standard_stack.tsv.gz
-$PYTHON scripts/69_score_table_with_ci.py --name v3b_standard "${SC[@]}" --n_boot "$N_BOOT" | cut -c1-400
+$PYTHON scripts/69_score_table_with_ci.py --name v3b_standard "${SC[@]}" --n_boot "$N_BOOT" --out_prefix "$OUT_PREFIX" | cut -c1-400

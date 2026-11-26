@@ -4,7 +4,7 @@
 ---------------------------
 Sequence-level novelty audit of test proteins against the v3a training proteins
 (MMseqs2). For every test protein it reports the best local-alignment identity to
-any training protein; optionally it stratifies a scores table (scripts/51 output)
+any training protein (the highest identity among the hits; script 59 reports the identity of the top-bits hit, so its bins differ); optionally it stratifies a scores table (scripts/51 output)
 by that identity bin.
 
 Usage

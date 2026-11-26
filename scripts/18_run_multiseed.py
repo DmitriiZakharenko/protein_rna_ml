@@ -119,13 +119,19 @@ def run_seed(
     return result.returncode, elapsed
 
 
-def find_result_json(seed_dir: str) -> dict | None:
-    """Find the most recently modified JSON result file in seed_dir."""
-    jsons = sorted(Path(seed_dir).glob("*.json"), key=lambda p: p.stat().st_mtime,
-                   reverse=True)
-    if not jsons:
+def find_result_json(seed_dir: str, result_name: str | None = None) -> dict | None:
+    """Load the named result JSON, else the only *_results.json, else the newest JSON."""
+    d = Path(seed_dir)
+    if result_name:
+        cands = [d / result_name]
+    else:
+        cands = sorted(d.glob("*_results.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+        if not cands:
+            cands = sorted(d.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    cands = [c for c in cands if c.exists()]
+    if not cands:
         return None
-    with open(jsons[0]) as fh:
+    with open(cands[0]) as fh:
         return json.load(fh)
 
 
@@ -248,6 +254,8 @@ def main():
     parser.add_argument("--no_auto_model_dir", action="store_true",
                         help="Do not set --model_dir per seed under seed_N/checkpoints/ "
                              "(use only if target script has no --model_dir). Default: auto.")
+    parser.add_argument("--result_name", default=None,
+                        help="Result JSON file name inside each seed dir (default: *_results.json)")
     parser.add_argument("--skip_failed",action="store_true",
                         help="Skip seeds that fail instead of aborting")
     args = parser.parse_args()
@@ -296,7 +304,7 @@ def main():
                 sys.exit(f"Aborting. Re-run with --skip_failed to ignore failures.")
             continue
 
-        result = find_result_json(seed_dir)
+        result = find_result_json(seed_dir, args.result_name)
         if result is None:
             print(f"  [WARN] seed={seed}: no result JSON found in {seed_dir}")
             failed_seeds.append(seed)
@@ -304,9 +312,10 @@ def main():
 
         metrics = extract_metrics(result)
         seed_metrics[seed] = metrics
+        fmt = lambda v: f"{v:.4f}" if v is not None else "n/a"
         print(f"  [seed={seed}] done in {elapsed:.0f}s | "
-              f"test_auroc={metrics.get('test_auroc', '?'):.4f} | "
-              f"test_auprc={metrics.get('test_auprc', '?'):.4f}")
+              f"test_auroc={fmt(metrics.get('test_auroc'))} | "
+              f"test_auprc={fmt(metrics.get('test_auprc'))}")
 
     if args.dry_run:
         print("\nDry run complete.")

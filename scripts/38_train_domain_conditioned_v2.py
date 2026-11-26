@@ -283,6 +283,7 @@ def main() -> None:
     ap.add_argument("--mode", choices=MODES, default="baseline")
     ap.add_argument("--data_dir", default="data/sanitized/generalized_v3a")
     ap.add_argument("--table_s1", default="data/raw/rbpzoo/TableS1.xlsx")
+    # Built by archived scripts/archive/37_annotate_protein_domains.py from the older eCLIP roster.
     ap.add_argument("--domains_tsv", default="data/domains/protein_domains.tsv")
     ap.add_argument(
         "--out_dir",

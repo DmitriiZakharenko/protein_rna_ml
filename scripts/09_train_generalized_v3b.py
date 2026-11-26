@@ -8,7 +8,7 @@ Architecture:
                                       concat → 640-d
                                       MLP [256, 64] → binding logit
 
-Why this beats V3 (ESM-2 mean-pool only):
+Rationale (concatenating CNN and ESM-2 mean-pool):
     V2 CNN excels at proteins with strong positional motifs (PUM2 Δ+0.253,
     LARP7 Δ+0.202, TRA2A Δ+0.150). ESM-2 excels at motif-poor proteins
     (UNK Δ+0.245, IGF2BP3 Δ+0.095, TAF15 Δ+0.060).
@@ -17,6 +17,8 @@ Why this beats V3 (ESM-2 mean-pool only):
 
     ESM-2 projection is smaller (128-d not 256-d) to prevent it overpowering
     the well-trained CNN branch.
+
+Measured test AUROC: 0.666 (V3: 0.634, V2: 0.690).
 
 Usage (from protein_rna_ml/):
     python scripts/09_train_generalized_v3b.py
@@ -138,6 +140,20 @@ def make_sampler(labels):  # noqa: F401  (kept for reference, not called)
     w = [n_neg/n_pos if l==1 else 1.0 for l in labels]
     return WeightedRandomSampler(torch.tensor(w, dtype=torch.float32), len(w), replacement=True)
 
+def v2_reference(path="results/generalized/v2_cnn_results.json"):
+    """Post-fix V2 test AUROC, AUPRC and per-protein median AUROC (file if present, else constants)."""
+    auroc, auprc, med = 0.6903, 0.5796, None
+    try:
+        with open(path) as fh:
+            d = json.load(fh)
+        auroc = d["test_metrics"]["auroc"]
+        auprc = d["test_metrics"]["auprc"]
+        med = d.get("per_protein_summary", {}).get("median")
+    except (OSError, KeyError, ValueError):
+        pass
+    return auroc, auprc, med
+
+
 @torch.no_grad()
 def evaluate(model, loader, device):
     model.eval()
@@ -252,7 +268,7 @@ def main():
         if is_best:
             best_auprc, best_auroc, best_epoch, no_improve = val_m["auprc"], val_m["auroc"], epoch, 0
             torch.save({"epoch": epoch, "model_state": model.state_dict(),
-                        "val_metrics": val_m, "args": vars(args)},
+                        "val_metrics": {k: v for k, v in val_m.items() if k != "probs"}, "args": vars(args)},
                        os.path.join(args.model_dir, "best_model.pt"))
         else:
             no_improve += 1
@@ -268,9 +284,12 @@ def main():
     test_m = evaluate(model, test_loader, device)
     print(f"\n=== Test set ===")
     print(f"  AUROC: {test_m['auroc']:.4f}   AUPRC: {test_m['auprc']:.4f}")
-    print(f"  V2 was: AUROC=0.7028  AUPRC=0.5987")
+    v2_auroc, v2_auprc, v2_med = v2_reference()
+    print(f"  V2 was: AUROC={v2_auroc:.4f}  AUPRC={v2_auprc:.4f}")
 
-    test_df = pd.read_csv(os.path.join(args.data_dir, "test.tsv"), sep="\t")
+    # Rows without an ESM-2 embedding were dropped in the dataset, so use its frame
+    test_df = test_ds.df.copy()
+    assert len(test_df) == len(test_m["probs"]), "test rows and predictions differ in length"
     test_df["prob"] = test_m["probs"]
     per_prot = []
     for prot, grp in test_df.groupby("protein_name"):
@@ -284,10 +303,11 @@ def main():
     pp_aurocs = [p["auroc"] for p in per_prot]
     pp_auprcs = [p["auprc"] for p in per_prot]
     print(f"  Per-protein median AUROC: {np.median(pp_aurocs):.4f}  AUPRC: {np.median(pp_auprcs):.4f}")
-    print(f"  V2 was: median AUROC=0.7176")
+    if v2_med is not None:
+        print(f"  V2 was: median AUROC={v2_med:.4f}")
 
-    delta_auroc = test_m["auroc"] - 0.7028
-    delta_auprc = test_m["auprc"] - 0.5987
+    delta_auroc = test_m["auroc"] - v2_auroc
+    delta_auprc = test_m["auprc"] - v2_auprc
     print(f"\n  vs V2: AUROC {delta_auroc:+.4f}  AUPRC {delta_auprc:+.4f}")
 
     results = {
@@ -306,7 +326,7 @@ def main():
     out = os.path.join(args.out_dir, "v3b_esm2_cnn_results.json")
     with open(out, "w") as f: json.dump(results, f, indent=2)
     print(f"\n✅ V3b complete — {out}")
-    if test_m["auroc"] > 0.7028:
+    if test_m["auroc"] > v2_auroc:
         print("  ✅ Beats V2! → next: fine-tune ESM-2 last 2 layers (V3c)")
     else:
         print("  ⚠️  No improvement over V2 → try: larger ESM-2 proj or V3c residue CNN")

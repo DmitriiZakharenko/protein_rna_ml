@@ -28,6 +28,8 @@ import matplotlib.gridspec as gridspec
 import numpy as np
 import pandas as pd
 
+RNG = np.random.default_rng(0)  # fixed seed for the strip-plot jitter
+
 # ── Palette / style ──────────────────────────────────────────────────────────
 COLORS = {
     "v1_mlp":              "#4e79a7",
@@ -184,10 +186,12 @@ def _save_gap_table(data: dict, out_dir: str):
             "model":            MODEL_LABELS.get(m, m),
             "best_val_auroc":   round(best_val_auroc, 4) if best_val_auroc else None,
             "test_auroc":       round(test_auroc, 4)     if test_auroc     else None,
-            "gap_auroc":        round((best_val_auroc or 0) - (test_auroc or 0), 4),
+            "gap_auroc":        (round(best_val_auroc - test_auroc, 4)
+                                 if best_val_auroc is not None and test_auroc is not None else None),
             "best_val_auprc":   round(best_val_auprc, 4) if best_val_auprc else None,
             "test_auprc":       round(test_auprc, 4)     if test_auprc     else None,
-            "gap_auprc":        round((best_val_auprc or 0) - (test_auprc or 0), 4),
+            "gap_auprc":        (round(best_val_auprc - test_auprc, 4)
+                                 if best_val_auprc is not None and test_auprc is not None else None),
             "best_epoch":       d.get("best_epoch"),
             "n_epochs":         len(hist),
         })
@@ -235,7 +239,7 @@ def plot_per_protein(data: dict, out_dir: str, fmt: str):
             pc.set_facecolor(col)
             pc.set_alpha(0.5)
         parts["cmedians"].set_color(col)
-        ax.scatter([i + np.random.uniform(-0.15, 0.15) for _ in aurocs],
+        ax.scatter([i + RNG.uniform(-0.15, 0.15) for _ in aurocs],
                    aurocs, s=12, alpha=0.35, color=col)
 
     ax.set_xticks(range(len(models_with_pp)))
@@ -263,7 +267,7 @@ def plot_per_protein(data: dict, out_dir: str, fmt: str):
                 pc.set_facecolor(col)
                 pc.set_alpha(0.55)
             parts["cmedians"].set_color(col)
-            ax2.scatter([j + np.random.uniform(-0.15, 0.15) for _ in grp],
+            ax2.scatter([j + RNG.uniform(-0.15, 0.15) for _ in grp],
                         grp, s=14, alpha=0.4, color=col)
             ax2.text(j, pp_df["auroc"].min() - 0.03,
                      f"n={len(grp)}", ha="center", fontsize=8, color="gray")

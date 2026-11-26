@@ -15,7 +15,7 @@ STRICT DATA RULES
 - Invalid RNA letters are dropped and counted.
 
 Usage:
-    python scripts/34_cross_protocol_classifiers.py --config configs/cross_protocol.yaml
+    python scripts/34_cross_protocol_classifiers.py --config configs/cross_protocol_invitro.yaml
     python scripts/34_cross_protocol_classifiers.py --within_from_cached
 """
 
@@ -433,7 +433,7 @@ def slice_protein(df: pd.DataFrame, native_name: str) -> pd.DataFrame:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", default="configs/cross_protocol.yaml")
+    ap.add_argument("--config", default="configs/cross_protocol_invitro.yaml")
     ap.add_argument("--roster", default=None)
     ap.add_argument("--model", default=None)
     ap.add_argument("--within_from_cached", action="store_true")

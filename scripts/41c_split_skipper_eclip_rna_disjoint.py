@@ -22,10 +22,10 @@ Typical workflow
   python scripts/41c_split_skipper_eclip_rna_disjoint.py --mode rna
 
   python scripts/06_train_generalized_v2.py \\
-    --data_dir data/benchmarks/skipper_eclip/rna_disjoint \\
+    --data_dir data/benchmarks/skipper_eclip/rna \\
     --rna_max 151 --prot_max 700 \\
-    --model_dir models/saved/skipper_eclip_v2_rna151_rna_disjoint \\
-    --out_dir results/skipper_eclip/rna_disjoint_v2_train
+    --model_dir models/saved/skipper_eclip_v2_rna151_rna \\
+    --out_dir results/skipper_eclip/rna_v2_train
 
   python scripts/41d_eval_eclip_diagnostics.py \\
     --checkpoint models/saved/skipper_eclip_v2_rna151/best_model.pt \\
@@ -215,6 +215,7 @@ def main() -> None:
         args.summary_json = f"results/skipper_eclip/{args.mode}_split_summary.json"
 
     df = load_or_build_pairs(args)
+    _load_build41().assert_protein_sequences_ok(df, context="41c pairs")
     eligible = proteins_with_both_classes(df)
     df = df[df["protein_name"].isin(eligible)].reset_index(drop=True)
     print(f"  Eligible proteins (both classes globally): {len(eligible)}")

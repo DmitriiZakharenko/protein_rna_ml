@@ -5,7 +5,8 @@ build_report_draft.py
 Builds reports/results.html: a sequential report (A data and baselines, B does the evaluation measure interaction, C transfer to new
 proteins, D attempts to improve and controls, E in vivo data, F affinity). Every block is question -> test -> result -> verdict.
 
-Numbers come from result files where they exist locally (results/knn_baseline, v3b_report, v3b_affinity, reverse_transfer, parpi_audit,
+State of 2026-10-30: most numbers are typed in, and results/v3b_report is not read.
+Numbers come from result files where they exist locally (results/knn_baseline, v3b_affinity, reverse_transfer, parpi_audit,
 rna_only_per_protein_honest, mechanistic/figures); results produced on the VM that exist only as logged output are typed in here and cite EXPERIMENT_LOG.
 
 Usage:  python scripts/build_report_draft.py
@@ -81,6 +82,7 @@ def fig_ladder():
 
 
 def fig_bins():
+    # n per bin is from script 55 (max identity), the nn values are from script 59 (identity of the top-bits hit), so the strata differ slightly
     bins = ["no hit /\n<30%", "30-50%", "50-70%", "70-90%", ">=90%"]
     n = [6, 15, 14, 13, 7]
     v2, v4, nn = [0.475, 0.613, 0.667, 0.789, 0.850], [0.525, 0.699, 0.695, 0.884, 0.874], [0.45, 0.71, 0.76, 0.84, 0.85]

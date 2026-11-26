@@ -83,7 +83,7 @@ class Tables:
             rna = np.concatenate([rna, np.zeros((len(rna), 1), rna.dtype)], 1)
             z = np.load(extra_dir / "rna_rnafm.npz", allow_pickle=False)
             n0 = len(rna)
-            self.rna_idx.update({s: n0 + i for i, s in enumerate(z["seqs"])})
+            self.rna_idx.update({s: n0 + i for i, s in enumerate(z["seqs"]) if s not in self.rna_idx})
             rna = np.concatenate([rna, np.concatenate([z["emb"], np.ones((len(z["emb"]), 1), z["emb"].dtype)], 1)])
             z = np.load(extra_dir / "prot_esm2.npz", allow_pickle=False)
             n0 = len(prot)
@@ -187,8 +187,11 @@ def main() -> None:
         ex = pd.read_csv(resolve(args.extra_tsv), sep="\t", usecols=cols, low_memory=False)
         held = set(val.protein_name) | set(test.protein_name) | set(probe.protein_name)
         n0 = ex.protein_name.nunique()
+        dropped = sorted(set(ex.protein_name) & held)
         ex = ex[~ex.protein_name.isin(held)]
-        print(f"extra proteins dropped because the name is in v3b val/test/probe: {n0 - ex.protein_name.nunique()}")
+        print(f"extra proteins dropped because the name is in v3b val/test/probe: {n0 - ex.protein_name.nunique()} {dropped[:20]}")
+        same_train = sorted(set(ex.protein_name) & set(train.protein_name))
+        print(f"extra proteins whose name equals a v3b training protein (kept, embedding of the training protein is used): {len(same_train)} {same_train[:20]}")
         if args.extra_frac < 1.0:
             ex = ex.sample(frac=args.extra_frac, random_state=args.seed)
         train = pd.concat([train, ex], ignore_index=True)

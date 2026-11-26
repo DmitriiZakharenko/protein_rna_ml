@@ -14,6 +14,10 @@ Stages (run in this order; every stage skips work that is already on disk):
                                         (same sequence, different protein: the layout of the cross-protein probe)
                label 0, neg_type gc     random genomic window without overlap, GC within +-0.05 of the paired positive
 
+Dependencies: requests (manifest, download), pyfaidx (build), pandas, numpy.
+Notes: the chromosome of a gc negative is drawn uniformly over chr1-22 and X, not in proportion to chromosome length.
+The TF names that also occur in v3b val/test/probe are removed in script 67 (`--extra_tsv`), not here.
+
 Columns: protein_name, rna_sequence (DNA written with U, as the RNA pipeline expects), protein_sequence, binding_label,
 dataset_source (chip_K562 / chip_HepG2), data_type (dna_chip), neg_type, chrom, start, end, strand.
 
@@ -112,6 +116,10 @@ def stage_download(args) -> None:
         lines = r.text.strip().split("\n")[1:] if r.ok else []
         recs = [l.split("\t") for l in lines if l]
         pick = next((x for x in recs if x[1] == tf), recs[0] if recs else None)
+        if pick and pick[1] != tf:
+            print(f"  UniProt alias match: {tf} -> {pick[0]} (gene {pick[1]})", flush=True)
+        elif not pick:
+            print(f"  UniProt: no reviewed entry for {tf}", flush=True)
         new.append({"tf": tf, "accession": pick[0] if pick else "", "sequence": pick[2] if pick else ""})
         time.sleep(0.1)
     have = pd.concat([have, pd.DataFrame(new)], ignore_index=True)

@@ -8,14 +8,19 @@ Merging strategy:
      - Proteins already in existing splits → stay in the same split
      - New proteins → assign to train (80%), val (10%), test (10%)
        with stratified sampling to balance class ratio
-  4. Save updated splits to data/generalized_v2/
+  4. Save updated splits to data/generalized_v2_expanded/ (refuses a non-empty directory
+     unless --force)
+
+eCLIP rule: rows with dataset == "eclip" always go to train, also when the protein is in
+the existing val or test split. A protein can therefore appear in train through eCLIP and
+in val/test through the existing data, which the invariant below does not cover.
 
 Critical invariant: no protein appears in more than one split.
 This is the key design principle from Phase 1.
 
 Usage:
     python scripts/14_merge_new_data.py
-    python scripts/14_merge_new_data.py --out_dir data/generalized_v2 --dry_run
+    python scripts/14_merge_new_data.py --out_dir data/generalized_v2_expanded --dry_run
 """
 
 import argparse
@@ -240,13 +245,19 @@ def main():
                         help="Directory with existing train/val/test.tsv")
     parser.add_argument("--eclip_path",    default="data/eclip/eclip_all.tsv")
     parser.add_argument("--rnainter_path", default="data/rnainter/rnainter_human.tsv")
-    parser.add_argument("--out_dir",       default="data/generalized_v2",
+    parser.add_argument("--out_dir",       default="data/generalized_v2_expanded",
                         help="Output directory for updated splits")
     parser.add_argument("--val_frac",      type=float, default=0.10)
     parser.add_argument("--test_frac",     type=float, default=0.10)
     parser.add_argument("--seed",          type=int,   default=42)
     parser.add_argument("--dry_run",       action="store_true")
+    parser.add_argument("--force",         action="store_true",
+                        help="Allow writing into a non-empty output directory")
     args = parser.parse_args()
+
+    if (not args.dry_run and not args.force and os.path.isdir(args.out_dir)
+            and os.listdir(args.out_dir)):
+        raise SystemExit(f"Output directory is not empty: {args.out_dir} (use --force to overwrite)")
 
     print("\n=== Merging datasets ===")
     print(f"  Existing:  {args.existing_dir}")
@@ -266,7 +277,7 @@ def main():
         print("\n⚠️  No new data found. Run scripts 12 and 13 first.")
         print("  To run scripts 12 and 13:")
         print("    python scripts/12_download_eclip.py")
-        print("    python scripts/13_download_rnainter.py")
+        print("    python scripts/archive/13_download_rnainter.py")
         return
 
     # 3. Assign splits to new data

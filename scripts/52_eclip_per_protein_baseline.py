@@ -20,7 +20,9 @@ Usage
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -32,6 +34,15 @@ from sklearn.model_selection import GroupKFold
 from sklearn.preprocessing import StandardScaler
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _load_build41():
+    path = ROOT / "scripts" / "41_build_skipper_eclip_benchmark.py"
+    spec = importlib.util.spec_from_file_location("build_skipper_41", path)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)
+    return mod
 
 
 def cv_auroc(df: pd.DataFrame, k_max: int, n_splits: int) -> float | None:
@@ -61,7 +72,9 @@ def main() -> None:
     args = ap.parse_args()
 
     df = pd.read_csv(ROOT / args.pairs_tsv if not Path(args.pairs_tsv).is_absolute() else args.pairs_tsv,
-                     sep="\t", usecols=["protein_name", "rna_sequence", "binding_label"])
+                     sep="\t", usecols=["protein_name", "protein_sequence", "rna_sequence", "binding_label"])
+    _load_build41().assert_protein_sequences_ok(df, context="52 pairs")
+    df = df.drop(columns=["protein_sequence"])
     rows = []
     for prot, g in df.groupby("protein_name"):
         a = cv_auroc(g.reset_index(drop=True), args.k_max, args.n_splits)

@@ -4,9 +4,15 @@ Script 12: Download and process eCLIP data from ENCODE.
 Strategy:
   POSITIVES  — IDR peaks (output_type=peaks, reproducible binding sites)
                Extract ±30 nt around peak summit → 60 nt window
-  NEGATIVES  — Flanking regions of the same chromosome, same length,
-               matched GC content (±0.05), no overlap with any peak for this RBP.
-               These are real expressed RNA regions confirmed NOT to be enriched.
+  NEGATIVES  — Flanking regions of the same chromosome, same length.
+               GC filter: a negative is kept if its GC lies in [min(pos GC) - 0.08,
+               max(pos GC) + 0.08], which is a range filter and not per-sequence matching.
+               Overlap is checked only against the first max_peaks peaks (top by score),
+               not against all peaks of the RBP.
+
+Known coordinate behaviour (not changed, to keep data/eclip reproducible):
+  The BED start is 0-based, but the Ensembl region request is 1-based inclusive.
+  Each window is requested as summit-30..summit+30 (61 nt) and truncated to 60 nt with seq[:60].
 
 For each RBP:
   1. Query ENCODE API → find peak BED files (GRCh38, released)

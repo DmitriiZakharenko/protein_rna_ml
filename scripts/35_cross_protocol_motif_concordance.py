@@ -148,7 +148,7 @@ def spearman_shared(sa: dict[str, float], sb: dict[str, float]) -> tuple[float, 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", default="configs/cross_protocol.yaml")
+    ap.add_argument("--config", default="configs/cross_protocol_invitro.yaml")
     ap.add_argument("--top_n", type=int, default=10)
     ap.add_argument("--out_dir", default=None)
     args = ap.parse_args()

@@ -53,7 +53,7 @@ from torch.utils.data import DataLoader
 from sklearn.metrics import roc_auc_score, average_precision_score
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from src.models.interaction_model import RNABindingV4, DatasetSourceEmbedding
+from src.models.interaction_model import RNABindingV4
 from src.data.dataset import SeqDataset
 
 

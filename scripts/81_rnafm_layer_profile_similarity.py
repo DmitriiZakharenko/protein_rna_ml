@@ -4,7 +4,7 @@
 ------------------------------------
 RNA-side counterpart of script 80: which RNA-FM layer ranks RNAcompete probes by their binding pattern across proteins?
 
-For a random subset of probes (30-40 nt, SetA and SetB), the binding vector is the normalised probe intensity in each of the 175
+For a random subset of probes (30-41 nt as present in the score file, no length filter is applied, SetA and SetB), the binding vector is the normalised probe intensity in each of the 175
 proteins of script 80 (mean over the experiments of the same protein sequence, every protein column standardised over all probes).
 The Pearson correlation between the vectors of two probes gives an n x n binding-similarity matrix; for every RNA-FM layer the cosine
 similarity of mean-pooled nucleotide embeddings (raw and centred over probes) gives a second matrix. Per layer, the Spearman correlation

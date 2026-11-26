@@ -17,9 +17,13 @@ Mechanistic validation of trained V2/V4 models on held-out proteins.
      domain_all        every residue of the domain
      domain_contact    F/Y/W/K/R inside the domain (RNA-contact-like residues)
      domain_random     the same number of random residues inside the domain
-     outside_contact   the same number of F/Y/W/K/R outside the domain
-     outside_segment   a random segment of equal length outside the domain
+     outside_contact   the same number of F/Y/W/K/R outside the domain (positions before the model input length only)
+     outside_segment   a random stretch of equal length of the non-domain residues (before the model input length)
    A model that uses the domain should lose more for domain_all / domain_contact than for the outside controls.
+
+Domain table: hmmscan is run with -E 1e-3 --domE 1e-3, and --domE acts on the conditional E-value. The stored `ievalue`
+column is the independent E-value and can exceed 1e-3 (about half of the rows in results/mechanistic/*_domain_positions.tsv).
+`--domain_max_ievalue X` additionally drops rows with ievalue >= X (default 0 = off, the criterion of the logged results).
 
 Usage
 -----
@@ -45,6 +49,7 @@ import numpy as np
 import pandas as pd
 import torch
 from scipy.stats import spearmanr, wilcoxon
+from sklearn.metrics import roc_auc_score
 
 ROOT = Path(__file__).resolve().parents[1]
 K = 5
@@ -111,7 +116,7 @@ def parse_model(spec: str) -> dict:
     return cfg
 
 
-def domain_positions_from_hmmscan(prots: dict[str, str]) -> pd.DataFrame:
+def domain_positions_from_hmmscan(prots: dict[str, str], max_ievalue: float = 0.0) -> pd.DataFrame:
     fam = load_mod("fam56", "56_domain_family_audit.py")
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
@@ -123,6 +128,8 @@ def domain_positions_from_hmmscan(prots: dict[str, str]) -> pd.DataFrame:
             if line.startswith("#"):
                 continue
             f = line.split()
+            if max_ievalue and float(f[12]) >= max_ievalue:
+                continue
             name = f[0]
             famlabel = fam.pfam_family([name])
             if famlabel != "other":
@@ -144,6 +151,8 @@ def main() -> None:
     ap.add_argument("--min_rows", type=int, default=300, help="min test rows per protein")
     ap.add_argument("--n_mut_rows", type=int, default=200, help="positives per protein for mutagenesis")
     ap.add_argument("--max_proteins", type=int, default=0)
+    ap.add_argument("--domain_max_ievalue", type=float, default=0.0,
+                    help="also drop domain rows with ievalue >= this value (0 = off, hmmscan conditional E-value only)")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--no_cuda", action="store_true")
     args = ap.parse_args()
@@ -235,7 +244,6 @@ def main() -> None:
             sh_sp.append(spearman(np.bincount(owners, weights=lg, minlength=len(KMERS)) / args.n_ctx, true_enr[n]))
         result["models"][cfg["name"]] = {"motif_spearman_shuffled_protein_mean": float(np.mean(sh_sp))}
         result["models"][cfg["name"]]["_cfg"] = cfg
-        result["models"][cfg["name"]]["_loaded"] = True
         result.setdefault("_cache", {})[cfg["name"]] = (model, fwd, cfg)
     motif = pd.DataFrame(rows_motif)
 
@@ -258,10 +266,12 @@ def main() -> None:
     if args.domain_positions and resolve(args.domain_positions).exists():
         dom = pd.read_csv(resolve(args.domain_positions), sep="\t")
     else:
-        dom = domain_positions_from_hmmscan({n: prot_seq[n] for n in names})
+        dom = domain_positions_from_hmmscan({n: prot_seq[n] for n in names}, args.domain_max_ievalue)
         out_dom = ROOT / "results/mechanistic"
         out_dom.mkdir(parents=True, exist_ok=True)
         dom.to_csv(out_dom / f"{args.name}_domain_positions.tsv", sep="\t", index=False)
+    if args.domain_max_ievalue:
+        dom = dom[dom.ievalue < args.domain_max_ievalue]
     dom = dom[dom.protein_name.isin(names)]
     rows_mut = []
     for cfg_name, (model, fwd, cfg) in result.pop("_cache").items():
@@ -271,7 +281,9 @@ def main() -> None:
             mask_dom = np.zeros(len(seq), dtype=bool)
             for s, e in zip(d.start, d.end):
                 mask_dom[s - 1:e] = True
-            if mask_dom.sum() < 20 or (~mask_dom).sum() < mask_dom.sum() or mask_dom[cfg["prot_max"]:].any():
+            mask_out = ~mask_dom
+            mask_out[cfg["prot_max"]:] = False  # residues beyond the model input are truncated, mutating them has no effect
+            if mask_dom.sum() < 20 or mask_out.sum() < mask_dom.sum() or mask_dom[cfg["prot_max"]:].any():
                 continue
             g = test[test.protein_name == n]
             pos = g[g.binding_label == 1].rna_sequence.drop_duplicates()
@@ -285,9 +297,9 @@ def main() -> None:
             n_c = int((mask_dom & contact).sum())
             if n_c < 3:
                 continue
-            idx_dom, idx_out = np.where(mask_dom)[0], np.where(~mask_dom)[0]
-            idx_out_contact = np.where(~mask_dom & contact)[0]
-            seg_start = int(rng.integers(0, len(seq) - mask_dom.sum() + 1))
+            idx_dom, idx_out = np.where(mask_dom)[0], np.where(mask_out)[0]
+            idx_out_contact = np.where(mask_out & contact)[0]
+            rng.integers(0, len(seq) - mask_dom.sum() + 1)  # value unused, keeps the random stream of earlier runs
             conds = {
                 "domain_all": idx_dom,
                 "domain_contact": np.where(mask_dom & contact)[0],
@@ -303,7 +315,6 @@ def main() -> None:
                 ms = "".join(mut)
                 mp = logits(model, fwd, sf, pos, ms, cfg["rna_max"], cfg["prot_max"], device)
                 mn = logits(model, fwd, sf, neg, ms, cfg["rna_max"], cfg["prot_max"], device)
-                from sklearn.metrics import roc_auc_score
                 y = np.r_[np.ones(len(pos)), np.zeros(len(neg))]
                 rows_mut.append({"model": cfg_name, "protein": n, "family": d.family.iloc[0], "condition": cname, "n_mut": int(len(ix)),
                                  "drop_pos_logit": float(base_p.mean() - mp.mean()),

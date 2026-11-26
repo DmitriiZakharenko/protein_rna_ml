@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Bridge test: fine-tune the in vitro V2 (v3a) on eCLIP and evaluate the
 # protein-specific signal with the shuffle control.
-#   FT_A  cross_protein_neg  (protein-disjoint, GC-matched cross-protein negatives)
+#   FT_A  cross_protein_neg  (protein-disjoint, other proteins' positives as negatives)
 #   FT_B  protein_and_rna    (protein-disjoint, genomic negatives)
 # Both at lr 1e-4 starting from V2_V3A_CKPT; compare with from-scratch runs.
 set -euxo pipefail

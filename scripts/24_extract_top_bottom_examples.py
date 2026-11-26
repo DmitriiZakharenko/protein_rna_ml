@@ -49,8 +49,8 @@ htr_selex
 ucRBP filtering (--ucrbp_mode)
   Restricts processing to the 23 reproducible ucRBPs identified by the pass/fail
   classifier in Ray & Laverty et al. 2023 (Sci. Rep. 13:5238).
-  Pass --ucrbp_whitelist <file> (one protein name per line) for the full list.
-  The partial built-in list contains 11 verified names from the paper text.
+  Default whitelist: configs/ucrbp_23_reproducible.txt (one protein name per line,
+  "#" lines skipped). The built-in list UCRBP_23_KNOWN is a fallback copy.
 
 Output
 ------
@@ -106,8 +106,7 @@ def portable_path(path: Path | str | None) -> str | None:
 
 # ---------------------------------------------------------------------------
 # Known 23 reproducible ucRBPs – Ray & Laverty et al. 2023, Sci. Rep. 13:5238
-# Full list is in Supplementary Table S1; partial list verified from paper text.
-# Complete via --ucrbp_whitelist or update this list from the supplement.
+# Fallback copy of configs/ucrbp_23_reproducible.txt (same 23 names).
 # ---------------------------------------------------------------------------
 UCRBP_23_KNOWN: list[str] = [
     # Class 1 – ribosomal / ribosomal-domain proteins (8)
@@ -862,7 +861,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--ucrbp_mode", action="store_true",
                    help="Restrict to 23 reproducible ucRBPs (Ray & Laverty et al. 2023).")
     p.add_argument("--ucrbp_whitelist", default=None,
-                   help="File with one ucRBP protein name per line (overrides built-in list).")
+                   help="File with one ucRBP protein name per line (default: configs/ucrbp_23_reproducible.txt).")
     p.add_argument("--high_confidence_only", action="store_true",
                    help="[rbns] Keep only rows where high_confidence==True.")
     p.add_argument("--min_pos", type=int, default=20,
@@ -886,7 +885,7 @@ def main() -> None:
         sys.exit(f"ERROR: --data_file not found: {data_path}")
 
     if args.protocol == "rnacompete" and args.dataset_label:
-        slug = args.dataset_label.lower().replace("rnacompete_", "rnacompete_")
+        slug = args.dataset_label.lower()
         out_dir = Path(args.output_dir) / slug
     else:
         out_dir = Path(args.output_dir) / args.protocol
@@ -950,18 +949,22 @@ def main() -> None:
     # ── ucRBP whitelist ────────────────────────────────────────────────────
     ucrbp_allowed: set[str] | None = None
     if args.ucrbp_mode:
+        default_wl = Path(__file__).resolve().parents[1] / "configs" / "ucrbp_23_reproducible.txt"
         if args.ucrbp_whitelist:
             wl = Path(args.ucrbp_whitelist)
             if not wl.exists():
                 sys.exit(f"ERROR: --ucrbp_whitelist not found: {wl}")
-            ucrbp_allowed = set(wl.read_text().strip().splitlines())
-            print(f"ucRBP whitelist: {len(ucrbp_allowed)} proteins")
+        else:
+            wl = default_wl if default_wl.exists() else None
+        if wl is not None:
+            ucrbp_allowed = {
+                ln.strip() for ln in wl.read_text().splitlines()
+                if ln.strip() and not ln.strip().startswith("#")
+            }
+            print(f"ucRBP whitelist: {len(ucrbp_allowed)} proteins ({wl})")
         else:
             ucrbp_allowed = set(UCRBP_23_KNOWN)
-            print(
-                f"ucRBP mode: built-in partial list ({len(ucrbp_allowed)} proteins).\n"
-                "  TIP: pass --ucrbp_whitelist to use the full 23 from Supplementary Table S1."
-            )
+            print(f"ucRBP mode: built-in list ({len(ucrbp_allowed)} proteins).")
 
     # ── MEME motif dir (HTR-SELEX) ─────────────────────────────────────────
     motif_dir: Path | None = None

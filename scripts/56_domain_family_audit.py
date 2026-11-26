@@ -34,6 +34,7 @@ PFAM_HMM = "data/external/pfam/Pfam-A.hmm"
 FAMILIES = [("RRM", "RRM"), ("KH_", "KH"), ("zf-CCCH", "CCCH"), ("zf-CCHC", "CCHC"), ("zf-C2H2", "C2H2"),
             ("DEAD", "DEAD"), ("dsrm", "dsRBD"), ("PUF", "PUF"), ("CSD", "CSD"), ("La", "La"), ("YTH", "YTH"),
             ("S1", "S1"), ("Piwi", "Piwi"), ("PAZ", "PAZ")]
+EXCLUDE = {"PUF_NOP9", "CSDE1"}  # share a prefix with PUF / CSD but are not those families
 MANIFEST = "data/raw/eclip_skipper/manifests/encode_eclip_rbp_id_best_acc_seq.added_domain_annot.tsv"
 
 
@@ -49,6 +50,8 @@ def norm(name: str) -> str:
 def pfam_family(hit_names: list[str]) -> str:
     fams = []
     for h in hit_names:
+        if h in EXCLUDE:
+            continue
         for pre, fam in FAMILIES:
             if h == pre or h.startswith(pre):
                 if fam not in fams:

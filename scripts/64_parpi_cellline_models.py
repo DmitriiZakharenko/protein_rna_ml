@@ -8,8 +8,10 @@ dataset as the PaRPI code, but with a proper validation split (10% of train) for
   rna_cnn       per-dataset RNA-only CNN (one-hot, 4 channels)              - protein-free, DeepBind-like
   rna_shape_cnn per-dataset CNN with in vivo icSHAPE (value + missing flag) - protein-free, PrismNet-like
   pooled_v2     one V2 dual-branch CNN (RNA one-hot + protein one-hot) trained on all datasets of the cell line
-  pooled_v2_x   same model evaluated with protein sequences permuted across datasets (protein-dependence control)
-  pooled_cross  pooled V2 trained and evaluated with cross-RBP negatives (negatives = other RBPs' positives)
+  pooled_v2_shuffled_protein  same model evaluated with protein sequences permuted across datasets (protein-dependence control)
+  pooled_cross_rbp  pooled V2 trained and evaluated with cross-RBP negatives (negatives = other RBPs' positives, windows identical
+                to the dataset's own positives removed). The own positives are split 80/20 in file order (first 80% train, last
+                20% test), not at random, and an equal number of negatives is taken per part.
 
 Reported: per-dataset test AUROC, medians, and the published PaRPI/HDRNet/PrismNet/DeepBind AUC for the same datasets.
 
@@ -217,6 +219,8 @@ def main() -> None:
     for k, p in packs.items():
         own = pos_x[k]
         others = torch.cat([pos_x[o] for o in packs if o != k])
+        own_keys = {x.numpy().tobytes() for x in own}
+        others = others[[i for i, x in enumerate(others) if x.numpy().tobytes() not in own_keys]]
         others = others[torch.randperm(len(others))[: len(own)]]
         n = len(own)
         cut = int(0.8 * n)

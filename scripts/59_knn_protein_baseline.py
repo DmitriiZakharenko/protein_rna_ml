@@ -16,6 +16,10 @@ the models of the training proteins most similar to P (MMseqs2 identity; weights
   mean  mean over ALL training proteins (protein-independent RNA prior; also the fallback
         for test proteins with no MMseqs2 hit)
 
+`best_identity` here is the identity of the highest-bit-score hit, not the highest identity as in script 55, so its identity bins differ from script 55
+(v3b test, proteins below 30%: 24 here, 9 in script 55). Standard-test rows above --max_eval_rows (150,000) are randomly subsampled,
+the probe is used in full. The headline scorer (nn1_lr) is chosen among the eight scorers below with the test sets in view.
+
 No protein information beyond sequence similarity is used, so on a cross-protein-negative probe
 (same RNA, different protein) any AUROC above 0.5 is pure homology transfer.
 

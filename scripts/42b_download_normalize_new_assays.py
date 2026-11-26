@@ -10,6 +10,8 @@ Outputs under data/sanitized/new_assays/:
 
 Raw files: data/raw/new_assays/
 
+Label rule for PRBAB: binding_label = 1 if Kd <= 1000 nM, else 0. A missing Kd gives 0.
+
 Usage:
     python scripts/42b_download_normalize_new_assays.py
     python scripts/42b_download_normalize_new_assays.py --download-hurpa --skip-download

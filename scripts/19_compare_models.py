@@ -12,7 +12,7 @@ normalized leaderboard score, and produces:
 
 Leaderboard score (composite):
   score = 0.50 * test_auroc + 0.30 * test_auprc + 0.20 * per_protein_median_auroc
-  (ZHMolGraph reference: 0.50*0.798 + 0.30*0.820 + 0.20*0.798 = 0.804)
+  (ZHMolGraph row shows its published AUROC and AUPRC only, no composite score.)
 
 Usage:
   # Compare all single-seed results:
@@ -49,7 +49,7 @@ except ImportError:
 ZHMOLGRAPH = {
     "test_auroc": 0.798,
     "test_auprc": 0.820,
-    "per_protein_median": 0.798,  # approximate, not published directly
+    "per_protein_median": None,  # not published
     "label": "ZHMolGraph (target)",
 }
 
@@ -66,6 +66,8 @@ MODEL_FILES = {
     "v3b_esm2_cnn":     "v3b_esm2_cnn_results.json",
     "v3c_esm2_residue": "v3c_esm2_residue_results.json",
 }
+# Runs trained while the sampler and pos_weight were both active (fixed 2026-05-13)
+DOUBLE_WEIGHTED = {"v1_mlp", "v3_esm2"}
 MODEL_LABELS = {
     "v1_mlp":           "V1 MLP",
     "v2_cnn":           "V2 CNN (anchor)",
@@ -82,13 +84,14 @@ COLORS = {
     "ZHMolGraph (target)": "#000000",
 }
 
-plt.rcParams.update({
-    "font.family": "sans-serif",
-    "font.size":   11,
-    "axes.spines.top":   False,
-    "axes.spines.right": False,
-    "figure.dpi": 150,
-})
+if HAS_MATPLOTLIB:
+    plt.rcParams.update({
+        "font.family": "sans-serif",
+        "font.size":   11,
+        "axes.spines.top":   False,
+        "axes.spines.right": False,
+        "figure.dpi": 150,
+    })
 
 
 # ── Data extraction ───────────────────────────────────────────────────────────
@@ -103,7 +106,7 @@ def load_single_seed(results_dir: str) -> dict[str, dict]:
             d = json.load(fh)
         test = d.get("test_metrics", {})
         pp   = d.get("per_protein", [])
-        pp_aurocs = [p["auroc"] for p in pp if "auroc" in p]
+        pp_aurocs = [p["auroc"] for p in pp if p.get("auroc") is not None and p["auroc"] == p["auroc"]]
         records[key] = {
             "label":              MODEL_LABELS.get(key, key),
             "test_auroc":         test.get("auroc"),
@@ -116,7 +119,7 @@ def load_single_seed(results_dir: str) -> dict[str, dict]:
             "n_seeds":            1,
             "auroc_std":          None,
             "auprc_std":          None,
-            "is_bug_affected":    True,   # pre-Phase-1 models are bug-affected
+            "is_bug_affected":    key in DOUBLE_WEIGHTED,
             "source_file":        path,
             "per_protein_list":   pp_aurocs,
         }
@@ -134,7 +137,7 @@ def load_multiseed(multiseed_dir: str, existing: dict[str, dict]) -> dict[str, d
             s = json.load(fh)
         key = model_dir.name  # e.g. "v2_cnn"
         agg = s.get("aggregate", {})
-        record = existing.get(key, {})
+        record = dict(existing.get(key, {}))  # copy, so the single-seed row stays unchanged
         record.update({
             "label":          MODEL_LABELS.get(key, key) + " (multi-seed)",
             "n_seeds":        s.get("n_runs", 1),
@@ -170,14 +173,16 @@ def build_leaderboard(records: dict[str, dict]) -> pd.DataFrame:
             "test_auprc":         r.get("test_auprc"),
             "per_protein_median": r.get("per_protein_median"),
             "best_val_auroc":     r.get("best_val_auroc"),
-            "val_test_gap":       (r.get("best_val_auroc", 0) or 0) - (r.get("test_auroc", 0) or 0),
+            "val_test_gap":       (r["best_val_auroc"] - r["test_auroc"]
+                                    if r.get("best_val_auroc") is not None and r.get("test_auroc") is not None
+                                    else None),
             "leaderboard_score":  score,
             "n_seeds":            r.get("n_seeds", 1),
             "is_bug_affected":    r.get("is_bug_affected", False),
             "auroc_std":          r.get("auroc_std"),
         })
     # Add ZHMolGraph reference
-    zh_score = sum(LEADERBOARD_WEIGHTS[m] * ZHMOLGRAPH[m] for m in LEADERBOARD_WEIGHTS)
+    zh_score = None  # composite needs the per-protein median, which is not published
     rows.append({
         "model":              ZHMOLGRAPH["label"],
         "test_auroc":         ZHMOLGRAPH["test_auroc"],
@@ -229,8 +234,9 @@ def plot_leaderboard_bar(df: pd.DataFrame, records: dict, out_dir: str):
 
         ax.barh(model_order[::-1], vals.reindex(model_order[::-1]), color=colors[::-1],
                 alpha=0.8, edgecolor="none")
-        ax.axvline(ZHMOLGRAPH.get(metric, 0.798), color="black", lw=1.2, ls=":",
-                   label=f"ZHMolGraph {ZHMOLGRAPH.get(metric, 0.798):.3f}")
+        ref = ZHMOLGRAPH.get(metric)
+        if ref is not None:
+            ax.axvline(ref, color="black", lw=1.2, ls=":", label=f"ZHMolGraph {ref:.3f}")
         ax.set_xlabel(metric.replace("_", " "))
         ax.set_title(f"Test {metric}")
         ax.legend(fontsize=8)

@@ -12,12 +12,15 @@ Usage:  python scripts/build_esm_layer_report.py
 """
 from __future__ import annotations
 
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 D = ROOT / "results" / "esm_layer_profile"
+# Fallback values of the logged VM run (results/esm_layer_analyze.log, 175 proteins, 500 permutations), used only when
+# results/esm_layer_profile/layer_correlation.tsv is absent. The same holds for the other fallbacks in main().
 RAW = [0.1118, 0.0757, 0.0718, 0.0716, 0.0744, 0.0815, 0.0838, 0.0805, 0.0755, 0.066, 0.0679, 0.0713, 0.0857, 0.0894, 0.082, 0.0818,
        0.0797, 0.0851, 0.0905, 0.0916, 0.0939, 0.0974, 0.1041, 0.1029, 0.1049, 0.1074, 0.1092, 0.1084, 0.1087, 0.1135, 0.1248, 0.1308,
        0.1322, 0.0873]
@@ -29,7 +32,9 @@ CEN = [0.1194, 0.1174, 0.1122, 0.1127, 0.1183, 0.1197, 0.1193, 0.1165, 0.1172, 0
 def load() -> pd.DataFrame:
     f = D / "layer_correlation.tsv"
     if f.exists():
-        df = pd.read_csv(f, sep="\t")[["layer", "spearman_raw", "spearman_centred"]]
+        head = pd.read_csv(f, sep="\t", nrows=0).columns
+        keep = ["layer", "spearman_raw", "spearman_centred"] + [c for c in ("mantel_p_raw", "mantel_p_centred") if c in head]
+        df = pd.read_csv(f, sep="\t")[keep]
     else:
         df = pd.DataFrame({"layer": range(34), "spearman_raw": RAW, "spearman_centred": CEN})
     b = D / "layer_bootstrap.tsv"
@@ -66,6 +71,21 @@ def svg(df: pd.DataFrame) -> str:
 
 def main() -> None:
     df = load()
+    n_prot, max_len, date = 175, None, "19.11.26"  # fallbacks from the logged run
+    exp = D / "experiments.tsv"
+    if exp.exists():
+        seqs = pd.read_csv(exp, sep="\t").protein_sequence.drop_duplicates()
+        n_prot, max_len = len(seqs), int(seqs.str.len().max())  # equals the proteins with Z-scores in the logged run
+    src = next((x for x in (D / "layer_correlation.tsv", D / "layer_bootstrap.tsv") if x.exists()), None)
+    if src is not None:
+        date = datetime.fromtimestamp(src.stat().st_mtime).strftime("%d.%m.%y")
+    n_pairs = n_prot * (n_prot - 1) // 2
+    long_txt = f"none of the {n_prot} is that long" if max_len is None or max_len <= 1022 else f"the longest of the {n_prot} has {max_len} residues"
+    if "mantel_p_raw" in df.columns:
+        pv = df[["mantel_p_raw", "mantel_p_centred"]].to_numpy()
+        mantel = f"Mantel p between {pv.min():.3f} and {pv.max():.3f} over the layers"
+    else:
+        mantel = "Mantel p = 0.002 for every layer (smallest value possible with 500 permutations)"
     ci = "Shaded bands are 95% bootstrap intervals over proteins." if "spearman_raw_lo" in df.columns else "No confidence intervals (not yet computed)."
     pick = [0, 5, 10, 15, 20, 22, 26, 30, 32, 33]
     has_ci = "spearman_raw_lo" in df.columns and df["spearman_raw_lo"].notna().all()
@@ -88,7 +108,8 @@ def main() -> None:
     if has_ci:
         ci_bullets = (
             f"<li>Intervals (95%, 200 bootstrap resamples over proteins). Layers above layer 33 with an interval of the difference that excludes 0: "
-            f"raw {lst(df.diff_vs33_raw_lo > 0)}; centred {lst(df.diff_vs33_centred_lo > 0)}. No layer is below layer 33.</li>"
+            f"raw {lst(df.diff_vs33_raw_lo > 0)}; centred {lst(df.diff_vs33_centred_lo > 0)}.</li>"
+            f"<li>Layers below layer 33 with an interval of the difference that excludes 0: raw {lst(df.diff_vs33_raw_hi < 0)}; centred {lst(df.diff_vs33_centred_hi < 0)}.</li>"
             f"<li>Layers above layer 0 (amino-acid composition) with an interval that excludes 0: raw {lst(df.diff_vs0_raw_lo > 0)}; "
             f"centred {lst(df.diff_vs0_centred_lo > 0)}. Layers below layer 0: raw {lst(df.diff_vs0_raw_hi < 0)}; centred {lst(df.diff_vs0_centred_hi < 0)}.</li>")
     best_r, best_c = df.loc[df.spearman_raw.idxmax()], df.loc[df.spearman_centred.idxmax()]
@@ -102,17 +123,17 @@ th,td{{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left}}th{
 .note{{color:var(--mut);font-size:15px}}li{{margin:6px 0}}@media (max-width:760px){{body{{font-size:16px}}}}
 </style></head><body><main>
 <h1>Which ESM-2 layer reflects RNA binding similarity of RBPs?</h1>
-<p class="meta">Dmitrii Zakharenko, 19.11.26. Test on RNAcompete data; protein embeddings are frozen ESM-2 650M.</p>
+<p class="meta">Dmitrii Zakharenko, {date}. Test on RNAcompete data; protein embeddings are frozen ESM-2 650M.</p>
 <h2>Method</h2><ol>
-<li>Binding vector per protein: published RNAcompete 7-mer Z-scores (16,382 7-mers; mean over the experiments of the same protein sequence); 175 proteins.</li>
-<li>Binding-similarity matrix: Pearson correlation between the 175 vectors.</li>
-<li>Embedding-similarity matrices: mean-pooled residue embeddings of every ESM-2 layer (0-33), cosine similarity, raw and centred over proteins. Proteins longer than 1,022 residues would use windows of 1,022 with overlap 511 (none of the 175 is that long).</li>
-<li>Per layer: Spearman correlation between the upper triangles of the two matrices (15,225 protein pairs); Mantel permutation test (500 permutations).</li></ol>
+<li>Binding vector per protein: published RNAcompete 7-mer Z-scores (16,382 7-mers; mean over the experiments of the same protein sequence); {n_prot} proteins.</li>
+<li>Binding-similarity matrix: Pearson correlation between the {n_prot} vectors.</li>
+<li>Embedding-similarity matrices: mean-pooled residue embeddings of every ESM-2 layer (0-33), cosine similarity, raw and centred over proteins. Proteins longer than 1,022 residues would use windows of 1,022 with overlap 511 ({long_txt}).</li>
+<li>Per layer: Spearman correlation between the upper triangles of the two matrices ({n_pairs:,} protein pairs); Mantel permutation test (500 permutations).</li></ol>
 <h2>Result</h2>
 <figure style="margin:8px 0">{svg(df)}<figcaption class="note">{ci}</figcaption></figure>
 <div style="overflow-x:auto"><table>{head}{rows}</table></div>
 <ul>
-<li>All layers correlate positively with binding similarity (rho {df.spearman_raw.min():.2f}-{df.spearman_centred.max():.2f}); Mantel p = 0.002 for every layer (smallest value possible with 500 permutations).</li>
+<li>All layers correlate positively with binding similarity (rho {df.spearman_raw.min():.2f}-{df.spearman_centred.max():.2f}); {mantel}.</li>
 <li>Maximum: layer {int(best_r.layer)} for raw cosine ({best_r.spearman_raw:.3f}), layer {int(best_c.layer)} for centred cosine ({best_c.spearman_centred:.3f}).</li>
 <li>The last layer (33), used by the frozen heads, is lower: {df.spearman_raw.iloc[-1]:.3f} raw, {df.spearman_centred.iloc[-1]:.3f} centred.</li>
 {ci_bullets}<li>Layer 0 (token embedding, i.e. amino-acid composition) reaches {df.spearman_raw.iloc[0]:.3f} / {df.spearman_centred.iloc[0]:.3f}, similar to most deep layers.</li></ul>

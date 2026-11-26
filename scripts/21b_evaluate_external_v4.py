@@ -26,7 +26,6 @@ import json
 import os
 import sys
 
-import numpy as np
 import pandas as pd
 import torch
 from sklearn.metrics import average_precision_score, roc_auc_score
@@ -221,6 +220,8 @@ def main():
     print(f"  Device: {device}")
 
     model, meta = load_v4_model(args.checkpoint, device)
+    if meta["use_source_emb"]:
+        print("  WARNING: scoring with a zero source embedding, which training never used.")
     print(f"  Loaded V4 | interaction={meta['interaction']} "
           f"| source_emb={meta['use_source_emb']} | epoch={meta.get('epoch')}")
 

@@ -81,7 +81,7 @@ class DatasetSourceEmbedding(nn.Module):
     Maps a source index (int) to a dense vector concatenated to the MLP input.
 
     Sources are indexed by DATASET_SOURCES dict.
-    Unknown sources map to index 0 (a learnable 'unknown' embedding).
+    Unknown sources map to index 0, which is a fixed zero vector (padding_idx=0, no gradient).
     """
 
     DATASET_SOURCES = {

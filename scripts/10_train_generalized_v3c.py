@@ -8,11 +8,12 @@ Architecture:
                                         concat → 512-d
                                         MLP [256, 64] → binding logit
 
-Why this beats V3 and V3b (mean-pool ESM-2):
+Rationale (residue-level instead of mean-pooled ESM-2):
     Mean-pool dilutes the binding domain signal: a 300-aa protein has only
     ~30-50 residues in the actual RNA-binding domain. Averaging all 300
-    dilutes the signal by ~6-10x. Two failed experiments (V3, V3b) confirmed
-    this empirically.
+    dilutes the signal by ~6-10x (hypothesis, not tested separately).
+
+Measured test AUROC: 0.685 (V3: 0.634, V3b: 0.666, V2: 0.690).
 
     V3c applies Conv1D + global max pooling OVER residue positions, just as
     V2 applied Conv1D + max pooling over sequence characters. The model
@@ -196,6 +197,20 @@ def make_sampler(labels):  # noqa: F401  (kept for reference, not called)
     return WeightedRandomSampler(torch.tensor(w, dtype=torch.float32), len(w), replacement=True)
 
 
+def v2_reference(path="results/generalized/v2_cnn_results.json"):
+    """Post-fix V2 test AUROC, AUPRC and per-protein median AUROC (file if present, else constants)."""
+    auroc, auprc, med = 0.6903, 0.5796, None
+    try:
+        with open(path) as fh:
+            d = json.load(fh)
+        auroc = d["test_metrics"]["auroc"]
+        auprc = d["test_metrics"]["auprc"]
+        med = d.get("per_protein_summary", {}).get("median")
+    except (OSError, KeyError, ValueError):
+        pass
+    return auroc, auprc, med
+
+
 @torch.no_grad()
 def evaluate(model, loader, device):
     model.eval()
@@ -348,7 +363,7 @@ def main():
             torch.save({
                 "epoch": epoch,
                 "model_state": model.state_dict(),
-                "val_metrics": val_m,
+                "val_metrics": {k: v for k, v in val_m.items() if k != "probs"},
                 "args": vars(args),
             }, ckpt_path)
         else:
@@ -387,16 +402,17 @@ def main():
             auprc = float(average_precision_score(labs, prbs))
         else:
             auroc = auprc = float("nan")
-        ds_name = grp["dataset"].iloc[0] if "dataset" in grp.columns else "unknown"
+        ds_col = "dataset" if "dataset" in grp.columns else "dataset_source"
+        ds_name = grp[ds_col].iloc[0] if ds_col in grp.columns else "unknown"
         per_prot.append({"protein": prot, "dataset": ds_name,
                          "auroc": round(auroc, 6), "auprc": round(auprc, 6), "n": len(grp)})
 
     # ── Compare vs V2 and V3/V3b ──────────────────────────────────────────────
-    v2_auroc, v2_auprc = 0.7028, 0.5987
+    v2_auroc, v2_auprc, _ = v2_reference()
     v3b_auroc, v3b_auprc = 0.6656, 0.5675
     print(f"\n{'='*55}")
     print(f"  COMPARISON")
-    print(f"  V2  CNN          : AUROC={v2_auroc:.4f}  AUPRC={v2_auprc:.4f}  (current best)")
+    print(f"  V2  CNN          : AUROC={v2_auroc:.4f}  AUPRC={v2_auprc:.4f}")
     print(f"  V3b CNN+ESM-mean : AUROC={v3b_auroc:.4f}  AUPRC={v3b_auprc:.4f}")
     print(f"  V3c ESM-residue  : AUROC={test_m['auroc']:.4f}  AUPRC={test_m['auprc']:.4f}  ← this run")
     delta_v2  = test_m["auroc"] - v2_auroc

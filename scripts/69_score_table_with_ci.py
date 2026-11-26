@@ -82,6 +82,7 @@ def main() -> None:
     ap.add_argument("--min_proteins", type=int, default=4, help="smallest stratum reported")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--out_dir", default="results/v3b_report")
+    ap.add_argument("--out_prefix", default="", help="prefix of the output file names (a run with fewer scorers can keep its own table)")
     args = ap.parse_args()
 
     rng = np.random.default_rng(args.seed)
@@ -118,9 +119,10 @@ def main() -> None:
         print(row, flush=True)
     o = resolve(args.out_dir)
     o.mkdir(parents=True, exist_ok=True)
-    (o / f"{args.name}.json").write_text(json.dumps(out, indent=2))
-    (o / f"{args.name}.txt").write_text("\n".join(lines) + "\n")
-    print(f"wrote {o / (args.name + '.json')}")
+    stem = f"{args.out_prefix}{args.name}"
+    (o / f"{stem}.json").write_text(json.dumps(out, indent=2))
+    (o / f"{stem}.txt").write_text("\n".join(lines) + "\n")
+    print(f"wrote {o / (stem + '.json')}")
 
 
 if __name__ == "__main__":

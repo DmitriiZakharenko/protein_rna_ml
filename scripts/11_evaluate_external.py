@@ -38,10 +38,8 @@ from src.data.external_benchmark import load_benchmark_tsv
 
 try:
     import openpyxl
-except ImportError:
-    print("Installing openpyxl...")
-    os.system("pip install openpyxl --break-system-packages -q")
-    import openpyxl
+except ImportError as exc:
+    raise ImportError("openpyxl is required (pip install -r requirements.txt)") from exc
 
 
 # ── One-hot encoding ──────────────────────────────────────────────────────────
@@ -641,14 +639,8 @@ def main():
             "median_auprc": round(median_auprc, 4),
         }
 
-    # Comparison to in-distribution test performance
-    print(f"\n  In-distribution (SELEX/RBNS, 24 proteins) → V2: AUROC=0.703  AUPRC=0.599")
-    print(f"  External (lncRNA/literature, this eval)   → V2: AUROC={auroc_v2:.3f}  AUPRC={auprc_v2:.3f}")
     if auroc_v2 is not None:
-        delta_auroc = auroc_v2 - 0.7028
-        delta_auprc = auprc_v2 - 0.5987
-        direction = "better" if delta_auroc > 0 else "worse"
-        print(f"  Δ AUROC: {delta_auroc:+.3f}  Δ AUPRC: {delta_auprc:+.3f}  ({direction} than in-distribution)")
+        print(f"\n  External (this eval) -> V2: AUROC={auroc_v2:.3f}  AUPRC={auprc_v2:.3f}")
 
     # ── Save results ──────────────────────────────────────────────────────────
     out_json = os.path.join(args.out_dir, "external_validation_v2.json")

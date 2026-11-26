@@ -23,6 +23,11 @@ Workflow
     --model_dir models/saved/skipper_eclip_v2_cross_protein_neg \\
     --out_dir results/skipper_eclip/cross_protein_neg_v2_train
 
+Donor RNAs are drawn from the positives of all other proteins before the protein split,
+so a negative RNA in one split can be a positive RNA of a protein in another split.
+The negatives reuse the positive RNAs, so GC is matched only over the whole table, not per
+split or per protein. A donor whose RNA is also a positive of the anchor protein is redrawn.
+
 Compare to rand_neg protein-disjoint (~0.89 pp-median) vs published protein-disjoint baselines.
 """
 
@@ -197,7 +202,16 @@ def build_cross_protein_pairs(
             out_rows.append(row)
 
         n_neg = len(pos_sub)
-        donor_indices = rng.choices(donors.index.tolist(), k=n_neg)
+        donor_idx_pool = donors.index.tolist()
+        donor_indices = rng.choices(donor_idx_pool, k=n_neg)
+        anchor_pos_rnas = set(pos_sub["rna_sequence"])
+        for k, d_idx in enumerate(donor_indices):
+            # redraw donors whose RNA is a positive of the anchor protein (up to 20 tries)
+            tries = 0
+            while donor_pool.at[d_idx, "rna_sequence"] in anchor_pos_rnas and tries < 20:
+                d_idx = rng.choice(donor_idx_pool)
+                tries += 1
+            donor_indices[k] = d_idx
         for anchor_idx, d_idx in zip(pos_sub.index.tolist(), donor_indices):
             anchor = pos_sub.loc[anchor_idx]
             donor = donors.loc[d_idx]

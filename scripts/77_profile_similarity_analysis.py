@@ -8,6 +8,14 @@ Per protein: the 5-mer log2-enrichment profile (script 73, results/v3b_profile/p
 Pairwise protein similarities: (a) sequence identity (local alignment, matches / length of the shorter protein),
 (b) cosine of the standardized ESM-2 embeddings (script 66).  Pairwise profile similarity: Pearson correlation of the profiles.
 
+Notes on the method
+  * Identity is a Biopython local alignment (BLOSUM62, gaps -10 / -0.5, matches / length of the shorter protein), not the MMseqs2
+    best identity of scripts 55, 61, 72 and 78, so identity bins are not comparable with those scripts.
+  * The 95% intervals of the identity curve come from a bootstrap over protein pairs, not over proteins, and are optimistic.
+  * Profile Pearson is computed over the 1024 5-mers centred within each protein only (no centring over proteins).
+  * The permutation test shuffles the protein labels of the profile matrix (symmetric), two-sided, n_perm = 500 by default.
+  * identity_matrix.npy is reused only when a hash of the protein list stored next to it (identity_matrix.sha1) matches.
+
 Outputs in --out_dir
   pairs.tsv.gz              one row per protein pair: identity, cosine, pearson, same_family
   identity_curve.tsv        median Pearson per identity bin (all pairs / same family / different family) with 95% bootstrap CI
@@ -22,6 +30,7 @@ Usage
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from multiprocessing import Pool
@@ -68,7 +77,9 @@ def pair_identity(args) -> float:
 
 def identity_matrix(seqs: list[str], cache: Path, workers: int) -> np.ndarray:
     n = len(seqs)
-    if cache.exists():
+    stamp = cache.with_suffix(".sha1")
+    digest = hashlib.sha1("\n".join(seqs).encode()).hexdigest()
+    if cache.exists() and stamp.exists() and stamp.read_text().strip() == digest:
         m = np.load(cache)
         if m.shape == (n, n):
             return m
@@ -79,6 +90,7 @@ def identity_matrix(seqs: list[str], cache: Path, workers: int) -> np.ndarray:
     for (i, j), v in zip(pairs, vals):
         m[i, j] = m[j, i] = v
     np.save(cache, m)
+    stamp.write_text(digest)
     return m
 
 

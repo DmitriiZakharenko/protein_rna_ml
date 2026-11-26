@@ -20,24 +20,12 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, WeightedRandomSampler
+from torch.utils.data import DataLoader
 from sklearn.metrics import roc_auc_score, average_precision_score
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from src.models.mlp_model import RNABindingMLP
 from src.data.dataset import KmerDataset
-
-
-def make_weighted_sampler(y: np.ndarray) -> WeightedRandomSampler:
-    """Over-sample positives to achieve 1:1 ratio during training."""
-    n_pos = y.sum()
-    n_neg = len(y) - n_pos
-    weights = np.where(y == 1, n_neg / n_pos, 1.0)
-    return WeightedRandomSampler(
-        weights=torch.tensor(weights, dtype=torch.float32),
-        num_samples=len(weights),
-        replacement=True,
-    )
 
 
 def evaluate(model, loader, device):
@@ -88,10 +76,9 @@ def main():
     print(f"  Train: {len(train_ds):,}  Val: {len(val_ds):,}  "
           f"Test: {len(test_ds):,}  Input dim: {input_dim}")
 
-    # Weighted sampler: 1:1 pos:neg ratio during training
-    sampler = make_weighted_sampler(train_ds.y.numpy())
+    # Class imbalance is handled by pos_weight only (a sampler as well would count it twice)
     train_loader = DataLoader(train_ds, batch_size=args.batch_size,
-                              sampler=sampler, num_workers=0, pin_memory=False)
+                              shuffle=True, num_workers=0, pin_memory=False)
     val_loader   = DataLoader(val_ds,   batch_size=args.batch_size * 2, shuffle=False)
     test_loader  = DataLoader(test_ds,  batch_size=args.batch_size * 2, shuffle=False)
 

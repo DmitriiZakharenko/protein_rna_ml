@@ -14,7 +14,8 @@ For every fold (train.csv / val.csv, columns RNA_id, Protein_id, RNA_seqs, Prot_
                 prot_only     logistic regression on amino-acid and dipeptide frequencies
                 concat_lr     logistic regression on both feature sets
                 concat_hgb    gradient boosting on both feature sets
-                degree        mean positive rate of the protein id and of the RNA id in train (0.5 when unseen)
+                degree        mean positive rate of the protein id and of the RNA id in train (0.5 when unseen, so exactly
+                              0.5 AUROC when validation and train share no ids)
 
 Usage
 -----
@@ -93,6 +94,7 @@ def baselines(tr: pd.DataFrame, va: pd.DataFrame, max_train: int, seed: int) -> 
         res[name] = auroc(y_va, m.predict_proba(sc.transform(b))[:, 1])
     m = HistGradientBoostingClassifier(max_iter=200, random_state=seed).fit(np.hstack([r_tr, p_tr]), y_tr)
     res["concat_hgb"] = auroc(y_va, m.predict_proba(np.hstack([r_va, p_va]))[:, 1])
+    # with no id overlap between train and validation (component-wise folds) every row scores 0.5, so the AUROC is 0.5 by construction
     pr = tr.groupby("Protein_id").label.mean()
     rr = tr.groupby("RNA_id").label.mean()
     res["degree"] = auroc(y_va, 0.5 * (va.Protein_id.map(pr).fillna(0.5) + va.RNA_id.map(rr).fillna(0.5)).to_numpy())
@@ -100,12 +102,12 @@ def baselines(tr: pd.DataFrame, va: pd.DataFrame, max_train: int, seed: int) -> 
 
 
 def overlap(tr: pd.DataFrame, va: pd.DataFrame) -> dict:
-    pair = lambda d: set(zip(d.Protein_id, d.RNA_id))  # noqa: E731
+    train_pairs = set(zip(tr.Protein_id, tr.RNA_id))
     return {"protein_id_in_train": float(va.Protein_id.isin(set(tr.Protein_id)).mean()),
             "rna_id_in_train": float(va.RNA_id.isin(set(tr.RNA_id)).mean()),
             "protein_seq_in_train": float(va.Prot_seqs.isin(set(tr.Prot_seqs)).mean()),
             "rna_seq_in_train": float(va.RNA_seqs.isin(set(tr.RNA_seqs)).mean()),
-            "pair_in_train": float(np.mean([p in pair(tr) for p in zip(va.Protein_id, va.RNA_id)]))}
+            "pair_in_train": float(np.mean([p in train_pairs for p in zip(va.Protein_id, va.RNA_id)]))}
 
 
 def best_identity(q: dict[str, str], t: dict[str, str], mmseqs: str, rna: bool, threads: int) -> dict[str, float]:

@@ -220,7 +220,7 @@ def fig_roster_overview(roster: pd.DataFrame, out: Path) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", default="configs/cross_protocol.yaml")
+    ap.add_argument("--config", default="configs/cross_protocol_invitro.yaml")
     ap.add_argument("--out_dir", default=None)
     ap.add_argument("--figures_dir", default=None)
     args = ap.parse_args()

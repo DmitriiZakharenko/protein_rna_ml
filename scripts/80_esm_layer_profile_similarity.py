@@ -4,7 +4,7 @@
 ----------------------------------
 Which ESM-2 layer ranks RNAcompete proteins by binding profile similarity?
 
-For every protein, the published RNAcompete 7-mer Z-scores (16,384 values; mean over the protein's experiments) give a binding
+For every protein, the published RNAcompete 7-mer Z-scores (16,382 rows in the 2025 matrix; mean over the protein's experiments) give a binding
 vector; Pearson correlation between proteins gives an n x n binding-similarity matrix. For every ESM-2 layer, mean-pooled
 residue embeddings give an n x n cosine matrix. Per layer, the Spearman correlation between the upper triangles of the two
 matrices is reported (cosine of raw embeddings and of embeddings centred over proteins), with a Mantel permutation p-value.
@@ -18,7 +18,10 @@ Stages
   embed    ESM-2 650M, all layers 0..33, mean pooled -> out_dir/esm2_layers.npz           (GPU)
   analyze  similarity matrices, per-layer Spearman, figure -> out_dir/layer_correlation.tsv, fig_layer_correlation.png
   domains  Pfam hmmscan on the proteins (local, needs hmmscan and data/external/pfam/Pfam-A.hmm) -> out_dir/domains.tsv (RNA-binding
-           families only); the embed stage then also saves embeddings pooled over the domain residues only (emb_domain)
+           families only); the embed stage then also saves embeddings pooled over the domain residues only (emb_domain).
+           hmmscan runs with -E 1e-3 --domE 1e-3, and --domE acts on the conditional E-value. The stored domain_ievalue column
+           is the independent E-value and can exceed 1e-3 (471 of 924 rows in the 175-protein run). `--max_ievalue X` also
+           drops rows with domain_ievalue >= X (default 0 = off, the criterion of the logged results).
   bootstrap  95% intervals over proteins (resampling with replacement, pairs of the same protein dropped) for every layer and for
            the difference to layer 0 and to layer 33 -> out_dir/layer_bootstrap.tsv
 
@@ -62,6 +65,7 @@ def stage_meta(args) -> None:
     print(f"{len(df)} experiments, {df.protein_sequence.nunique()} distinct sequences, {n_long} longer than {WINDOW}")
 
 
+# Pfam name prefix -> RNA-binding family, same list as FAMILIES in scripts/56_domain_family_audit.py
 FAMILIES = [("RRM", "RRM"), ("KH_", "KH"), ("zf-CCCH", "CCCH"), ("zf-CCHC", "CCHC"), ("zf-C2H2", "C2H2"), ("DEAD", "DEAD"),
             ("dsrm", "dsRBD"), ("PUF", "PUF"), ("CSD", "CSD"), ("La", "La"), ("YTH", "YTH"), ("S1", "S1"), ("Piwi", "Piwi"), ("PAZ", "PAZ")]
 
@@ -81,6 +85,8 @@ def stage_domains(args) -> None:
             if line.startswith("#"):
                 continue
             f = line.split()
+            if args.max_ievalue and float(f[12]) >= args.max_ievalue:
+                continue
             fam = next((fm for pre, fm in FAMILIES if f[0] == pre or f[0].startswith(pre)), None)
             if fam:
                 i = int(f[3][1:])
@@ -221,7 +227,7 @@ def stage_analyze(args) -> None:
     seqs = list(z["seqs"])
     zs = pd.read_csv(resolve(args.zscores), sep="\t", index_col=0)
     zs = zs.loc[:, ~zs.columns.duplicated()]
-    cols = {c: c for c in zs.columns}
+    cols = set(zs.columns)
     vec, keep = [], []
     for i, s in enumerate(seqs):
         ids = [e for e in exp[exp.protein_sequence == s].experiment_id.unique() if e in cols]
@@ -277,6 +283,8 @@ def main() -> None:
     ap.add_argument("--n_boot", type=int, default=200)
     ap.add_argument("--pool", choices=["full", "domain", "outside"], default="full", help="analyze: pooling over the whole sequence or the Pfam RNA-binding domains")
     ap.add_argument("--pfam", default="data/external/pfam/Pfam-A.hmm")
+    ap.add_argument("--max_ievalue", type=float, default=0.0,
+                    help="domains stage: also drop domains with i-Evalue >= this value (0 = off, hmmscan conditional E-value only)")
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
     {"meta": stage_meta, "domains": stage_domains, "embed": stage_embed, "analyze": stage_analyze, "bootstrap": stage_bootstrap}[args.stage](args)

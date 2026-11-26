@@ -6,8 +6,8 @@ Key fixes vs v1:
   2. RNA length (1 feature, normalized) — accounts for 20 nt RBNS vs 40 nt HTR-SELEX
   3. StandardScaler fitted on train → applied to val/test (removes cross-dataset scale bias)
 
-Feature vector layout (8263 total):
-  [RNA 4-mer (256) | Protein 3-mer (8000) | dataset_onehot (3) | rna_len_norm (1) | expt_type (1) | is_flagged (1) | is_flagged (1)]
+Feature vector layout (8262 total, from the code: 256 + 8000 + 3 + 1 + 1 + 1):
+  [RNA 4-mer (256) | Protein 3-mer (8000) | dataset_onehot (3) | rna_len_norm (1) | expt_type (1) | is_flagged (1)]
 
 Usage (from protein_rna_ml/):
     python scripts/04_build_generalized_dataset.py

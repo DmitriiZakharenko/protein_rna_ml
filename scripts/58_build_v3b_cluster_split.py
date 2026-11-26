@@ -18,6 +18,9 @@ Usage
 -----
   python scripts/58_build_v3b_cluster_split.py split
   python scripts/58_build_v3b_cluster_split.py build
+
+`split` stops if results/<tag>/protein_split_map.tsv already exists (the map defines the headline split); --force overwrites it.
+`build` only reads the map.
 """
 from __future__ import annotations
 
@@ -109,6 +112,7 @@ def main() -> None:
     ap.add_argument("--f_test", type=float, default=0.12)
     ap.add_argument("--f_val", type=float, default=0.11)
     ap.add_argument("--holdout_family", default=None)
+    ap.add_argument("--force", action="store_true", help="stage split: overwrite an existing protein_split_map.tsv")
     args = ap.parse_args()
 
     tag = "v3b" if not args.holdout_family else f"v3b_lofo_{args.holdout_family}"
@@ -117,6 +121,8 @@ def main() -> None:
     map_path = res / "protein_split_map.tsv"
 
     if args.stage == "split":
+        if map_path.exists() and not args.force:
+            raise SystemExit(f"{map_path} exists, pass --force to overwrite it")
         prots = v3a_proteins()
         # protein names may appear in several v3a splits only if v3a leaked; keep the first sequence/rows sum
         prots = prots.groupby("protein_name").agg(protein_sequence=("protein_sequence", "first"), n_rows=("n_rows", "sum"),

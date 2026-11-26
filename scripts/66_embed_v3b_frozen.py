@@ -3,7 +3,8 @@
 66_embed_v3b_frozen.py
 ----------------------
 Mean-pooled frozen embeddings for every unique protein and RNA of the v3b split (and of the v3b cross-protein probe):
-proteins with ESM-2 (650M, layer 33, sequences cut to 1022 residues), RNAs with RNA-FM (layer 12).
+proteins with ESM-2 (650M, layer 33, sequences cut to 1022 residues, no sliding window unlike script 80), RNAs with RNA-FM (layer 12).
+Proteins longer than 1022 residues are listed in a warning. With --tsv, --out_dir is required (the default folder holds the v3b embeddings).
 
 Outputs in --out_dir:
   prot_esm2.npz   names (n,), emb (n, 1280) float16
@@ -52,6 +53,9 @@ def embed_proteins(df: pd.DataFrame, out: Path, device, layer: int = 33) -> None
     conv = alphabet.get_batch_converter()
     prots = df.drop_duplicates("protein_name").set_index("protein_name")["protein_sequence"]
     names = sorted(prots.index, key=lambda n: len(prots[n]))
+    long = [n for n in names if len(prots[n]) > 1022]
+    if long:
+        print(f"WARNING: {len(long)} of {len(names)} proteins are longer than 1022 residues and are cut: {', '.join(long[:20])}", flush=True)
     embs = []
     for i, n in enumerate(names):
         seq = clean(prots[n], "ACDEFGHIKLMNPQRSTVWYX")[:1022]
@@ -172,7 +176,7 @@ def main() -> None:
     ap.add_argument("--stage", choices=["proteins", "rna"], required=True)
     ap.add_argument("--data_dir", default="data/generalized_v3b")
     ap.add_argument("--probe_tsv", default="data/benchmarks/v3b_cross_neg/cross_neg_probe/test.tsv")
-    ap.add_argument("--out_dir", default="data/embeddings_v3b")
+    ap.add_argument("--out_dir", default=None, help="default data/embeddings_v3b, required with --tsv")
     ap.add_argument("--rna_batch", type=int, default=256)
     ap.add_argument("--rna_backend", choices=["hf", "fm"], default="hf",
                     help="hf = multimolecule/rnafm from HuggingFace; fm = original rna-fm package (weights server may refuse)")
@@ -182,6 +186,10 @@ def main() -> None:
     args = ap.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if args.out_dir is None:
+        if args.tsv:
+            ap.error("--tsv requires --out_dir (the default folder holds the v3b embeddings)")
+        args.out_dir = "data/embeddings_v3b"
     out = resolve(args.out_dir)
     out.mkdir(parents=True, exist_ok=True)
     if args.tsv:

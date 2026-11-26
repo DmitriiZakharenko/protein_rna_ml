@@ -9,7 +9,8 @@ shortcut controls:
   rna_only      RNA 4-mer composition only
   protein_only  protein 3-mer composition only
   both          RPISeq-style concatenation
-  label_prior   per-protein / per-RNA positive rate learnt on the training folds (pure identity memorisation)
+  label_prior   per-protein positive rate learnt on the training folds, per-RNA rate when the protein is unseen (so in
+                protein-disjoint folds it is an RNA-identity prior), global rate otherwise (pure identity memorisation)
 
 Folds: random 5-fold (as in the original papers), protein-disjoint (GroupKFold by protein sequence) and
 RNA-disjoint. If a single-molecule baseline matches `both` under random folds, the benchmark does not
@@ -31,7 +32,6 @@ from sklearn.model_selection import GroupKFold, StratifiedKFold
 
 ROOT = Path(__file__).resolve().parents[1]
 D = ROOT / "data/external/rpi_ggcn"
-GROUPS = {"A": "AGV", "I": "ILMV".replace("V", ""), "Y": "FWY"}
 # conjoint-triad 7-class alphabet
 CLASSES = ["AGV", "ILFP", "YMTS", "HNQW", "RK", "DE", "C"]
 AA2C = {a: i for i, g in enumerate(CLASSES) for a in g}

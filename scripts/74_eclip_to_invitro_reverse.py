@@ -78,11 +78,6 @@ def main() -> None:
     shared = sorted(set(vit.key) & set(by_prot))
     print(f"{len(shared)} proteins in both resources")
 
-    # positives of every dataset per cell line (negatives of the cross-RBP model), subsampled
-    cell_pos: dict[str, dict[str, list[str]]] = {}
-    for f in files:
-        prot, cell = f.stem.rsplit("_", 1)
-        cell_pos.setdefault(cell, {})
     rows, prior_rows = [], []
     z = np.load(resolve("results/hybrid") / "nn_models.npz", allow_pickle=False)
     for prot in shared:

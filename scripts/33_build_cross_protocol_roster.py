@@ -13,12 +13,15 @@ Strict matching rules
   (prefer name without -constructN) and record the rule + discarded natives.
 - A2BP1 and RBFOX1 both present in the same panel stay as separate keys.
 
+Default config is configs/cross_protocol_invitro.yaml (the run quoted in README).
+configs/cross_protocol.yaml is the earlier run that included eCLIP.
+
 Outputs
 -------
-  results/cross_protocol/protein_roster.tsv
-  results/cross_protocol/protocol_protein_lists.tsv
-  results/cross_protocol/match_ambiguities.tsv
-  results/cross_protocol/roster_summary.json
+  results/cross_protocol_invitro/protein_roster.tsv
+  results/cross_protocol_invitro/protocol_protein_lists.tsv
+  results/cross_protocol_invitro/match_ambiguities.tsv
+  results/cross_protocol_invitro/roster_summary.json
 """
 
 from __future__ import annotations
@@ -319,14 +322,14 @@ def build_roster(
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Build cross-protocol protein roster")
-    ap.add_argument("--config", default="configs/cross_protocol.yaml")
+    ap.add_argument("--config", default="configs/cross_protocol_invitro.yaml")
     ap.add_argument("--scan_raw", action="store_true")
     ap.add_argument("--out_dir", default=None)
     args = ap.parse_args()
 
     cfg = load_config(resolve(args.config))
     paths = cfg.get("paths", {})
-    out_dir = resolve(args.out_dir or paths.get("out_dir", "results/cross_protocol"))
+    out_dir = resolve(args.out_dir or paths.get("out_dir", "results/cross_protocol_invitro"))
     out_dir.mkdir(parents=True, exist_ok=True)
     min_protocols = int(cfg.get("min_protocols", 2))
 

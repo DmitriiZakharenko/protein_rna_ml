@@ -19,7 +19,7 @@ for L in $LAYERS; do
     for c in $CONFIGS; do
       h=${c%%:*}; m=${c##*:}
       d=results/v3b_frozen_layers/L${L}_${h}_${m}_s${s}
-      [ -f $d/scores_probe.tsv.gz ] && continue
+      [ -f $d/results.json ] && continue
       echo "=== layer $L $h $m seed $s $(date +%H:%M)"
       $PYTHON -u scripts/67_frozen_embedding_baselines.py --head $h --train_mode $m --seed $s --emb_dir $e --out_dir $d > results/v3b_layers_L${L}_${h}_${m}_s${s}.log 2>&1
       tail -n 3 results/v3b_layers_L${L}_${h}_${m}_s${s}.log

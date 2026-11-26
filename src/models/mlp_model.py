@@ -2,10 +2,10 @@
 Phase 2 Model V1: Multi-layer Perceptron on k-mer features.
 
 Architecture:
-    [RNA 4-mer (256) | Protein 3-mer (8000) | metadata (2)]
+    [RNA 4-mer (256) | Protein 3-mer (8000) | metadata (6 in script 04)]
                             ↓
                     BatchNorm → Dropout
-                     Linear(8258 → 512) → GELU
+                     Linear(input_dim → 512) → GELU
                      BatchNorm → Dropout
                      Linear(512 → 256) → GELU
                      BatchNorm → Dropout
@@ -25,7 +25,7 @@ class RNABindingMLP(nn.Module):
     MLP classifier for protein–RNA binding prediction on k-mer features.
 
     Args:
-        input_dim   : total feature dimension (default: 8258 = 256+8000+2)
+        input_dim   : total feature dimension (script 04 builds 8262 = 256+8000+6; the default 8258 is not used by it)
         hidden_dims : list of hidden layer sizes
         dropout     : dropout probability applied after each hidden layer
     """

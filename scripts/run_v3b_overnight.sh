@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Unattended pipeline on the cluster-based v3b split (run with nohup; safe to disconnect).
 #
-#   1. build data/generalized_v3b from results/v3b/protein_split_map.tsv (script 58 build)
+#   1. build data/generalized_v3b from results/v3b/protein_split_map.tsv (script 58 build; the map is never recreated here,
+#      script 58 split refuses to overwrite it without --force)
 #   2. build the v3b cross-protein probe (script 53)
 #   3. for each seed: train V2, then V4 on v3b (skipped if a checkpoint exists)
 #   4. probe every checkpoint that exists, aggregate mean +- std (script 54)
@@ -52,6 +53,10 @@ probe() {  # probe <out_dir>   (only checkpoints that exist)
     --max_train_rows 200000 --n_boot 100 --out_dir "$1" "${args[@]}"
 }
 
+if [ ! -f results/v3b/protein_split_map.tsv ]; then
+  echo "results/v3b/protein_split_map.tsv is missing (create it locally with scripts/58_build_v3b_cluster_split.py split)." >&2
+  exit 1
+fi
 echo "$(date -Is) PIPELINE START (seeds: $SEEDS)" >> "$STATUS"
 stage build_v3b "$PYTHON" scripts/58_build_v3b_cluster_split.py build
 stage build_probe "$PYTHON" scripts/53_build_invitro_cross_protein_probe.py \

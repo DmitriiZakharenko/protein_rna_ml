@@ -7,12 +7,12 @@ Architecture:
                                       concat → 512-d
                                       MLP [256, 64] → binding logit
 
-Why this beats V2 (one-hot CNN):
+Rationale (one-hot CNN replaced in the protein branch):
     - Protein branch now uses pre-trained evolutionary language model instead of
       random one-hot convolutions that must learn protein grammar from scratch
     - ESM-2 embeddings encode structural domains, active sites, co-evolution
     - RNA branch unchanged — CNN already learns positional motifs well
-    - Expected test AUROC: 0.78-0.82 (vs 0.703 for V2)
+    - Measured test AUROC: 0.634 (V2: 0.690), so the mean-pooled variant does not improve on V2
 
 Early stopping: val AUPRC (more informative than AUROC under class imbalance)
 
@@ -285,7 +285,7 @@ def main():
         if is_best:
             best_auprc, best_epoch, no_improve = val_m["auprc"], epoch, 0
             torch.save({"epoch": epoch, "model_state": model.state_dict(),
-                        "val_metrics": val_m, "args": vars(args)},
+                        "val_metrics": {k: v for k, v in val_m.items() if k != "probs"}, "args": vars(args)},
                        os.path.join(args.model_dir, "best_model.pt"))
         else:
             no_improve += 1
@@ -304,7 +304,9 @@ def main():
     print(f"  AUROC: {test_m['auroc']:.4f}   AUPRC: {test_m['auprc']:.4f}")
     print(f"  ZHMolGraph target: AUROC≥0.798  AUPRC≥0.820")
 
-    test_df = pd.read_csv(os.path.join(args.data_dir, "test.tsv"), sep="\t")
+    # Rows without an ESM-2 embedding were dropped in the dataset, so use its frame
+    test_df = test_ds.df.copy()
+    assert len(test_df) == len(test_m["probs"]), "test rows and predictions differ in length"
     test_df["prob"] = test_m["probs"]
     per_protein = []
     for prot, grp in test_df.groupby("protein_name"):

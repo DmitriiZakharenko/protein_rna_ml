@@ -2,7 +2,7 @@
 """
 41b_split_skipper_eclip_protein_disjoint.py
 -------------------------------------
-Protein-disjoint train/val/test splits **within Skipper eCLIP only** (protein-disjoint).
+Protein-disjoint train/val/test splits **within Skipper eCLIP only**.
 
 Unlike script 41's ``protein_disjoint_v3a`` export (train in vitro → test eCLIP),
 this holds out eCLIP proteins for test while training on other eCLIP proteins
@@ -204,6 +204,7 @@ def main() -> None:
     args = ap.parse_args()
 
     df = load_or_build_pairs(args)
+    _load_build41().assert_protein_sequences_ok(df, context="41b pairs")
 
     if args.allow_single_class_proteins:
         eligible = set(df["protein_name"].astype(str).unique())
@@ -242,7 +243,7 @@ def main() -> None:
 
     summary = {
         "script": "41b_split_skipper_eclip_protein_disjoint.py",
-        "description": "Protein-disjoint split within Skipper eCLIP (RPIembeddor-style protein-disjoint style)",
+        "description": "Protein-disjoint split within Skipper eCLIP (RPIembeddor-style)",
         "pairs_tsv": str(resolve(args.pairs_tsv)) if args.pairs_tsv else None,
         "seed": args.seed,
         "train_frac": args.train_frac,

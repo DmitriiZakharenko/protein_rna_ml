@@ -103,6 +103,8 @@ def pick_idr_bed_file(exp_accession: str) -> str | None:
         except requests.HTTPError:
             continue
         if files:
+            if assembly == "GRCh37":
+                print(f"  WARNING: {exp_accession} has only GRCh37 peaks, used without liftover", file=sys.stderr)
             break
     if not files:
         return None

@@ -11,7 +11,7 @@ Reports:
   - RNA-seen subset (leakage check)
   - GC-matched negatives: subsample negs per protein to match pos GC
 
-Works on the protein-disjoint protein-disjoint model without retraining (post-hoc),
+Works on the protein-disjoint model without retraining (post-hoc),
 or on any train/test TSV pair after a new split (41c).
 
 Usage
@@ -63,6 +63,11 @@ _eval11 = _ilu.module_from_spec(_spec)
 sys.modules[_spec.name] = _eval11
 _spec.loader.exec_module(_eval11)
 score_pair = _eval11.score_pair
+
+_b41_spec = _ilu.spec_from_file_location("build_skipper_41", ROOT / "scripts" / "41_build_skipper_eclip_benchmark.py")
+_build41 = _ilu.module_from_spec(_b41_spec)
+sys.modules[_b41_spec.name] = _build41
+_b41_spec.loader.exec_module(_build41)
 
 
 def resolve(p: str | Path) -> Path:
@@ -155,6 +160,7 @@ def load_test_with_features(test_path: Path) -> pd.DataFrame:
     df = pd.read_csv(test_path, sep="\t", low_memory=False)
     if "binding_label" not in df.columns:
         raise SystemExit(f"test TSV missing binding_label: {test_path}")
+    _build41.assert_protein_sequences_ok(df, context=f"41d test {test_path.name}")
     df["gc"] = df["rna_sequence"].map(gc_fraction)
     df["au_frac"] = df["rna_sequence"].map(au_fraction)
     return df

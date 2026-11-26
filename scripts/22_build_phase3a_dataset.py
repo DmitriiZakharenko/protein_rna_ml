@@ -13,6 +13,12 @@ Pipeline:
   5. Subsample RNAcompete to avoid overwhelming the original data
   6. Save to data/generalized_v3a/
 
+NOTE on the homology rule: the MMseqs2 FASTA holds SELEX train proteins only
+(proteins_train.fasta), so hits never name SELEX val/test proteins and rule 2 in
+assign_rnacompete_splits cannot move proteins on that basis. Homology to the final
+test set is measured separately by scripts/55 (62% of v3a test proteins have a
+training protein at >=50% identity).
+
 Key design decisions:
   - RNAcompete proteins that overlap with existing test/val stay in that split
     (prevents homology leakage)
@@ -48,7 +54,6 @@ import json
 import os
 import random
 import sys
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
