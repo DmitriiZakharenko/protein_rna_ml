@@ -459,7 +459,7 @@ Best test seed: **0** (AUROC 0.837). Variance is modest; V4 gain over V2 (0.813)
 
 ## 2026-09-01 — Phase 3B: Cross-protocol in-vitro (scripts 33–36)
 
-**VM**: pleasedimpala-8f147 (`/vol/space/protein_rna_ml`)  
+**VM**: gpu-vm (`/vol/space/protein_rna_ml`)  
 **Config**: `configs/cross_protocol_invitro.yaml` — HTR-SELEX, RBNS, RNAcompete Eukarya/RBPZoo (no eCLIP)  
 **Model**: k=4 logistic regression, representative native exact match (roster from script 33)
 
@@ -508,7 +508,7 @@ RNA sequence overlap ≈ 0 for SELEX/RBNS/RNAcompete cross-pairs; ~23% for Eukar
 
 ## 2026-09-04 — Phase 3B: Domain-conditioned V2 (script 38)
 
-**VM**: pleasedimpala-8f147  
+**VM**: gpu-vm  
 **Data**: `generalized_v3a`, `known_domains_only` (465 variants; CCCH/KH/RRM/multi)  
 **Model**: V2 RNABindingCNN + optional `domain_class` embedding in head  
 **Seed**: 42, `prot_max=700`
@@ -531,7 +531,7 @@ Per-protein median by domain: CCCH and multi improve under shuffle; KH best unde
 
 ## 2026-10-28 — Skipper eCLIP audit and in vitro interaction probe (scripts 41–53)
 
-**VM**: pleasedimpala-8f147. **Data**: Skipper eCLIP `fixlen_151` rebuilt with real protein sequences
+**VM**: gpu-vm. **Data**: Skipper eCLIP `fixlen_151` rebuilt with real protein sequences
 (earlier local TSVs carried `protein_sequence == "ok"` — build scripts now abort on that).
 Evaluation: `scripts/51_eclip_eval_suite.py` (protein-bootstrap CIs, GC-matched subset with caliper,
 protein-shuffle control).

@@ -77,7 +77,7 @@ but `dataset` in `data/generalized_v2/` splits. The script read the wrong column
 
 ### Bug 3 — Broken pipeline runner (MEDIUM)
 **File**: `scripts/archive/run_pipeline.sh` (moved from the repository root)
-**Description**: `phase1_htr()` called non-existent `scripts/02b_train_htr_selex_validation.py`.
+**Description**: `phase1_htr()` called `scripts/02b_train_htr_selex_validation.py`, now archived in `scripts/archive/`.
 **Fix**: Corrected to `scripts/02_train_validation_model.py --config configs/htr_selex_validation.yaml`.
 
 ### Bug 4 — Missing dependencies (HIGH)

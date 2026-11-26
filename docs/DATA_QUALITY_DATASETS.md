@@ -214,7 +214,7 @@ Manifest: `data/raw/new_assays/MANIFEST.json` · ProNAB request: `data/raw/new_a
 2. eCLIP script 12 → 50–100 RBPs overlapping v3a / Skipper
 3. ucRBP: classifier-pass subset from GSE215198 → homology merge (expand beyond 23)
 4. Verify RBPZoo clean TSV covers all 174 in Sasse Table S1
-5. bbad307: copy negative-sampling spec into `scripts/15_generate_hard_negatives.py` design
+5. bbad307: negative-sampling specification copied into the design of a script `15_generate_hard_negatives.py` (planned, not implemented)
 6. MMseqs2 on all protein sources before any new merge into `generalized_v3a`
 ```
 

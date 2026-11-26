@@ -19,7 +19,7 @@
 
 **Headline**: V4 beats V2 on v3a test; V2 better OOD; cross-assay k-mer LR transfers with ~0.18 AUROC drop; coarse `domain_class` does not help V2.
 
-### Cross-protocol outputs (VM: `pleasedimpala`)
+### Cross-protocol outputs (VM: `gpu-vm`)
 
 ```
 results/cross_protocol_invitro/
@@ -38,9 +38,9 @@ figures/cross_protocol_*.png
 Run on **Mac**:
 
 ```bash
-SSH='ssh -i /Users/zahalae/.ssh/id_ed25519 -p 30021'
+SSH='ssh -i $KEY -p 30021'
 HOST='ubuntu@194.94.113.18'
-REPO='/Users/zahalae/Desktop/protein_rna_ml'
+REPO='.'
 
 # All cross-protocol TSVs + JSON (~few MB)
 rsync -avP -e "$SSH" \

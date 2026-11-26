@@ -11,6 +11,42 @@ Run history with hypotheses, decision rules and results: [`EXPERIMENT_LOG.md`](E
 
 ---
 
+## Project logic
+
+The question is whether a model trained on RNA-protein binding data predicts binding for proteins it has not seen. The work follows one chain: build training sets from several assays, test generalization with progressively stricter splits, and compare every model with simple baselines that use one molecule or the nearest training protein.
+
+```mermaid
+flowchart TD
+  Q["Question: does a model generalize to new RNA-binding proteins?"]
+  D1["In vitro data: HTR-SELEX, RBNS, RNAcompete"]
+  D2["In vivo data: ENCODE eCLIP (Skipper)"]
+  D3["Extension: ENCODE TF ChIP-seq"]
+  S1["generalized_v2 and v3a: protein-disjoint splits"]
+  S2["generalized_v3b: protein-cluster split (MMseqs2)"]
+  M["Models: k-mer baselines, CNN V2, bilinear V4, frozen ESM-2 and RNA-FM heads"]
+  T1["Standard test"]
+  T2["Cross-protein-negative probe"]
+  T3["Literature external pairs and eCLIP benchmark"]
+  B["Baselines: RNA-only, protein-only, nearest-protein"]
+  A["Audits: homology, RPI benchmarks, PaRPI, CORAL, mechanistic checks"]
+  R["Result: transfer follows sequence similarity to training proteins; the nearest-protein baseline is the reference to beat"]
+  N["Next: structure-derived priors, affinity, TF sub-project, per-protein in vivo models (NEXT_STEPS.md)"]
+  Q --> D1 & D2 & D3
+  D1 --> S1 --> S2
+  D2 --> T3
+  D3 --> M
+  S1 --> M
+  S2 --> M
+  M --> T1 & T2 & T3
+  B --> T1 & T2
+  S1 --> A
+  T1 & T2 & T3 & A --> R --> N
+```
+
+Where each box is implemented: [`SCRIPTS.md`](SCRIPTS.md) (script map and pipeline diagrams). Where each result is recorded: [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md).
+
+---
+
 ## Current status
 
 AUROC is the area under the ROC curve on the test proteins of the named split. "Probe" is the cross-protein-negative probe (the same RNA paired with another protein of the same assay, so RNA composition carries no information and RNA-only models score 0.500).

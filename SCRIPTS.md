@@ -8,21 +8,21 @@ Paths `../<name>/` refer to the four upstream repositories (see `docs/DATA_SOURC
 
 ```mermaid
 flowchart LR
-  A["Upstream repos: HTR-SELEX, RBNS, RNAcompete"] --> B[01-04 phase 1 and generalized_v2]
-  B --> C[22a, 22: generalized_v3a]
-  C --> D[55, 58: MMseqs2 audit and cluster split v3b]
-  D --> E[59: nearest-protein baseline]
-  D --> F[66, 67: frozen ESM-2 and RNA-FM heads]
-  C --> G[06, 21: V2 CNN and V4 interaction model]
-  H[41, 41b, 41c, 42: Skipper eCLIP benchmark] --> I[51, 52: eCLIP evaluation]
+  A["Upstream repos: HTR-SELEX, RBNS, RNAcompete"] --> B["01-04 phase 1 and generalized_v2"]
+  B --> C["22a, 22: generalized_v3a"]
+  C --> D["55, 58: MMseqs2 audit and cluster split v3b"]
+  D --> E["59: nearest-protein baseline"]
+  D --> F["66, 67: frozen ESM-2 and RNA-FM heads"]
+  C --> G["06, 21: V2 CNN and V4 interaction model"]
+  H["41, 41b, 41c, 42: Skipper eCLIP benchmark"] --> I["51, 52: eCLIP evaluation"]
   G --> I
-  J[53: cross-protein-negative probe] --> E
+  J["53: cross-protein-negative probe"] --> E
   J --> F
-  K[76: ENCODE TF ChIP-seq pairs] --> F
-  L[80, 81: layers vs RNAcompete profiles] --> M[reports/esm_layer_similarity.html]
-  E --> N[69, run_v3b_report.sh: tables with CI]
+  K["76: ENCODE TF ChIP-seq pairs"] --> F
+  L["80, 81: layers vs RNAcompete profiles"] --> M["reports/esm_layer_similarity.html"]
+  E --> N["69, run_v3b_report.sh: tables with CI"]
   F --> N
-  N --> O[reports/results.html]
+  N --> O["reports/results.html"]
 ```
 
 ## Phase 1 and 2: validation and first generalized models

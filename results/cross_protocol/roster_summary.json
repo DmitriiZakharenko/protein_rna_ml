@@ -9,11 +9,11 @@
     "eclip": 9
   },
   "source_notes": {
-    "htr_selex": "/Users/zahalae/Desktop/protein_rna_ml/results/rna_only_per_protein_honest/htr_selex_per_protein_metrics.tsv",
-    "rbns": "/Users/zahalae/Desktop/protein_rna_ml/results/rna_only_per_protein_honest/rbns_per_protein_metrics.tsv",
-    "rnacompete_eukarya": "/Users/zahalae/Desktop/protein_rna_ml/results/rna_only_per_protein_honest/rnacompete_eukarya_per_protein_metrics.tsv",
-    "rnacompete_rbpzoo": "/Users/zahalae/Desktop/protein_rna_ml/results/rna_only_per_protein_honest/rnacompete_rbpzoo_per_protein_metrics.tsv",
-    "eclip": "/Users/zahalae/Desktop/protein_rna_ml/data/eclip/eclip_all.tsv"
+    "htr_selex": "results/rna_only_per_protein_honest/htr_selex_per_protein_metrics.tsv",
+    "rbns": "results/rna_only_per_protein_honest/rbns_per_protein_metrics.tsv",
+    "rnacompete_eukarya": "results/rna_only_per_protein_honest/rnacompete_eukarya_per_protein_metrics.tsv",
+    "rnacompete_rbpzoo": "results/rna_only_per_protein_honest/rnacompete_rbpzoo_per_protein_metrics.tsv",
+    "eclip": "data/eclip/eclip_all.tsv"
   },
   "combo_counts": {
     "rbns|rnacompete_eukarya": 17,

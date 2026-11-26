@@ -101,7 +101,7 @@
 
   "cross_protocol_invitro": {
     "date": "2026-09-01",
-    "vm": "pleasedimpala-8f147",
+    "vm": "gpu-vm",
     "config": "configs/cross_protocol_invitro.yaml",
     "protocols": ["htr_selex", "rbns", "rnacompete_eukarya", "rnacompete_rbpzoo"],
     "model": "logistic_regression",
@@ -143,7 +143,7 @@
 
   "domain_aware_v2": {
     "date": "2026-09-04",
-    "vm": "pleasedimpala-8f147",
+    "vm": "gpu-vm",
     "script": "scripts/38_train_domain_conditioned_v2.py",
     "data": "data/sanitized/generalized_v3a",
     "filter": "known_domains_only (465/619 variants kept)",

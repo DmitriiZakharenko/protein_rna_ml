@@ -495,7 +495,7 @@ positive intensity** per RNAcompete panel.
 | RBPZoo | 174 | −0.036 | 0.63 |
 
 No significant association. Deliverables: `spectrum_samples_{dataset}.tsv` (300 rows each).
-Figure: `figures/rnacompete_length_vs_intensity.png`.
+Figure: `docs/archive/figures/rnacompete_domain_diverse_length_vs_intensity.png`.
 
 **Note**: log transform is `log10(intensity − Smin + 1)` per protein (Smin = minimum raw
 intensity in the modal-length pool). Probes at Smin map to log 0.

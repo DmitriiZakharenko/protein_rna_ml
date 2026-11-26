@@ -2,7 +2,7 @@
 
 > **Status (2026-11-26)**: complete with a null result (2026-09-04); kept as a record. See [`INVENTORY.md`](../../INVENTORY.md).
 
-**Status**: **Complete** (2026-09-04, VM `pleasedimpala-8f147`)  
+**Status**: **Complete** (2026-09-04, VM `gpu-vm`)  
 **Headline experiment**: clean V2 baseline vs **domain-class conditioning** — **null result**  
 **Deferred**: Table S1 construct-replace ablation (on v3a most matches are already
 RNAcompete constructs → full vs construct is nearly a no-op)

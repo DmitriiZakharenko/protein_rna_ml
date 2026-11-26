@@ -1,6 +1,6 @@
 # Project inventory
 
-State of the repository on 2026-11-26. The inventory is based on a full read of all scripts, documents and result directories by eight reviewers (one per slice: Phase 1-2 code, Phase 3 code, eCLIP code, v3b code, audits and layer tests, documentation, results and data layout, VM commands), on `py_compile` of every script, on a check of relative links in the Markdown files and on `git ls-files`. Navigation: [`README.md`](README.md) (results and quick start), [`SCRIPTS.md`](SCRIPTS.md) (map of every script and module), [`docs/VM_RUNBOOK.md`](docs/VM_RUNBOOK.md) (GPU VM commands), [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) (every run with its decision rule), [`NEXT_STEPS.md`](NEXT_STEPS.md) (plan and open checks).
+State of the repository on 2026-11-26. The inventory is based on a full read of all scripts, documents and result directories by eight reviewers (one per slice: Phase 1-2 code, Phase 3 code, eCLIP code, v3b code, audits and layer tests, documentation, results and data layout, VM commands), on `py_compile` of every script, on a check of relative links in the Markdown files and on `git ls-files`. Navigation: [`README.md`](README.md) (project logic diagram, results, quick start), [`SCRIPTS.md`](SCRIPTS.md) (map of every script and module), [`docs/VM_RUNBOOK.md`](docs/VM_RUNBOOK.md) (GPU VM commands), [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) (every run with its decision rule), [`NEXT_STEPS.md`](NEXT_STEPS.md) (plan and open checks).
 
 ## 1. Layout
 
@@ -16,6 +16,7 @@ State of the repository on 2026-11-26. The inventory is based on a full read of 
 | `results/` | metrics, small tables and summaries | final and intermediate result files. Logs, per-protein example tables and smoke runs are ignored |
 | `figures/`, `reports/` | yes | README figures, `results.html` (built 2026-10-30), `esm_layer_similarity.html` |
 | `data/` | 21 small files | raw, sanitized and benchmark data (2.7 GB shown, larger on disk because of iCloud-evicted files), rebuilt by scripts |
+| `docs/local/` | no (ignored) | literature tracker and meeting update (local notes) |
 | `archive_local/` | no (ignored) | superseded outputs and local notes moved out of the working tree |
 | `htr_selex_analysis/`, `htr_selex_prjeb47428/`, `rbns_analysis/`, `rnacompete_analysis/` | no (own `.git`, ignored) | upstream data-processing repositories, needed only to rebuild data from scratch (see `docs/DATA_SOURCES_AND_DOWNLOADS.md`) |
 | `reference_letters/`, `share_tf/` | no (ignored) | personal material (letters) and the TF data package, not published |
