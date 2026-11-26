@@ -1,5 +1,7 @@
 # Phase 3A Plan — Expand Training with RNAcompete
 
+> **Status (2026-11-26)**: Phase 3A is complete (2026-07-11); kept as a record of the v3a build. See [`INVENTORY.md`](../../INVENTORY.md).
+
 **Status**: **Complete** (2026-07-11)  
 **Last updated**: 2026-07-11  
 **Goal**: Scale protein diversity in the generalized training set by merging

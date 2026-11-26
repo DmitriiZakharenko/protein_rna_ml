@@ -1,5 +1,7 @@
 # Research Strategy
 
+> **Status (2026-11-26)**: the header numbers describe the state of 2026-09-01 (before the homology audit); sections on lessons and what not to repeat remain valid. Current results: README and EXPERIMENT_LOG. See `INVENTORY.md`.
+
 **Project**: Protein–RNA Binding Prediction
 **Last updated**: 2026-09-01
 **Current best in-distribution model**: V4 concat_bi on `generalized_v3a` — test AUROC=**0.829 ± 0.009** AUPRC=**0.732 ± 0.011** (3 seeds, P100)

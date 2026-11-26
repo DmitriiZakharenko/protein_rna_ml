@@ -20,6 +20,13 @@ sentencepiece>=0.1.99
 # Bioinformatics utilities
 biopython>=1.81
 
+# Imported by scripts but missing before 2026-11-26 (versions not pinned)
+requests
+fair-esm          # import esm (scripts 66, 80)
+multimolecule     # RNA-FM (script 66)
+
+# External programs (not pip packages), called by 11 scripts: MMseqs2 (22, 55, 57, 58, 59, 61, 70, 78) and HMMER hmmscan with Pfam-A (56, 57, 61, 75, 80)
+
 # Plotting
 matplotlib>=3.7.0
 seaborn>=0.12.0

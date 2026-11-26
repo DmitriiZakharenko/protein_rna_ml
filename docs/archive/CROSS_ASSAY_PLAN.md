@@ -1,5 +1,7 @@
 # Cross-Assay Strategy — Protocol Comparison → Domain-Aware Models
 
+> **Status (2026-11-26)**: Week 1 (cross-protocol) and the domain track are complete; kept as a record. See [`INVENTORY.md`](../../INVENTORY.md).
+
 **Status**: Week 1 complete (in-vitro cross-protocol, 2026-09-01); **next** = domain-aware (`scripts/38`)  
 **Last updated**: 2026-09-01  
 **Repo**: stay in `protein_rna_ml` (do not fork a new project)  

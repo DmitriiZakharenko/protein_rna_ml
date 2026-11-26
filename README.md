@@ -7,7 +7,7 @@ Input:  protein amino acid sequence + RNA nucleotide sequence
 Output: binding probability ∈ [0, 1]
 ```
 
-**Canonical metrics**: [`results/phase3b_summary.json`](results/phase3b_summary.json) · **Run history**: [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md)
+**Metrics up to Phase 3B**: [`results/phase3b_summary.json`](results/phase3b_summary.json) · **Run history (all later work, v3b onwards)**: [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) · **File inventory**: [`INVENTORY.md`](INVENTORY.md)
 
 ---
 
@@ -24,17 +24,24 @@ Output: binding probability ∈ [0, 1]
 | Domain-aware V2 | **Closed (null)** | `scripts/38`: `domain_shuffle` (0.855) ≥ baseline (0.847) ≥ conditioned (0.842) — coarse `domain_class` is not a useful bias |
 | Skipper eCLIP benchmark (41–53) | **Closed (negative transfer)** | Genomic-negative splits are composition-solvable (RNA-only k-mer LR 0.81); on `cross_protein_neg` no model beats chance within protein. In vitro probe (3 seeds): V2 0.686 ± 0.015, V4 0.754 ± 0.001, but homology-driven (no-hit proteins: ≈0.5) — see [Skipper eCLIP](#skipper-eclip-benchmark-audit) |
 | RNAcompete `rnacompete_all` zero-shot | **Historical only** | Valid for **V2 + `generalized_v2` only** — panels are **in v3a training** |
+| Homology audit and cluster split `generalized_v3b` (55–58, 62) | **Complete** | Share of test proteins with ≥ 50% identity to training: 62% (v3a) → 3% (v3b); see [v3b](#generalized_v3b-and-the-honest-test) |
+| Nearest-protein baseline, frozen ESM-2 / RNA-FM heads (59, 66, 67, 69–71) | **Complete (negative)** | v3b cross-protein probe: nearest-protein baseline **0.627** [0.57, 0.68] vs best frozen head **0.559 ± 0.009** (3 seeds) |
+| Shortcut audit of RPI benchmarks, PaRPI, CORAL (60, 63, 64, 78, 79) | **Complete (10 of 25 CORAL folds)** | One molecule explains most of the signal in RPI369/488/1446/2241; CORAL component-wise folds: composition-only gradient boosting 0.65–0.71 AUROC |
+| Mechanistic checks (61, 68, 75) | **Complete (illustration)** | RBFOX2 top 5-mer GCAUG recovered (Spearman 0.48); proteins were in the training data |
+| ENCODE TF ChIP-seq as extra training rows (76) | **Closed (not supported)** | 248 TFs, 857,839 rows: 0.535 ± 0.021 with vs 0.559 ± 0.009 without (cross-protein negatives) |
+| ESM-2 layers vs RNAcompete binding-profile similarity (80) | **Result for 175 proteins; follow-ups pending** | Spearman 0.07–0.16 for all layers; no layer distinguishable from layer 0; domain pooling, RNA-FM layers (81) and frozen heads with layers 0/22/26/32 not yet logged |
 
 <details>
 <summary>Documentation map</summary>
 
 | Doc | Purpose |
 |---|---|
-| [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) | Chronological run record |
-| [`PHASE3B_STATUS.md`](PHASE3B_STATUS.md) | Latest VM commands & sync steps |
-| [`PHASE3A_PLAN.md`](PHASE3A_PLAN.md) | v3a dataset build (complete) |
+| [`INVENTORY.md`](INVENTORY.md) | File inventory, status of every document, problems found, proposed reorganisation |
+| [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md) | Chronological run record (hypothesis, decision rule, result) |
+| [`PHASE3B_STATUS.md`](docs/archive/PHASE3B_STATUS.md) | Latest VM commands & sync steps |
+| [`PHASE3A_PLAN.md`](docs/archive/PHASE3A_PLAN.md) | v3a dataset build (complete) |
 | [`NEXT_STEPS.md`](NEXT_STEPS.md) | Sequenced plan: integrity checks → baselines → motif/mutation tests → new models |
-| [`CROSS_ASSAY_PLAN.md`](CROSS_ASSAY_PLAN.md) | Cross-protocol → domain strategy |
+| [`CROSS_ASSAY_PLAN.md`](docs/archive/CROSS_ASSAY_PLAN.md) | Cross-protocol → domain strategy |
 | [`DATA_SOURCES_AND_DOWNLOADS.md`](DATA_SOURCES_AND_DOWNLOADS.md) | Sibling-repo paths & integrity checks |
 | [`DATA.md`](DATA.md) | Provenance, leakage, negatives |
 | [`DATA_QUALITY_DATASETS.md`](DATA_QUALITY_DATASETS.md) | Dataset hunt: tiers, new assays, acquisition order |
@@ -42,17 +49,34 @@ Output: binding probability ∈ [0, 1]
 | [`data/raw/eclip_skipper/README.md`](data/raw/eclip_skipper/README.md) | Skipper eCLIP layout and scripts 41–50 |
 | [`METHODS.md`](METHODS.md) | Splits, metrics, references |
 | [`STRATEGY.md`](STRATEGY.md) | Lessons learned, what not to repeat |
-| [`strategy_dashboard.html`](strategy_dashboard.html) | Architecture & queue (HTML) |
+| [`strategy_dashboard.html`](docs/archive/strategy_dashboard.html) | Architecture & queue (HTML) |
 
-Legacy: [`dashboard.html`](dashboard.html) — Phase 1–2 only, not updated for 3A/3B.
+Legacy: [`dashboard.html`](docs/archive/dashboard.html) (Phase 1–2 only). Planning documents `PROJECT_PLAN.md`, `RESEARCH_ROADMAP.md`, `PHASE3A_PLAN.md`, `PHASE3B_STATUS.md`, `CROSS_ASSAY_PLAN.md` and `DOMAIN_AWARE_PLAN.md` are archived in [`docs/archive/`](docs/archive/); `STRATEGY.md` (header numbers) describe the state of 2026-04 to 2026-09 and are listed in `INVENTORY.md` with their status.
 
 </details>
 
-### Headline takeaways (2026-09)
+### Headline takeaways (2026-09, before the homology audit; see the v3b section for the current reading)
 
 1. **In-distribution (v3a test)**: V4 bilinear + source embedding beats V2 CNN (**0.829 ± 0.009** vs **0.813**).
 2. **OOD (literature long-RNA)**: V2 still wins; V4 does not improve external generalization.
 3. **Cross-assay**: For the same RBP, k-mer binding models transfer across HTR-SELEX / RBNS / RNAcompete with ~0.18 AUROC drop vs within-assay; RNAcompete panels transfer almost perfectly to each other.
+
+---
+
+## generalized_v3b and the honest test
+
+`generalized_v3a` has a test set in which 62% of the proteins have a training protein with at least 50% identity. `scripts/55` (all-vs-all MMseqs2) showed that transfer follows this similarity, and `scripts/58` re-split the same 2,658,999 pairs by protein cluster (single linkage, 40% identity at 50% coverage): 160 clusters, train 375 / val 55 / test 64 proteins, and 3% of the test proteins with ≥ 50% identity to training. The cross-protein-negative probe (`scripts/53`, the same RNA paired with another protein, so RNA composition is uninformative) is the test of protein-specific signal.
+
+| Question | Result | Where |
+|---|---|---|
+| Do V2/V4 learn the protein × RNA interaction? | On v3a V4 0.754 ± 0.001 and V2 0.686 ± 0.015, but with no detectable homolog in training both are at about 0.5 | log 2026-10-28 |
+| Does a simple baseline match them? | Nearest-protein baseline (RNA-only k-mer models of the most similar training proteins) 0.627 [0.57, 0.68] on the v3b probe | log "Nearest-protein baseline on v3b" |
+| Do frozen language-model embeddings help? | ESM-2 650M layer 33 + RNA-FM bilinear head: 0.531 ± 0.027 (ordinary labels), 0.559 ± 0.009 (cross-protein negatives), 3 seeds | log "frozen-embedding heads" |
+| Do TF ChIP-seq rows help? | No: 0.547 ± 0.016 vs 0.531 ± 0.027 (ordinary labels), 0.535 ± 0.021 vs 0.559 ± 0.009 (cross-protein negatives) | log "TF ChIP-seq" |
+| Are published benchmarks informative? | Protein-only AUROC 0.964 vs 0.974 with both molecules on RPI369; CORAL component-wise folds have training homologs for 16% (30/50) and 46% (60/80) of validation proteins at ≥ 30% identity | log, `scripts/60`, `scripts/78` |
+| Which ESM-2 layer follows measured RNAcompete profile similarity? | Spearman 0.07–0.16 for all 34 layers over 175 proteins; best layers (22–32) above the last layer, none distinguishable from the token-embedding layer 0 (protein bootstrap) | [`reports/esm_layer_similarity.html`](reports/esm_layer_similarity.html) |
+
+Reports: [`reports/results.html`](reports/results.html) (summary page), [`reports/esm_layer_similarity.html`](reports/esm_layer_similarity.html) (layer analysis). Embeddings and checkpoints are on the GPU VM and are not in git.
 
 ---
 
@@ -207,7 +231,7 @@ python scripts/35_cross_protocol_motif_concordance.py --config configs/cross_pro
 python scripts/36_visualize_cross_protocol.py --config configs/cross_protocol_invitro.yaml
 ```
 
-**Domain track**: domain-conditioned V2 (`scripts/38`) gave a null result (see [`DOMAIN_AWARE_PLAN.md`](DOMAIN_AWARE_PLAN.md)).
+**Domain track**: domain-conditioned V2 (`scripts/38`) gave a null result (see [`DOMAIN_AWARE_PLAN.md`](docs/archive/DOMAIN_AWARE_PLAN.md)).
 
 ---
 
@@ -306,7 +330,7 @@ For the **Phase 2 V2 checkpoint** trained on `generalized_v2` (169 proteins, SEL
 | Per-protein median (715 unseen) | 0.549 |
 | % proteins AUROC > 0.7 | 17.3% |
 
-This motivated Phase 3A (add RNAcompete to training). See `PHASE3A_PLAN.md`.
+This motivated Phase 3A (add RNAcompete to training). See [`docs/archive/PHASE3A_PLAN.md`](docs/archive/PHASE3A_PLAN.md).
 
 ```bash
 python scripts/17_prepare_rnacompete_benchmark.py \
@@ -359,22 +383,32 @@ protein_rna_ml/
 │   ├── 41–41d, 42, 51  Skipper eCLIP build, splits, diagnostics, evaluation suite
 │   ├── 42b–44    New assays: download/normalize, sequence enrichment, overlap QC
 │   ├── 45–50     CLIPper/Skipper enrichment + motif QC, BED exports
-│   └── run_eclip_step1.sh  eCLIP rebuild + baselines + training + evaluation
+│   ├── 52–54     eCLIP per-protein baseline, in vitro cross-protein-negative probe
+│   ├── 55–58, 62 MMseqs2 homology audit, Pfam family audit/inventory, v3b cluster split, split integrity check
+│   ├── 59, 65–67, 69–71  nearest-protein baseline, V4 with cross-protein negatives, frozen ESM-2/RNA-FM heads, scores with CI, hybrid
+│   ├── 60, 63, 64, 78, 79  RPI benchmark shortcut audit, PaRPI audit, CORAL fold audit and converter
+│   ├── 61, 68, 75  motif recovery, in silico mutagenesis, attribution maps
+│   ├── 72, 73, 77  affinity-style probe, motif-profile regression, profile similarity
+│   ├── 74, 76    eCLIP → in vitro reverse transfer, ENCODE TF ChIP-seq pairs
+│   ├── 80, 81    ESM-2 and RNA-FM layers vs RNAcompete binding profiles
+│   ├── build_*.py, summarize_v3b_runs.py  HTML reports and run summaries
+│   └── run_*.sh  unattended VM pipelines (eCLIP step 1, v3b overnight/frozen/layers/TF, multi-seed, probes)
 │
 ├── src/          data loaders, models (V2 CNN, V4 interaction)
+├── reports/      results.html, esm_layer_similarity.html
 ├── results/
-│   ├── phase3a_summary.json, phase3b_summary.json
+│   ├── phase3a_summary.json, phase3b_summary.json, v3b/ (split map)
 │   ├── cross_protocol_invitro/     Cross-protocol metrics (3B)
 │   ├── generalized/, external/, multiseed/
 │   └── rna_only_per_protein_honest/, top_bottom_examples/
 │
-├── DATA.md, METHODS.md, STRATEGY.md, EXPERIMENT_LOG.md
-├── CROSS_ASSAY_PLAN.md, DOMAIN_AWARE_PLAN.md
-├── PHASE3A_PLAN.md, PHASE3B_STATUS.md
-└── run_pipeline.sh
+├── README.md, INVENTORY.md, EXPERIMENT_LOG.md, NEXT_STEPS.md
+├── DATA*.md, METHODS.md, STRATEGY.md
+├── docs/archive/  completed plans and legacy dashboards (PROJECT_PLAN, RESEARCH_ROADMAP, PHASE3A/3B, CROSS_ASSAY, DOMAIN_AWARE, *.html)
+└── run_pipeline.sh  (Phase 1–2 only)
 ```
 
-Sibling repos (not in this git repo): `../htr_selex_analysis/`, `../rbns_analysis/`, `../rnacompete_analysis/`. See [`DATA_SOURCES_AND_DOWNLOADS.md`](DATA_SOURCES_AND_DOWNLOADS.md).
+Upstream data-processing repositories (own git repositories, ignored by this one): `htr_selex_analysis/`, `htr_selex_prjeb47428/`, `rbns_analysis/`, `rnacompete_analysis/`. On the Mac they sit inside this folder, in the documents and defaults they are addressed as `../<name>/`; see [`DATA_SOURCES_AND_DOWNLOADS.md`](DATA_SOURCES_AND_DOWNLOADS.md). External programs: MMseqs2 and HMMER (Pfam-A) for 11 scripts.
 
 ---
 
@@ -391,7 +425,7 @@ python scripts/03_evaluate_validation.py --config configs/rbns_validation.yaml -
 python scripts/04_build_generalized_dataset.py
 python scripts/06_train_generalized_v2.py --data_dir data/generalized_v2 --epochs 50
 
-# Phase 3A: build v3a + train V2 (data not in git — see PHASE3A_PLAN.md)
+# Phase 3A: build v3a + train V2 (data not in git — see docs/archive/PHASE3A_PLAN.md)
 # NB: scripts 41/51 read `data/sanitized/generalized_v3a/`; older docs use `data/generalized_v3a/`
 # Phase 3B: V4 + cross-protocol (see sections above)
 
@@ -407,7 +441,8 @@ python scripts/19_compare_models.py --results_dir results/generalized
 - **Protein-aware split**: no RBP in more than one split. See `METHODS.md §3`.
 - **Primary metric: AUPRC** under ~1:2 class imbalance; AUROC reported for comparability.
 - **CNN over k-mer MLP**: global max pooling is length-agnostic (RBNS 20 nt vs HTR-SELEX 40 nt).
-- **Frozen ESM-2 does not help** on 169-protein v2 data (V3/V3b/V3c).
+- **Frozen ESM-2 does not help** on 169-protein v2 data (V3/V3b/V3c) nor on v3b (frozen heads 0.531–0.559 vs nearest-protein baseline 0.627).
+- **Evaluation on v3b, not v3a**: v3a test proteins have close training homologs; use the cluster split and the cross-protein-negative probe for claims about new proteins.
 - **RNAcompete in training (v3a)**: Eukarya + RBPZoo full panels + ucRBP 23; homology-aware splits. Full-panel `rnacompete_all` eval is invalid for v3a/V4 checkpoints.
 - **Cross-protocol matching**: representative native name per protocol, exact equality only — constructs never pooled (`scripts/33–34`).
 

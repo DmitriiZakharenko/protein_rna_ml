@@ -80,3 +80,13 @@ results/skipper_eclip/bed6/
 results/skipper_eclip/bed10/
 results/skipper_eclip/*.log
 data/embeddings_v3b/
+
+# Personal and sharing material (never publish)
+reference_letters/
+share_tf/
+
+# Upstream data-processing repositories (own git repos, kept next to this project)
+htr_selex_analysis/
+htr_selex_prjeb47428/
+rbns_analysis/
+rnacompete_analysis/

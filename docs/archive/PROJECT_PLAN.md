@@ -1,5 +1,7 @@
 # Protein–RNA Binding Prediction: ML Project Plan
 
+> **Status (2026-11-26)**: original plan of 2026-04; historical, the work went beyond it (v3b, eCLIP, audits). See [`INVENTORY.md`](../../INVENTORY.md).
+
 **Goal**: Build a generalizable machine learning model that predicts whether a given protein (amino acid sequence) binds to a given RNA (nucleotide sequence), with planned extensions for experimental context (in vivo / in vitro) and binding affinity.
 
 ---

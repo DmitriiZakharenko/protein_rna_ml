@@ -1,5 +1,7 @@
 # Research Roadmap — Beyond Binary Binding Classification
 
+> **Status (2026-11-26)**: planning document of 2026-06 written before the homology audit and v3b; historical. See [`INVENTORY.md`](../../INVENTORY.md).
+
 **Project**: Protein–RNA Binding Prediction  
 **Status**: Planning document (extends Phase 3A)  
 **Last updated**: 2026-06-25  

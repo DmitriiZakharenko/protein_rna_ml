@@ -1,5 +1,7 @@
 # Phase 3B — status and VM commands
 
+> **Status (2026-11-26)**: Phase 3B is complete (2026-09); VM commands kept as a record. See [`INVENTORY.md`](../../INVENTORY.md).
+
 **Last updated**: 2026-09-04  
 **Full metrics**: `results/phase3b_summary.json`
 

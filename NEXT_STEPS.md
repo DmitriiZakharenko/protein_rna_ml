@@ -1,5 +1,7 @@
 # Next steps (sequenced plan, 2026-10-29)
 
+> **Status (2026-11-26)**: written on 2026-10-29, before the TF ChIP-seq, CORAL and layer experiments; to be replaced by the next plan. See `INVENTORY.md`.
+
 Context: results so far are in [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md). Key facts driving this plan:
 
 - Genomic-negative eCLIP benchmarks are composition-solvable (RNA-only k-mer LR 0.81; 0.68 GC-matched).
