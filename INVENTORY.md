@@ -113,3 +113,14 @@ Candidates for `scripts/archive/` (no caller, no mention in README, log or other
 Keep, but historical (referenced by README, log or other scripts): 05, 07-10 (Phase 2 models V1-V3c, results in the README table), 12-16 (downloads and Phase 2 analyses), 25-26, 34-37, 45-50 (documented in `data/raw/eclip_skipper/README.md`).
 
 Not verifiable by text search: whether the scripts above were used once for a file that is still in `results/`. Their outputs were not checked.
+
+## 8. Nested upstream repositories and config paths (checked 2026-11-26)
+
+| Folder | Last commit | Remote | Working tree |
+|---|---|---|---|
+| `htr_selex_analysis/` | 2026-04-13 | github.com/zahalae/htr-selex-analysis | modified tracked files (motif logos under `results/motifs/`) |
+| `htr_selex_prjeb47428/` | 2026-04-12 | github.com/DmitriiZakharenko/htr-selex-prjeb47428 | clean |
+| `rbns_analysis/` | 2026-04-17 | github.com/DmitriiZakharenko/rbns_analysis | `git status` timed out (iCloud placeholders) |
+| `rnacompete_analysis/` | 2026-05-28 | github.com/DmitriiZakharenko/rnacompete-ml-dataset | `git status` timed out (iCloud placeholders) |
+
+`configs/*.yaml` address the input tables as `../htr_selex_analysis/...`, `../rbns_analysis/...`, `../htr_selex_prjeb47428/...`. These paths do not resolve while the repositories sit inside this folder. Placing the four folders next to `protein_rna_ml/` restores them. Other configs and scripts that use the `../` form were not checked. Results of the JSON check: all JSON files under `results/` parse.
